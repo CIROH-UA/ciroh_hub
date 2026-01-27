@@ -67,7 +67,7 @@ jobs:
             echo "(FIXME: No target repo available, the next few steps will likely fail!)"
           else
             echo "ENVIRONMENT=staging" >> $GITHUB_ENV
-            echo "TARGET_REPO=CIROH-UA/docuhub-staging" >> $GITHUB_ENV
+            echo "TARGET_REPO=CIROH-UA/ciroh_hub_staging" >> $GITHUB_ENV
             echo "Deploying to STAGING environment"
           fi
 
