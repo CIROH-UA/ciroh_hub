@@ -1,71 +1,155 @@
-.team-grid-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 1.2rem;
-  max-width: 1000px;
-  margin: 0 auto;
-}
-
+/* ===============================
+   TEAM SECTION
+================================= */
 .team-section {
   padding: 4rem 1rem;
-  background-color: var(--ifm-background-color);
-  text-align: center; 
+  text-align: center;
 }
 
-.team-tile {
-  display: flex;
-  background-color: var(--ifm-card-background-color);
-  border-radius: 10px;
-  padding: 1rem;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-  transition: transform 0.2s ease;
-  align-items: center;
+.team-title {
+  font-size: 2.3rem;
+  font-weight: 800;
+  margin-bottom: 0.5rem;
 }
 
 .team-divider {
-  width: 60px;
+  width: 70px;
   height: 4px;
-  background-color: #00bcd4;
-  margin: 0 auto 2.5rem auto; /* <-- Centers the divider */
+  background: #19a7ce;
+  margin: 1rem auto 3rem auto;
   border-radius: 2px;
 }
 
-.team-tile:hover {
-  transform: translateY(-3px);
+/* ===============================
+   GRID
+================================= */
+.team-grid-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 2rem;
+  max-width: 1100px;
+  margin: 0 auto;
 }
 
-.tile-avatar,
-.tile-initials {
-  width: 60px;
-  height: 60px;
+/* ===============================
+   PROFILE CARD
+================================= */
+.profile-card {
+  /* background: var(--ifm-card-background-color); */
+  border-radius: 22px;
+  padding: 2.5rem 1.5rem 3rem;
+  text-align: center;
+  transition: all 0.35s ease;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.profile-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 18px 45px rgba(0, 180, 255, 0.25);
+}
+
+/* html[data-theme="light"] .profile-card {
+  background: #ffffff;
+  border-color: rgba(0, 0, 0, 0.05);
+}
+
+html[data-theme="dark"] .profile-card {
+  background: #131c2a;
+  border-color: rgba(255, 255, 255, 0.08);
+} */
+
+/* ===============================
+   AVATAR
+================================= */
+.profile-img-wrapper {
+  width: 155px;
+  height: 155px;
   border-radius: 50%;
+  overflow: hidden;
+  margin: 0 auto 1.5rem;
+  transition: 0.3s ease;
+  box-shadow: 0 0 0 5px rgba(255, 255, 255, 0.1);
+}
+
+.profile-card:hover .profile-img-wrapper {
+  transform: scale(1.06);
+  box-shadow: 0 0 0 6px rgba(0, 180, 255, 0.45);
+}
+
+.profile-img {
+  width: 100%;
+  height: 100%;
   object-fit: cover;
-  background-color: #00bcd4;
+}
+
+.profile-placeholder {
+  width: 100%;
+  height: 100%;
+  background: #19a7ce;
   color: white;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: bold;
-  font-size: 1rem;
-  text-transform: uppercase;
-  flex-shrink: 0;
-  border: 3px solid #19a7ce;
+  font-size: 2.2rem;
+  font-weight: 700;
 }
 
-.tile-text {
-  padding-left: 0.75rem;
-  text-align: left;
+/* ===============================
+   TEXT
+================================= */
+.profile-name {
+  font-size: 1.3rem;
+  font-weight: 700;
 }
 
-.tile-text .team-name {
-  font-size: 1rem;
-  font-weight: 600;
-  margin: 0;
-  color: var(--ifm-heading-color);
+.profile-role {
+  font-size: 0.95rem;
+  opacity: 0.7;
+}
+/* 
+html[data-theme="light"] .profile-name {
+  color: #1e293b;
 }
 
-.tile-text .team-role {
-  font-size: 0.85rem;
-  color: #777;
-  margin: 0.2rem 0 0 0;
+html[data-theme="light"] .profile-role {
+  color: #475569;
+}
+
+html[data-theme="dark"] .profile-name {
+  color: #ffffff;
+}
+
+html[data-theme="dark"] .profile-role {
+  color: #cbd5e1;
+} */
+
+/* ===============================
+   LINKEDIN BUTTON (UPDATED)
+================================= */
+.linkedin-btn {
+  margin-top: 1.4rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 12px;
+  background: #0A66C2;
+  transition: 0.25s ease;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.25);
+}
+
+.linkedin-btn:hover {
+  transform: scale(1.12);
+  box-shadow: 0 0 14px rgba(14, 165, 233, 0.6);
+  background: #0d7aff;
+}
+
+/* Better LinkedIn icon image */
+.linkedin-icon-img {
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
+  pointer-events: none;
 }

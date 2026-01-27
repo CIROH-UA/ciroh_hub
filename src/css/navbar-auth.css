@@ -1,0 +1,139 @@
+.navbar-github-login {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: linear-gradient(135deg, #24292e 0%, #1a1e22 100%);
+    border: 1px solid #30363d;
+    border-radius: 8px;
+    color: white;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    margin-left: 8px;
+    margin-right: 8px;
+}
+
+.navbar-github-login:hover {
+    background: linear-gradient(135deg, #2c3239 0%, #22262b 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+}
+
+.navbar-github-icon {
+    flex-shrink: 0;
+}
+
+.navbar-user-menu {
+    position: relative;
+}
+
+.navbar-user-button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px;
+    background: transparent;
+    border: 2px solid transparent;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.navbar-user-button:hover {
+    border-color: var(--ifm-color-primary);
+}
+
+.navbar-user-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    object-fit: cover;
+}
+
+.navbar-dropdown-arrow {
+    color: var(--ifm-navbar-link-color);
+    transition: transform 0.3s ease;
+}
+
+.navbar-user-button:hover .navbar-dropdown-arrow {
+    transform: translateY(2px);
+}
+
+.navbar-dropdown {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    min-width: 180px;
+    background: #ffffff !important;
+    border: 1px solid var(--ifm-color-emphasis-300);
+    border-radius: 8px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    padding: 8px;
+    z-index: 1000;
+    animation: slideDown 0.2s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.navbar-dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    padding: 10px 12px;
+    background: transparent;
+    border: none;
+    border-radius: 6px;
+    color: var(--ifm-navbar-link-color);
+    font-size: 14px;
+    font-weight: 500;
+    text-align: left;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.navbar-dropdown-item:hover {
+    background: var(--ifm-color-emphasis-200);
+    color: var(--ifm-color-primary);
+}
+
+.navbar-dropdown-item svg {
+    flex-shrink: 0;
+    opacity: 0.7;
+}
+
+.navbar-dropdown-item:hover svg {
+    opacity: 1;
+}
+
+[data-theme='dark'] .navbar-github-login {
+    background: linear-gradient(135deg, #30363d 0%, #24292e 100%);
+    border-color: #444c56;
+}
+
+[data-theme='dark'] .navbar-github-login:hover {
+    background: linear-gradient(135deg, #3d444d 0%, #2c3239 100%);
+}
+
+[data-theme='dark'] .navbar-dropdown {
+    background: #2d3748 !important;
+    border-color: #334155;
+}
+
+[data-theme='dark'] .navbar-dropdown-item:hover {
+    background: #334155;
+}

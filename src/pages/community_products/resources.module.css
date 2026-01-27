@@ -1,0 +1,128 @@
+.resourcesBanner {
+  position: relative;
+  padding: 2.5rem 2rem;
+  text-align: center;
+  overflow: hidden;
+}
+
+.resourcesBanner::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+}
+
+.resourcesContainer {
+  position: relative;
+  max-width: 900px;
+  margin: 0 auto;
+  z-index: 1;
+}
+
+.resourcesTitle {
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 800;
+  margin: 0 0 1rem 0;
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.3);
+  letter-spacing: -0.02em;
+}
+
+.resourcesSubtitle {
+  font-size: clamp(1.1rem, 2vw, 1.35rem);
+  line-height: 1.7;
+  margin: 0;
+  font-weight: 500;
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.2);
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+  .resourcesBanner {
+    padding: 2rem 1.5rem;
+  }
+
+  .resourcesTitle {
+    margin-bottom: 0.75rem;
+  }
+
+  .resourcesSubtitle {
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+}
+
+/* Tab banners (smaller, card-like) */
+.tabBanner {
+  margin: 1rem 0 1.5rem;
+  border: 1px solid rgba(12, 74, 110, 0.12);
+  border-radius: 12px;
+  background: linear-gradient(135deg, rgba(125,211,252,0.25) 0%, rgba(103,232,249,0.25) 50%, rgba(94,234,212,0.25) 100%);
+}
+
+.tabBannerContent {
+  padding: 1rem 1.25rem;
+}
+
+.tabTitle {
+  margin: 0;
+  font-size: clamp(1.25rem, 2.5vw, 1.6rem);
+  font-weight: 700;
+  color: #0c4a6e;
+}
+
+.tabSubtitle {
+  margin: 0.35rem 0 0.5rem;
+  font-size: 0.98rem;
+  color: #0e7490;
+}
+
+/* Powered by strip */
+.poweredBy {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: 0.5rem;
+  padding: 0.4rem 0.75rem 0.45rem;
+  font-size: 0.75rem;
+  line-height: 1.1;
+  color: #0c4a6e;
+}
+
+.poweredBy img {
+  display: block;
+  height: auto;
+  max-height: 48px; /* guard rail to prevent extreme vertical expansion */
+}
+
+.poweredByLabel {
+  font-weight: 600;
+  font-size: 0.7rem;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  opacity: 0.85;
+}
+
+
+:root[data-theme='dark'] .tabBanner {
+  border-color: rgba(255,255,255,0.15);
+  background: linear-gradient(135deg, rgba(12,74,110,0.35) 0%, rgba(22,78,99,0.35) 50%, rgba(14,116,144,0.35) 100%);
+}
+
+:root[data-theme='dark'] .tabTitle { color: #e0f2fe; }
+:root[data-theme='dark'] .tabSubtitle { color: rgba(224,242,254,0.85); }
+
+:root[data-theme='dark'] .poweredBy {
+  color: #f1f5f9;
+}
+
+
+/* removed dark mode image background styling to show original logos */

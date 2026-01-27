@@ -1,10 +1,10 @@
-# CIROH DocuHub
+# CIROH Hub
 
-DocuHub is constructed using [Docusaurus](https://docusaurus.io/), a modern static website generator.
+CIROH Hub is constructed using [Docusaurus](https://docusaurus.io/), a modern static website generator.
 
 ## Repository
 
-The source code for DocuHub is available at:  
+The source code for CIROH Hub is available at:  
 [https://github.com/CIROH-UA/ciroh-ua_website](https://github.com/CIROH-UA/ciroh-ua_website)
 
 ## Environments
@@ -27,11 +27,11 @@ The staging environment is used for testing and validating changes before deploy
 
 4. **Contribute to Blog Section**: To add content to the blog, please follow the guidelines in [How to write a new Blog?](https://github.com/CIROH-UA/ciroh-ua_website/blob/main/blog/2023-10-29-intro-docuhub-blog.md)
 
-5. **Report Issues**: Found a bug or have a suggestion? Open an issue in the [GitHub repository](https://github.com/CIROH-UA/ciroh-ua_website) to help improve DocuHub.
+5. **Report Issues**: Found a bug or have a suggestion? Open an issue in the [GitHub repository](https://github.com/CIROH-UA/ciroh-ua_website) to help improve CIROH Hub.
 
 If you need help, please contact us at [ciroh-it-admin@ua.edu](mailto:ciroh-it-admin@ua.edu) or Arpita Patel at apatel54@ua.edu
 
-## Setup for running DocuHub locally
+## Setup for running CIROH Hub locally
 
 To set up the project locally, follow these steps:
 
@@ -64,10 +64,9 @@ To set up the project locally, follow these steps:
    This will start a local development server at http://localhost:3000 
    
 6. **View the Site**:
-   Open your browser and navigate to http://localhost:3000 to see the local version of DocuHub.
+   Open your browser and navigate to http://localhost:3000 to see the local version of CIROH Hub.
 
 ## How to validate PR locally
 
 Go to GitHub Actions and Download the build folder from PR validate Action. Unzip the folder and run below command.
 $ npx http-server
-

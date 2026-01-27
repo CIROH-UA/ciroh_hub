@@ -1,0 +1,395 @@
+/* PublicationCard.module.css */
+
+.publicationCard {
+  background: white;
+  border-radius: 12px;
+  padding: 1.75rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.publicationCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--ifm-color-primary) 0%, var(--ifm-color-primary-light) 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.publicationCard:hover::before {
+  opacity: 1;
+}
+
+.publicationCard.cardDark {
+  background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+}
+
+.publicationCard:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+}
+
+.publicationCard.cardDark:hover {
+  box-shadow: 0 12px 24px rgba(6, 182, 212, 0.2);
+  border-color: rgba(6, 182, 212, 0.3);
+}
+
+.slideUp {
+  animation: slideUp 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Card Header */
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  gap: 1rem;
+}
+
+.typeBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: linear-gradient(135deg, rgba(6, 182, 212, 0.15) 0%, rgba(2, 132, 199, 0.1) 100%);
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  border: 1px solid rgba(6, 182, 212, 0.3);
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: var(--ifm-color-primary-dark);
+  transition: all 0.3s ease;
+}
+
+.publicationCard.cardDark .typeBadge {
+  background: rgba(6, 182, 212, 0.2);
+  border-color: rgba(6, 182, 212, 0.4);
+  color: var(--ifm-color-primary-light);
+}
+
+.typeBadge:hover {
+  background: linear-gradient(135deg, rgba(6, 182, 212, 0.25) 0%, rgba(2, 132, 199, 0.2) 100%);
+  transform: scale(1.05);
+}
+
+.typeIcon {
+  font-size: 1.1rem;
+  line-height: 1;
+}
+
+.typeText {
+  text-transform: capitalize;
+}
+
+.externalLink {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(6, 182, 212, 0.1);
+  color: var(--ifm-color-primary);
+  transition: all 0.3s ease;
+  border: none;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.publicationCard.cardDark .externalLink {
+  background: rgba(6, 182, 212, 0.15);
+}
+
+.externalLink:hover {
+  background: var(--ifm-color-primary);
+  color: white;
+  transform: rotate(45deg) scale(1.1);
+}
+
+/* Card Title */
+.cardTitle {
+  font-size: 1.35rem;
+  font-weight: 700;
+  margin: 0 0 1rem 0;
+  line-height: 1.4;
+  color: var(--ifm-heading-color);
+  transition: color 0.3s ease;
+  word-break: break-word;
+}
+
+.publicationCard:hover .cardTitle {
+  color: var(--ifm-color-primary);
+}
+
+.publicationCard.cardDark .cardTitle {
+  color: white;
+}
+
+/* Authors Section */
+.authorsSection {
+  margin-bottom: 1rem;
+}
+
+.authors {
+  font-size: 0.95rem;
+  color: var(--ifm-color-emphasis-700);
+  margin: 0;
+  font-style: italic;
+  line-height: 1.5;
+}
+
+.publicationCard.cardDark .authors {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* Meta Info */
+.metaInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+  padding: 1rem 0;
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.publicationCard.cardDark .metaInfo {
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.metaItem {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.9rem;
+  color: var(--ifm-color-emphasis-600);
+  animation: fadeInLeft 0.4s ease-out both;
+}
+
+@keyframes fadeInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.publicationCard.cardDark .metaItem {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.metaItem svg {
+  color: var(--ifm-color-primary);
+  flex-shrink: 0;
+}
+
+.journal {
+  font-weight: 600;
+  color: var(--ifm-color-emphasis-800);
+}
+
+.publicationCard.cardDark .journal {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* Abstract Preview */
+.abstractPreview {
+  margin-bottom: 1rem;
+  padding: 1rem;
+  background: rgba(6, 182, 212, 0.05);
+  border-left: 3px solid var(--ifm-color-primary);
+  border-radius: 4px;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: var(--ifm-color-emphasis-700);
+  max-height: 100px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.publicationCard.cardDark .abstractPreview {
+  background: rgba(6, 182, 212, 0.1);
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.abstractPreview p {
+  margin: 0;
+}
+
+/* Tags Container */
+.tagsContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.tag {
+  display: inline-block;
+  padding: 0.35rem 0.75rem;
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(59, 130, 246, 0.05) 100%);
+  border: 1px solid rgba(99, 102, 241, 0.2);
+  border-radius: 12px;
+  font-size: 0.8rem;
+  color: #4338ca;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 120px;
+}
+
+.publicationCard.cardDark .tag {
+  background: rgba(99, 102, 241, 0.15);
+  border-color: rgba(99, 102, 241, 0.3);
+  color: #a5b4fc;
+}
+
+.tag:hover {
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.2) 0%, rgba(59, 130, 246, 0.1) 100%);
+  transform: translateY(-2px);
+}
+
+.moreTag {
+  display: inline-block;
+  padding: 0.35rem 0.75rem;
+  font-size: 0.8rem;
+  color: var(--ifm-color-emphasis-600);
+  font-weight: 500;
+}
+
+/* DOI Link */
+.doiLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--ifm-color-primary);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+  margin-bottom: 0.75rem;
+  width: fit-content;
+}
+
+.publicationCard.cardDark .doiLink {
+  color: var(--ifm-color-primary-light);
+}
+
+.doiLink:hover {
+  color: var(--ifm-color-primary-dark);
+  transform: translateX(4px);
+  text-decoration: underline;
+}
+
+/* CTA Button */
+.ctaButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.9rem 1.5rem;
+  background: linear-gradient(135deg, var(--ifm-color-primary) 0%, var(--ifm-color-primary-dark) 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  margin-top: auto;
+  box-shadow: 0 4px 12px rgba(6, 182, 212, 0.3);
+  overflow: hidden;
+  position: relative;
+}
+
+.ctaButton::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.ctaButton:hover::before {
+  width: 300px;
+  height: 300px;
+}
+
+.ctaButton:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(6, 182, 212, 0.4);
+}
+
+.ctaButton:active {
+  transform: translateY(-2px);
+}
+
+.ctaButton svg {
+  transition: transform 0.3s ease;
+}
+
+.ctaButton:hover svg {
+  transform: translateX(4px);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .publicationCard {
+    padding: 1.25rem;
+  }
+
+  .cardTitle {
+    font-size: 1.15rem;
+  }
+
+  .metaInfo {
+    padding: 0.75rem 0;
+  }
+
+  .cardHeader {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .externalLink {
+    align-self: flex-end;
+  }
+
+  .abstractPreview {
+    max-height: 80px;
+  }
+}

@@ -69,15 +69,19 @@ export default function ResourceBrowser({
       }
 
       const ascending = sortDirection === 'asc';
-      const raw = await fetchResourcesBySearch(
+      
+      // Use fetchResourcesBySearch for keyword-specific filtering
+      const response = await fetchResourcesBySearch(
         keyword,
         activeSearch,
         ascending,
         sortBy,
-        undefined,
-        page,
+        undefined, // author filter
+        page
       );
 
+      // Extract resources from response
+      const raw = response || [];
       const normalized = raw.map(normalize);
 
       if (page === 1 && replace) {
@@ -86,7 +90,7 @@ export default function ResourceBrowser({
         setResources((prev) => [...prev.filter((r) => !r.isPlaceholder), ...normalized]);
       }
 
-  setHasMore(raw.length === pageSize);
+      setHasMore(raw.length === pageSize);
       setLoading(false);
 
       // Lazy metadata enrichment

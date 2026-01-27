@@ -1,0 +1,530 @@
+/* cloudInfraDashboard.css */
+/* Namespaced under .cloud-dashboard-root to avoid breaking Tailwind */
+
+/* Prevent global resets */
+.cloud-dashboard-root * {
+    box-sizing: border-box;
+}
+
+/* -----------------------------
+   BACKGROUND GRID & GLOWS
+----------------------------- */
+
+.cloud-dashboard-root .bg-grid {
+    position: fixed;
+    inset: 0;
+    background-image:
+        linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+    background-size: 50px 50px;
+    animation: cloudDashboardGridMove 20s linear infinite;
+    z-index: 0;
+}
+
+@keyframes cloudDashboardGridMove {
+    0% {
+        transform: translate(0, 0);
+    }
+
+    100% {
+        transform: translate(50px, 50px);
+    }
+}
+
+.cloud-dashboard-root .bg-glow {
+    position: fixed;
+    width: 600px;
+    height: 600px;
+    border-radius: 50%;
+    filter: blur(150px);
+    opacity: 0.3;
+    animation: cloudDashboardFloat 10s ease-in-out infinite;
+    z-index: 0;
+}
+
+/* .cloud-dashboard-root .bg-glow-1 {
+    top: -200px;
+    left: -200px;
+    background: #4285f4;
+}
+
+.cloud-dashboard-root .bg-glow-2 {
+    bottom: -200px;
+    right: -200px;
+    background: #ff9900;
+    animation-delay: -5s;
+} */
+
+@keyframes cloudDashboardFloat {
+
+    0%,
+    100% {
+        transform: translate(0, 0) scale(1);
+    }
+
+    50% {
+        transform: translate(30px, 30px) scale(1.1);
+    }
+}
+
+/* -----------------------------
+   PARTICLES
+----------------------------- */
+
+.cloud-dashboard-root .particles {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 5;
+}
+
+.cloud-dashboard-root .particle {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    animation: cloudDashboardParticleFloat 15s linear infinite;
+}
+
+@keyframes cloudDashboardParticleFloat {
+    0% {
+        transform: translateY(100vh) rotate(0deg);
+        opacity: 0;
+    }
+
+    10% {
+        opacity: 1;
+    }
+
+    90% {
+        opacity: 1;
+    }
+
+    100% {
+        transform: translateY(-100vh) rotate(720deg);
+        opacity: 0;
+    }
+}
+
+/* -----------------------------
+   MAIN CONTAINER
+----------------------------- */
+
+.cloud-dashboard-root .container {
+    position: relative;
+    z-index: 10;
+    padding: 60px 24px;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+/* -----------------------------
+   HEADER
+----------------------------- */
+
+.cloud-dashboard-root .header {
+    text-align: center;
+    margin-bottom: 48px;
+}
+
+.cloud-dashboard-root .header h1 {
+    
+    opacity: 0;
+    animation: cloudDashboardFadeInUp 1s ease forwards;
+}
+
+.cloud-dashboard-root .header p {
+    font-size: 1.1rem;
+    opacity: 0;
+    animation: cloudDashboardFadeInUp 1s ease 0.15s forwards;
+}
+
+@keyframes cloudDashboardFadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* -----------------------------
+   GRID LAYOUT
+----------------------------- */
+
+.cloud-dashboard-root .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+}
+
+@media (max-width:1200px) {
+    .cloud-dashboard-root .cards-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width:600px) {
+    .cloud-dashboard-root .cards-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .cloud-dashboard-root .header h1 {
+        font-size: 2rem;
+    }
+}
+
+/* -----------------------------
+   CARD BASE
+----------------------------- */
+
+.cloud-dashboard-root .card {
+    position: relative;
+    
+    border-radius: 24px;
+    padding: 40px 32px;
+    text-align: center;
+    cursor: pointer;
+    overflow: hidden;
+    opacity: 0;
+    animation: cloudDashboardCardFadeIn 0.8s ease forwards;
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+        border-color 0.3s ease;
+}
+
+@keyframes cloudDashboardCardFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(40px) scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.cloud-dashboard-root .card:hover {
+    transform: translateY(-8px) scale(1.02);
+    border-color: rgba(255, 255, 255, 0.15);
+}
+
+/* -----------------------------
+   CARD GLOW
+----------------------------- */
+
+.cloud-dashboard-root .card-glow {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    pointer-events: none;
+}
+
+.cloud-dashboard-root .card:hover .card-glow {
+    opacity: 1;
+}
+
+.cloud-dashboard-root .card-glow::before {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    border-radius: 24px;
+    padding: 2px;
+    background: linear-gradient(135deg, var(--card-accent), transparent, var(--card-accent));
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    animation: cloudDashboardBorderRotate 3s linear infinite;
+}
+
+@keyframes cloudDashboardBorderRotate {
+    0% {
+        filter: hue-rotate(0deg);
+    }
+
+    100% {
+        filter: hue-rotate(360deg);
+    }
+}
+
+/* -----------------------------
+   CORNERS
+----------------------------- */
+
+.cloud-dashboard-root .cursor-target {
+    position: absolute;
+    inset: 8px;
+    pointer-events: none;
+}
+
+.cloud-dashboard-root .corner {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    opacity: 0;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.cloud-dashboard-root .corner::before,
+.cloud-dashboard-root .corner::after {
+    content: '';
+    position: absolute;
+    background: var(--card-accent);
+    border-radius: 2px;
+}
+
+/* Horizontal bar */
+.cloud-dashboard-root .corner::before {
+    height: 3px;
+    width: 100%;
+}
+
+/* Vertical bar */
+.cloud-dashboard-root .corner::after {
+    width: 3px;
+    height: 100%;
+}
+
+
+.cloud-dashboard-root .corner-tl {
+    top: 16px;
+    left: 16px;
+    transform: rotate(0deg) translate(-6px, -6px);
+}
+
+.cloud-dashboard-root .corner-tr {
+    top: 16px;
+    right: 16px;
+    transform: rotate(90deg) translate(-6px, -6px);
+}
+
+.cloud-dashboard-root .corner-br {
+    bottom: 16px;
+    right: 16px;
+    transform: rotate(180deg) translate(-6px, -6px);
+}
+
+.cloud-dashboard-root .corner-bl {
+    bottom: 16px;
+    left: 16px;
+    transform: rotate(270deg) translate(-6px, -6px);
+}
+
+.cloud-dashboard-root .card:hover .corner-tl {
+    transform: rotate(0deg) translate(0, 0);
+}
+
+.cloud-dashboard-root .card:hover .corner-tr {
+    transform: rotate(90deg) translate(0, 0);
+}
+
+.cloud-dashboard-root .card:hover .corner-br {
+    transform: rotate(180deg) translate(0, 0);
+}
+
+.cloud-dashboard-root .card:hover .corner-bl {
+    transform: rotate(270deg) translate(0, 0);
+}
+
+
+/* -----------------------------
+   ICON CONTAINER
+----------------------------- */
+
+/* ICON CONTAINER — now fully controlled by the card props */
+.cloud-dashboard-root .icon-container {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 24px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+
+
+    transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* Glow ring (accent-colored) */
+.cloud-dashboard-root .icon-container::before {
+    content: "";
+    position: absolute;
+    inset: -3px;
+    border-radius: 22px;
+    background: linear-gradient(
+        135deg,
+        var(--card-accent),
+        transparent
+    );
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: -1;
+}
+
+/* Hover: scale + glow intensity */
+.cloud-dashboard-root .card:hover .icon-container {
+    transform: scale(1.1) rotate(5deg);
+}
+.cloud-dashboard-root .card:hover .icon-container::before {
+    opacity: 0.5;
+}
+
+
+.cloud-dashboard-root .icon-wrapper img,
+.cloud-dashboard-root .icon-wrapper svg {
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+}
+
+/* -----------------------------
+   TITLE
+----------------------------- */
+
+.cloud-dashboard-root .card-title {
+    color: #ffffff;
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 24px;
+}
+
+/* -----------------------------
+   STATS SECTION
+----------------------------- */
+
+.cloud-dashboard-root .stats {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.cloud-dashboard-root .stat-value {
+    font-size: 2.4rem;
+    font-weight: 700;
+    line-height: 1;
+    margin-bottom: 8px;
+    color: #ffffff;
+    transition: color 0.3s ease;
+}
+
+.cloud-dashboard-root .card:hover .stat-value {
+    color: var(--card-accent);
+}
+
+.cloud-dashboard-root .stat-label {
+    font-size: 0.85rem;
+    color: #8b8b9e;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+/* Progress Bar */
+
+.cloud-dashboard-root .stat-bar {
+    width: 100%;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 2px;
+    margin-top: 12px;
+    overflow: hidden;
+}
+
+.cloud-dashboard-root .stat-bar-fill {
+    height: 100%;
+    background: var(--card-accent);
+    border-radius: 2px;
+    width: 0;
+    transition: width 1.6s ease;
+}
+
+.cloud-dashboard-root .card.visible .stat-bar-fill {
+    width: var(--bar-width);
+}
+
+/* -----------------------------
+   SHIMMER EFFECT
+----------------------------- */
+
+.cloud-dashboard-root .shimmer {
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+}
+
+.cloud-dashboard-root .card:hover .shimmer {
+    animation: cloudDashboardShimmer 0.8s ease;
+}
+
+@keyframes cloudDashboardShimmer {
+    0% {
+        left: -100%;
+    }
+
+    100% {
+        left: 100%;
+    }
+}
+
+/* -----------------------------
+   PULSE RING
+----------------------------- */
+
+.cloud-dashboard-root .pulse-ring {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    height: 100%;
+    border: 2px solid var(--card-accent);
+    border-radius: 24px;
+    transform: translate(-50%, -50%) scale(0.8);
+    opacity: 0;
+    pointer-events: none;
+}
+
+.cloud-dashboard-root .card:hover .pulse-ring {
+    animation: cloudDashboardPulse 1s ease-out;
+}
+
+@keyframes cloudDashboardPulse {
+    0% {
+        transform: translate(-50%, -50%) scale(0.8);
+        opacity: 0.5;
+    }
+
+    100% {
+        transform: translate(-50%, -50%) scale(1.1);
+        opacity: 0;
+    }
+}
+
+/* -----------------------------
+   ACCENT COLORS (fallback)
+----------------------------- */
+
+.cloud-dashboard-root .card[data-accent="aws"] {
+    --card-accent: #ff9900;
+}
+
+.cloud-dashboard-root .card[data-accent="gcp"] {
+    --card-accent: #4285f4;
+}
+
+.cloud-dashboard-root .card[data-accent="hpc"] {
+    --card-accent: #00d4ff;
+}
+
+.cloud-dashboard-root .card[data-accent="nsf"] {
+    --card-accent: #ffd700;
+}

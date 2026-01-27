@@ -1,0 +1,3 @@
+/* Remove preflight to avoid breaking Infima */
+@tailwind components;
+@tailwind utilities;

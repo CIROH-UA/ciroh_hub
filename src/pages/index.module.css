@@ -2,168 +2,198 @@
  * CSS files with the .module.css suffix will be treated as CSS modules
  * and scoped locally.
  */
+
+/* Hero Banner */
 .heroBanner {
-  padding: 4rem 0;
-  text-align: center;
   position: relative;
   overflow: hidden;
-  /* Add modern gradient background */
-  background: linear-gradient(135deg, 
-    #0ea5e9 0%, 
-    #06b6d4 25%, 
-    #0891b2 50%, 
-    #0e7490 75%, 
-    #155e75 100%) !important;
-  color: white;
 }
 
-/* Add gradient animation overlay */
-.heroBanner::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: 
-    radial-gradient(circle at 20% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
-    radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
-  animation: gradientShift 8s ease-in-out infinite;
+/* Logo Container */
+.logoContainer {
+  perspective: 1000px;
 }
 
-@keyframes gradientShift {
-  0%, 100% { transform: translateX(0) translateY(0); }
-  50% { transform: translateX(10px) translateY(10px); }
-}
-
-@media screen and (max-width: 996px) {
-  .heroBanner {
-    padding: 2rem;
-  }
-}
-
-.buttons {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.flexContainer {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  max-width: 1200px;
-  margin: 0 auto;
+.logoWrapper {
   position: relative;
-  z-index: 10;
 }
 
-.flexitem1 {
-  text-align: center;
+.glowCircle {
+  animation: glowPulse 4s ease-in-out infinite;
 }
 
-.flexitem1:first-child {
-  margin-bottom: 20px;
+.logoBg {
+  animation: logoFloat 4s ease-in-out infinite;
+  transition: transform 0.3s ease;
+
 }
 
-.flexitem1 img {
-  max-width: 200px;
-  width: 100%;
-  height: auto;
-  /* Add subtle glow to logo */
+.logoBg:hover {
+  transform: scale(1.05);
+}
+
+/* LIGHT MODE — dark blue circle */
+[data-theme="light"] .logoBg {
+  background-color: #0a1b3d !important; /* deep navy */
+  box-shadow: 0 0 40px rgba(0, 30, 90, 0.5) !important;
+}
+
+/* DARK MODE — white circle */
+[data-theme="dark"] .logoBg {
+  background-color: #ffffff !important;
+  box-shadow: 0 0 40px rgba(100, 200, 255, 0.5) !important;
+}
+
+.logoImage {
   filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.3));
-  animation: logoFloat 3s ease-in-out infinite;
+}
+
+/* Animations */
+@keyframes glowPulse {
+  0%, 100% {
+    opacity: 0.25;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.4;
+    transform: scale(1.1);
+  }
 }
 
 @keyframes logoFloat {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-10px); }
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-15px);
+  }
+}
+/* DARK MODE — FORCE WHITE TEXT IN HERO SECTION
+[data-theme='dark'] .heroBanner h1,
+[data-theme='dark'] .heroBanner h2,
+[data-theme='dark'] .heroBanner p,
+[data-theme='dark'] .heroBanner span,
+[data-theme='dark'] .heroBanner div {
+  color: white;
+} */
+
+/* Title and Subtitle Styles */
+.heroTitle {
+  animation: fadeInLeft 0.8s ease-out forwards;
 }
 
-/* Style the title with gradient text */
-.heroBanner h1 {
-  background: linear-gradient(135deg, #ffffff 0%, #e0f2fe 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  animation: titleGlow 2s ease-in-out infinite alternate;
+.heroSubtitle {
+  animation: fadeInLeft 0.8s ease-out 0.2s forwards;
+  opacity: 0;
 }
 
-@keyframes titleGlow {
-  0% { filter: brightness(1); }
-  100% { filter: brightness(1.2); }
+.heroDescription {
+  animation: fadeInLeft 0.8s ease-out 0.4s forwards;
+  opacity: 0;
 }
 
-/* Style the subtitle */
-.heroBanner h2 {
-  opacity: 0.9;
-  animation: fadeInUp 1s ease-out 0.5s both;
+/* CTA Buttons */
+.ctaButton {
+  animation: fadeInLeft 0.8s ease-out 0.6s forwards;
+  opacity: 0;
 }
 
-/* Style the description */
-.heroBanner p {
-  animation: fadeInUp 1s ease-out 1s both;
-  opacity: 0.8;
+.ctaButton:hover {
+  transform: translateY(-2px);
 }
 
-@keyframes fadeInUp {
+.secondaryButton {
+  animation: fadeInLeft 0.8s ease-out 0.7s forwards;
+  opacity: 0;
+}
+
+.secondaryButton:hover {
+  transform: translateY(-2px);
+}
+
+/* Fade In Animations */
+@keyframes fadeInLeft {
   from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateX(-30px);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateX(0);
   }
 }
 
-/* Add floating water drops */
-.floatingElements {
+/* Responsive adjustments for small devices */
+@media (max-width: 640px) {
+  .heroTitle {
+    animation-delay: 0s;
+  }
+
+  .heroSubtitle {
+    animation-delay: 0.15s;
+  }
+
+  .heroDescription {
+    animation-delay: 0.3s;
+  }
+
+  .ctaButton {
+    animation-delay: 0.45s;
+  }
+
+  .secondaryButton {
+    animation-delay: 0.55s;
+  }
+}
+
+/* Responsive adjustments for tablets */
+@media (max-width: 1024px) {
+  .heroBanner {
+    min-height: auto;
+    padding: 2rem 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .heroBanner {
+    padding: 1rem 0;
+  }
+}
+
+/* Small animation utilities matching test.html (Tailwind prefix used in project is `tw-`) */
+@keyframes float {
+  0%, 100% { transform: translateY(0px) scale(1); }
+  50% { transform: translateY(-20px) scale(1.05); }
+}
+
+@keyframes floatDelayed {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-15px); }
+}
+
+@keyframes pingSlow {
+  0% { transform: scale(1); opacity: 0.5; }
+  50% { transform: scale(1.1); opacity: 0.3; }
+  100% { transform: scale(1.2); opacity: 0; }
+}
+
+.tw-animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.tw-animate-float-delayed {
+  animation: floatDelayed 8s ease-in-out infinite;
+}
+
+.tw-animate-ping-slow {
+  animation: pingSlow 3s cubic-bezier(0,0,0.2,1) infinite;
+}
+
+/* Ensure canvas covers viewport if a global canvas fallback is used */
+.tw-constellation-canvas {
   position: absolute;
-  top: 0;
-  left: 0;
+  inset: 0;
   width: 100%;
   height: 100%;
   pointer-events: none;
-  z-index: 1;
-}
-
-.waterDrop {
-  position: absolute;
-  width: 6px;
-  height: 6px;
-  background: rgba(255, 255, 255, 0.4);
-  border-radius: 50%;
-  animation: float 8s ease-in-out infinite;
-}
-
-@keyframes float {
-  0%, 100% {
-    transform: translateY(100vh) scale(0);
-    opacity: 0;
-  }
-  50% {
-    opacity: 1;
-    transform: translateY(0vh) scale(1);
-  }
-}
-
-/* for smaller screens */
-@media (max-width: 768px) {
-  .flexContainer {
-    gap: 20px;
-  }
-
-  .flexitem1 img {
-    max-width: 150px;
-  }
-  
-  .heroBanner h1 {
-    font-size: 2rem;
-  }
-  
-  .heroBanner h2 {
-    font-size: 1.2rem;
-  }
 }

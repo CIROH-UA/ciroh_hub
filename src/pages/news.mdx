@@ -9,11 +9,22 @@ import styles from '../components/News/NewsPage.module.css';
 
 <div className={styles.newsPageContainer}>
   <div className={styles.pageHeader}>
-    <h1 className={styles.pageTitle}>Community NextGen Updates</h1>
+    <h1 className={`${styles.pageTitle} tw-text-blue-800 dark:tw-text-white`}>Community NextGen Updates</h1>
     <p className={styles.pageSubtitle}>Stay connected with the latest developments in NextGen water modeling! This news hub brings you updates, breakthroughs, and opportunities from across our community of practice.</p>
   </div>
 
-  <hr className={styles.divider} />
+  <hr className={`${styles.divider} tw-bg-blue-800 dark:tw-bg-white`} />
 
   <News/>
+
+  <div className="tw-mt-8 tw-text-center">
+    <h2 className="tw-text-2xl tw-font-bold tw-text-blue-800 dark:tw-text-white tw-mb-4">Contributors</h2>
+    <p className="tw-text-gray-600 dark:tw-text-gray-300 tw-mb-4">This news section is maintained by the CIROH community. Special thanks to our contributors:</p>
+    <div className="tw-flex tw-flex-wrap tw-justify-center tw-gap-4">
+      <span className="tw-bg-blue-100 dark:tw-bg-cyan-800 tw-text-blue-800 dark:tw-text-cyan-200 tw-px-3 tw-py-1 tw-rounded-full tw-text-sm">John Doe</span>
+      <span className="tw-bg-blue-100 dark:tw-bg-cyan-800 tw-text-blue-800 dark:tw-text-cyan-200 tw-px-3 tw-py-1 tw-rounded-full tw-text-sm">Jane Smith</span>
+      <span className="tw-bg-blue-100 dark:tw-bg-cyan-800 tw-text-blue-800 dark:tw-text-cyan-200 tw-px-3 tw-py-1 tw-rounded-full tw-text-sm">Bob Johnson</span>
+      {/* Add more contributors as needed */}
+    </div>
+  </div>
 </div>

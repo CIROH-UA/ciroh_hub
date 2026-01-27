@@ -1,0 +1,101 @@
+/* Carousel Card Animations */
+.carousel-card {
+    transform-style: preserve-3d;
+    -webkit-transform-style: preserve-3d;
+    will-change: transform, box-shadow;
+}
+
+.carousel-card {
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+        box-shadow 0.3s ease,
+        border-color 0.3s ease;
+}
+
+/* Smooth hover lift effect */
+.carousel-card:hover {
+    transform: translateY(-8px) translateZ(0);
+}
+
+/* Image zoom on card hover */
+.carousel-card img {
+    transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.carousel-card:hover img {
+    transform: scale(1.15);
+}
+
+/* Button glow effect */
+.carousel-card a:hover {
+    background: rgba(255, 255, 255, 0.35) !important;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(59, 130, 246, 0.4);
+}
+
+/* Smooth carousel transition */
+.carousel-viewport {
+    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .carousel-card {
+        min-height: 380px;
+    }
+}
+
+@media (max-width: 480px) {
+    .carousel-card {
+        min-height: 320px;
+    }
+}
+
+/* ===== CIROH: learn-more button override (highest priority) ===== */
+
+/* Use a wrapper-specific selector if you have one; otherwise this is robust */
+.carousel-wrapper .ciroh-learn-more,
+.tw-carousel .ciroh-learn-more,
+.ci roh-learn-more {
+    /* fallback single selector */
+    background-color: rgba(59, 130, 246, 1) !important;
+    /* tailwind blue-600 */
+    color: #ffffff !important;
+    border: 0 !important;
+    text-decoration: none !important;
+    display: inline-block !important;
+    box-shadow: 0 6px 18px rgba(59, 130, 246, 0.12) !important;
+}
+
+/* Hover — LIGHT MODE */
+.carousel-wrapper .ciroh-learn-more:hover,
+.tw-carousel .ciroh-learn-more:hover,
+.ci roh-learn-more:hover {
+    background-color: rgba(37, 99, 235, 1) !important;
+    /* tailwind blue-600 -> blue-700 */
+    color: #ffffff !important;
+    transform: translateY(-2px) !important;
+}
+
+/* Focus (keyboard accessibility) */
+.carousel-wrapper .ciroh-learn-more:focus,
+.tw-carousel .ciroh-learn-more:focus,
+.ci roh-learn-more:focus {
+    outline: 3px solid rgba(59, 130, 246, 0.22) !important;
+    outline-offset: 3px !important;
+}
+
+/* DARK MODE specific: keep your existing dark styles but also force them */
+html[data-theme="dark"] .carousel-wrapper .ciroh-learn-more,
+html[data-theme="dark"] .tw-carousel .ciroh-learn-more,
+html[data-theme="dark"] .ci roh-learn-more {
+    background-color: rgba(255, 255, 255, 0.12) !important;
+    color: #ffffff !important;
+    border: 1px solid rgba(255, 255, 255, 0.06) !important;
+}
+
+html[data-theme="dark"] .carousel-wrapper .ciroh-learn-more:hover,
+html[data-theme="dark"] .tw-carousel .ciroh-learn-more:hover,
+html[data-theme="dark"] .ci roh-learn-more:hover {
+    background-color: rgba(255, 255, 255, 0.18) !important;
+    color: #ffffff !important;
+}

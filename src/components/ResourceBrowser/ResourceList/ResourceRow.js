@@ -78,9 +78,9 @@ export default function ResourceRow({ resource, defaultImage }) {
       {/* Content: title, authors chips, description */}
       <div className={styles.content}>
         <h3 className={styles.title}>
-          {pageUrl ? (
+          {resourceUrl ? (
             <a
-              href={pageUrl}
+              href={resourceUrl}
               target="_blank"
               rel="noopener noreferrer"
               className={styles.titleLink}

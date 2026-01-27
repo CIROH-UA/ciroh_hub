@@ -38,8 +38,8 @@
 			},
 			{
 			"type": "update",
-			"title": "CIROH DocuHub",
-			"description": "DocuHub has been updated! This month's updates feature an overhaul of the [Infrastructure Access page](/docs/services/access), making it easier than ever to request access to CIROH CyberInfrastructure, alongside a [new blog post](/blog/ciroh-psu-collab) highlighting collaboration between the Alabama Water Institute and Pennsylvania State University.",
+			"title": "CIROH Hub",
+			"description": "CIROH Hub has been updated! This month's updates feature an overhaul of the [Infrastructure Access page](/docs/services/access), making it easier than ever to request access to CIROH CyberInfrastructure, alongside a [new blog post](/blog/ciroh-psu-collab) highlighting collaboration between the Alabama Water Institute and Pennsylvania State University.",
 			"link": "release-notes/v20251103"
 			},
 			{
@@ -294,20 +294,20 @@
 			},
 			{
 				"type": "news",
-				"title": "Community FIM Documentation on DocuHub",
-				"description": "📢 Both FIM as a service (FIMserv) and FIM Evaluation Framework (FIMPEF) documentation now available on DocuHub!! Go to Products tab -> Community Flood Inundation Mapping",
+				"title": "Community FIM Documentation on CIROH Hub",
+				"description": "📢 Both FIM as a service (FIMserv) and FIM Evaluation Framework (FIMPEF) documentation now available on CIROH Hub!! Go to Products tab -> Community Flood Inundation Mapping",
 				"link": "/docs/products/Community%20Flood%20Inundation%20Mapping/FIM%20as%20a%20Service/"
 			},
 			{
 				"type": "news",
 				"title": "CIROH Portal New Look!!",
-				"description": "📢 BYU Team released newer version of CIROH Portal using docusaurus framework. This brings consistency with CIROH DocuHub!",
+				"description": "📢 BYU Team released newer version of CIROH Portal using docusaurus framework. This brings consistency with CIROH Hub!",
 				"link": "https://portal.ciroh.org/"
 			},
 			{
 				"type": "news",
-				"title": "DocuHub Contribute page Updated",
-				"description": "📢 For more ways to contribute to DocuHub. Read below",
+				"title": "CIROH Hub Contribute page Updated",
+				"description": "📢 For more ways to contribute to CIROH Hub. Read below",
 				"link": "/docs/contribute"
 			}
 	],
@@ -430,7 +430,7 @@
 		{
 			"type": "news",
 			"title": "Best Practice Guide for NextGen Framework",
-			"description": "Technical guidance for the inclusion of models/modules in the NextGen Water Resources Modeling Framework is now available in DocuHub.",
+			"description": "Technical guidance for the inclusion of models/modules in the NextGen Water Resources Modeling Framework is now available in CIROH Hub.",
 			"link": "https://docs.ciroh.org/docs/policies/NextGen/"
 		},  
 		{
@@ -687,7 +687,7 @@
 		{
 			"type": "news",
 			"title": "NextGen In A Box (NGIAB)",
-			"description": "We have made some improvements to NGIAB: 10 PRs merged. Sample input data updated to use AWI_003(with new data provider names). Boost upgraded to v1.79. Self-hosted Runner can start and stop automatically with GitHub Actions. NGIAB image can run in auto mode. Geopackage support added. Documentation available at CIROH DocuHub",
+			"description": "We have made some improvements to NGIAB: 10 PRs merged. Sample input data updated to use AWI_003(with new data provider names). Boost upgraded to v1.79. Self-hosted Runner can start and stop automatically with GitHub Actions. NGIAB image can run in auto mode. Geopackage support added. Documentation available at CIROH Hub",
 			"link": " https://docs.ciroh.org/docs/products/ngiab/distributions/ngiab-docker"
 		},
 		{

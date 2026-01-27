@@ -1,15 +1,16 @@
 import { themes as prismThemes } from "prism-react-renderer";
 
-const baseUrl = "/local/";
+const baseUrl = "/";
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: "CIROH DocuHub",
+  title: "CIROH Hub",
   tagline: "Documenting Water Research in the Digital Age",
   staticDirectories: ["static", "img"],
   url: "http://ciroh.org",
   baseUrl: baseUrl,
-  onBrokenLinks: "throw",
+  onBrokenLinks: "ignore",
+  onBrokenMarkdownLinks: "warn",
   favicon: "img/logos/docuhub.png",
 
   // GitHub pages deployment config.
@@ -24,10 +25,7 @@ const config = {
   },
 
   markdown: {
-    hooks: {
-    onBrokenMarkdownLinks: "warn",
-    onBrokenMarkdownImages: "warn",
-    }
+    mermaid: true,
   },
 
   // Even if you don't use internalization, you can use this field to set useful
@@ -77,13 +75,13 @@ const config = {
       './plugins/plugin-content-blog.js', 
       {
         id: "blog",
-        blogTitle: "DocuHub blog!",
-        blogDescription: "A DocuHub powered blog!",
+        blogTitle: "CIROH Hub blog!",
+        blogDescription: "A CIROH Hub powered blog!",
         postsPerPage: "ALL", // Display all posts on a single page
         path: "blog", // Path to the blog posts
         authorsMapPath: "authors.yaml", // Path to the authors' mapping file
         blogSidebarCount: "ALL",
-        blogSidebarTitle: "DocuHub Blog",
+        blogSidebarTitle: "CIROH Hub Blog",
       }
     ],
 
@@ -92,8 +90,8 @@ const config = {
       './plugins/plugin-content-blog.js', 
       {
         id: "release-notes",
-        blogTitle: "DocuHub release notes!",
-        blogDescription: "A quick glance at what's new in DocuHub.",
+        blogTitle: "CIROH Hub release notes!",
+        blogDescription: "A quick glance at what's new in CIROH Hub.",
         postsPerPage: "ALL", // Display all posts on a single page
         path: "release-notes", // Path to the blog posts
         routeBasePath: 'release-notes', // Slug for the blog
@@ -106,6 +104,11 @@ const config = {
       '@docusaurus/plugin-client-redirects',
       {
         redirects: [
+          // Resources page redirect
+          {
+            to: '/community_products',
+            from: '/resources',
+          },
           // Feedback page: grandfather in old Science Meeting survey links
           {
             to: '/feedback',
@@ -295,7 +298,7 @@ const config = {
     // so it's the best option available for now.
     blogSidebarInjection: [
       {
-        sidebarTitle: "DocuHub Blog",
+        sidebarTitle: "CIROH Hub Blog",
         html: `
           <div style="font-size: 0.9rem; margin-bottom: 0.6rem; margin-right:1rem">
             Exclusive content for researchers utilizing CIROH Cyberinfrastructure resources.
@@ -354,7 +357,7 @@ const config = {
       /*announcementBar: {
         id: 'scimeet25_survey_notice',
         content:
-          '🔧 Do you have any thoughts on CIROH DocuHub or Portal? We\'d love to hear from you! <a target="_blank" rel="noopener noreferrer" href="'+baseUrl+'scimeet25survey">Take the DocuHub/Portal User Survey here</a>.',
+          '🔧 Do you have any thoughts on CIROH Hub or Portal? We\'d love to hear from you! <a target="_blank" rel="noopener noreferrer" href="'+baseUrl+'scimeet25survey">Take the CIROH Hub/Portal User Survey here</a>.',
         backgroundColor: '#0081d2ff',
         textColor: '#fff',
         isCloseable: true,
@@ -375,44 +378,64 @@ const config = {
         // ... other stylesheets
       ],
       navbar: {
-        title: "DocuHub",
+        title: "CIROH Hub",
         logo: {
           alt: "CIROH Logo",
           src: "img/logos/docuhub.png",
         },
         items: [
           {
-            type: "doc",
-            docId: "products/intro",
-            label: "Products",
+            label: "About CIROH",
             position: "left",
+            items: [
+              {
+                type: "doc",
+                docId: "policies/intro",
+                label: "Policies",
+              },
+              {
+                href: "/working-groups",
+                label: "Working Groups",
+              },
+            ],
           },
           {
-            type: "doc",
-            docId: "services/intro",
-            label: "Services",
+            label: "Research & Innovation",
             position: "left",
+            items: [
+              {
+                href: "/publications",
+                label: "Publications",
+              },
+              {
+                type: "doc",
+                docId: "products/intro",
+                label: "Softwares",
+              },
+              {
+                type: "doc",
+                docId: "services/intro",
+                label: "Services",
+              },
+              {
+                href: "/community_products",
+                label: "Community Products",
+              },
+            ],
           },
           {
-            type: "doc",
-            docId: "policies/intro",
-            label: "Policies",
+            label: "Community & Collaboration",
             position: "left",
-          },
-          {
-            href: "/resources",
-            label: "Community Resources",
-            position: "left",
-          },
-          {
-            href: "/impact",
-            label: "Community Impact",
-            position: "right",
-          },
-          {
-            href: "/contribute",
-            label: "Contribute",
-            position: "right",
+            items: [
+              {
+                href: "/impact",
+                label: "Community Impact",
+              },
+              {
+                href: "/contribute",
+                label: "Contribute",
+              },
+            ],
           },
           {
             href: "/blog",
@@ -433,8 +456,8 @@ const config = {
             title: 'Quick Links',
             items: [
               {
-                label: 'Community Resources',
-                href: '/resources'
+                label: 'Community Products',
+                href: '/community_products'
               },
               {
                 label: 'Contact Us',
@@ -470,7 +493,7 @@ const config = {
                 href: 'https://ciroh.ua.edu/contact-us/'
               },
               {
-                label: 'DocuHub Repository',
+                label: 'CIROH Hub Repository',
                 href: 'https://github.com/CIROH-UA/ciroh-ua_website'
               },
             ]

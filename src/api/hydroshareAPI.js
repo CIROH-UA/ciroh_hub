@@ -259,78 +259,49 @@ async function fetchResourcesByKeyword(keyword, fullTextSearch=undefined) {
  * @returns {Promise<Array>} Array of resource objects
  */
 async function fetchResourcesBySearch(keyword, searchText, ascending=false, sortBy=undefined, author=undefined, pageNumber=1) {
-  // API Url with query parameters
-  let url = `https://www.hydroshare.org/discoverapi/?q=${encodeURIComponent(searchText)}&subject=${encodeURIComponent(keyword)}`;
+  // Use hsapi/resource API (same as fetchResourcesByKeyword)
+  let url = `https://www.hydroshare.org/hsapi/resource/?subject=${encodeURIComponent(keyword)}&page=${pageNumber}&count=40`;
 
-  // Add sort order parameter
-  if (ascending) {
-    url += `&asc=1`;
-  } else {
-    url += `&asc=-1`;
+  // Add search text if provided
+  if (searchText && searchText.trim()) {
+    url += `&full_text_search=${encodeURIComponent(searchText)}`;
   }
 
-  // Add sort parameter if provided
-  if (sortBy !== undefined) {
-    url += `&sort=${encodeURIComponent(sortBy)}`;
-  }
-
-  // Convert author name from "First Middle Last" to "Last, First Middle"
-  if (author !== undefined) {
-    author = convertAuthorToLastFirst(author);
-  }
-
-  // Add page number parameter (1-based indexing)
-  url += `&pnum=${pageNumber}`;
-
-  // Add filter parameter
-  const filter = {
-    author: [author].filter(a => a !== undefined),
-    subject: [keyword],
-  };
-
-  url += `&filter=${encodeURIComponent(JSON.stringify(filter))}`;
+  console.log(`[fetchResourcesBySearch] URL: ${url}`);
+  console.log(`[fetchResourcesBySearch] KEYWORD: ${keyword}, PAGE: ${pageNumber}, SEARCH: "${searchText}"`);
 
   // Fetch data from the API
   const response = await fetch(url);
   if (!response.ok) {
+    console.error(`[fetchResourcesBySearch] HTTP Error: ${response.status} ${response.statusText} for URL: ${url}`);
     throw new Error(`Error fetching resources (status: ${response.status})`);
   }
   const data = await response.json();
 
-  // Put resources into a corrected format
-  let resources;
+  console.log(`[fetchResourcesBySearch] Response received: count=${data.count}, results=${data.results?.length || 0}, for keyword="${keyword}"`);
 
-  if (typeof data.resources === "string") {
-    try {
-      resources = JSON.parse(data.resources);
-    } catch (e) {
-      console.error("Failed to parse data.resources as JSON string:", e);
-      resources = [];
-    }
-  } else if (Array.isArray(data.resources)) {
-    resources = data.resources;
-  } else {
-    console.warn("Unexpected format for data.resources:", data.resources);
-    resources = [];
-  }
+  // The API returns results directly as an array in data.results
+  const resources = data.results || [];
 
   let resourcesCorrected = [];
 
   for (let i = 0; i < resources.length; i++) {
     let resource = resources[i];
     let resourceCorrected = {
-      resource_id: resource.short_id,
-      resource_title: resource.title,
+      resource_id: resource.resource_id,
+      resource_title: resource.resource_title,
       authors: resource.authors,
-      resource_type: resource.type,
-      resource_url: 'https://www.hydroshare.org' + resource.link,
+      resource_type: resource.resource_type,
+      resource_url: resource.resource_url,
       abstract: resource.abstract,
-      date_created: resource.created,
-      date_last_updated: resource.modified,
+      date_created: resource.date_created,
+      date_last_updated: resource.date_last_updated,
     };
 
     resourcesCorrected.push(resourceCorrected);
   }
+
+  console.log(`[fetchResourcesBySearch] Returned ${resourcesCorrected.length} corrected resources for keyword="${keyword}"`);
 
   // Return the corrected resources
   return resourcesCorrected;
@@ -348,7 +319,7 @@ async function fetchResourcesBySearch(keyword, searchText, ascending=false, sort
  */
 async function fetchResourcesWithPaginationData(keyword, searchText, ascending=false, sortBy=undefined, author=undefined, pageNumber=1) {
   // API Url with query parameters
-  let url = `https://www.hydroshare.org/discoverapi/?q=${searchText ? encodeURIComponent(searchText) : ''}&subject=${encodeURIComponent(keyword)}`;
+  let url = `https://www.hydroshare.org/discoverapi/?q=${searchText ? encodeURIComponent(searchText) : ''}&subjects=${encodeURIComponent(keyword)}`;
 
   // Add sort order parameter
   if (ascending) {
@@ -362,25 +333,15 @@ async function fetchResourcesWithPaginationData(keyword, searchText, ascending=f
     url += `&sort=${encodeURIComponent(sortBy)}`;
   }
 
-  // Convert author name from "First Middle Last" to "Last, First Middle"
-  if (author !== undefined) {
-    author = convertAuthorToLastFirst(author);
-  }
-
   // Add page number parameter (1-based indexing)
   url += `&pnum=${pageNumber}`;
 
-  // Add filter parameter
-  const filter = {
-    author: [author].filter(a => a !== undefined),
-    subject: [keyword],
-  };
-
-  url += `&filter=${encodeURIComponent(JSON.stringify(filter))}`;
+  console.log(`[fetchResourcesWithPaginationData] Fetching page ${pageNumber} with URL: ${url}`, {searchText: searchText || '(empty)'});
 
   // Fetch data from the API
   const response = await fetch(url);
   if (!response.ok) {
+    console.error(`[fetchResourcesWithPaginationData] HTTP Error: ${response.status} ${response.statusText} for URL: ${url}`);
     throw new Error(`Error fetching resources (status: ${response.status})`);
   }
   const data = await response.json();
@@ -424,6 +385,8 @@ async function fetchResourcesWithPaginationData(keyword, searchText, ascending=f
     resourcesCorrected.push(resourceCorrected);
   }
 
+  console.log(`[fetchResourcesWithPaginationData] Fetched ${resourcesCorrected.length} of ${data.rescount} total resources`);
+
   // Return the corrected resources with pagination data
   return {
     resources: resourcesCorrected,
@@ -463,27 +426,19 @@ async function fetchKeywordPageData(keyword, searchText, ascending=false, sortBy
     url += `&sort=${encodeURIComponent(sortBy)}`;
   }
 
-  // Convert author name from "First Middle Last" to "Last, First Middle"
-  if (author !== undefined) {
-    author = convertAuthorToLastFirst(author);
-  }
-
   // Add page number parameter (1-based indexing)
   url += `&pnum=${1}`;
 
-  // Add filter parameter
-  const filter = {
-    author: [author].filter(a => a !== undefined),
-    subject: [keyword],
-  };
-
-  url += `&filter=${encodeURIComponent(JSON.stringify(filter))}`;
+  console.log(`[fetchKeywordPageData] Fetching page data with URL: ${url}`, {searchText: searchText || '(empty)'});
 
   const response = await fetch(url);
   if (!response.ok) {
+    console.error(`[fetchKeywordPageData] HTTP Error: ${response.status} ${response.statusText} for URL: ${url}`);
     throw new Error(`Error fetching resources (status: ${response.status})`);
   }
   const data = await response.json();
+
+  console.log(`[fetchKeywordPageData] Total resources for keyword '${keyword}': ${data.rescount}, pages: ${data.pagecount}`);
 
   return {
     resourceCount: data.rescount,

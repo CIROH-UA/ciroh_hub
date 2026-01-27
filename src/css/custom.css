@@ -1,99 +1,174 @@
 /**
- * Any CSS included here will be global.The classic template
- * bundles Infima by default. Infima is a CSS framework designed to
- * work well for content-centric websites.
+ * GLOBAL THEME OVERRIDES
+ * Light Mode = Solid White
+ * Dark Mode = Blue Gradient
  */
- /*
- :root {
-  --ifm-color-primary: #9e1b32;
-  --ifm-color-primary-dark: #8e182d;
-  --ifm-color-primary-darker: #86172a;
-  --ifm-color-primary-darkest: #6f1323;
-  --ifm-color-primary-light: #ae1e37;
-  --ifm-color-primary-lighter: #b61f39;
-  --ifm-color-primary-lightest: #cd2341;
-}
- You can override the default Infima variables here. */
- :root {
+
+/* ----------------------------- */
+/* LIGHT MODE — solid white      */
+/* ----------------------------- */
+
+:root {
   --ifm-color-primary: #19a7ce;
-
   --ifm-color-primary-dark: #1796b9;
-
   --ifm-color-primary-darker: #158eaf;
-
   --ifm-color-primary-darkest: #117590;
-
   --ifm-color-primary-light: #1cb8e3;
-
   --ifm-color-primary-lighter: #25bbe5;
-
   --ifm-color-primary-lightest: #44c5e8;
+
   --ifm-code-font-size: 95%;
-  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
-  --ifm-background-color: #eeeeee !important;
-} 
-/* For readability concerns, you should choose a lighter palette in dark mode. */
+  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.04);
+
+  /* Light mode background override (WHITE) */
+  --ifm-background-color: #ffffff !important;
+  --ifm-background-surface-color: #ffffff !important;
+
+  /* Navbar dropdown menus should never be transparent */
+  --ifm-dropdown-background-color: #ffffff;
+  --ifm-navbar-dropdown-background-color: #ffffff;
+
+  /* Text colors for light mode */
+  --ifm-heading-color: #0f172a;       /* slate-900 */
+  --ifm-font-color-base: #0f172a;     /* slate-900 */
+  --ifm-footer-color: #475569;        /* slate-600 for footer text */
+}
+
+[data-theme='light'] body {
+  background: #ffffff !important;
+  color: var(--ifm-font-color-base) !important;
+}
+
+/* Ensure light-mode surface elements (cards, panels) use white or slight shade */
+[data-theme='light'] {
+  --ifm-background-surface-color: #ffffff !important;
+  --ifm-block-background: #ffffff !important;
+}
+
+/* ----------------------------- */
+/* DARK MODE — gradient theme    */
+/* ----------------------------- */
+
+/* Force opaque navbar in dark theme */
+[data-theme="dark"] .navbar,
+[data-theme="dark"] .navbar__inner,
+[data-theme="dark"] .navbar--fixed,
+[data-theme="dark"] .navbar--sticky {
+  background-color: #060010 !important; /* slate-900; change to preferred color */
+  opacity: 1 !important;
+  backdrop-filter: none !important;     /* disable blur/transparency */
+  background-image: none !important;    /* remove gradients/overlays */
+  box-shadow: 0 6px 18px rgba(2,6,23,0.6); /* optional shadow for depth */
+}
+
 [data-theme='dark'] {
   --ifm-color-primary: #19a7ce;
-
   --ifm-color-primary-dark: #1796b9;
-
   --ifm-color-primary-darker: #158eaf;
-
   --ifm-color-primary-darkest: #117590;
-
   --ifm-color-primary-light: #1cb8e3;
-
   --ifm-color-primary-lighter: #25bbe5;
-
   --ifm-color-primary-lightest: #44c5e8;
-  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
-  --ifm-background-color: #313131 !important;
 
+  /* Reset Infima background vars to allow gradient */
+  --ifm-background-color: transparent !important;
+  --ifm-background-surface-color: transparent !important;
+
+  /* Navbar dropdown menus should stay opaque even if surfaces are transparent */
+  --ifm-dropdown-background-color: #2d3748;
+  --ifm-navbar-dropdown-background-color: #2d3748;
+
+  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
+
+  /* Dark mode text defaults */
+  --ifm-heading-color: #e6eef8;
+  --ifm-font-color-base: #cbd5e1;
+  --ifm-footer-color: #9aa6b2;
 }
-/* Styling one class specially in dark mode */
-[data-theme='dark'] .hero__title, .hero__subtitle{
+
+:root[data-theme='light'] {
+  --bg-primary: #ffffff;
+  --bg-card: #f7f7f9;
+  --text-primary: #1a1a1a;
+  --text-secondary: #4b5563;
+
+  --accent-1: #06b6d4;
+  --accent-2: #6366f1;
+
+  --border-color: rgba(0,0,0,0.12);
+  --glow-1: rgba(6, 182, 212, 0.35);
+}
+
+:root[data-theme='dark'] {
+  --bg-primary: #0c0e12;
+  --bg-card: #14161b;
+  --text-primary: #ffffff;
+  --text-secondary: #9ca3af;
+
+  --accent-1: #22d3ee;
+  --accent-2: #818cf8;
+
+  --border-color: rgba(255,255,255,0.1);
+  --glow-1: rgba(34, 211, 238, 0.55);
+}
+
+
+/* Apply gradient in dark mode site-wide */
+[data-theme='dark'] body {
+  background: #060010 !important;
+  background-attachment: fixed;
+  background-size: cover;
+  color: var(--ifm-font-color-base);
+}
+
+/* Dark mode hero fixes */
+[data-theme='dark'] .hero__title,
+[data-theme='dark'] .hero__subtitle {
   color: whitesmoke;
 }
 
-/*
-  This class can be apply to img tag if you want image colors to invert, to look better in a dark mode
-  e.g. <img src="path/to/image.png" class="theme-invert-dark" />
-*/
+/* Optional image light/dark swapping */
+[data-theme="light"] .darkImage {
+  display: none;
+}
+[data-theme="light"] .lightImage {
+  display: block;
+}
+[data-theme="dark"] .lightImage {
+  display: none;
+}
+[data-theme="dark"] .darkImage {
+  display: block;
+}
+
+/* Invert helper */
 [data-theme='dark'] .theme-invert-dark {
   filter: invert(100%);
 }
 
-[data-theme="light"] .darkImage {
-    display: none; /* Hide dark image in light mode */
-  }
-  
-  [data-theme="light"] .lightImage {
-  display: block; /* Show light image in light mode */
-  }
-  
-  [data-theme="dark"] .lightImage {
-  display: none; /* Hide light image in dark mode */
-  }
-  
-  [data-theme="dark"] .darkImage {
-  display: block; /* Show dark image in dark mode */
-  }
-/* 
-[data-theme='dark'] {
-  --ifm-color-primary: #25c2a0;
-  --ifm-color-primary-dark: #21af90;
-  --ifm-color-primary-darker: #1fa588;
-  --ifm-color-primary-darkest: #1a8870;
-  --ifm-color-primary-light: #29d5b0;
-  --ifm-color-primary-lighter: #32d8b4;
-  --ifm-color-primary-lightest: #4fddbf;
-  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
-} */
- 
+/* Hidden utility */
 .hidden {
-display: none !important;
+  display: none !important;
 }
+
+/* ----------------------------- */
+/* NAVBAR DROPDOWN MENU FIXES    */
+/* ----------------------------- */
+
+/* Docusaurus/Infima navbar dropdown menus */
+.navbar .dropdown__menu {
+  background-color: var(--ifm-dropdown-background-color) !important;
+  border: 1px solid var(--ifm-color-emphasis-300) !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18) !important;
+}
+
+[data-theme='dark'] .navbar .dropdown__menu {
+  border-color: #334155 !important;
+}
+
+/* ----------------------------- */
+/* LAYOUT + COMPONENT OVERRIDES  */
+/* ----------------------------- */
 
 .docs-wrapper .container {
   max-width: 100%;
@@ -101,19 +176,11 @@ display: none !important;
   margin-right: 1.3rem;
 }
 
-.embed-wrapper {
-  position: relative;
-  padding-top: 56.25%; /* 16:9 Aspect Ratio */
-}
-
-.centered-caption {
-  width: 100%;
-  text-align:center;
-}
-
+/* Embedded video wrapper */
+.embed-wrapper,
 .player-wrapper {
   position: relative;
-  padding-top: 56.25%; /* 16:9 Aspect Ratio */
+  padding-top: 56.25%; /* 16:9 */
 }
 
 .react-player {
@@ -124,52 +191,48 @@ display: none !important;
 
 @media screen and (max-width: 768px) {
   .player-wrapper {
-    padding-top: 75%; /* 4:3 Aspect Ratio for smaller screens */
+    padding-top: 75%; /* 4:3 for mobile */
   }
 }
 
+/* Scaling fonts + sidebar for smaller screens */
 @media (max-width: 1400px) {
   :root {
-    /* Adjust the base font size to 90% of the original */
     font-size: 85% !important;
-    
-    /* Adjust other root variables */
     --ifm-font-size-base: 90% !important;
     --ifm-code-font-size: 90% !important;
-    
-    /* Adjust sidebar widths */
-    --doc-sidebar-width: 240px !important; /* 240px * 0.9 */
+    --doc-sidebar-width: 240px !important;
   }
   body {
     line-height: 1.5;
   }
-  
 }
+
+/* ----------------------------- */
+/* FOOTER OVERRIDES              */
+/* ----------------------------- */
 
 .footer {
   padding-bottom: 2rem;
 }
 
-/* Center the footer columns container */
 .footer__links {
   display: flex;
   justify-content: center;
   gap: 4rem;
   padding: 2rem 1rem;
   margin-bottom: 2rem;
-  max-width: 1000px; /* Add max-width to match content width */
+  max-width: 1000px;
   margin-left: auto;
   margin-right: auto;
 }
 
-/* Column styling */
 .footer__col {
-  flex: 1 1 0; /* Change to flex: 1 to distribute space evenly */
+  flex: 1 1 0;
   min-width: 200px;
-  max-width: 250px; /* Slightly reduce max-width */
+  max-width: 250px;
 }
 
-/* Rest of the styles remain the same */
 .footer__title {
   text-align: left;
   margin-bottom: 1rem;
@@ -186,28 +249,25 @@ display: none !important;
   margin-top: 0.5rem;
 }
 
-.footer__attrib {
-  text-align: center;
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 2rem 1.5rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  font-size: 1.2rem;
-  color: white;
-  line-height: 1.5;
-}
-
+.footer__attrib,
 .footer__funding {
   text-align: center;
   max-width: 800px;
   margin: 0 auto;
   padding: 2rem 1.5rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 1px solid rgba(0,0,0,0.05);
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+  line-height: 1.5;
+}
+
+.footer__attrib {
+  font-size: 1.2rem;
+  color: var(--ifm-heading-color);
+}
+
+.footer__funding {
   font-size: 0.9rem;
   color: var(--ifm-footer-color);
-  line-height: 1.5;
 }
 
 .footer__bottom {
@@ -222,12 +282,12 @@ display: none !important;
   .footer__links {
     gap: 2rem;
     flex-wrap: wrap;
-    justify-content: center; /* Change to center */
+    justify-content: center;
     margin-bottom: 1.5rem;
   }
 
   .footer__col {
-    flex: 0 1 auto; /* Reset flex in mobile view */
+    flex: 0 1 auto;
     min-width: 150px;
     margin-bottom: 1rem;
   }
@@ -238,17 +298,19 @@ display: none !important;
   }
 }
 
-@media (min-width: 1440px) {
-  .community-impact-wrapper .container {
-    max-width: 100% !important;
-  }
+/* ----------------------------- */
+/* MISC UI ELEMENTS              */
+/* ----------------------------- */
+
+.community-impact-wrapper .container {
+  max-width: 100% !important;
 }
 
-.community-impact-wrapper  .col {
-  padding:0rem;
+.community-impact-wrapper .col {
+  padding: 0rem;
 }
 
-.community-impact-wrapper  .margin-vert--lg {
+.community-impact-wrapper .margin-vert--lg {
   margin-bottom: 2rem !important;
   margin-top: 0rem !important;
 }
@@ -265,20 +327,17 @@ display: none !important;
     float: none;
     clear: none;
     max-width: 50%;
-    max-height: 100%;
     margin-left: auto;
     margin-right: auto;
   }
 }
 
+/* Indent boxes */
 [data-theme="light"] .indent-wrapper {
-  background-color: #DEDEDE;
+  background-color: #f3f4f6; /* light surface */
   border-left-style: solid;
-  border-color: #999999;
-  padding-top: 1rem;
-  padding-left: 2rem;
-  padding-bottom: 0.5rem;
-  padding-right: 1rem;
+  border-color: #d1d5db;
+  padding: 1rem 1rem 0.5rem 2rem;
   margin-bottom: 1rem;
 }
 
@@ -286,35 +345,22 @@ display: none !important;
   background-color: #343434;
   border-left-style: solid;
   border-color: #999999;
-  padding-top: 1rem;
-  padding-left: 2rem;
-  padding-bottom: 0.5rem;
-  padding-right: 1rem;
+  padding: 1rem 1rem 0.5rem 2rem;
   margin-bottom: 1rem;
 }
 
-[data-theme="dark"] .checkmark-color {
+[data-theme='dark'] .checkmark-color {
   color: var(--ifm-color-success-light);
   font-weight: bold;
 }
 
-[data-theme="light"] .checkmark-color {
+[data-theme='light'] .checkmark-color {
   color: var(--ifm-color-success-dark);
   font-weight: bold;
 }
 
-[data-theme="light"] .darkImage {
-  display: none; /* Hide dark image in light mode */
-}
+/* ----------------------------- */
+/* IMPORT TAILWIND LAST          */
+/* ----------------------------- */
 
-[data-theme="light"] .lightImage {
-display: block; /* Show light image in light mode */
-}
-
-[data-theme="dark"] .lightImage {
-display: none; /* Hide light image in dark mode */
-}
-
-[data-theme="dark"] .darkImage {
-display: block; /* Show dark image in dark mode */
-}
+@import "./tailwind.css";

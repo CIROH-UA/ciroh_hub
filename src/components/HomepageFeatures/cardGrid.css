@@ -1,0 +1,297 @@
+/* -----------------------------------------
+   SECTION WRAPPER
+----------------------------------------- */
+.cg-section {
+    position: relative;
+    padding: 4rem 0;
+    
+    overflow: hidden;
+}
+
+/* -----------------------------------------
+   GRID LINES BACKGROUND
+----------------------------------------- */
+.cg-grid-lines {
+    position: absolute;
+    inset: 0;
+    background-image:
+        linear-gradient(var(--border-color) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border-color) 1px, transparent 1px);
+    background-size: 110px 110px;
+    opacity: 0.4;
+    z-index: 0;
+    animation: cgGridMove 22s linear infinite;
+}
+
+@keyframes cgGridMove {
+    0% {
+        background-position: 0 0;
+    }
+
+    100% {
+        background-position: 110px 110px;
+    }
+}
+
+/* -----------------------------------------
+   PARTICLES
+----------------------------------------- */
+.cg-particles {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.cg-particle {
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0;
+    animation: cgParticleAnim linear infinite;
+}
+
+@keyframes cgParticleAnim {
+    0% {
+        opacity: 0;
+        transform: translateY(60vh) scale(0);
+    }
+
+    10% {
+        opacity: 0.9;
+    }
+
+    90% {
+        opacity: 0.9;
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateY(-60vh) scale(1);
+    }
+}
+
+/* -----------------------------------------
+   LAYOUT CONTAINER
+----------------------------------------- */
+.cg-container {
+    position: relative;
+    z-index: 2;
+    max-width: 1300px;
+    margin: auto;
+    padding: 0 2rem;
+}
+
+/* -----------------------------------------
+   HEADER
+----------------------------------------- */
+.cg-header {
+    margin-bottom: 2.5rem;
+}
+
+.cg-chip {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+    padding: 0.3rem 1rem;
+    font-size: 0.75rem;
+    color: white;
+    border-radius: 999px;
+    margin-bottom: 0.8rem;
+    letter-spacing: 1px;
+}
+
+.cg-title {
+    font-size: 2rem;
+    margin-bottom: 0.4rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.cg-subtitle {
+    font-size: 1rem;
+    max-width: 700px;
+    margin: 0.5rem auto 0;
+    color: var(--text-secondary);
+}
+
+/* -----------------------------------------
+   CARD GRID
+----------------------------------------- */
+.cg-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.8rem;
+    margin-top: 2rem;
+    perspective: 1200px;
+}
+
+/* -----------------------------------------
+   SINGLE CARD
+----------------------------------------- */
+.cg-card {
+    /* background: var(--bg-card); */
+    border-radius: 18px;
+    padding: 1.8rem;
+    border: 1px solid var(--border-color);
+    position: relative;
+    cursor: pointer;
+    transition: 0.4s ease;
+    transform-style: preserve-3d;
+    overflow: hidden;
+}
+
+.cg-card:hover {
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+
+/* ICON */
+.cg-icon-box {
+    width: 64px;
+    height: 64px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+    margin-bottom: 1rem;
+}
+
+.cg-icon-box img {
+    width: 70%;
+    height: 70%;
+}
+
+/* CARD CONTENT */
+.cg-card-title {
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.4rem;
+}
+
+.cg-card-desc {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    margin-bottom: 1rem;
+    line-height: 1.5;
+}
+
+/* LINK */
+.cg-link {
+    text-decoration: none;
+    color: var(--accent-2);
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+/* ORBIT ANIMATION */
+.cg-orbit {
+    position: absolute;
+    bottom: -20px;
+    right: -20px;
+    width: 110px;
+    height: 110px;
+    border: 1px dashed var(--border-color);
+    border-radius: 50%;
+    opacity: 0.3;
+    animation: cgOrbitSpin 18s linear infinite;
+}
+
+.cg-orbit-dot {
+    width: 10px;
+    height: 10px;
+    background: var(--accent-1);
+    border-radius: 50%;
+    position: absolute;
+    top: 8px;
+    right: 8px;
+}
+
+@keyframes cgOrbitSpin {
+    0% {
+        transform: rotate(0);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* -----------------------------------------
+   CTA BUTTON
+----------------------------------------- */
+.cg-cta {
+    margin-top: 3rem;
+}
+
+.cg-cta-button {
+    display: inline-block;
+    /* background: linear-gradient(135deg, var(--accent-1), var(--accent-2)); */
+    padding: 0.9rem 1.6rem;
+    border-radius: 999px;
+    color: white;
+    font-weight: 600;
+    font-size: 1rem;
+    text-decoration: none;
+    transition: 0.3s ease;
+}
+
+.cg-cta-button:hover {
+    transform: translateY(-2px);
+    opacity: 0.9;
+}
+
+/* -----------------------------------------
+   RESPONSIVE
+----------------------------------------- */
+@media (max-width: 768px) {
+    .cg-title {
+        font-size: 1.6rem;
+    }
+
+    .cg-subtitle {
+        font-size: 0.9rem;
+    }
+}
+
+.cg-icon {
+    font-size: 2.2rem;
+    z-index: 1;
+    position: relative;
+}
+
+/* -----------------------------------------
+   STYLISH CARD NUMBER
+----------------------------------------- */
+.cg-card-number {
+    font-family: 'Inter', sans-serif;
+    line-height: 1;
+    pointer-events: none;
+    transform: translateZ(20px);
+}
+
+/* Cyan glow on hover */
+.group:hover .cg-card-number {
+    opacity: 1 !important;
+    color: #22d3ee !important; /* cyan-400 */
+
+    /* Softer, more subtle glow */
+    text-shadow:
+        0 0 3px rgba(34, 211, 238, 0.30),
+        0 0 6px rgba(34, 211, 238, 0.20),
+        0 0 10px rgba(34, 211, 238, 0.12);
+
+    transition: all 0.25s ease;
+}
+
+
+
+.cg-number-box {
+    width: 64px;
+    height: 64px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+}

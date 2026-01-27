@@ -100,12 +100,12 @@ const ProductCard = ({ product }) => {
 
 const ProductCards = ({ productsData }) => {
   const { siteConfig } = useDocusaurusContext();
-  const issueUrl = siteConfig?.customFields?.productIssueUrl;
+  const productIssueUrl =
+    siteConfig?.customFields?.productIssueUrl ||
+    'https://github.com/CIROH-UA/ciroh-ua_website/issues/new?template=product-request.md';
 
   const handleAddProduct = () => {
-    // Open product request issue template from config (fallback to repo issues page)
-    const githubUrl = issueUrl;
-    window.open(githubUrl, "_blank");
+    window.open(productIssueUrl, '_blank', 'noopener,noreferrer');
   };
 
   return (

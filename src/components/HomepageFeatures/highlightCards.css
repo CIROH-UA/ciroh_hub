@@ -1,0 +1,233 @@
+/* ========================================
+   THEME VARIABLES
+   ======================================== */
+:root {
+    --card-bg: rgba(255, 255, 255, 0.7);
+    --card-border: rgba(0, 0, 0, 0.1);
+    --water-color: rgba(14, 165, 233, 0.6);
+    --water-color-deep: rgba(2, 132, 199, 0.7);
+    --wave-color-1: rgba(56, 189, 248, 0.8);
+    --wave-color-2: rgba(14, 165, 233, 0.6);
+    --bubble-color: rgba(255, 255, 255, 0.6);
+
+    --text-over-water: #000;
+    /* text becomes black while water rises */
+}
+
+html[data-theme="light"] {
+    --card-bg: rgba(255, 255, 255, 0.7);
+    --card-border: rgba(0, 0, 0, 0.1);
+    --water-color: rgba(14, 165, 233, 0.6);
+    --water-color-deep: rgba(2, 132, 199, 0.7);
+    --wave-color-1: rgba(56, 189, 248, 0.8);
+    --wave-color-2: rgba(14, 165, 233, 0.6);
+    --bubble-color: rgba(255, 255, 255, 0.6);
+
+    --text-over-water: #000;
+}
+
+html[data-theme="dark"] {
+    --card-bg: rgba(255, 255, 255, 0.05);
+    --card-border: rgba(255, 255, 255, 0.12);
+
+    /* ↓↓↓ LOWERED TRANSPARENCY FOR WATER */
+    --water-color-deep: rgb(27, 221, 255);
+    /* was 0.5 */
+    --water-color: rgb(117, 227, 255);
+    /* was 0.6 */
+
+    /* KEEP WAVES VISIBLE BUT SOFTER */
+    --wave-color-1: rgb(180, 245, 255);
+    /* was 0.7 */
+    --wave-color-2: rgb(152, 240, 255);
+    /* was 0.5 */
+
+    --bubble-color: rgba(255, 255, 255, 0.25);
+    /* softer bubbles */
+}
+
+/* ========================================
+   BASE CARD
+   ======================================== */
+.highlight-card {
+    position: relative;
+    overflow: hidden;
+    border-radius: 1rem;
+    backdrop-filter: blur(10px);
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    min-height: 220px;
+    cursor: pointer;
+}
+
+.highlight-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(14, 165, 233, 0.2);
+}
+
+/* TEXT ABOVE WATER */
+.card-content {
+    position: relative;
+    z-index: 10;
+    padding: 2rem;
+    color: inherit;
+}
+
+/* ========================================
+   WATER FILL
+   ======================================== */
+.water-fill {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 120%;
+    height: 0%;
+    z-index: 1;
+    overflow: hidden;
+    transition: height 2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.highlight-card:hover .water-fill {
+    height: 120%;
+}
+
+/* Water color */
+.water-body {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 120%;
+    height: 100%;
+    background: linear-gradient(to top,
+            var(--water-color-deep),
+            var(--water-color),
+            transparent 100%);
+}
+
+/* Waves */
+.water-wave {
+    position: absolute;
+    top: -20px;
+    left: -50%;
+    width: 200%;
+    height: 40px;
+    border-radius: 40%;
+}
+
+.wave-1 {
+    background: var(--wave-color-1);
+    animation: wave-motion 3s ease-in-out infinite;
+}
+
+.wave-2 {
+    top: -15px;
+    background: var(--wave-color-2);
+    animation: wave-motion 4s ease-in-out infinite reverse;
+    animation-delay: 0.5s;
+}
+
+@keyframes wave-motion {
+
+    0%,
+    100% {
+        transform: translateX(0) rotate(0deg);
+    }
+
+    25% {
+        transform: translateX(5%) rotate(1deg);
+    }
+
+    50% {
+        transform: translateX(0) rotate(0deg);
+    }
+
+    75% {
+        transform: translateX(-5%) rotate(-1deg);
+    }
+}
+
+/* ========================================
+   BUBBLES
+   ======================================== */
+.bubble {
+    position: absolute;
+    background: var(--bubble-color);
+    border-radius: 50%;
+    opacity: 0;
+    animation: bubble-rise 2s ease-in infinite;
+}
+
+.highlight-card:hover .bubble {
+    opacity: 1;
+}
+
+.bubble-1 {
+    width: 8px;
+    height: 8px;
+    left: 20%;
+    bottom: 10%;
+    animation-delay: 0s;
+    animation-duration: 2.5s;
+}
+
+.bubble-2 {
+    width: 6px;
+    height: 6px;
+    left: 40%;
+    bottom: 15%;
+    animation-delay: 0.3s;
+    animation-duration: 2s;
+}
+
+.bubble-3 {
+    width: 10px;
+    height: 10px;
+    left: 60%;
+    bottom: 5%;
+    animation-delay: 0.6s;
+    animation-duration: 2.8s;
+}
+
+.bubble-4 {
+    width: 5px;
+    height: 5px;
+    left: 75%;
+    bottom: 20%;
+    animation-delay: 0.9s;
+    animation-duration: 2.2s;
+}
+
+.bubble-5 {
+    width: 7px;
+    height: 7px;
+    left: 85%;
+    bottom: 8%;
+    animation-delay: 1.2s;
+    animation-duration: 2.6s;
+}
+
+@keyframes bubble-rise {
+    0% {
+        transform: translateY(0) scale(1);
+        opacity: 0.7;
+    }
+
+    50% {
+        opacity: 0.5;
+    }
+
+    100% {
+        transform: translateY(-180px) scale(0.5);
+        opacity: 0;
+    }
+}
+
+/* ========================================
+   TEXT COLOR CHANGE ON HOVER (BLACK TEXT)
+   ======================================== */
+.highlight-card:hover .card-content,
+.highlight-card:hover .card-content * {
+    color: var(--text-over-water) !important;
+    fill: var(--text-over-water) !important;
+}
