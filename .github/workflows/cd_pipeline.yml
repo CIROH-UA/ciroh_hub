@@ -75,7 +75,7 @@ jobs:
       # but don't want to chance insecure handling of secrets.
       - name: GitHub Pages deployment to staging
         uses: JamesIves/github-pages-deploy-action@v4.6.1
-        if: ${{ env.ENVIRONMENT == "staging" }}
+        if: ${{ env.ENVIRONMENT == 'staging' }}
         with:
           token: ${{ secrets.GH_STAGING_TOKEN }}
           branch: main
@@ -84,7 +84,7 @@ jobs:
 
       - name: GitHub Pages deployment to production
         uses: JamesIves/github-pages-deploy-action@v4.6.1
-        if: ${{ env.ENVIRONMENT == "production" }}
+        if: ${{ env.ENVIRONMENT == 'production' }}
         with:
           token: ${{ secrets.GH_PRODUCTION_TOKEN }}
           branch: main
