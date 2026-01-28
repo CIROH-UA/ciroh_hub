@@ -72,10 +72,10 @@ jobs:
         
         # Use sed to replace the baseUrl value
         echo "Setting baseUrl for staging"
-        sed -i 's|baseUrl: '\''\/local\/'\''|baseUrl: '\''/staging/'\''|g' docusaurus.config.js
-        sed -i 's|baseUrl: "\/local\/"|baseUrl: "\/staging\/"|g' docusaurus.config.js
-        sed -i 's|baseUrl = '\''\/local\/'\''|baseUrl = '\''/staging/'\''|g' docusaurus.config.js
-        sed -i 's|baseUrl = "\/local\/"|baseUrl = "\/staging\/"|g' docusaurus.config.js
+        sed -i 's|baseUrl: '\''\/local\/'\''|baseUrl: '\''/ciroh_hub_staging/'\''|g' docusaurus.config.js
+        sed -i 's|baseUrl: "\/local\/"|baseUrl: "\/ciroh_hub_staging\/"|g' docusaurus.config.js
+        sed -i 's|baseUrl = '\''\/local\/'\''|baseUrl = '\''/ciroh_hub_staging/'\''|g' docusaurus.config.js
+        sed -i 's|baseUrl = "\/local\/"|baseUrl = "\/ciroh_hub_staging\/"|g' docusaurus.config.js
         
         # Show the changed config
         echo "Modified docusaurus.config.js:"
