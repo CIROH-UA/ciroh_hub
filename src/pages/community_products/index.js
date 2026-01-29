@@ -119,7 +119,7 @@ export default function Resources() {
               <ResourceBrowser
                 keyword="nwm_portal_app"
                 resourceLabel="Resources"
-                defaultImage="/img/datasets_logo_light.png"
+                defaultImage="/img/cards/datasets_logo_light.png"
               />
             </TabItem>
             <TabItem value="courses">
@@ -144,7 +144,7 @@ export default function Resources() {
               <ResourceBrowser
                 keyword="nwm_portal_module"
                 resourceLabel="Courses"
-                defaultImage="/img/datasets_logo_light.png"
+                defaultImage="/img/cards/datasets_logo_light.png"
               />
             </TabItem>
             <TabItem value="presentations">

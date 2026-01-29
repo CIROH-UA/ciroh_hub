@@ -1,0 +1,156 @@
+.wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  background: var(--ifm-background-color);
+  padding: 4rem 0 0;
+}
+
+/* Header with title and toggle buttons */
+.header {
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+    align-items: center;
+    margin-bottom: 2rem;
+    margin-top: 2rem;
+  }
+  
+  /* View Toggle Buttons */
+  .viewToggle {
+    display: flex;
+    gap: 0.5rem;
+  }
+  
+  .toggleButton {
+    background: var(--ifm-cards-resources);
+    border: 1px solid var(--ifm-color-emphasis-200);
+    border-radius: 5px;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    transition: background 0.2s ease-in-out;
+  }
+  
+  .toggleButton:hover {
+    background: var(--ifm-color-emphasis-100);
+  }
+  
+  .toggleButton.active {
+    background: var(--ifm-color-primary);
+    color: white;
+  }
+  
+  /* Grid and Row Containers */
+  .gridContainer, .rowContainer {
+    margin-top: 1rem;
+  }
+
+/* Search and Filter Form */
+  .filterForm {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+  
+.filterForm input[type="text"],
+.filterForm select {
+  padding: 0.5rem;
+  font-size: 1rem;
+}
+  
+.filterForm button {
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+
+.searchInput {
+  flex: 1;
+  min-width: 200px;
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+  
+.sortSelect,.typeSelect {
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  min-width: 180px;
+}
+
+.button {
+  padding: 1rem 2rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: transform 0.3s ease, background-color 0.3s ease;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.button:hover {
+  transform: scale(1.05);
+}
+
+
+.buttonPrimary {
+  background-color: var(--ifm-color-primary-dark);
+  color: #fff;
+  
+}
+  
+:root[data-theme='dark'] .buttonPrimary {
+  background-color: var(--ifm-color-primary-dark);
+  color: #fff;
+}
+
+.counterRow{
+  margin: 0 0 0.75rem 0;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.emptyMessage{
+  width: 100%;
+  text-align: center;
+  margin-top: 2rem;
+  font-size: 1.1rem;
+  color: var(--ifm-color-emphasis-600);
+}
+  
+  /* --------------------------------------
+   * SHIMMER ANIMATION FOR GRID PLACEHOLDER
+   * -------------------------------------- */
+  .shimmerGrid {
+    background: linear-gradient(90deg, #eee 25%, #f5f5f5 50%, #eee 75%);
+    background-size: 400% 100%;
+    animation: shimmerAnimation 1.5s infinite;
+  }
+  
+  /* --------------------------------------
+   * SHIMMER ANIMATION FOR ROW PLACEHOLDER
+   * -------------------------------------- */
+  .shimmerRow {
+    background: linear-gradient(90deg, #ddd 25%, #e3e3e3 50%, #ddd 75%);
+    background-size: 400% 100%;
+    animation: shimmerAnimation 2s infinite;
+  }
+  
+  /* --------------------------------------
+   * SHIMMER KEYFRAMES
+   * -------------------------------------- */
+  @keyframes shimmerAnimation {
+    0% {
+      background-position: -200% 0;
+    }
+    100% {
+      background-position: 200% 0;
+    }
+  }
+  

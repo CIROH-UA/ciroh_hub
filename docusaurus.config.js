@@ -20,7 +20,85 @@ const config = {
       process.env.REACT_APP_API_BASE_URL ||
       process.env.VITE_API_BASE_URL ||
       'https://67h5z9ih7j.execute-api.us-east-1.amazonaws.com/default',
-    githubProjectToken: process.env.GITHUB_PROJECT_TOKEN,
+    onBrokenMarkdownLinks: "warn",
+    onBrokenMarkdownImages: "warn",
+    githubProjectToken: process.env.GITHUB_PROJECT_TOKEN,    
+
+    // Workaround to add descriptive text to blog sidebars.
+    // Supports any number of blogs.
+    // 
+    // For each blog, the injector matches against the
+    // sidebar title. If it matches, the html segment
+    // will be inserted below the sidebar title.
+    // 
+    // This approach is somewhat hacky, but the blog
+    // plug-in locks down access to custom fields,
+    // so it's the best option available for now.
+    blogSidebarInjection: [
+      {
+        sidebarTitle: "CIROH Hub Blog",
+        html: `
+          <div style="font-size: 0.9rem; margin-bottom: 0.6rem; margin-right:1rem">
+            Exclusive content for researchers utilizing CIROH Cyberinfrastructure resources.
+            Share your insights, discoveries, and experiences with the hydrologic science community.
+          </div>
+          <div style="font-size: 0.9rem; margin-bottom: 1rem; margin-right:1rem">
+            This blog platform is dedicated to highlighting the innovative work of researchers who
+            have leveraged CIROH's computational tools and resources to advance water science.
+            Your stories help demonstrate the value of our shared infrastructure and inspire new
+            applications across the field.
+          </div>
+          <a 
+            href="https://github.com/CIROH-UA/ciroh-ua_website/issues/new?template=docuhub-blog-post.md" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            style="
+              display: inline-block;
+              padding: 0.5rem 1rem;
+              margin-bottom: 1rem;
+              background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+              color: white;
+              text-decoration: none;
+              border-radius: 6px;
+              font-size: 0.9rem;
+              font-weight: 500;
+              transition: all 0.2s ease;
+              box-shadow: 0 2px 4px rgba(34, 197, 94, 0.2);
+            "
+            onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 8px rgba(34, 197, 94, 0.3)';"
+            onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 4px rgba(34, 197, 94, 0.2)';"
+          >
+            Submit Your Blog
+          </a>
+        `
+      },
+
+    ],
+    zotero_api_key: process.env.ZOTERO_API_KEY || "dummy",
+    zotero_group_id: process.env.ZOTERO_CIROH_GROUP_ID,
+    captcha_key: process.env.CAPTCHA_KEY || "dummy",
+    s3_bucket: process.env.S3_BUCKET_NAME,
+    s3_access_key: process.env.S3_ACCESS_KEY,
+    s3_secret_key: process.env.S3_SECRET_KEY,
+    s3_region: process.env.S3_REGION,
+    hs_client_id: process.env.HS_CLIENT_ID || "dummy",
+    hs_scopes: ['read', 'write'],
+    hs_authorize_url: "https://www.hydroshare.org/o/authorize/",
+    hs_token_url: "https://www.hydroshare.org/o/token/",
+    hs_redirect_uri: "https://portal.ciroh.org/contribute",
+    hs_logout_endpoint: "https://www.hydroshare.org/accounts/logout/",
+    hs_logout_redirect: "https://portal.ciroh.org/contribute",
+    // URL for submitting a new product request (used in ProductCards component)
+    productIssueUrl: "https://github.com/CIROH-UA/ciroh-ua_website/issues/new?template=product-request.md",
+
+    // Centralized external links used across pages/components
+    externalLinks: {
+      zoteroLogin: "https://www.zotero.org/user/login",
+      feedbackForm: "https://forms.office.com/r/5ww7qRWwwf",
+    },
+
+    // Optional links for contribution CTAs
+  blogIdeaUrl: "https://github.com/CIROH-UA/ciroh-ua_website/issues/new?template=docuhub-blog-post.md",
   },
 
   // GitHub pages deployment config.
@@ -295,71 +373,6 @@ const config = {
     ],
   ],
 
-  customFields: {
-    // Workaround to add descriptive text to blog sidebars.
-    // Supports any number of blogs.
-    // 
-    // For each blog, the injector matches against the
-    // sidebar title. If it matches, the html segment
-    // will be inserted below the sidebar title.
-    // 
-    // This approach is somewhat hacky, but the blog
-    // plug-in locks down access to custom fields,
-    // so it's the best option available for now.
-    blogSidebarInjection: [
-      {
-        sidebarTitle: "CIROH Hub Blog",
-        html: `
-          <div style="font-size: 0.9rem; margin-bottom: 0.6rem; margin-right:1rem">
-            Exclusive content for researchers utilizing CIROH Cyberinfrastructure resources.
-            Share your insights, discoveries, and experiences with the hydrologic science community.
-          </div>
-          <div style="font-size: 0.9rem; margin-bottom: 1rem; margin-right:1rem">
-            This blog platform is dedicated to highlighting the innovative work of researchers who
-            have leveraged CIROH's computational tools and resources to advance water science.
-            Your stories help demonstrate the value of our shared infrastructure and inspire new
-            applications across the field.
-          </div>
-          <a 
-            href="https://github.com/CIROH-UA/ciroh-ua_website/issues/new?template=docuhub-blog-post.md" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            style="
-              display: inline-block;
-              padding: 0.5rem 1rem;
-              margin-bottom: 1rem;
-              background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
-              color: white;
-              text-decoration: none;
-              border-radius: 6px;
-              font-size: 0.9rem;
-              font-weight: 500;
-              transition: all 0.2s ease;
-              box-shadow: 0 2px 4px rgba(34, 197, 94, 0.2);
-            "
-            onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 8px rgba(34, 197, 94, 0.3)';"
-            onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 4px rgba(34, 197, 94, 0.2)';"
-          >
-            Submit Your Blog
-          </a>
-        `
-      },
-    ],
-
-    // URL for submitting a new product request (used in ProductCards component)
-    productIssueUrl: "https://github.com/CIROH-UA/ciroh-ua_website/issues/new?template=product-request.md",
-
-    // Centralized external links used across pages/components
-    externalLinks: {
-      zoteroLogin: "https://www.zotero.org/user/login",
-      feedbackForm: "https://forms.office.com/r/5ww7qRWwwf",
-    },
-
-    // Optional links for contribution CTAs
-  blogIdeaUrl: "https://github.com/CIROH-UA/ciroh-ua_website/issues/new?template=docuhub-blog-post.md",
-
-  },
-
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     (
@@ -395,42 +408,43 @@ const config = {
         },
         items: [
           {
-            label: "About CIROH",
-            position: "left",
-            items: [
-              {
-                type: "doc",
-                docId: "policies/intro",
-                label: "Policies",
-              },
-              {
-                href: "/working-groups",
-                label: "Working Groups",
-              },
-            ],
-          },
-          {
             label: "Research & Innovation",
             position: "left",
             items: [
               {
-                href: "/publications",
-                label: "Publications",
+                href: "/apps",
+                label: "Apps",
               },
               {
-                type: "doc",
-                docId: "products/intro",
-                label: "Softwares",
+                href: "/datasets",
+                label: "Datasets",
+              },
+              {href: "/presentations",
+                label: "Presentations",
+              },
+              {href: "/publications",
+                label: "Publications",
               },
               {
                 type: "doc",
                 docId: "services/intro",
                 label: "Services",
               },
+            ],
+          },
+          {
+            label: "Docs & Learning",
+            position: "left",
+            items: [
               {
-                href: "/community_products",
-                label: "Community Products",
+                type: "doc",
+                docId: "products/intro",
+                label: "Software",
               },
+             {
+                href: "/courses",
+                label: "Courses",
+              } 
             ],
           },
           {
@@ -448,18 +462,34 @@ const config = {
             ],
           },
           {
-            href: "/blog",
-            label: "Blog",
+            label: "About CIROH",
             position: "right",
+            items: [
+              {
+                type: "doc",
+                docId: "policies/intro",
+                label: "Policies",
+              },
+              {
+                href: "/working-groups",
+                label: "Working Groups",
+              },
+            ],
           },
+
           {
-            href: "/news",
-            label: "News",
+            label: "Blog & News",
             position: "right",
-          },
-          {
-            type: 'custom-githubAuth',
-            position: 'right',
+            items: [
+              {
+                href: "/blog",
+                label: "Blog",
+              },
+              {
+                href: "/news",
+                label: "News",
+              }
+            ]
           },
         ],
       },

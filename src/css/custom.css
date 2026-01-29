@@ -32,6 +32,8 @@
   --ifm-heading-color: #0f172a;       /* slate-900 */
   --ifm-font-color-base: #0f172a;     /* slate-900 */
   --ifm-footer-color: #475569;        /* slate-600 for footer text */
+
+  --ifm-cards-resources: #fff;
 }
 
 [data-theme='light'] body {
@@ -62,6 +64,8 @@
 }
 
 [data-theme='dark'] {
+    --ifm-cards-resources: #242526;
+
   --ifm-color-primary: #19a7ce;
   --ifm-color-primary-dark: #1796b9;
   --ifm-color-primary-darker: #158eaf;

@@ -13,9 +13,7 @@ export default function Contribute() {
   const docsContribUrl = useBaseUrl('/docs/contribute');
   const zoteroLogin = siteConfig?.customFields?.externalLinks?.zoteroLogin || 'https://www.zotero.org/user/login';
   const feedbackUrl = siteConfig?.customFields?.externalLinks?.feedbackForm || 'https://forms.office.com/r/5ww7qRWwwf';
-  const addProductUrl =
-    siteConfig?.customFields?.productIssueUrl ||
-    'https://github.com/CIROH-UA/ciroh-ua_website/issues/new?template=product-request.md';
+  const addProductUrl = useBaseUrl('/admin/add-software');
   const blogIdeaUrl = siteConfig?.customFields?.blogIdeaUrl || 'https://github.com/CIROH-UA/ciroh-ua_website/issues/new?template=docuhub-blog-post.md';
 
   return (
@@ -66,7 +64,7 @@ export default function Contribute() {
               </div>
             </div>
             <div className={styles.brandActions}>
-              <a href={addProductUrl} target="_blank" rel="noreferrer noopener" className={styles.addProductButton}>
+              <a href={addProductUrl} className={styles.addProductButton}>
                 <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" role="img"><path d="M12 6v12M6 12h12" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></svg>
                 Add Your Product
               </a>

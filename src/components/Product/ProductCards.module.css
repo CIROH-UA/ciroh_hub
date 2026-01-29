@@ -5,9 +5,9 @@
   padding: 2rem 1rem;
 
   /* Design tokens (scoped to this component subtree) */
-  --pc-primary: #0ea5e9;
-  --pc-primary-strong: #06b6d4;
-  --pc-surface: var(--ifm-background-surface-color, #ffffff);
+  --pc-primary: var(--ifm-color-primary, #0ea5e9);
+  --pc-primary-strong: var(--ifm-color-primary-dark, #06b6d4);
+  --pc-surface: var(--ifm-cards-resources, #ffffff);
   --pc-border: var(--ifm-color-emphasis-200, #e5e7eb);
   --pc-soft: var(--ifm-color-emphasis-100, #f3f4f6);
   --pc-ink: var(--ifm-font-color-base, #1f2937);

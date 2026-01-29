@@ -1,0 +1,157 @@
+/* Publications.module.css */
+.counterRow{
+  margin: 0 0 0.75rem 0;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.emptyMessage{
+  width: 100%;
+  text-align: center;
+  margin-top: 2rem;
+  font-size: 1.1rem;
+  color: var(--ifm-color-emphasis-600);
+}
+
+.wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    background: #ffff;
+    padding: 3rem 0 8rem; 
+  }
+  
+  :root[data-theme='dark'] .wrapper {
+    background-color: #222227;
+  }
+  .container {
+    width: 100%;
+    max-width: 1000px;
+    padding: 1rem;
+    flex-direction: column;
+    align-items: center;
+  }
+
+.collectionSelect {
+  min-width: 200px;
+  padding: 0.4rem 0.6rem;
+  margin-right: 0.5rem;
+}
+
+.publicationsContainer {
+    display: grid;
+    gap: 2rem;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    padding: 1rem 0;
+    align-items: center;
+  }
+  
+  .filterForm {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+  }
+  
+  .filterForm input[type="text"],
+  .filterForm select {
+    padding: 0.5rem;
+    font-size: 1rem;
+  }
+  
+  .filterForm button {
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    cursor: pointer;
+  }
+
+
+.searchInput {
+    flex: 1;
+    min-width: 200px;
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+  
+.sortSelect,.typeSelect {
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    min-width: 180px;
+  }
+  
+  .errorContainer {
+    width: 90%;
+    /* max-width: 600px; */
+    margin: 2rem auto;
+    padding: 1.5rem;
+    /* background-color: #ffe6e6;
+    border: 2px solid #ff4d4d; */
+    border-radius: 8px;
+    text-align: center;
+    animation: fadeIn 0.3s ease-in;
+  }
+  
+  .error {
+    /* color: #cc0000; */
+    font-size: 1.1rem;
+    line-height: 1.5;
+    margin: 0;
+    font-weight: 500;
+  }
+  .error::before {
+    content: "❗";
+    margin-right: 0.5rem;
+    vertical-align: middle;
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+
+
+  .button {
+    padding: 1rem 2rem;
+    font-size: 1rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .button:hover {
+    transform: scale(1.05);
+  }
+
+
+  .buttonPrimary {
+    background-color: var(--ifm-color-primary-dark);
+    color: #fff;
+    
+  }
+  
+  :root[data-theme='dark'] .buttonPrimary {
+    background-color: var(--ifm-color-primary-dark);
+    color: #fff;
+  }
+  
+  @media (max-width: 996px) {
+    .publicationsContainer {
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 1.5rem;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .publicationsContainer {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+  }

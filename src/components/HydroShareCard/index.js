@@ -21,10 +21,10 @@ export default function HydroShareCard() {
         <div>
           <div className={styles.label}>Use these subject tags</div>
           <div className={styles.tags}>
-            <span className={`${styles.tag} ${styles.tagApp}`} title="Products/Apps">nwm_portal_app</span>
-            <span className={`${styles.tag} ${styles.tagModule}`} title="Courses/Modules">nwm_portal_module</span>
-            <span className={`${styles.tag} ${styles.tagPresentation}`} title="Presentations">ciroh_portal_presentation</span>
-            <span className={`${styles.tag} ${styles.tagData}`} title="Datasets">ciroh_portal_data</span>
+            <span className={`${styles.tag} ${styles.tagApp}`} title="Products/Apps">ciroh_hub_app</span>
+            <span className={`${styles.tag} ${styles.tagModule}`} title="Courses/Modules">ciroh_hub_module</span>
+            <span className={`${styles.tag} ${styles.tagPresentation}`} title="Presentations">ciroh_hub_presentation</span>
+            <span className={`${styles.tag} ${styles.tagData}`} title="Datasets">ciroh_hub_data</span>
           </div>
           <div className={styles.tip}>Choose the tag that matches your resource type.</div>
         </div>

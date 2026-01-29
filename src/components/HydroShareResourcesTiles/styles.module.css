@@ -1,0 +1,229 @@
+
+
+.heading{
+  color: var(--ifm-font-color-secondary);
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 4rem;
+  margin-top: 4rem;
+}
+
+.titleLink {
+  pointer-events: auto;
+  color: inherit;
+  text-decoration: none;
+}
+.titleLink:hover {
+  text-decoration: none;
+}
+/*************************************************************
+ * Responsive Grid: max 3 columns within a container
+ *************************************************************/
+ .gridContainer {
+  display: grid;
+  gap: 1rem;
+  margin-top: 1rem;
+  /* Start with 3 columns for wide screens */
+  grid-template-columns: repeat(3, 1fr);
+}
+
+/* If screen < 1200px, drop to 2 columns */
+@media (max-width: 1200px) {
+  .gridContainer {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* If screen < 600px, drop to 1 column */
+@media (max-width: 600px) {
+  .gridContainer {
+    grid-template-columns: repeat(1, 1fr);
+  }
+}
+
+/*************************************************************
+ * Each item in the grid
+ *************************************************************/
+.gridItem {
+  aspect-ratio: 1/1;
+  border: 1px solid var(--ifm-color-emphasis-200);
+  border-radius: var(--ifm-global-radius);
+  background: var(--ifm-cards-resources);
+  padding: 1rem;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.iconPlaceholder{
+  display: flex;
+  color: var(--ifm-color-primary);
+
+}
+
+
+.iconPlaceholder svg{
+  width: 100%;
+  height: 100%;
+  padding: 30px;
+}
+
+
+
+/*************************************************************
+ * The image + overlay
+ *************************************************************/
+.imageWrapper {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: var(--ifm-global-radius);
+  display: block;
+}
+
+/* Hover overlay (title, button, icons) */
+.hoverOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  border-radius: 4px;
+}
+
+.imageWrapper:hover .hoverOverlay {
+  opacity: 1;
+}
+
+/*************************************************************
+ * Overlay content
+ *************************************************************/
+.overlayTitle {
+  color: #fff;
+  margin-bottom: 0.75rem;
+  text-align: center;
+  font-size: 1.5rem;
+}
+
+.overlayButton {
+  text-decoration: none;
+  font-size: 1.2rem;
+  color: var(--ifm-color-primary);
+  background: var(--ifm-color-content-inverse);
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  margin-bottom: 0.75rem;
+  transition: background 0.2s, color 0.2s;
+}
+
+.overlayButton:hover {
+  background: var(--ifm-color-primary-dark);
+  color: var(--ifm-color-content-inverse);
+}
+
+.overlayIcons {
+  display: flex;
+  gap: 1rem;
+}
+
+.iconLink {
+  color: #fff;
+  text-decoration: none;
+}
+
+.iconLink:hover {
+  color: var(--ifm-color-primary);
+}
+
+/*************************************************************
+ * PlaceHolders
+ *************************************************************/
+
+/* Base styles for the placeholder container */
+.imagePlaceholder {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* The skeleton container */
+.placeholder {
+  border-radius: 1rem;
+  position: relative;
+  overflow: hidden;
+}
+
+/* The shimmer overlay */
+.placeholder::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -150px; /* Start off-screen */
+  width: 150px; /* Width of the shimmer band */
+  height: 100%;
+  animation: shimmer 1.5s infinite ease-in-out;
+}
+
+/* Keyframes for horizontal sweep */
+@keyframes shimmer {
+  0% {
+    left: -150px;
+  }
+  50% {
+    left: 100%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+/* 
+  DARK MODE 
+  In dark mode, we want a lighter placeholder background 
+  and slightly darker shimmer band. 
+*/
+:root[data-theme="dark"] .placeholder {
+  background-color: #333; /* Darker container background */
+}
+
+:root[data-theme="dark"] .placeholder::after {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0),     /* transparent edges */
+    rgba(255, 255, 255, 0.15),  /* a subtle lighter middle band */
+    rgba(255, 255, 255, 0)
+  );
+}
+
+/* 
+  LIGHT MODE 
+  In light mode, we want a lighter placeholder background 
+  and a subtle brighter shimmer band. 
+*/
+:root[data-theme="light"] .placeholder {
+  background-color: #eee; /* Lighter container background */
+}
+
+:root[data-theme="light"] .placeholder::after {
+  background: linear-gradient(
+    90deg,
+    rgba(0, 0, 0, 0),       /* transparent edges */
+    rgba(0, 0, 0, 0.05),    /* a subtle darker middle band */
+    rgba(0, 0, 0, 0)
+  );
+}
+
