@@ -38,7 +38,7 @@ export default function AppsPage() {
       <div className="margin-top--md">
         <Header 
             title="Apps" 
-            tagline="En­hance fore­cast­ing, ana­lys­is, and wa­ter re­source man­age­ment by mak­ing your web ap­plic­a­tions and tools ac­cess­ible to CIROH and NOAA's hy­dro­lo­gic re­search ini­ti­at­ives."
+            tagline="Enhance forecasting, analysis, and water resource management by making your web applications and tools accessible to CIROH and NOAA's hydrologic research initiatives."
             buttons={[
               { label: "Add your Apps", href: contributeUrl, primary: true },
             ]}
