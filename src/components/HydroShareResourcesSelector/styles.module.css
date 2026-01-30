@@ -6,6 +6,14 @@
   padding: 4rem 0 0;
 }
 
+.cardsContainer {
+  background-color: #fff;
+}
+
+[data-theme='dark'] .cardsContainer {
+  background-color: #060010;
+}
+
 /* Header with title and toggle buttons */
 .header {
     display: flex;
