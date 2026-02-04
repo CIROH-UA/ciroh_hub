@@ -5,7 +5,7 @@
 			"type": "update",
 			"title": "CIROH Hub",
 			"link": "",
-			"description": "📣 Development is underway for CIROH Hub—an integrated CIROH DocuHub and Portal experience. Coming February 2026! Added banner in DocuHub and Portal. Join the Community Resources Working Group to share your input and feedback.",
+			"description": "📣 Development is underway for CIROH Hub—an integrated CIROH DocuHub and Portal experience. Coming February 2026! An announcement banner in DocuHub and Portal linking to an FAQ. Join the Community Resources Working Group to share your input and feedback.",
 			"contributors": 0
    			},
             {
@@ -14,7 +14,7 @@
 			"links": [
 				"https://github.com/orgs/CIROH-UA/projects/10"
 			],
-			"description":"Latest IT requests and updates for the CIROH R2OHC Platform can be found on the [R2OHC Project Board](https://github.com/orgs/CIROH-UA/projects/10)", 
+			"description":"Latest IT requests and updates for the CIROH R2OHC Platform can be found on the [R2OHC Project Board](https://github.com/orgs/CIROH-UA/projects/10).", 
 			"release_date": "01/25/2026",
 			"contributors": 0
 			},
@@ -24,7 +24,7 @@
 			"links": [
 				"https://github.com/orgs/CIROH-UA/projects/11"
 			],
-			"description":"Stay updated with the latest features, bug fixes, and improvements across the NGIAB ecosystem by visiting the [NGIAB Ecosystem Project Board](https://github.com/orgs/CIROH-UA/projects/11)", 
+			"description":"Stay updated with the latest features, bug fixes, and improvements across the NGIAB ecosystem by visiting the [NGIAB Ecosystem Project Board](https://github.com/orgs/CIROH-UA/projects/11).", 
 			"release_date": "01/25/2026",
 			"contributors": 0
 			},
@@ -34,17 +34,17 @@
 			"links": [
 				"https://github.com/orgs/CIROH-UA/projects/2"
 			],
-            "description":"Stay updated with the latest features, bug fixes, and improvements across the NGIAB ecosystem by visiting the [NGIAB Ecosystem Project Board](https://github.com/orgs/CIROH-UA/projects/11)", 
+            "description":"Stay updated with the latest features, bug fixes, and improvements across the NGIAB ecosystem by visiting the [NGIAB Ecosystem Project Board](https://github.com/orgs/CIROH-UA/projects/11).", 
 			"release_date": "01/25/2026",
 			"contributors": 0
 			},
             {
 			"type": "NGIAB NRDS Website (v1.0.0)",
-			"title": "NGIAB + NRDS Product portfolio website.",
+			"title": "NGIAB + NRDS Product portfolio website",
 			"links": [
 				"https://github.com/CIROH-UA/ngiab-website/releases/tag/v1.0.0"
 			],
-			"description":"The NGIAB NRDS Website v1.0.0 is live! Visit [https://ngiab.ciroh.org/](https://ngiab.ciroh.org/) to explore all NGIAB and NRDS tools, documentation, and resources all in one place. Visit NRDS at [https://ngiab.ciroh.org/#/nrds](https://ngiab.ciroh.org/#/nrds) to learn more about NextGen Research DataStream.", 
+			"description":"The NGIAB NRDS Website v1.0.0 is live! Visit [https://ngiab.ciroh.org/](https://ngiab.ciroh.org/) to explore all NGIAB and NRDS tools, documentation, and resources all in one place. Visit [https://ngiab.ciroh.org/#/nrds](https://ngiab.ciroh.org/#/nrds) to learn more about NextGen Research DataStream.", 
 			"release_date": "01/25/2026",
 			"contributors": 0
 			},
@@ -71,7 +71,7 @@
 			"type": "NRDS",
 			"title": "ForcingProcessor (v1.3.0)",
 			"link": "https://github.com/CIROH-UA/forcingprocessor/releases/tag/v1.3.0",
-			"description":"This release of forcingprocessor contains a major new feature! Checkout [here](https://github.com/CIROH-UA/forcingprocessor/releases/tag/v1.3.0)",
+			"description":"This release of forcingprocessor contains a major new feature! Checkout [here](https://github.com/CIROH-UA/forcingprocessor/releases/tag/v1.3.0).",
 			"release_date": "01/29/2026",
 			"contributors": 0
 			},

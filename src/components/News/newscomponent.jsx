@@ -1,80 +1,79 @@
-import React, { useState } from "react";
-import ReactMarkdown from 'react-markdown';
-import Link from '@docusaurus/Link';
-import useBaseUrl from '@docusaurus/useBaseUrl';
-import styles from './NewsComponent.module.css';
+import { useState } from "react";
+import ReactMarkdown from "react-markdown";
+import Link from "@docusaurus/Link";
+import useBaseUrl from "@docusaurus/useBaseUrl";
+import styles from "./NewsComponent.module.css";
 
 const NewsComponent = ({ data, isLatest }) => {
+  const isNew = isNewFormat(data.date);
+  return isNew ? (
+    <NewNewsSection data={data} isLatest={isLatest} />
+  ) : (
+    <OldNewsSection data={data} isLatest={isLatest} />
+  );
+};
+
+function isNewFormat(dateString) {
+  if (!dateString || typeof dateString !== "string") return false;
+  
+  const monthNames = [
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"
+  ];
+
+  const match = dateString.match(
+    /^(January|February|March|April|May|June|July|August|September|October|November|December)\s+(\d{4})/
+  );
+
+  if (!match) return false;
+
+  const monthName = match[1];
+  const yearNum = parseInt(match[2], 10);
+  const monthIndex = monthNames.indexOf(monthName);
+
+  if (yearNum > 2025) return true;
+  if (yearNum === 2025 && monthIndex >= 10) return true;
+
+  return false;
+}
+
+// =====================================================
+// =============== OLD LAYOUT (pre-Nov 2025) ===========
+// =====================================================
+
+const OldNewsSection = ({ data, isLatest }) => {
   const [isExpanded, setIsExpanded] = useState(isLatest);
 
-  const toggleExpand = () => {
-    setIsExpanded(!isExpanded);
-  };
-
-  const logoSafeUrl = useBaseUrl("/img/logos/ciroh-bgsafe.png");
-  const sidelineDarkUrl = useBaseUrl("/img/graphics/news/sideline-dark.png");
-  const sidelineLightUrl = useBaseUrl("/img/graphics/news/sideline-light.png");
-  const underlinesDarkUrl = useBaseUrl("/img/graphics/news/underlines-dark.png");
-  const underlinesLightUrl = useBaseUrl("/img/graphics/news/underlines-light.png");
-
   return (
-    <div className={`${styles.newsContainer} tw-rounded-2xl tw-overflow-hidden tw-shadow-lg tw-bg-white dark:tw-bg-gray-800 tw-transition-all tw-duration-300`}>
-      <div 
-        className="tw-flex tw-items-center tw-justify-between tw-p-8 tw-bg-gradient-to-br tw-from-slate-900 tw-to-slate-800 dark:tw-from-cyan-500 dark:tw-to-cyan-700 tw-relative tw-overflow-hidden tw-cursor-pointer tw-transition-all tw-duration-300 hover:tw-shadow-xl"
-        onClick={toggleExpand}
-      >
-        <div className={`${styles.logoSection} tw-mr-8`}>
-          <img className={`${styles.darkImage} ${styles.logo} tw-max-h-32 tw-max-w-32 tw-drop-shadow-lg tw-transition-transform tw-duration-300 hover:tw-scale-110`} alt="CIROH logo" src={logoSafeUrl} />
-          <img className={`${styles.lightImage} ${styles.logo} tw-max-h-32 tw-max-w-32 tw-drop-shadow-lg tw-transition-transform tw-duration-300 hover:tw-scale-110`} alt="CIROH logo" src={logoSafeUrl} />
-        </div>
-        
-        <div className={`${styles.titleSection} tw-flex tw-flex-col tw-items-center tw-relative tw-z-10 tw-flex-1`}>
-          <div className={`${styles.titleRow} tw-flex tw-items-center tw-gap-4 tw-mb-2`}>
-            <img className={`${styles.darkImage} ${styles.waveIcon} tw-max-h-8 tw-filter tw-brightness-0 tw-invert tw-opacity-80`} alt="Wave graphic" src={sidelineDarkUrl} />
-            <img className={`${styles.lightImage} ${styles.waveIcon} tw-max-h-8 tw-filter tw-brightness-0 tw-invert tw-opacity-80`} alt="Wave graphic" src={sidelineLightUrl} />
-            <span className={`${styles.titleText} tw-text-2xl tw-font-semibold tw-text-white tw-drop-shadow-lg tw-tracking-wider`}>News</span>
-            <img className={`${styles.darkImage} ${styles.waveIcon} tw-max-h-8 tw-filter tw-brightness-0 tw-invert tw-opacity-80`} alt="Wave graphic" src={sidelineDarkUrl} />
-            <img className={`${styles.lightImage} ${styles.waveIcon} tw-max-h-8 tw-filter tw-brightness-0 tw-invert tw-opacity-80`} alt="Wave graphic" src={sidelineLightUrl} />
-          </div>
-          <h2 className={`${styles.dateTitle} tw-text-4xl tw-font-bold tw-text-white tw-m-2 tw-drop-shadow-xl tw-tracking-wide`}>{data.date}s</h2>
-          <div className={`${styles.underlineSection} tw-mt-2`}>
-            <img className={`${styles.darkImage} ${styles.underline} tw-max-h-12 tw-filter tw-brightness-0 tw-invert tw-opacity-90`} alt="Wave graphic" src={underlinesDarkUrl} />
-            <img className={`${styles.lightImage} ${styles.underline} tw-max-h-12 tw-filter tw-brightness-0 tw-invert tw-opacity-90`} alt="Wave graphic" src={underlinesLightUrl} />
-          </div>
-        </div>
-
-        <div className={`${styles.expandIndicator} tw-flex tw-flex-col tw-items-center tw-gap-1 tw-relative tw-z-10 tw-ml-8`}>
-          <span className={`${styles.expandIcon} tw-text-3xl tw-font-light tw-text-white tw-drop-shadow-lg tw-transition-all tw-duration-300 tw-leading-none ${isExpanded ? 'tw-scale-110 tw-font-normal' : ''}`}>
-            {isExpanded ? '−' : '+'}
-          </span>
-          <span className={`${styles.expandText} tw-text-sm tw-text-white tw-drop-shadow-md tw-opacity-90 tw-text-center tw-max-w-32 tw-leading-tight`}>
-            {isExpanded ? 'Click to collapse' : 'Click to expand'}
-          </span>
-        </div>
-      </div>
+    <div className={styles.newsContainer}>
+      <NewsHeader
+        date={data.date}
+        isExpanded={isExpanded}
+        onToggle={() => setIsExpanded(!isExpanded)}
+      />
 
       {isExpanded && (
-        <div className={`${styles.newsContent} tw-bg-white dark:tw-bg-gray-800 tw-grid tw-grid-cols-1 md:tw-grid-cols-2 lg:tw-grid-cols-3 tw-gap-6 tw-p-6`}>
+        <div className={styles.newsContent}>
           {data.items.map((item, index) => (
-            <div key={index} className={`${styles.newsItem} tw-m-0 tw-p-6 tw-rounded-xl tw-bg-gradient-to-br tw-from-gray-50 tw-to-gray-100 dark:tw-from-gray-700 dark:tw-to-gray-600 tw-border-l-4 tw-border-gray-400 dark:tw-border-cyan-400 tw-shadow-md tw-transition-all tw-duration-300 hover:tw-shadow-lg`}>
-              <div className={`${styles.itemHeader} tw-flex tw-items-center tw-gap-4 tw-mb-4 tw-flex-wrap`}>
+            <div key={index} className={styles.newsItem}>
+              <div className={styles.itemHeader}>
                 <span className={`${styles.badge} ${styles[`badge--${getBadgeClass(item.type)}`]}`}>
                   {item.type}
                 </span>
-                <h3 className={`${styles.itemTitle} tw-text-xl tw-font-bold tw-m-0 tw-leading-tight tw-text-gray-900 dark:tw-text-gray-100`}>{item.title}</h3>
+                <h3 className={styles.itemTitle}>{item.title}</h3>
               </div>
-              
-              <div className={`${styles.itemDescription} tw-mb-6 tw-leading-relaxed tw-text-gray-700 dark:tw-text-gray-300`}>
+
+              <div className={styles.itemDescription}>
                 {renderDescription(item.description)}
               </div>
-              
+
               {item.link && (
-                <div className={`${styles.itemLink} tw-mt-4`}>
-                  <Link 
-                    to={item.link} 
-                    target="_blank" 
+                <div className={styles.itemLink}>
+                  <Link
+                    to={item.link}
+                    target="_blank"
                     rel="noopener noreferrer"
-                    className={`${styles.readMoreLink} tw-inline-flex tw-items-center tw-gap-2 tw-px-6 tw-py-3 tw-bg-blue-700 dark:tw-bg-cyan-600 tw-text-white tw-no-underline tw-rounded-lg tw-font-semibold tw-transition-all tw-duration-300 tw-shadow-md hover:tw--translate-y-1 hover:tw-bg-blue-800 dark:hover:tw-bg-cyan-700 hover:tw-shadow-lg`}
+                    className={styles.readMoreLink}
                   >
                     <span>Read more</span>
                   </Link>
@@ -88,52 +87,340 @@ const NewsComponent = ({ data, isLatest }) => {
   );
 };
 
-// Function to determine the badge class based on item.type
+// =====================================================
+// =============== NEW LAYOUT (Nov 2025+) ==============
+// =====================================================
+
+const NewNewsSection = ({ data, isLatest }) => {
+  const [isExpanded, setIsExpanded] = useState(isLatest);
+  const groupedItems = groupItemsByTitle(data.items);
+
+  return (
+    <div className={styles.newsContainer}>
+      <NewsHeader
+        date={data.date}
+        isExpanded={isExpanded}
+        onToggle={() => setIsExpanded(!isExpanded)}
+      />
+
+      {isExpanded && (
+        <div className={styles.newsContent}>
+          <div className={styles.newsGrid}>
+            {groupedItems.map((group, index) => (
+              <NewsCard key={`${group.title}-${index}`} item={group} />
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+// =====================================================
+// =============== SHARED COMPONENTS ===================
+// =====================================================
+
+const NewsHeader = ({ date, isExpanded, onToggle }) => {
+  const logoSafeUrl = useBaseUrl("/img/logos/ciroh-bgsafe.png");
+  const sidelineDarkUrl = useBaseUrl("/img/graphics/news/sideline-dark.png");
+  const sidelineLightUrl = useBaseUrl("/img/graphics/news/sideline-light.png");
+  const underlinesDarkUrl = useBaseUrl("/img/graphics/news/underlines-dark.png");
+  const underlinesLightUrl = useBaseUrl("/img/graphics/news/underlines-light.png");
+
+  return (
+    <div className={styles.headerSection} onClick={onToggle}>
+      <div className={styles.logoSection}>
+        <img className={`${styles.logo}`} alt="CIROH logo" src={logoSafeUrl} />
+      </div>
+
+      <div className={styles.titleSection}>
+        <div className={styles.titleRow}>
+          <img className={`darkImage ${styles.waveIcon}`} alt="Wave graphic" src={sidelineDarkUrl} />
+          <img className={`lightImage ${styles.waveIcon}`} alt="Wave graphic" src={sidelineLightUrl} />
+          <span className={styles.titleText}>News</span>
+          <img className={`darkImage ${styles.waveIcon}`} alt="Wave graphic" src={sidelineDarkUrl} />
+          <img className={`lightImage ${styles.waveIcon}`} alt="Wave graphic" src={sidelineLightUrl} />
+        </div>
+        <h2 className={styles.dateTitle}>{date}s</h2>
+        <div className={styles.underlineSection}>
+          <img className={`darkImage ${styles.underline}`} alt="Wave graphic" src={underlinesDarkUrl} />
+          <img className={`lightImage ${styles.underline}`} alt="Wave graphic" src={underlinesLightUrl} />
+        </div>
+      </div>
+
+      <div className={styles.expandIndicator}>
+        <span className={`${styles.expandIcon} ${isExpanded ? styles.expanded : ""}`}>
+          {isExpanded ? "−" : "+"}
+        </span>
+        <span className={styles.expandText}>
+          {isExpanded ? "Click to collapse" : "Click to expand"}
+        </span>
+      </div>
+    </div>
+  );
+};
+
+const NewsCard = ({ item }) => {
+  const links = getLinksFromItem(item);
+  const { releaseLinks, prLinks } = categorizeLinks(links);
+  const versions = extractVersions(item, releaseLinks);
+  const contributorsCount = item.contributors ?? 0;
+  const releaseDate = item.release_date ? new Date(item.release_date) : null;
+  const relativeTime = releaseDate ? formatRelativeTime(releaseDate) : null;
+
+  return (
+    <div className={styles.newsCard}>
+      <div className={styles.cardHeader}>
+        <span className={`${styles.cardBadge} ${styles[`cardBadge--${getBadgeClass(item.type)}`]}`}>
+          {item.type}
+        </span>
+      </div>
+
+      <div className={styles.cardBody}>
+        <h3 className={styles.cardTitle}>{item.title}</h3>
+
+        {item.description && (
+          <div className={styles.cardDescription}>
+            {renderDescription(item.description)}
+          </div>
+        )}
+
+        {versions.length > 0 && (
+          <div className={styles.cardVersions}>
+            {versions.map((version, idx) => (
+              <Link
+                key={idx}
+                to={version.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={styles.versionTag}
+              >
+                {version.label}
+              </Link>
+            ))}
+          </div>
+        )}
+
+        {prLinks.length > 0 && (
+          <div className={styles.cardPRs}>
+            {prLinks.map((pr, idx) => (
+              <Link
+                key={idx}
+                to={pr.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={styles.prTag}
+              >
+                {pr.label}
+              </Link>
+            ))}
+          </div>
+        )}
+
+        <div className={styles.cardMeta}>
+          {relativeTime && (
+            <span className={styles.cardMetaItem}>
+              <span className={styles.metaIcon}>🟢</span>
+              {relativeTime}
+            </span>
+          )}
+
+          {contributorsCount > 0 && (
+            <span className={styles.cardMetaItem}>
+              <span className={styles.metaIcon}>👥</span>
+              {contributorsCount} contributor{contributorsCount !== 1 ? "s" : ""}
+            </span>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// =====================================================
+// =============== UTILITY FUNCTIONS ===================
+// =====================================================
+
 function getBadgeClass(type) {
-  switch (type) {
-    case "bug":
-      return "danger";
-    case "note":
-      return "info";
-    case "feature":
-      return "success";
-    case "news":
-      return "info";
-    case "update":
-      return "warning";
-    case "NGIAB":
-      return "success";
-    case "NRDS":
-      return "primary";
-    case "blog":  
-      return "info";
-    default:
-      return "primary";
-  }
+  const badgeMap = {
+    bug: "danger",
+    note: "info",
+    feature: "success",
+    news: "info",
+    update: "warning",
+    NGIAB: "info",
+    NRDS: "primary",
+    blog: "info",
+  };
+  return badgeMap[type] || "primary";
 }
 
-// Function to render the description with links
 function renderDescription(description) {
+  if (!description) return null;
+
   return (
     <ReactMarkdown
-      children={description}
       components={{
-        a: ({node, ...props}) => <a target="_blank" rel="noopener noreferrer" className={styles.markdownLink} {...props} />
+        a: ({ node, ...props }) => (
+          <a
+            target="_blank"
+            rel="noopener noreferrer"
+            className={styles.markdownLink}
+            {...props}
+          />
+        ),
       }}
       urlTransform={safelyUseBaseUrl}
-    />
+    >
+      {description}
+    </ReactMarkdown>
   );
 }
 
-// Function to check if a part is a web link
-function isWebLink(part) {
-  return part.startsWith("http://") || part.startsWith("https://");
+function safelyUseBaseUrl(link) {
+  const isWebLink = link.startsWith("http://") || link.startsWith("https://");
+  return isWebLink ? link : useBaseUrl(link);
 }
 
-// Function to safely handle internal links
-function safelyUseBaseUrl(link) {
-  if (isWebLink(link)) return link;
-  else return useBaseUrl(link);
+function getLinksFromItem(item) {
+  if (item?.links && Array.isArray(item.links)) return item.links;
+  if (item?.link) return [item.link];
+  return [];
+}
+
+function categorizeLinks(links) {
+  const releaseLinks = [];
+  const prLinks = [];
+
+  links.forEach((link) => {
+    if (isPRLink(link)) {
+      prLinks.push({
+        link,
+        label: extractPRNumber(link),
+      });
+    } else if (isReleaseLink(link)) {
+      releaseLinks.push(link);
+    }
+  });
+
+  return { releaseLinks, prLinks };
+}
+
+function isPRLink(link) {
+  return link.includes("/pull/") || link.includes("/pr/");
+}
+
+function isReleaseLink(link) {
+  return link.includes("/tag/") || link.includes("/releases/");
+}
+
+function extractPRNumber(link) {
+  const match = link.match(/\/pull\/(\d+)|\/pr\/(\d+)/);
+  if (match) {
+    const prNumber = match[1] || match[2];
+    return `PR #${prNumber}`;
+  }
+  return "PR";
+}
+
+function extractVersionFromLink(link) {
+  if (!link) return null;
+  const tagMatch = link.match(/\/tag\/([^\/]+)/);
+  return tagMatch ? tagMatch[1] : null;
+}
+
+function extractVersions(item, releaseLinks) {
+  const versions = [];
+
+  // Check for explicit versions array
+  if (item?.versions && Array.isArray(item.versions)) {
+    item.versions.forEach((version, idx) => {
+      versions.push({
+        label: version,
+        link: releaseLinks[idx] || "#",
+      });
+    });
+    return versions;
+  }
+
+  // Extract from release links
+  releaseLinks.forEach((link) => {
+    const version = extractVersionFromLink(link);
+    if (version) {
+      versions.push({
+        label: version,
+        link: link,
+      });
+    }
+  });
+
+  // Fallback to single version
+  if (versions.length === 0 && item?.version) {
+    versions.push({
+      label: item.version,
+      link: item.link || "#",
+    });
+  }
+
+  return versions;
+}
+
+function groupItemsByTitle(items) {
+  const grouped = {};
+
+  items.forEach((item) => {
+    const title = item.title;
+    if (!grouped[title]) {
+      grouped[title] = {
+        type: item.type,
+        title,
+        links: [],
+        description: item.description || "",
+        contributors: item.contributors ?? null,
+        release_date: item.release_date ?? null,
+      };
+    }
+
+    const itemLinks = getLinksFromItem(item);
+    grouped[title].links.push(...itemLinks);
+
+    if (item.description) {
+      grouped[title].description = item.description;
+    }
+
+    if (item.contributors !== undefined) {
+      grouped[title].contributors = item.contributors;
+    }
+
+    if (item.release_date !== undefined) {
+      grouped[title].release_date = item.release_date;
+    }
+  });
+
+  return Object.values(grouped).map((group) => ({
+    ...group,
+    links: [...new Set(group.links)],
+  }));
+}
+
+function formatRelativeTime(dateInput) {
+  const date = new Date(dateInput);
+  const now = new Date();
+  const diffMs = now - date;
+  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+
+  if (diffDays === 0) return "today";
+  if (diffDays === 1) return "1 day ago";
+  if (diffDays < 7) return `${diffDays} days ago`;
+  
+  const weeks = Math.floor(diffDays / 7);
+  if (diffDays < 30) return `${weeks} week${weeks > 1 ? "s" : ""} ago`;
+  
+  const months = Math.floor(diffDays / 30);
+  if (diffDays < 365) return `${months} month${months > 1 ? "s" : ""} ago`;
+  
+  const years = Math.floor(diffDays / 365);
+  return `${years} year${years > 1 ? "s" : ""} ago`;
 }
 
 export default NewsComponent;

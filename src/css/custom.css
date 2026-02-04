@@ -363,6 +363,22 @@
   font-weight: bold;
 }
 
+[data-theme="light"] .dark-image {
+  display: none; /* Hide dark image in light mode */
+}
+  
+[data-theme="light"] .light-image {
+  display: block; /* Show light image in light mode */
+}
+  
+[data-theme="dark"] .light-image {
+  display: none; /* Hide light image in dark mode */
+}
+  
+[data-theme="dark"] .dark-image {
+  display: block; /* Show dark image in dark mode */
+}
+
 /* ----------------------------- */
 /* IMPORT TAILWIND LAST          */
 /* ----------------------------- */
