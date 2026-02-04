@@ -27,7 +27,7 @@ const LinkIcon = ({ type, url }) => {
 
   return (
     <a
-      href={url}
+      href={useBaseUrl(url)}
       target="_blank"
       rel="noopener noreferrer"
       className={styles.linkIcon}

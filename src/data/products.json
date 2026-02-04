@@ -8,10 +8,10 @@
       "tags": ["Docker", "NextGen", "Containerization"],
       "iconUrl": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg",
       "links": {
-        "github": "https://github.com/ciroh-ua/nextgen-in-a-box",
-        "docs": "https://ciroh-ua.github.io/nextgen-in-a-box/",
-        "hydroshare": "https://hydroshare.org/resource/nextgen-in-a-box",
-        "zotero": "https://www.zotero.org/groups/ciroh/items/nextgen-in-a-box"
+        "github": "https://github.com/ciroh-ua/ngiab-cloudinfra",
+        "docs": "/docs/products/ngiab",
+        "hydroshare": "https://www.hydroshare.org/resource/88e0ebf2719c492381efcb27fba71032/",
+        "zotero": "https://www.sciencedirect.com/science/article/pii/S1364815225003500"
       }
     },
     {
@@ -22,10 +22,7 @@
       "tags": ["NWM", "Forecasting", "Streamflow"],
       "iconUrl": "https://img.icons8.com/fluency/96/000000/water.png",
       "links": {
-        "github": "https://github.com/ciroh-ua/nwm",
-        "docs": "https://nwm.ciroh.org/docs",
-        "hydroshare": "https://hydroshare.org/resource/nwm-data",
-        "zotero": "https://www.zotero.org/groups/ciroh/items/nwm-research"
+        "docs": "/docs/products/national-water-model"
       }
     },
     {
@@ -36,10 +33,9 @@
       "tags": ["GIS", "Catchments", "Hydrology"],
       "iconUrl": "https://img.icons8.com/fluency/96/000000/geography.png",
       "links": {
-        "github": "https://github.com/ciroh-ua/hydrofabric",
-        "docs": "https://hydrofabric.org/docs",
-        "hydroshare": "https://hydroshare.org/resource/hydrofabric",
-        "zotero": "https://www.zotero.org/groups/ciroh/items/hydrofabric"
+        "github": "https://github.com/NOAA-OWP/hydrofabric",
+        "docs": "/docs/products/hydrofabric",
+        "zotero": "https://www.nature.com/articles/s41597-025-05941-6"
       }
     },
     {
@@ -50,10 +46,8 @@
       "tags": ["Data Stream", "Real-time", "Research"],
       "iconUrl": "https://img.icons8.com/fluency/96/000000/data-configuration.png",
       "links": {
-        "github": "https://github.com/ciroh-ua/nextgen-datastream",
-        "docs": "https://datastream.ciroh.org",
-        "hydroshare": "https://hydroshare.org/resource/datastream-tools",
-        "zotero": "https://www.zotero.org/groups/ciroh/items/datastream"
+        "github": "https://github.com/CIROH-UA/ngen-datastream",
+        "docs": "/docs/products/research-datastream"
       }
     },
     {
@@ -65,9 +59,7 @@
       "iconUrl": "https://img.icons8.com/fluency/96/000000/analytics.png",
       "links": {
         "github": "https://github.com/ciroh-ua/evaluation-tools",
-        "docs": "https://evaluation.ciroh.org",
-        "hydroshare": "https://hydroshare.org/resource/evaluation-tools",
-        "zotero": "https://www.zotero.org/groups/ciroh/items/evaluation-tools"
+        "docs": "/docs/products/evaluation"
       }
     },
     {
@@ -78,10 +70,7 @@
       "tags": ["Snow", "SWE", "Remote Sensing"],
       "iconUrl": "https://img.icons8.com/fluency/96/000000/snow.png",
       "links": {
-        "github": "https://github.com/ciroh-ua/snow-tools",
-        "docs": "https://snow.ciroh.org/docs",
-        "hydroshare": "https://hydroshare.org/resource/snow-tools",
-        "zotero": "https://www.zotero.org/groups/ciroh/items/snow-modeling"
+        "docs": "/docs/products/snow-tools/"
       }
     },
     {
@@ -92,10 +81,8 @@
       "tags": ["Machine Learning", "AI", "Education"],
       "iconUrl": "https://img.icons8.com/fluency/96/000000/artificial-intelligence.png",
       "links": {
-        "github": "https://github.com/ciroh-ua/ml-hydrology-course",
-        "docs": "https://course.ml.ciroh.org",
-        "hydroshare": "https://hydroshare.org/resource/ml-course-materials",
-        "zotero": "https://www.zotero.org/groups/ciroh/items/ml-education"
+        "docs": "/docs/products/ml-ai",
+        "zotero": "https://www.zotero.org/groups/5261687/ciroh/collections/XQM2DKXB/collection"
       }
     },
     {
@@ -106,10 +93,7 @@
       "tags": ["Visualization", "Dashboard", "Analytics"],
       "iconUrl": "https://img.icons8.com/fluency/96/000000/combo-chart.png",
       "links": {
-        "github": "https://github.com/ciroh-ua/viz-tools",
-        "docs": "https://viz.ciroh.org/docs",
-        "hydroshare": "https://hydroshare.org/resource/viz-tools",
-        "zotero": "https://www.zotero.org/groups/ciroh/items/visualization"
+        "docs": "/docs/products/visualization/"
       }
     },
     {
@@ -120,10 +104,8 @@
       "tags": ["Flood Mapping", "Research", "Methodology"],
       "iconUrl": "https://img.icons8.com/fluency/96/000000/flood.png",
       "links": {
-        "github": "https://github.com/ciroh-ua/flood-mapping-research",
-        "docs": "https://research.flood.ciroh.org",
-        "hydroshare": "https://hydroshare.org/resource/flood-mapping-publication",
-        "zotero": "https://www.zotero.org/groups/ciroh/items/flood-research"
+        "github": " https://github.com/sdmlua/FIMserv",
+        "docs": "/docs/products/portal/"
       }
     },
     {
@@ -134,10 +116,7 @@
       "tags": ["Datasets", "Open Data", "Research"],
       "iconUrl": "https://img.icons8.com/fluency/96/000000/database.png",
       "links": {
-        "github": "https://github.com/ciroh-ua/hydrology-datasets",
-        "docs": "https://data.ciroh.org/docs",
-        "hydroshare": "https://hydroshare.org/resource/ciroh-datasets",
-        "zotero": "https://www.zotero.org/groups/ciroh/items/datasets"
+        "docs": "/datasets/"
       }
     }
   ]
