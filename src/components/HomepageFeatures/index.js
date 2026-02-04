@@ -117,10 +117,10 @@ const carouselCards = [
     link: "/docs/services/on-prem/Pantarhei"
   },
   {
-    title: "CIROH Portal",
+    title: "Hydrofabric",
     image: "img/graphics/ciroh-synergy.jpg",
-    description: "This portal enhances collaboration and innovation by providing access to interactive web apps, datasets, and learning modules, supporting CIROH and NOAA NWM researchers in advancing hydrological science.",
-    link: "https://portal.ciroh.org/"
+    description: "Geospatial fabric for hydrological modeling providing standardized catchment and flowline representations for water resource applications.",
+    link: "docs/products/Hydrofabric/"
   }
 ];
 
