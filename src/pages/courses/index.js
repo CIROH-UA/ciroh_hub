@@ -43,7 +43,7 @@ export default function CoursesPage() {
       </div>
 
       <main>
-        <Courses/> 
+        <Courses/>
         <TechBox items={items} type={"Courses"}  />
       </main>
     
