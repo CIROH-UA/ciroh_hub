@@ -13,7 +13,7 @@ const config = {
   url: "http://ciroh.org",
   baseUrl: baseUrl,
   onBrokenLinks: "ignore",
-  favicon: "img/logos/CIROH_Hub_logo.png",
+  favicon: "img/logos/docuhub.png",
 
   customFields: {
     apiBaseUrl:
@@ -22,7 +22,7 @@ const config = {
       'https://67h5z9ih7j.execute-api.us-east-1.amazonaws.com/default',
     onBrokenMarkdownLinks: "warn",
     onBrokenMarkdownImages: "warn",
-    githubProjectToken: process.env.GITHUB_PROJECT_TOKEN,
+    githubProjectToken: process.env.GITHUB_PROJECT_TOKEN,    
 
     // Workaround to add descriptive text to blog sidebars.
     // Supports any number of blogs.
@@ -98,7 +98,7 @@ const config = {
     },
 
     // Optional links for contribution CTAs
-    blogIdeaUrl: "https://github.com/CIROH-UA/ciroh-ua_website/issues/new?template=docuhub-blog-post.md",
+  blogIdeaUrl: "https://github.com/CIROH-UA/ciroh-ua_website/issues/new?template=docuhub-blog-post.md",
   },
 
   // GitHub pages deployment config.
@@ -131,7 +131,7 @@ const config = {
       "classic",
       /** @type {import('@docusaurus/preset-classic').Options} */
       ({
-
+        
         // gtag: process.env.NODE_ENV === 'production'
         //   ? { trackingID: 'G-7KD31X6H62', anonymizeIP: true }
         //   : undefined,
@@ -152,18 +152,18 @@ const config = {
   plugins: [
     // Lunr Search Plugin for search functionality
     [
-      require.resolve('docusaurus-lunr-search'),
+      require.resolve('docusaurus-lunr-search'), 
       {
         languages: ['en'], // language codes for search
       }
     ],
-
+    
     // Draw.io Plugin for embedding diagrams
     ['drawio', {}],
-
+    
     // Custom Blog Plugin
     [
-      './plugins/plugin-content-blog.js',
+      './plugins/plugin-content-blog.js', 
       {
         id: "blog",
         blogTitle: "CIROH Hub blog!",
@@ -178,7 +178,7 @@ const config = {
 
     // Release notes (also based on the custom blog plugin)
     [
-      './plugins/plugin-content-blog.js',
+      './plugins/plugin-content-blog.js', 
       {
         id: "release-notes",
         blogTitle: "CIROH Hub release notes!",
@@ -195,110 +195,109 @@ const config = {
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     (
       {
-        /*announcementBar: {
-          id: 'scimeet25_survey_notice',
-          content:
-            '🔧 Do you have any thoughts on CIROH Hub or Portal? We\'d love to hear from you! <a target="_blank" rel="noopener noreferrer" href="'+baseUrl+'scimeet25survey">Take the CIROH Hub/Portal User Survey here</a>.',
-          backgroundColor: '#0081d2ff',
-          textColor: '#fff',
-          isCloseable: true,
-        },*/
-        colorMode: {
-          defaultMode: 'dark',
-          disableSwitch: false,
-          respectPrefersColorScheme: false,
+      /*announcementBar: {
+        id: 'scimeet25_survey_notice',
+        content:
+          '🔧 Do you have any thoughts on CIROH Hub or Portal? We\'d love to hear from you! <a target="_blank" rel="noopener noreferrer" href="'+baseUrl+'scimeet25survey">Take the CIROH Hub/Portal User Survey here</a>.',
+        backgroundColor: '#0081d2ff',
+        textColor: '#fff',
+        isCloseable: true,
+      },*/
+      colorMode: {
+        defaultMode: 'dark',
+        disableSwitch: false,
+        respectPrefersColorScheme: false,
+      },
+      docs: {
+        sidebar: {
+          autoCollapseCategories: false,
+          hideable: true,
         },
-        docs: {
-          sidebar: {
-            autoCollapseCategories: false,
-            hideable: true,
-          },
+      },
+      stylesheets: [
+        "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css",
+        // ... other stylesheets
+      ],
+      navbar: {
+        title: "CIROH Hub",
+        logo: {
+          alt: "CIROH Logo",
+          src: "img/logos/docuhub.png",
         },
-        stylesheets: [
-          "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css",
-          // ... other stylesheets
-        ],
-        navbar: {
-          title: "CIROH Hub",
-          logo: {
-            alt: "CIROH Logo",
-            src: "img/logos/docuhub.png",
-          },
-          items: [
-            {
-              label: "Research & Innovation",
-              position: "left",
-              items: [
-                {
-                  href: "/apps",
-                  label: "Apps",
-                },
-                {
-                  href: "/datasets",
-                  label: "Datasets",
-                },
-                {
-                  href: "/presentations",
-                  label: "Presentations",
-                },
-                {
-                  href: "/publications",
-                  label: "Publications",
-                },
-              ],
-            },
-            {
-              label: "Docs & Learning",
-              position: "left",
-              items: [
-                {
-                  type: "doc",
-                  docId: "products/intro",
-                  label: "Software",
-                },
-                {
-                  href: "/courses",
-                  label: "Courses",
-                }
-              ],
-            },
-            {
-              label: "Operations",
-              position: "left",
-              items: [
-                {
-                  type: "doc",
-                  docId: "services/intro",
-                  label: "IT Services",
-                },
-                {
-                  type: "doc",
-                  docId: "policies/intro",
-                  label: "Policies",
-                },
-                {
-                  href: "/working-groups",
-                  label: "Working Groups",
-                },
-              ],
-            },
-            {
-              label: "Community",
-              position: "left",
-              items: [
-                {
-                  href: "/impact",
-                  label: "Community Impact",
-                },
-                {
-                  href: "/contribute",
-                  label: "Contribute",
-                },
-              ],
-            },
-            {
-            label: "Latest Updates",
+        items: [
+          {
+            label: "Research & Innovation",
             position: "left",
+            items: [
+              {
+                href: "/apps",
+                label: "Apps",
+              },
+              {
+                href: "/datasets",
+                label: "Datasets",
+              },
+              {href: "/presentations",
+                label: "Presentations",
+              },
+              {href: "/publications",
+                label: "Publications",
+              },
+            ],
+          },
+          {
+            label: "Docs & Learning",
+            position: "left",
+            items: [
+              {
+                type: "doc",
+                docId: "products/intro",
+                label: "Software",
+              },
+             {
+                href: "/courses",
+                label: "Courses",
+              } 
+            ],
+          },
+          {
+            label: "Operations",
+            position: "left",
+            items: [
+              {
+                type: "doc",
+                docId: "services/intro",
+                label: "IT Services",
+              },
+              {
+                type: "doc",
+                docId: "policies/intro",
+                label: "Policies",
+              },
+              {
+                href: "/working-groups",
+                label: "Working Groups",
+              },
+            ],
+          },
+          {
+            label: "Community",
+            position: "left",
+            items: [
+              {
+                href: "/impact",
+                label: "Community Impact",
+              },
+              {
+                href: "/contribute",
+                label: "Contribute",
+              },
+            ],
+          },
+
+          {
+            label: "Latest Updates",
+            position: "right",
             items: [
               {
                 href: "/blog",
@@ -314,62 +313,62 @@ const config = {
               }
             ]
           },
-          ],
-        },
-        footer: {
-          style: "dark",
-          links: [
-            {
-              title: 'Quick Links',
-              items: [
-                {
-                  label: 'Community Products',
-                  href: '/community_products'
-                },
-                {
-                  label: 'Contact Us',
-                  href: '/contact'
-                },
-                {
-                  label: 'Contribute',
-                  href: '/contribute'
-                },
-                {
-                  label: 'Feedback',
-                  href: 'https://forms.office.com/r/5ww7qRWwwf'
-                },
-                {
-                  label: 'Release Notes',
-                  href: '/release-notes'
-                },
-              ]
-            },
-            {
-              title: 'About CIROH',
-              items: [
-                {
-                  label: 'About Us',
-                  href: 'https://ciroh.ua.edu/about/'
-                },
-                {
-                  label: 'Members & Partners',
-                  href: 'https://ciroh.ua.edu/about/ciroh-partners/'
-                },
-                {
-                  label: 'Contact CIROH',
-                  href: 'https://ciroh.ua.edu/contact-us/'
-                },
-                {
-                  label: 'CIROH Hub Repository',
-                  href: 'https://github.com/CIROH-UA/ciroh-ua_website'
-                },
-              ]
-            },
-            {
-              title: "Follow us on",
-              items: [
-                {
-                  html: `
+        ],
+      },
+      footer: {
+        style: "dark",
+        links: [
+          {
+            title: 'Quick Links',
+            items: [
+              {
+                label: 'Community Products',
+                href: '/community_products'
+              },
+              {
+                label: 'Contact Us',
+                href: '/contact'
+              },
+              {
+                label: 'Contribute',
+                href: '/contribute'
+              },
+              {
+                label: 'Feedback',
+                href: 'https://forms.office.com/r/5ww7qRWwwf'
+              },
+              {
+                label: 'Release Notes',
+                href: '/release-notes'
+              },
+            ]
+          },
+          {
+            title: 'About CIROH',
+            items: [
+              {
+                label: 'About Us',
+                href: 'https://ciroh.ua.edu/about/'
+              },
+              {
+                label: 'Members & Partners',
+                href: 'https://ciroh.ua.edu/about/ciroh-partners/'
+              },
+              {
+                label: 'Contact CIROH',
+                href: 'https://ciroh.ua.edu/contact-us/'
+              },
+              {
+                label: 'CIROH Hub Repository',
+                href: 'https://github.com/CIROH-UA/ciroh-ua_website'
+              },
+            ]
+          },
+          {
+            title: "Follow us on",
+            items: [
+              {
+                html: `
                   <div class="footer-social-links">
                     <a href="https://github.com/CIROH-UA" target="_blank" rel="noreferrer noopener" aria-label="Visit CIROH">
                       <img src="${baseUrl}img/socials/github_light.svg" alt="CIROH on GitHub" width="40" height="40" />
@@ -382,9 +381,9 @@ const config = {
                     </a>
                   </div>
                 `,
-                },
-                {
-                  html: `
+              },
+              {
+                html: `
                 <div class="footer-social-links"> 
                   <a href="https://www.instagram.com/ua_ciroh/" target="_blank" rel="noreferrer noopener" aria-label="CIROH on Instagram">
                     <img src="${baseUrl}img/socials/instagram_light.svg" alt="CIROH on Instagram" width="40" height="40" />
@@ -397,11 +396,11 @@ const config = {
                   </a>
                 </div>
                 `,
-                },
-              ],
-            },
-          ],
-          copyright: `
+              },
+            ],
+          },
+        ],
+        copyright: `
           <div class="footer__attrib">
             Developed with ❤️ by the CIROH Hub Team
           </div>
@@ -415,13 +414,13 @@ const config = {
             Copyright © ${new Date().getFullYear()} CIROH - The University of Alabama
           </div>
           `,
-        },
-        prism: {
-          theme: prismThemes.github,
-          darkTheme: prismThemes.dracula,
-        },
-      }),
-
+      },
+      prism: {
+        theme: prismThemes.github,
+        darkTheme: prismThemes.dracula,
+      },
+    }),
+    
 };
 
 module.exports = config;

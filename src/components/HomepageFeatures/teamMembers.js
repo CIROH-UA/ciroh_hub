@@ -88,14 +88,14 @@ export default function TeamMembers() {
               >
                 {/* Light mode: Blue icon */}
                 <img
-                  src={useBaseUrl("/img/socials/linkedin_blue.svg")}
+                  src="/img/socials/linkedin_blue.svg"
                   alt="LinkedIn"
                   className="tw-w-8 tw-h-8 tw-block dark:tw-hidden"
                 />
 
                 {/* Dark mode: White icon */}
                 <img
-                  src={useBaseUrl("/img/socials/linkedin_light.svg")}
+                  src="/img/socials/linkedin_light.svg"
                   alt="LinkedIn"
                   className="tw-w-8 tw-h-8 tw-hidden dark:tw-block"
                 />

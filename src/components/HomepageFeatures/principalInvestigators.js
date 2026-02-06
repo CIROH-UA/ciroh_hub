@@ -39,15 +39,6 @@ const investigators = [
     orgName: "Brigham Young University",
     orgLogo: "https://th.bing.com/th/id/R.f1cb7dee44fd82870c0e58ba859a078e?rik=opVcBH5Lqtyl9w&riu=http%3a%2f%2flogonoid.com%2fimages%2fbyu-logo.png&ehk=9Ob%2bcxsV7xRkYYmzuKx0ac0w3A3TELDo4ETKBjdbhiI%3d&risl=&pid=ImgRaw&r=0",
   },
-  {
-    name: "Jeffrey C. Carver",
-    role: "Associate Department Head for Graduate Studies\nDepartment of Computer Science",
-    image: "https://eng.ua.edu/wp-content/uploads/2020/01/2302031_BH_043_Jeffrey_Carver-e1745355760760.jpg",
-    initial: "JC",
-    link: "https://carver.cs.ua.edu/",
-    orgName: "University of Alabama",
-    orgLogo: "/img/logos/uni/UAlogo.png",
-  },
 ];
 
 export default function PrincipalInvestigators() {

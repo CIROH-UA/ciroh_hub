@@ -8,7 +8,6 @@ import "./cta-1.css";
 import styles from "./styles.module.css";
 import "./whyDocuhub.css";
 import Link from '@docusaurus/Link';
-import useBaseUrl from '@docusaurus/useBaseUrl';
 import ResearcherTestimonials from './testimonial';
 import TeamMembers from './teamMembers';
 import PrincipalInvestigators from './principalInvestigators';
@@ -117,10 +116,10 @@ const carouselCards = [
     link: "/docs/services/on-prem/Pantarhei"
   },
   {
-    title: "Hydrofabric",
+    title: "CIROH Portal",
     image: "img/graphics/ciroh-synergy.jpg",
-    description: "Geospatial fabric for hydrological modeling providing standardized catchment and flowline representations for water resource applications.",
-    link: "docs/products/Hydrofabric/"
+    description: "This portal enhances collaboration and innovation by providing access to interactive web apps, datasets, and learning modules, supporting CIROH and NOAA NWM researchers in advancing hydrological science.",
+    link: "https://portal.ciroh.org/"
   }
 ];
 
@@ -762,7 +761,7 @@ export default function HomepageFeatures() {
 
             <div className="image-container tw-lg:w-2/6 tw-md:w-3/6 tw-w-5/6 tw-mb-16 tw-rounded-2xl tw-shadow-2xl tw-animate-fade-in-scale">
               <img
-                src={useBaseUrl("/img/graphics/OurResearch.png")}
+                src="https://dummyimage.com/720x600/3b82f6/ffffff&text=Research+Innovation"
                 alt="research hero"
                 className="tw-w-full tw-object-cover tw-object-center tw-rounded-2xl"
               />

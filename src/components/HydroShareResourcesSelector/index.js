@@ -1,10 +1,9 @@
-import React, { useEffect, useState, startTransition, useRef, useCallback, useMemo } from "react";
+import React, { useEffect, useState, startTransition, useRef, useCallback } from "react";
 import clsx from "clsx";
 import { FaThLarge, FaBars } from "react-icons/fa";
 import styles from "./styles.module.css";
 import HydroShareResourcesTiles from "@site/src/components/HydroShareResourcesTiles";
 import HydroShareResourcesRows from "@site/src/components/HydroShareResourcesRows";
-import HydroShareResourcesCards from "@site/src/components/HydroShareResourcesCards";
 import { fetchResourcesBySearch, fetchResourceCustomMetadata } from "@site/src/components/HydroShareImporter";
 import { useColorMode } from "@docusaurus/theme-common"; // Hook to detect theme
 import DatasetLightIcon from '@site/static/img/cards/datasets_logo_light.png';
@@ -12,7 +11,6 @@ import DatasetDarkIcon from '@site/static/img/cards/datasets_logo_dark.png';
 import {
   HiOutlineSortDescending,
   HiOutlineSortAscending,
-  HiOutlineSearch,
 } from 'react-icons/hi';
 
 const PAGE_SIZE        = 40;
@@ -20,12 +18,7 @@ const SCROLL_THRESHOLD = 800;
 let   debounceTimer    = null;
 const DEBOUNCE_MS      = 1_000;
 
-export default function HydroShareResourcesSelector({
-  keyword = "nwm_portal_app",
-  defaultImage,
-  variant = 'legacy',
-  onResultsChange,
-}) {
+export default function HydroShareResourcesSelector({ keyword = "nwm_portal_app", defaultImage }) {
   const { colorMode } = useColorMode(); // Get the current theme
   const PLACEHOLDER_ITEMS = 10;
 
@@ -167,36 +160,6 @@ export default function HydroShareResourcesSelector({
     fetchResources(1);
   }, [keyword, filterSearch, sortDirection, sortType, fetchResources]);
 
-  const nonPlaceholderResources = useMemo(
-    () => resources.filter(
-      r => !String(r.resource_id || '').startsWith('placeholder-')
-    ),
-    [resources]
-  );
-
-  useEffect(() => {
-    if (typeof onResultsChange !== 'function') return;
-    onResultsChange(nonPlaceholderResources, {
-      loading,
-      hasMore,
-      keyword,
-      filterSearch,
-      sortType,
-      sortDirection,
-      view,
-    });
-  }, [
-    nonPlaceholderResources,
-    loading,
-    hasMore,
-    keyword,
-    filterSearch,
-    sortType,
-    sortDirection,
-    view,
-    onResultsChange,
-  ]);
-
   if (error) {
     return <p style={{ color: "red" }}>Error: {error}</p>;
   }
@@ -217,145 +180,33 @@ export default function HydroShareResourcesSelector({
   }, [currentPage, hasMore, fetchResources]);
 
   /* search helpers */
-  const commitSearch = (q) => {
+  const commitSearch = q => {
     clearTimeout(debounceTimer);
-    setFilterSearch(String(q || '').trim());
+    setFilterSearch(q.trim());
   };
-
-  useEffect(() => {
+  const handleKeyUp   = () => {
     clearTimeout(debounceTimer);
     debounceTimer = setTimeout(() => commitSearch(searchInput), DEBOUNCE_MS);
-    return () => clearTimeout(debounceTimer);
-  }, [searchInput]);
-
-  const resultLabel = keyword === 'nwm_portal_app'
-    ? 'Apps'
-    : keyword === 'nwm_portal_module'
-      ? 'Courses'
-      : 'Resources';
+  };
+  const handleKeyPress = () => clearTimeout(debounceTimer);
+  const handleKeyDown  = e => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      commitSearch(searchInput);
+    }
+  };
+  const handleBlur = () => commitSearch(searchInput);
 
   /* ---------------- render ---------------- */
-  if (variant === 'modern') {
-    return (
-      <section className={clsx(styles.cardsContainer, 'tw-relative tw-z-20 tw-w-full tw-py-10')}>
-        <div className="tw-mx-auto tw-max-w-7xl tw-px-4 sm:tw-px-6 lg:tw-px-8">
-          <div className="tw-flex tw-flex-col lg:tw-flex-row lg:tw-items-center lg:tw-justify-between tw-gap-4 tw-mb-6">
-            <div className="tw-text-sm sm:tw-text-base tw-text-slate-600 dark:tw-text-slate-300">
-              Showing{' '}
-              <strong className="tw-font-semibold tw-text-slate-900 dark:tw-text-white">
-                {nonPlaceholderResources.length}
-              </strong>{' '}
-              {resultLabel}
-            </div>
-
-            <form
-              className="tw-flex tw-flex-col md:tw-flex-row md:tw-items-center tw-gap-3 tw-w-full lg:tw-w-auto"
-              onSubmit={e => { e.preventDefault(); commitSearch(searchInput); }}
-            >
-              <div className="tw-relative tw-w-full md:tw-w-[28rem]">
-                <span className="tw-pointer-events-none tw-absolute tw-left-3 tw-inset-y-0 tw-flex tw-items-center tw-text-slate-400 dark:tw-text-slate-500">
-                  <HiOutlineSearch size={18} />
-                </span>
-                <input
-                  type="text"
-                  placeholder="Search by Title, Author, Description..."
-                  className="tw-w-full tw-rounded-lg tw-border tw-border-slate-200/80 dark:tw-border-slate-700/80 tw-bg-white/80 dark:tw-bg-slate-900/50 tw-backdrop-blur tw-pl-10 tw-pr-3 tw-py-3 tw-text-sm tw-text-slate-900 dark:tw-text-white placeholder:tw-text-slate-400 dark:placeholder:tw-text-slate-500 focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-cyan-500/30"
-                  value={searchInput}
-                  onChange={e => setSearchInput(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter') {
-                      e.preventDefault();
-                      commitSearch(e.currentTarget.value);
-                    }
-                  }}
-                  onBlur={(e) => commitSearch(e.currentTarget.value)}
-                />
-              </div>
-
-              <div className="tw-flex tw-flex-wrap tw-gap-2 tw-items-center">
-                <select
-                  value={sortType}
-                  onChange={e => setSortType(e.target.value)}
-                  className="tw-rounded-lg tw-border tw-border-slate-200/80 dark:tw-border-slate-700/80 tw-bg-white/80 dark:tw-bg-slate-900/50 tw-backdrop-blur tw-px-3 tw-py-3 tw-text-sm tw-text-slate-900 dark:tw-text-white focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-cyan-500/30"
-                >
-                  <option value="modified">Last Updated</option>
-                  <option value="created">Date Created</option>
-                  <option value="title">Title</option>
-                  <option value="author">Authors</option>
-                </select>
-
-                <button
-                  type="button"
-                  aria-label={`Sort direction ${sortDirection}`}
-                  className="tw-inline-flex tw-items-center tw-justify-center tw-rounded-lg tw-border tw-border-slate-200/80 dark:tw-border-slate-700/80 tw-bg-white/80 dark:tw-bg-slate-900/50 tw-backdrop-blur tw-px-3 tw-py-3 tw-text-slate-700 dark:tw-text-slate-200 hover:tw-border-cyan-500/40 hover:tw-text-cyan-700 dark:hover:tw-text-cyan-300 tw-transition"
-                  onClick={() =>
-                    startTransition(() =>
-                      setSortDirection(d => (d === 'asc' ? 'desc' : 'asc')),
-                    )
-                  }
-                >
-                  {sortDirection === 'asc'
-                    ? <HiOutlineSortAscending size={20} />
-                    : <HiOutlineSortDescending size={20} />}
-                </button>
-
-                <div className="tw-flex tw-gap-2">
-                  {/* <button
-                    type="button"
-                    className={clsx(
-                      "tw-inline-flex tw-items-center tw-justify-center tw-rounded-lg tw-border tw-px-3 tw-py-3 tw-transition",
-                      view === 'grid'
-                        ? 'tw-border-cyan-500/40 tw-bg-cyan-500/10 tw-text-cyan-700 dark:tw-text-cyan-300'
-                        : 'tw-border-slate-200/80 dark:tw-border-slate-700/80 tw-bg-white/80 dark:tw-bg-slate-900/50 tw-text-slate-600 dark:tw-text-slate-300 hover:tw-border-cyan-500/40'
-                    )}
-                    onClick={() => setView('grid')}
-                    title="Grid View"
-                  >
-                    <FaThLarge size={16} />
-                  </button> */}
-                  <button
-                    type="button"
-                    className={clsx(
-                      "tw-inline-flex tw-items-center tw-justify-center tw-rounded-lg tw-border tw-px-3 tw-py-3 tw-transition",
-                      view === 'row'
-                        ? 'tw-border-cyan-500/40 tw-bg-cyan-500/10 tw-text-cyan-700 dark:tw-text-cyan-300'
-                        : 'tw-border-slate-200/80 dark:tw-border-slate-700/80 tw-bg-white/80 dark:tw-bg-slate-900/50 tw-text-slate-600 dark:tw-text-slate-300 hover:tw-border-cyan-500/40'
-                    )}
-                    onClick={() => setView('row')}
-                    title="List View"
-                  >
-                    <FaBars size={16} />
-                  </button>
-                </div>
-              </div>
-            </form>
-          </div>
-
-          {view === 'grid' ? (
-            <HydroShareResourcesTiles resources={resources} defaultImage={defaultImage} />
-          ) : (
-            <HydroShareResourcesCards resources={resources} defaultImage={defaultImage} />
-          )}
-
-          {!loading && nonPlaceholderResources.length === 0 && (
-            <p className="tw-mt-10 tw-text-center tw-text-sm tw-text-slate-600 dark:tw-text-slate-300">
-              No {resultLabel} Found
-            </p>
-          )}
-        </div>
-      </section>
-    );
-  }
-
   return (
     <div className={clsx(styles.wrapper)}>
       <div className={clsx("container", "margin-bottom--lg")}>
         {/* counter */}
       <div className={styles.counterRow}>
         Showing&nbsp;
-        <strong>{nonPlaceholderResources.length}</strong>
-        &nbsp; {resultLabel}
-        {!loading && <> of <strong>{nonPlaceholderResources.length}</strong></>}
+        <strong>{resources.filter(r => !r.resource_id.startsWith('placeholder-')).length}</strong>
+        &nbsp; { keyword == 'nwm_portal_app' ? 'Apps' : keyword == 'nwm_portal_module' ? 'Courses' : 'Resources' }
+        {!loading && <> of <strong>{resources.filter(r => !r.resource_id.startsWith('placeholder-')).length}</strong></>}
       </div>
 
         {/* Search Form */}
@@ -424,15 +275,16 @@ export default function HydroShareResourcesSelector({
 
         {/* Resources */}
         {view === "grid" ? (
-          <HydroShareResourcesTiles resources={resources} defaultImage={defaultImage} />
+          <HydroShareResourcesTiles resources={resources} />
         ) : (
-          <HydroShareResourcesRows resources={resources} defaultImage={defaultImage} />
+          <HydroShareResourcesRows resources={resources} />
         )}
 
         {/* empty */}
-        {!loading && nonPlaceholderResources.length === 0 && (
-          <p className={styles.emptyMessage}>No&nbsp;Resources&nbsp;Found</p>
-        )}
+        {!loading &&
+          resources.filter(r => !r.resource_id.startsWith('placeholder-')).length === 0 && (
+            <p className={styles.emptyMessage}>No&nbsp;Resources&nbsp;Found</p>
+          )}
       </div>
     </div>
   );

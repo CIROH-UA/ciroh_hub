@@ -172,8 +172,13 @@ export default function CommunityImpactComponent() {
 
       <CloudInfraDashboard cards={cards} />
 
-      {/* <hr className={styles.sectionDivider} /> */}
-      <BlogFilter />
+
+      
+      <hr className={styles.sectionDivider} />
+      <p className={`container ${styles.paragraph}`}>To learn more about our projects and the impact we're making, check out our blogs for in-depth insights and updates!</p>
+      <div className="container">
+        <BlogFilter />
+      </div>
     </div>
   );
 }

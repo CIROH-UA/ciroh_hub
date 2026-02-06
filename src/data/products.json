@@ -5,15 +5,11 @@
       "name": "NextGen In A Box",
       "description": "A comprehensive containerized solution for NextGen framework deployment, providing easy setup and management of hydrological modeling workflows.",
       "category": "Modeling Framework",
-      "tags": [
-        "Docker",
-        "NextGen",
-        "Containerization"
-      ],
+      "tags": ["Docker", "NextGen", "Containerization"],
       "iconUrl": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg",
       "links": {
         "github": "https://github.com/ciroh-ua/nextgen-in-a-box",
-        "docs": "ngiab/",
+        "docs": "https://ciroh-ua.github.io/nextgen-in-a-box/",
         "hydroshare": "https://hydroshare.org/resource/nextgen-in-a-box",
         "zotero": "https://www.zotero.org/groups/ciroh/items/nextgen-in-a-box"
       }
@@ -23,15 +19,11 @@
       "name": "National Water Model",
       "description": "Advanced hydrologic modeling system that simulates observed and forecast streamflow over the continental United States.",
       "category": "Water Modeling",
-      "tags": [
-        "NWM",
-        "Forecasting",
-        "Streamflow"
-      ],
+      "tags": ["NWM", "Forecasting", "Streamflow"],
       "iconUrl": "https://img.icons8.com/fluency/96/000000/water.png",
       "links": {
         "github": "https://github.com/ciroh-ua/nwm",
-        "docs": "national-water-model/",
+        "docs": "https://nwm.ciroh.org/docs",
         "hydroshare": "https://hydroshare.org/resource/nwm-data",
         "zotero": "https://www.zotero.org/groups/ciroh/items/nwm-research"
       }
@@ -41,15 +33,11 @@
       "name": "Hydrofabric",
       "description": "Geospatial fabric for hydrological modeling providing standardized catchment and flowline representations for water resource applications.",
       "category": "Geospatial Tools",
-      "tags": [
-        "GIS",
-        "Catchments",
-        "Hydrology"
-      ],
+      "tags": ["GIS", "Catchments", "Hydrology"],
       "iconUrl": "https://img.icons8.com/fluency/96/000000/geography.png",
       "links": {
         "github": "https://github.com/ciroh-ua/hydrofabric",
-        "docs": "hydrofabric/",
+        "docs": "https://hydrofabric.org/docs",
         "hydroshare": "https://hydroshare.org/resource/hydrofabric",
         "zotero": "https://www.zotero.org/groups/ciroh/items/hydrofabric"
       }
@@ -59,15 +47,11 @@
       "name": "NextGen Research Datastream",
       "description": "Real-time data streaming platform for NextGen framework, enabling efficient data ingestion and processing for hydrological research.",
       "category": "Data Management",
-      "tags": [
-        "Data Stream",
-        "Real-time",
-        "Research"
-      ],
+      "tags": ["Data Stream", "Real-time", "Research"],
       "iconUrl": "https://img.icons8.com/fluency/96/000000/data-configuration.png",
       "links": {
-        "github": "https://github.com/CIROH-UA/ngen-datastream",
-        "docs": "research-datastream/",
+        "github": "https://github.com/ciroh-ua/nextgen-datastream",
+        "docs": "https://datastream.ciroh.org",
         "hydroshare": "https://hydroshare.org/resource/datastream-tools",
         "zotero": "https://www.zotero.org/groups/ciroh/items/datastream"
       }
@@ -77,15 +61,11 @@
       "name": "Evaluation Tools",
       "description": "Comprehensive suite of model evaluation and validation tools for hydrological forecasting performance assessment.",
       "category": "Analysis Tools",
-      "tags": [
-        "Evaluation",
-        "Validation",
-        "Metrics"
-      ],
+      "tags": ["Evaluation", "Validation", "Metrics"],
       "iconUrl": "https://img.icons8.com/fluency/96/000000/analytics.png",
       "links": {
         "github": "https://github.com/ciroh-ua/evaluation-tools",
-        "docs": "evaluation/",
+        "docs": "https://evaluation.ciroh.org",
         "hydroshare": "https://hydroshare.org/resource/evaluation-tools",
         "zotero": "https://www.zotero.org/groups/ciroh/items/evaluation-tools"
       }
@@ -95,15 +75,11 @@
       "name": "Snow Sensing and Modeling Tools",
       "description": "Advanced tools for snow water equivalent estimation, snowpack monitoring, and snow-related hydrological modeling applications.",
       "category": "Snow Science",
-      "tags": [
-        "Snow",
-        "SWE",
-        "Remote Sensing"
-      ],
+      "tags": ["Snow", "SWE", "Remote Sensing"],
       "iconUrl": "https://img.icons8.com/fluency/96/000000/snow.png",
       "links": {
         "github": "https://github.com/ciroh-ua/snow-tools",
-        "docs": "snow-tools/",
+        "docs": "https://snow.ciroh.org/docs",
         "hydroshare": "https://hydroshare.org/resource/snow-tools",
         "zotero": "https://www.zotero.org/groups/ciroh/items/snow-modeling"
       }
@@ -113,15 +89,11 @@
       "name": "Machine Learning for Hydrology Course",
       "description": "Comprehensive online course covering machine learning algorithms and AI-powered solutions for hydrological prediction and water resource management.",
       "category": "AI/ML",
-      "tags": [
-        "Machine Learning",
-        "AI",
-        "Education"
-      ],
+      "tags": ["Machine Learning", "AI", "Education"],
       "iconUrl": "https://img.icons8.com/fluency/96/000000/artificial-intelligence.png",
       "links": {
         "github": "https://github.com/ciroh-ua/ml-hydrology-course",
-        "docs": "ml-ai/",
+        "docs": "https://course.ml.ciroh.org",
         "hydroshare": "https://hydroshare.org/resource/ml-course-materials",
         "zotero": "https://www.zotero.org/groups/ciroh/items/ml-education"
       }
@@ -131,15 +103,11 @@
       "name": "Visualization and Analysis Tools",
       "description": "Interactive visualization platform for hydrological data analysis, featuring customizable dashboards and analytical workflows.",
       "category": "Visualization",
-      "tags": [
-        "Visualization",
-        "Dashboard",
-        "Analytics"
-      ],
+      "tags": ["Visualization", "Dashboard", "Analytics"],
       "iconUrl": "https://img.icons8.com/fluency/96/000000/combo-chart.png",
       "links": {
         "github": "https://github.com/ciroh-ua/viz-tools",
-        "docs": "visualization/",
+        "docs": "https://viz.ciroh.org/docs",
         "hydroshare": "https://hydroshare.org/resource/viz-tools",
         "zotero": "https://www.zotero.org/groups/ciroh/items/visualization"
       }
@@ -149,15 +117,11 @@
       "name": "Flood Inundation Mapping Methods",
       "description": "Comprehensive research publication on community-driven flood mapping methodologies for real-time inundation prediction and risk assessment.",
       "category": "Flood Management",
-      "tags": [
-        "Flood Mapping",
-        "Research",
-        "Methodology"
-      ],
+      "tags": ["Flood Mapping", "Research", "Methodology"],
       "iconUrl": "https://img.icons8.com/fluency/96/000000/flood.png",
       "links": {
         "github": "https://github.com/ciroh-ua/flood-mapping-research",
-        "docs": "community-fim/",
+        "docs": "https://research.flood.ciroh.org",
         "hydroshare": "https://hydroshare.org/resource/flood-mapping-publication",
         "zotero": "https://www.zotero.org/groups/ciroh/items/flood-research"
       }
@@ -167,36 +131,13 @@
       "name": "CIROH Hydrology Datasets",
       "description": "Curated collection of hydrological datasets including streamflow, precipitation, and water quality data for research and educational purposes.",
       "category": "Data Resources",
-      "tags": [
-        "Datasets",
-        "Open Data",
-        "Research"
-      ],
+      "tags": ["Datasets", "Open Data", "Research"],
       "iconUrl": "https://img.icons8.com/fluency/96/000000/database.png",
       "links": {
         "github": "https://github.com/ciroh-ua/hydrology-datasets",
         "docs": "https://data.ciroh.org/docs",
         "hydroshare": "https://hydroshare.org/resource/ciroh-datasets",
         "zotero": "https://www.zotero.org/groups/ciroh/items/datasets"
-      }
-    },
-    {
-      "id": "chpt",
-      "name": "CIROH Hydrologic Prediction Testbed (CHPT)",
-      "description": "CHPT is a community-driven testbed that standardizes and benchmarks research advancing operational hydrologic forecasting, with future opportunities to integrate ecological prediction.",
-      "category": "Forecasting & Testing",
-      "tags": [
-        "Benchmarking",
-        "Forecasting",
-        "Testbed",
-        "Community"
-      ],
-      "iconUrl": "https://img.icons8.com/fluency/96/000000/test-tube.png",
-      "links": {
-        "github": "https://github.com/ciroh-ua/chpt",
-        "docs": "chpt/",
-        "hydroshare": "https://hydroshare.org/resource/chpt",
-        "zotero": "https://www.zotero.org/groups/ciroh/items/chpt"
       }
     }
   ]
