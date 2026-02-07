@@ -258,11 +258,15 @@ export default function HydroShareResourcesSelector({
         <div className="tw-mx-auto tw-max-w-7xl tw-px-4 sm:tw-px-6 lg:tw-px-8">
           <div className="tw-flex tw-flex-col lg:tw-flex-row lg:tw-items-center lg:tw-justify-between tw-gap-4 tw-mb-6">
             <div className="tw-text-sm sm:tw-text-base tw-text-slate-600 dark:tw-text-slate-300">
-              Showing{' '}
-              <strong className="tw-font-semibold tw-text-slate-900 dark:tw-text-white">
-                {nonPlaceholderResources.length}
-              </strong>{' '}
-              {resultLabel}
+              {loading || fetching.current ? "Fetching " + resultLabel + "..." : (
+                <>
+                  Showing{' '}
+                  <strong className="tw-font-semibold tw-text-slate-900 dark:tw-text-white">
+                    {nonPlaceholderResources.length}
+                  </strong>{' '}
+                  {resultLabel}
+                </>
+              )}
             </div>
 
             <form
@@ -383,10 +387,12 @@ export default function HydroShareResourcesSelector({
       <div className={clsx("container", "margin-bottom--lg")}>
         {/* counter */}
       <div className={styles.counterRow}>
-        Showing&nbsp;
-        <strong>{nonPlaceholderResources.length}</strong>
-        &nbsp; {resultLabel}
-        {!loading && <> of <strong>{nonPlaceholderResources.length}</strong></>}
+        {loading || fetching.current ? "Fetching " + resultLabel + "..." : (
+        <>
+          Showing&nbsp;<strong>{nonPlaceholderResources.length}</strong>
+          &nbsp;{resultLabel}
+        </>
+        )}
       </div>
 
         {/* Search Form */}
