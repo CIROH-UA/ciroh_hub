@@ -362,6 +362,20 @@ export default function HydroShareResourcesSelector({
     );
   }
 
+    /* legacy search helpers */
+  const handleKeyUp   = () => {
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(() => commitSearch(searchInput), DEBOUNCE_MS);
+  };
+  const handleKeyPress = () => clearTimeout(debounceTimer);
+  const handleKeyDown  = e => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      commitSearch(searchInput);
+    }
+  };
+  const handleBlur = () => commitSearch(searchInput);
+
   return (
     <div className={clsx(styles.wrapper)}>
       <div className={clsx("container", "margin-bottom--lg")}>
