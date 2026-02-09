@@ -238,9 +238,8 @@ const config = {
                   label: "Datasets",
                 },
                 {
-                  type: "doc",
-                  docId: "products/intro",
-                  label: "Software",
+                  href: "/courses",
+                  label: "Courses",
                 },
                 {
                   href: "/presentations",
@@ -253,9 +252,10 @@ const config = {
               ],
             },
             {
-              label: "Courses",
-              position: "left",
-              href: "/courses",
+              type: "doc",
+              docId: "products/intro",
+              label: "Docs",
+              
             },
             {
               label: "Operations",
