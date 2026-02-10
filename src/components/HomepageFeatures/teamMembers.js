@@ -45,6 +45,7 @@ const team = [
     role: "Graduate Research Assistant",
     image: null,
     initial: "NM",
+    github: "https://github.com/sheargrub"
   },
   {
     name: "James Dolinar",
@@ -60,6 +61,34 @@ const team = [
   }, 
   
 ];
+
+function SocialButton({href, imgLight, imgDark, alt}) {
+  if (href != null) {
+    return (
+      <a
+        href={href}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="tw-inline-flex tw-items-center tw-justify-center tw-mt-3"
+      >
+        {/* Light mode: Blue icon */}
+        <img
+          src={imgLight}
+          alt={alt}
+          className="tw-w-8 tw-h-8 tw-block dark:tw-hidden"
+        />
+
+        {/* Dark mode: White icon */}
+        <img
+          src={imgDark}
+          alt={alt}
+          className="tw-w-8 tw-h-8 tw-hidden dark:tw-block"
+        />
+      </a>
+    )
+  }
+  else return null;
+}
 
 export default function TeamMembers() {
   return (
@@ -91,29 +120,20 @@ export default function TeamMembers() {
                 {member.role}
               </p>
 
-              {/* LINKEDIN BUTTON */}
-              <a
+              <SocialButton
                 href={member.linkedin}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="tw-inline-flex tw-items-center tw-justify-center tw-mt-3"
-              >
-                {/* Light mode: Blue icon */}
-                <img
-                  src={useBaseUrl("/img/socials/linkedin_blue.svg")}
-                  alt="LinkedIn"
-                  className="tw-w-8 tw-h-8 tw-block dark:tw-hidden"
-                />
+                imgLight={useBaseUrl("/img/socials/linkedin_blue.svg")}
+                imgDark={useBaseUrl("/img/socials/linkedin_light.svg")}
+                alt="LinkedIn"
+              />
 
-                {/* Dark mode: White icon */}
-                <img
-                  src={useBaseUrl("/img/socials/linkedin_light.svg")}
-                  alt="LinkedIn"
-                  className="tw-w-8 tw-h-8 tw-hidden dark:tw-block"
-                />
-
-
-              </a>
+              <SocialButton
+                href={member.github}
+                imgLight={useBaseUrl("/img/socials/github_dark.svg")}
+                imgDark={useBaseUrl("/img/socials/github_light.svg")}
+                alt="GitHub"
+              />
+              
             </div>
 
           </div>
