@@ -10,7 +10,6 @@ export default function Contribute() {
   const { siteConfig } = useDocusaurusContext();
   const contactUrl = useBaseUrl('/contact');
   const portalUrl = useBaseUrl('/products/portal/');
-  const docsContribUrl = useBaseUrl('/docs/coxntribute');
   const resourcesUrl = useBaseUrl('/resources');
   const zoteroLogin = siteConfig?.customFields?.externalLinks?.zoteroLogin || 'https://www.zotero.org/user/login';
   const feedbackUrl = siteConfig?.customFields?.externalLinks?.feedbackForm || 'https://forms.office.com/r/5ww7qRWwwf';
@@ -52,7 +51,7 @@ export default function Contribute() {
         </div>
 
         {/* Main Content */}
-        <div className="container" style={{ marginTop: '3rem', marginBottom: '3rem' }}>
+        <div className="container margin-vert--xl">
           {/* Mission Statement Callout (flat) */}
           <div className={styles.flatMissionText}>
             <p>
@@ -63,7 +62,9 @@ export default function Contribute() {
           </div>
 
           {/* Contribute to DocuHub */}
-          <section className={styles.brandCard}>
+          {/* Dummying this section out as potentially redundant. Restore if rpeferred. */}
+          {/*
+          <section className={clsx(styles.brandCard, "margin-vert--xl")}>
             <div className={styles.brandHeader}>
               <img
                 className={styles.brandLogo}
@@ -79,9 +80,6 @@ export default function Contribute() {
                   to the hydrologic science community.
                 </p>
               </div>
-              <div className={styles.brandTopActions}>
-                <a href={docsContribUrl} className={styles.cardButton}>Read contribution guide</a>
-              </div>
             </div>
             <div className={styles.brandActions}>
               <a href={addProductUrl} className={styles.addProductButton} target='_blank'>
@@ -93,13 +91,18 @@ export default function Contribute() {
                 Submit a blog idea
               </a>
             </div>
-          </section>
+          </section> */}
+
+          {/* Note: horizontal rules around Hydroshare have added margins for spacing */}
+          <hr className="margin-vert--xl" />
 
           {/* Contribute to HydroShare */}
           <HydroShareCard />
+          
+          <hr className="margin-top--xl" />
 
           {/* Contribute to Resources Documentation */}
-          <section id="resources-documentation" className={styles.zoteroSection}>
+          <section id="resources-documentation" className={clsx(styles.zoteroSection, "margin-vert--xl")}>
             <div className={styles.zoteroHeader}>
               <h2 className={styles.zoteroTitle}>Contribute to Resources Documentation</h2>
               <p className={styles.zoteroSubtitle}>
@@ -148,8 +151,10 @@ export default function Contribute() {
             </div>
           </section>
 
+          <hr />
+
           {/* Contribute to Zotero Publications */}
-          <section className={styles.zoteroSection}>
+          <section className={clsx(styles.zoteroSection, "margin-vert--xl")}>
             <div className={styles.zoteroHeader}>
               <h2 className={styles.zoteroTitle}>Contribute your publications to Zotero</h2>
               <p className={styles.zoteroSubtitle}>
@@ -193,8 +198,10 @@ export default function Contribute() {
             </div>
           </section>
 
+          <hr />
+
           {/* Mission Statement (original) - flat page text style */}
-          <div className={styles.flatMissionText}>
+          <div className={clsx(styles.flatMissionText, "margin-vert--xl")}>
             <p>
               Amplify your hydrologic work through community collaboration. Whether you're sharing
               existing resources or building new solutions, your contribution accelerates water
@@ -202,8 +209,10 @@ export default function Contribute() {
             </p>
           </div>
 
+          <hr />
+
           {/* Join the Community Section */}
-          <section id="community-working-group" className={styles.brandCard} style={{ marginTop: '3rem' }}>
+          <section id="community-working-group" className={clsx(styles.brandCard, "margin-top--xl margin-bottom--lg")}>
             <div className={styles.brandHeader}>
               <div style={{ fontSize: '3rem', marginRight: '1.5rem' }}>👥</div>
               <div className={styles.brandTitleWrap}>
@@ -226,7 +235,7 @@ export default function Contribute() {
           </section>
           
           {/* Call to Action */}
-          <div className={styles.ctaSection}>
+          <div className={clsx(styles.ctaSection, "margin-top--lg margin-bottom--xl")}>
             <h2 className={styles.ctaTitle}>Questions or Need Help?</h2>
             <p className={styles.ctaDescription}>
               Our team is here to help you get started with your contributions. 

@@ -21,11 +21,12 @@
   margin-bottom: 0.5rem;
 }
 
-.logo { height: 28px; width: auto; }
+.logo { height: 32px; width: auto; }
 
 .title {
   margin: 0;
-  font-size: 1.1rem;
+  font-size: 1.5rem;
+  font-weight: 800;
 }
 
 .body {
