@@ -17,8 +17,9 @@
 .header {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 0.5rem;
-  margin-bottom: 0.5rem;
+  margin-bottom: 1.0rem;
 }
 
 .logo { height: 32px; width: auto; }
