@@ -1,9 +1,17 @@
 /* removed deprecated mission blockquote dark mode styles */
 /* Contribute Banner (simple) */
-.contributeBanner {
+
+.mainContainer {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+  z-index: 99999;
+  background-color: #fff;
   position: relative;
-  /* Slightly cooler, more blue-forward than Resources to differentiate */
-  
+}
+
+.contributeBanner {
+  position: relative;  
   padding: 2.5rem 2rem;
   text-align: center;
   overflow: hidden;
@@ -494,6 +502,10 @@ html[data-theme='dark'] .brandLogo { background: rgba(15,23,42,0.6); }
 }
 
 /* Dark Mode Support */
+
+html[data-theme='dark'] .mainContainer {
+  background-color: #060010;
+}
 
 html[data-theme='dark'] .bannerTitle {
   color: #e0f2fe;

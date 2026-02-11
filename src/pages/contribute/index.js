@@ -5,53 +5,63 @@ import styles from './contribute.module.css';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import HydroShareCard from '@site/src/components/HydroShareCard';
 import clsx from 'clsx';
+import Header from '@site/src/components/Header';
+import { ConstellationCanvas } from '@site/src/components/ConstellationCanvas';
+import { useColorMode } from '@docusaurus/theme-common';
 
 export default function Contribute() {
+  return (
+    <Layout
+      title="Contribute to CIROH"
+      description="Learn how to contribute to CIROH's open science initiatives">
+      <ContributeContent />
+    </Layout>
+  );
+}
+
+function ContributeContent() {
   const { siteConfig } = useDocusaurusContext();
+  const { colorMode } = useColorMode();
+  const isDarkTheme = colorMode === 'dark';
   const contactUrl = useBaseUrl('/contact');
-  const portalUrl = useBaseUrl('/products/portal/');
-  const resourcesUrl = useBaseUrl('/resources');
   const zoteroLogin = siteConfig?.customFields?.externalLinks?.zoteroLogin || 'https://www.zotero.org/user/login';
   const feedbackUrl = siteConfig?.customFields?.externalLinks?.feedbackForm || 'https://forms.office.com/r/5ww7qRWwwf';
   const addProductUrl = "https://github.com/CIROH-UA/ciroh_hub/issues/new?assignees=&labels=on-prem&projects=&template=product-request.md";
   const blogIdeaUrl = siteConfig?.customFields?.blogIdeaUrl || 'https://github.com/CIROH-UA/ciroh_hub/issues/new?template=docuhub-blog-post.md';
   const wgIntakeFormUrl = siteConfig?.customFields?.externalLinks?.wgIntakeForm || 'https://app.smartsheet.com/b/form/07569d6285f643c1a57fd18daab98f7e'; // TODO: Replace with actual WG intake form URL
 
-    useEffect(() => {
+  useEffect(() => {
     const hash = window.location.hash;
     if (hash) {
-      // Remove the # from the hash
       const id = hash.replace('#', '');
-      // Wait a bit for the page to render
       setTimeout(() => {
         const element = document.getElementById(id);
         if (element) {
-          // Scroll to the element with offset for fixed header
-          const yOffset = -100; // Adjust this value based on your header height
+          const yOffset = -100;
           const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
           window.scrollTo({ top: y, behavior: 'smooth' });
         }
       }, 100);
     }
   }, []);
+
   return (
-    <Layout
-      title="Contribute to CIROH"
-      description="Learn how to contribute to CIROH's open science initiatives">
-      <main>
-        {/* Contribute Banner */}
-        <div className={clsx(styles.contributeBanner, "tw-bg-cyan-500 tw-text-white")}>
-          <div className={styles.bannerContainer}>
-            <h1 className={clsx(styles.bannerTitle, "tw-text-slate-900 dark:tw-text-white")}>Contribute to CIROH</h1>
-            <p className={clsx(styles.bannerSubtitle, "tw-text-slate-900 dark:tw-text-white")}>
-              Join our community of researchers, developers, and water science enthusiasts.<br />
-              Your contributions help advance hydrologic science and support NOAA's water prediction initiatives.
-            </p>
-          </div>
+    <main>
+      {/* Hero */}
+      <section className="tw-relative tw-z-20 tw-overflow-hidden tw-pb-8">
+        <div className="tw-absolute tw-inset-0 tw-pointer-events-none tw-overflow-hidden" style={{ zIndex: 0 }}>
+          <ConstellationCanvas isDarkTheme={isDarkTheme} />
         </div>
+        <div className="margin-top--lg">
+          <Header
+            title="Contribute to CIROH"
+            tagline="Join our community of researchers, developers, and water science enthusiasts. Your contributions help advance hydrologic science and support NOAA's water prediction initiatives."
+          />
+        </div>
+      </section>
 
         {/* Main Content */}
-        <div className="container margin-vert--xl">
+        <div className={styles.mainContainer}>
           {/* Mission Statement Callout (flat) */}
           <div className={styles.flatMissionText}>
             <p>
@@ -218,7 +228,6 @@ export default function Contribute() {
             </div>
           </div>
         </div>
-      </main>
-    </Layout>
+    </main>
   );
 }
