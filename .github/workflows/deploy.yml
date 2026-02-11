@@ -2,7 +2,7 @@ name: Deploy CIROH Portal to GitHub Pages
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, test-deploy ]
   workflow_dispatch:
 
 jobs:
