@@ -41,7 +41,7 @@ export default function PublicationsPage() {
         />
       </div>
 
-      <main>
+      <main className="tw-relative tw-z-20">
         
        <Publications 
           apiKey={siteConfig.customFields.zotero_api_key}
