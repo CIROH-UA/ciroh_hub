@@ -11,6 +11,7 @@ import { useColorMode } from '@docusaurus/theme-common';
 import LMLightIcon from '@site/static/img/cards/modules_light.png';
 import LMDarkIcon from '@site/static/img/cards/modules_dark.png';
 import StatsBar from "@site/src/components/StatsBar";
+import { getResourceStats } from "@site/src/utils/resourceStats";
 
 const items = [
   {
@@ -56,43 +57,7 @@ function CoursesPageContent({ contributeUrl, docsUrl }) {
     setStatsLoading(Boolean(meta?.loading));
   }, []);
 
-  const stats = useMemo(() => {
-    const totalCourses = courses.length;
-
-    const categories = new Set(
-      courses.map(c => c?.resource_type).filter(Boolean)
-    ).size;
-
-    const contributors = (() => {
-      const set = new Set();
-      for (const course of courses) {
-        const authors = typeof course?.authors === 'string' ? course.authors : '';
-        authors
-          .split('🖊')
-          .map(a => a.trim())
-          .filter(Boolean)
-          .forEach(a => set.add(a));
-      }
-      return set.size;
-    })();
-
-    const lastUpdated = (() => {
-      let latest = null;
-      for (const course of courses) {
-        const d = course?.date_last_updated ? new Date(course.date_last_updated) : null;
-        if (!d || Number.isNaN(d.getTime())) continue;
-        if (!latest || d > latest) latest = d;
-      }
-      if (!latest) return '-';
-      try {
-        return new Intl.DateTimeFormat(undefined, { month: 'short', year: 'numeric' }).format(latest);
-      } catch {
-        return latest.toISOString().slice(0, 10);
-      }
-    })();
-
-    return { totalCourses, categories, contributors, lastUpdated };
-  }, [courses]);
+  const stats = useMemo(() => getResourceStats(courses), [courses]);
 
   return (
     <>
@@ -117,7 +82,7 @@ function CoursesPageContent({ contributeUrl, docsUrl }) {
       <StatsBar
         loading={statsLoading}
         items={[
-          { label: 'Total Courses', value: stats.totalCourses },
+          { label: 'Total Courses', value: stats.total },
           { label: 'Categories', value: stats.categories },
           { label: 'Contributors', value: stats.contributors },
           { label: 'Latest Update', value: stats.lastUpdated },

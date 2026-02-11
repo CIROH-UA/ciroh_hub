@@ -5,6 +5,7 @@ import { ConstellationCanvas } from '@site/src/components/ConstellationCanvas';
 import Layout from '@theme/Layout';
 import TechBox from "@site/src/components/TechBox";
 import StatsBar from "@site/src/components/StatsBar";
+import { getResourceStats } from "@site/src/utils/resourceStats";
 import TethysLogoDark from '@site/static/img/logos/tethys-platform-dark.png';
 import TethysLogWhite from '@site/static/img/logos/tethys-platform-white.png';
 import HydroShareLogo from '@site/static/img/logos/hydroshare-white.png';
@@ -56,43 +57,7 @@ function AppsPageContent({ contributeUrl, docsUrl, defaultImage }) {
     setStatsLoading(Boolean(meta?.loading));
   }, []);
 
-  const stats = useMemo(() => {
-    const totalApps = apps.length;
-
-    const categories = new Set(
-      apps.map(a => a?.resource_type).filter(Boolean)
-    ).size;
-
-    const contributors = (() => {
-      const set = new Set();
-      for (const app of apps) {
-        const authors = typeof app?.authors === 'string' ? app.authors : '';
-        authors
-          .split('🖊')
-          .map(a => a.trim())
-          .filter(Boolean)
-          .forEach(a => set.add(a));
-      }
-      return set.size;
-    })();
-
-    const lastUpdated = (() => {
-      let latest = null;
-      for (const app of apps) {
-        const d = app?.date_last_updated ? new Date(app.date_last_updated) : null;
-        if (!d || Number.isNaN(d.getTime())) continue;
-        if (!latest || d > latest) latest = d;
-      }
-      if (!latest) return '-';
-      try {
-        return new Intl.DateTimeFormat(undefined, { month: 'short', year: 'numeric' }).format(latest);
-      } catch {
-        return latest.toISOString().slice(0, 10);
-      }
-    })();
-
-    return { totalApps, categories, contributors, lastUpdated };
-  }, [apps]);
+  const stats = useMemo(() => getResourceStats(apps), [apps]);
 
   return (
     <>
@@ -119,7 +84,7 @@ function AppsPageContent({ contributeUrl, docsUrl, defaultImage }) {
       <StatsBar
         loading={statsLoading}
         items={[
-          { label: 'Total Apps', value: stats.totalApps },
+          { label: 'Total Apps', value: stats.total },
           { label: 'Categories', value: stats.categories },
           { label: 'Contributors', value: stats.contributors },
           { label: 'Latest Update', value: stats.lastUpdated },

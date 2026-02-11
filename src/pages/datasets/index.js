@@ -8,6 +8,7 @@ import useBaseUrl from '@docusaurus/useBaseUrl';
 import Header from "@site/src/components/Header";
 import { useColorMode } from '@docusaurus/theme-common';
 import StatsBar from "@site/src/components/StatsBar";
+import { getResourceStats } from "@site/src/utils/resourceStats";
 
 const items = [
   {
@@ -45,43 +46,7 @@ function DatasetsPageContent({ contributeUrl, docsUrl }) {
     setStatsLoading(Boolean(meta?.loading));
   }, []);
 
-  const stats = useMemo(() => {
-    const totalDatasets = datasets.length;
-
-    const categories = new Set(
-      datasets.map(d => d?.resource_type).filter(Boolean)
-    ).size;
-
-    const contributors = (() => {
-      const set = new Set();
-      for (const dataset of datasets) {
-        const authors = typeof dataset?.authors === 'string' ? dataset.authors : '';
-        authors
-          .split('🖊')
-          .map(a => a.trim())
-          .filter(Boolean)
-          .forEach(a => set.add(a));
-      }
-      return set.size;
-    })();
-
-    const lastUpdated = (() => {
-      let latest = null;
-      for (const dataset of datasets) {
-        const d = dataset?.date_last_updated ? new Date(dataset.date_last_updated) : null;
-        if (!d || Number.isNaN(d.getTime())) continue;
-        if (!latest || d > latest) latest = d;
-      }
-      if (!latest) return '-';
-      try {
-        return new Intl.DateTimeFormat(undefined, { month: 'short', year: 'numeric' }).format(latest);
-      } catch {
-        return latest.toISOString().slice(0, 10);
-      }
-    })();
-
-    return { totalDatasets, categories, contributors, lastUpdated };
-  }, [datasets]);
+  const stats = useMemo(() => getResourceStats(datasets), [datasets]);
 
   return (
     <>
@@ -106,7 +71,7 @@ function DatasetsPageContent({ contributeUrl, docsUrl }) {
       <StatsBar
         loading={statsLoading}
         items={[
-          { label: 'Total Datasets', value: stats.totalDatasets },
+          { label: 'Total Datasets', value: stats.total },
           { label: 'Categories', value: stats.categories },
           { label: 'Contributors', value: stats.contributors },
           { label: 'Latest Update', value: stats.lastUpdated },

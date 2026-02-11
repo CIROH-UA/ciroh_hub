@@ -8,6 +8,7 @@ import useBaseUrl from '@docusaurus/useBaseUrl';
 import Header from "@site/src/components/Header";
 import { useColorMode } from '@docusaurus/theme-common';
 import StatsBar from "@site/src/components/StatsBar";
+import { getResourceStats } from "@site/src/utils/resourceStats";
 
 const items = [
   {
@@ -45,43 +46,7 @@ function PresentationsPageContent({ contributeUrl, docsUrl }) {
     setStatsLoading(Boolean(meta?.loading));
   }, []);
 
-  const stats = useMemo(() => {
-    const totalPresentations = presentations.length;
-
-    const categories = new Set(
-      presentations.map(p => p?.resource_type).filter(Boolean)
-    ).size;
-
-    const contributors = (() => {
-      const set = new Set();
-      for (const presentation of presentations) {
-        const authors = typeof presentation?.authors === 'string' ? presentation.authors : '';
-        authors
-          .split('🖊️')
-          .map(a => a.trim())
-          .filter(Boolean)
-          .forEach(a => set.add(a));
-      }
-      return set.size;
-    })();
-
-    const lastUpdated = (() => {
-      let latest = null;
-      for (const presentation of presentations) {
-        const d = presentation?.date_last_updated ? new Date(presentation.date_last_updated) : null;
-        if (!d || Number.isNaN(d.getTime())) continue;
-        if (!latest || d > latest) latest = d;
-      }
-      if (!latest) return '—';
-      try {
-        return new Intl.DateTimeFormat(undefined, { month: 'short', year: 'numeric' }).format(latest);
-      } catch {
-        return latest.toISOString().slice(0, 10);
-      }
-    })();
-
-    return { totalPresentations, categories, contributors, lastUpdated };
-  }, [presentations]);
+  const stats = useMemo(() => getResourceStats(presentations), [presentations]);
 
   return (
     <>
@@ -107,7 +72,7 @@ function PresentationsPageContent({ contributeUrl, docsUrl }) {
       <StatsBar
         loading={statsLoading}
         items={[
-          { label: 'Total Presentations', value: stats.totalPresentations },
+          { label: 'Total Presentations', value: stats.total },
           { label: 'Categories', value: stats.categories },
           { label: 'Contributors', value: stats.contributors },
           { label: 'Latest Update', value: stats.lastUpdated },
