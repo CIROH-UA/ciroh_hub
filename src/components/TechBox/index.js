@@ -2,7 +2,20 @@ import React from 'react';
 import { useColorMode } from '@docusaurus/theme-common';
 import styles from "./styles.module.css";
 
-export default function TechBox({ items, type, poweredByItems }) {
+const DEFAULT_POWERED_BY = [
+  {
+    name: 'Tethys Platform',
+    href: 'https://www.tethysplatform.org/',
+    className: styles.link,
+  },
+  {
+    name: 'HydroShare',
+    href: 'https://hydroshare.org/',
+    className: styles.link,
+  },
+];
+
+export default function TechBox({ items, type, poweredByItems = DEFAULT_POWERED_BY }) {
   const { colorMode } = useColorMode();
 
   const renderPoweredBy = () => {
@@ -41,18 +54,3 @@ export default function TechBox({ items, type, poweredByItems }) {
     </div>
   );
 }
-
-TechBox.defaultProps = {
-  poweredByItems: [
-    {
-      name: 'Tethys Platform',
-      href: 'https://www.tethysplatform.org/',
-      className: styles.link
-    },
-    {
-      name: 'HydroShare',
-      href: 'https://hydroshare.org/',
-      className: styles.link
-    }
-  ]
-};

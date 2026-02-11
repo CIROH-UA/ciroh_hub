@@ -44,6 +44,7 @@ export default function Header({ title, tagline, buttons }) {
 
             {buttons.map((button, index) => (
               <Link
+                key={index}
                 index={index}
                 className="tw-no-underline lg:tw-text-xl tw-inline-flex tw-items-center tw-justify-center tw-px-6 tw-py-3 tw-rounded-lg tw-font-semibold tw-transition-all tw-duration-300 tw-bg-blue-700 dark:tw-bg-cyan-500 tw-text-white dark:hover:tw-bg-cyan-700 hover:tw-bg-blue-800"
                 to={button.href}
