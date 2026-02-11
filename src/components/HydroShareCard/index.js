@@ -20,7 +20,7 @@ export default function HydroShareCard() {
           <h2 className={styles.title}>Contribute to HydroShare Resources</h2>
         </div>
         <p className={styles.subtitle}>
-          Publish your apps, datasets, courses, and presentations on HydroShare
+          Publish your apps, datasets, notebooks, courses, and presentations on HydroShare
         </p>
       </div>
 
@@ -44,6 +44,7 @@ export default function HydroShareCard() {
             <span className={`${styles.tag} ${styles.tagModule}`} title="Courses/Modules">ciroh_hub_module</span>
             <span className={`${styles.tag} ${styles.tagPresentation}`} title="Presentations">ciroh_hub_presentation</span>
             <span className={`${styles.tag} ${styles.tagData}`} title="Datasets">ciroh_hub_data</span>
+            <span className={`${styles.tag} ${styles.tagNotebook}`} title="Notebooks">ciroh_hub_notebook</span>
           </div>
         </div>
         <div className={styles.card}>

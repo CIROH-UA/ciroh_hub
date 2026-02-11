@@ -120,10 +120,21 @@
   background: var(--tag-bg);
 }
 
+.tagNotebook {
+  --tag-border: var(--ifm-color-success);
+  --tag-text: var(--ifm-color-success-dark);
+  --tag-bg: color-mix(in srgb, var(--ifm-color-success) 12%, transparent);
+  border-color: var(--tag-border);
+  color: var(--tag-text);
+  background: var(--tag-bg);
+}
+
+
 html[data-theme='dark'] .tagApp { --tag-text: #7dd3fc; }
 html[data-theme='dark'] .tagModule { --tag-text: #c4b5fd; }
 html[data-theme='dark'] .tagPresentation { --tag-text: #fcd34d; }
 html[data-theme='dark'] .tagData { --tag-text: #6ee7b7; }
+html[data-theme='dark'] .tagNotebook { --tag-text: var(--ifm-color-success-light); }
 
 .steps {
   margin: 0.25rem 0 0;
