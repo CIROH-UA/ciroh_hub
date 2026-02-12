@@ -186,7 +186,7 @@ const MemberList = [
     height: "70",
   },
   {
-    name: "Bringham Young University",
+    name: "Brigham Young University",
     logo: "https://ciroh.ua.edu/wp-content/uploads/2023/03/byu-wordmark-blue-300x191.png",
     link: "https://www.byu.edu/",
     width: "180",
