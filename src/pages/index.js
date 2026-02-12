@@ -26,6 +26,9 @@ export default function Home() {
               { label: "Publications", href: "/publications", primary: true },
               { label: "IT Services", href: "/docs/services/access" },
             ]}
+            notice={
+              "CIROH Hub is the new home for content from CIROH Portal and CIROH DocuHub."
+            }
           />
         </div>
       </section>

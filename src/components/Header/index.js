@@ -3,7 +3,7 @@ import styles from './styles.module.css';
 import { useColorMode } from '@docusaurus/theme-common';
 import Link from '@docusaurus/Link';
 
-export default function Header({ title, tagline, description, buttons }) {
+export default function Header({ title, tagline, description, buttons, notice }) {
   const { colorMode } = useColorMode();
   const isDarkTheme = colorMode === 'dark';
   return (
@@ -51,22 +51,33 @@ export default function Header({ title, tagline, description, buttons }) {
               )}
             </div>
 
-        {buttons && buttons.length > 0 && (
-          <div className="tw-flex tw-flex-col sm:tw-flex-row tw-gap-3 sm:tw-gap-4 tw-pt-4 tw-justify-center md:tw-justify-start">
+            {buttons && buttons.length > 0 && (
+              <div className="tw-flex tw-flex-col sm:tw-flex-row tw-gap-3 sm:tw-gap-4 tw-pt-4 tw-justify-center md:tw-justify-start">
 
-            {buttons.map((button, index) => (
-              <Link
-                key={index}
-                index={index}
-                className="tw-no-underline lg:tw-text-xl tw-inline-flex tw-items-center tw-justify-center tw-px-6 tw-py-3 tw-rounded-lg tw-font-semibold tw-transition-all tw-duration-300 tw-bg-blue-700 dark:tw-bg-cyan-500 tw-text-white dark:hover:tw-bg-cyan-700 hover:tw-bg-blue-800"
-                to={button.href}
+                {buttons.map((button, index) => (
+                  <Link
+                    key={index}
+                    index={index}
+                    className="tw-no-underline lg:tw-text-xl tw-inline-flex tw-items-center tw-justify-center tw-px-6 tw-py-3 tw-rounded-lg tw-font-semibold tw-transition-all tw-duration-300 tw-bg-blue-700 dark:tw-bg-cyan-500 tw-text-white dark:hover:tw-bg-cyan-700 hover:tw-bg-blue-800"
+                    to={button.href}
+                  >
+                    {button.label}
+                  </Link>
+
+                ))}
+              </div>
+            )}
+
+            {notice && (
+              <p
+                className={clsx(
+                  'tw-mt-6 tw-max-w-2xl tw-text-center md:tw-text-left sm:tw-text-lg tw-leading-relaxed',
+                  styles.heroSubtitle,
+                )}
               >
-                {button.label}
-              </Link>
-
-            ))}
-          </div>
-        )}
+                <i>{notice}</i>
+              </p>
+            )}
 
           </div>
 
