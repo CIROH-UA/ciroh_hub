@@ -24,7 +24,7 @@ export default function Header({ title, tagline, description, buttons, notice })
                   'tw-text-5xl tw-text-center md:tw-text-left sm:tw-text-6xl lg:tw-text-7xl tw-font-bold tw-leading-tight tw-mb-4'
                 )}
               >
-                <span className="tw-text-cyan-700 dark:tw-text-cyan-300">
+                <span className="tw-text-black dark:tw-text-white">
                   {title}
                 </span>
               </h1>
@@ -43,7 +43,7 @@ export default function Header({ title, tagline, description, buttons, notice })
                   className={clsx(
                     styles.heroDescription,
                     'tw-text-lg lg:tw-text-xl tw-leading-relaxed tw-max-w-l sm:tw-max-w-2xl tw-text-center md:tw-text-left ',
-                    isDarkTheme ? 'tw-text-white' : 'tw-text-blue-700'
+                    isDarkTheme ? 'tw-text-white' : 'tw-text-black'
                   )}
                 >
                   {description}
@@ -58,7 +58,12 @@ export default function Header({ title, tagline, description, buttons, notice })
                   <Link
                     key={index}
                     index={index}
-                    className="tw-no-underline lg:tw-text-xl tw-inline-flex tw-items-center tw-justify-center tw-px-6 tw-py-3 tw-rounded-lg tw-font-semibold tw-transition-all tw-duration-300 tw-bg-blue-700 dark:tw-bg-cyan-500 tw-text-white dark:hover:tw-bg-cyan-700 hover:tw-bg-blue-800"
+                    className={clsx(
+                      'tw-no-underline lg:tw-text-xl tw-inline-flex tw-items-center tw-justify-center tw-px-6 tw-py-3 tw-rounded-lg tw-font-semibold tw-transition-all tw-duration-300',
+                      button.primary
+                        ? 'tw-bg-cyan-500 tw-text-black hover:tw-bg-cyan-400'
+                        : 'tw-bg-black tw-text-white hover:tw-bg-gray-800 dark:tw-bg-white dark:tw-text-black dark:hover:tw-bg-gray-200'
+                    )}
                     to={button.href}
                   >
                     {button.label}

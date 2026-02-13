@@ -6,7 +6,7 @@ export default function ResearcherTestimonials() {
         <section className="researcher-testimonials-section" id="researcher-testimonials">
             <div className="researcher-testimonials-container">
                 <h1 className="tw-text-4xl tw-font-extrabold tw-text-center tw-mb-6
-                tw-text-blue-800 dark:tw-text-white">
+                tw-text-black dark:tw-text-white">
                     User Comments
                 </h1>
                 <div style={{"textAlign": "center"}}>

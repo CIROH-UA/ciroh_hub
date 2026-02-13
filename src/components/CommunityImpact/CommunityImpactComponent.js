@@ -65,7 +65,7 @@ export default function CommunityImpactComponent() {
 
   return (
     <div>
-      <section className="tw-text-gray-800 dark:tw-text-slate-50 tw-body-font tw-relative tw-overflow-hidden">
+      <section className="tw-text-black dark:tw-text-white tw-body-font tw-relative tw-overflow-hidden">
 
         {/* PARTICLES BACKGROUND (receives mouse events) */}
         <div className="tw-absolute tw-inset-0 tw--z-10 tw-pointer-events-auto">
@@ -92,8 +92,8 @@ export default function CommunityImpactComponent() {
                 "tw-text-5xl sm:tw-text-6xl lg:tw-text-7xl tw-font-bold tw-mb-4"
               )}
             >
-              <span className="tw-text-blue-800 dark:tw-text-white">Community </span>
-              <span className="tw-text-blue-800 dark:tw-text-cyan-400">Impact</span>
+              <span className="tw-text-black dark:tw-text-white">Community </span>
+              <span className="tw-text-black dark:tw-text-cyan-300">Impact</span>
             </h1>
 
             <p className="tw-mb-8 tw-leading-relaxed tw-text-lg">
@@ -104,7 +104,7 @@ export default function CommunityImpactComponent() {
             <div className="tw-flex tw-justify-center tw-pointer-events-auto">
 
               <Link
-                                className={`tw-no-underline lg:tw-text-xl tw-inline-flex tw-items-center tw-justify-center tw-px-6 tw-py-3 tw-rounded-lg tw-font-semibold tw-transition-all tw-duration-300 tw-border-2 tw-outline tw-outline-blue-600 tw-text-blue-700 hover:tw-bg-blue-600 hover:tw-text-white dark:tw-outline-white dark:tw-text-white dark:hover:tw-bg-white dark:hover:tw-text-cyan-700`}
+                                className={`tw-no-underline lg:tw-text-xl tw-inline-flex tw-items-center tw-justify-center tw-px-6 tw-py-3 tw-rounded-lg tw-font-semibold tw-transition-all tw-duration-300 tw-border-2 tw-outline tw-outline-cyan-500 tw-text-cyan-600 hover:tw-bg-cyan-500 hover:tw-text-black dark:tw-outline-cyan-500 dark:tw-text-cyan-300 dark:hover:tw-bg-cyan-500 dark:hover:tw-text-black`}
                                 href="/docs/products/ngiab/office-hours"
                                 style={{ textDecoration: "none", marginRight: "10px" }}
                               >

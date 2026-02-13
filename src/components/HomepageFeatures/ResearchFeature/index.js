@@ -185,7 +185,7 @@ export default function ResearchFeature() {
 
                 {/* PRODUCTS (APPLICATIONS) */}
                 <div className="tw-text-center tw-p-6 tw-bg-white dark:tw-bg-slate-800 tw-rounded-2xl tw-shadow-lg hover:tw-shadow-xl tw-transition-shadow">
-                  <div className="tw-text-4xl tw-font-bold tw-text-blue-700 dark:tw-text-cyan-300">
+                  <div className="tw-text-4xl tw-font-bold tw-text-black dark:tw-text-cyan-300">
                     {statsLoading ? <span className="tw-animate-ping">...</span> : stats.products}
                   </div>
                   <div className="tw-mt-2 tw-text-sm tw-font-semibold tw-text-gray-700 dark:tw-text-gray-300">
@@ -195,7 +195,7 @@ export default function ResearchFeature() {
 
                 {/* DATASETS */}
                 <div className="tw-text-center tw-p-6 tw-bg-white dark:tw-bg-slate-800 tw-rounded-2xl tw-shadow-lg hover:tw-shadow-xl tw-transition-shadow">
-                  <div className="tw-text-4xl tw-font-bold tw-text-blue-700 dark:tw-text-cyan-300">
+                  <div className="tw-text-4xl tw-font-bold tw-text-black dark:tw-text-cyan-300">
                     {statsLoading ? <span className="tw-animate-ping">...</span> : stats.datasets}
                   </div>
                   <div className="tw-mt-2 tw-text-sm tw-font-semibold tw-text-gray-700 dark:tw-text-gray-300">
@@ -205,7 +205,7 @@ export default function ResearchFeature() {
 
                 {/* PRESENTATIONS */}
                 <div className="tw-text-center tw-p-6 tw-bg-white dark:tw-bg-slate-800 tw-rounded-2xl tw-shadow-lg hover:tw-shadow-xl tw-transition-shadow">
-                  <div className="tw-text-4xl tw-font-bold tw-text-blue-700 dark:tw-text-cyan-300">
+                  <div className="tw-text-4xl tw-font-bold tw-text-black dark:tw-text-cyan-300">
                     {statsLoading ? <span className="tw-animate-ping">...</span> : stats.presentations}
                   </div>
                   <div className="tw-mt-2 tw-text-sm tw-font-semibold tw-text-gray-700 dark:tw-text-gray-300">
@@ -215,7 +215,7 @@ export default function ResearchFeature() {
 
                 {/* NOTEBOOKS */}
                 <div className="tw-text-center tw-p-6 tw-bg-white dark:tw-bg-slate-800 tw-rounded-2xl tw-shadow-lg hover:tw-shadow-xl tw-transition-shadow">
-                  <div className="tw-text-4xl tw-font-bold tw-text-blue-700 dark:tw-text-cyan-300">
+                  <div className="tw-text-4xl tw-font-bold tw-text-black dark:tw-text-cyan-300">
                     {statsLoading ? <span className="tw-animate-ping">...</span> : stats.notebooks}
                   </div>
                   <div className="tw-mt-2 tw-text-sm tw-font-semibold tw-text-gray-700 dark:tw-text-gray-300">
@@ -225,7 +225,7 @@ export default function ResearchFeature() {
 
                 {/* COURSES */}
                 <div className="tw-text-center tw-p-6 tw-bg-white dark:tw-bg-slate-800 tw-rounded-2xl tw-shadow-lg hover:tw-shadow-xl tw-transition-shadow tw-col-span-2 md:tw-col-span-1">
-                  <div className="tw-text-4xl tw-font-bold tw-text-blue-700 dark:tw-text-cyan-300">
+                  <div className="tw-text-4xl tw-font-bold tw-text-black dark:tw-text-cyan-300">
                     {statsLoading ? <span className="tw-animate-ping">...</span> : stats.courses}
                   </div>
                   <div className="tw-mt-2 tw-text-sm tw-font-semibold tw-text-gray-700 dark:tw-text-gray-300">

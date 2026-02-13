@@ -220,6 +220,10 @@
   .impactItem:hover {
     transform: translateY(-5px);
   }
+
+  [data-theme='dark'] .impactItem {
+    background-color: #111827; /* slate-900 */
+  }
   
   .impactIcon {
     width: 120px;

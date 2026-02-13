@@ -34,7 +34,13 @@ export default function OfficeHoursFeature() {
             </section>
 
             {/* Text section */}
-            <section className="tw-text-blue-800 tw-body-font tw-rounded-2xl tw-py-24 tw-relative tw-overflow-hidden">
+            <section className="tw-body-font tw-rounded-2xl tw-py-24 tw-relative tw-overflow-hidden">
+
+                {/* Theme-aware text color override */}
+                <style>{`
+                  [data-theme='light'] .office-hours-section { color: #000000; }
+                  [data-theme='dark'] .office-hours-section { color: #ffffff; }
+                `}</style>
 
                 {/* Soft gradient overlay */}
                 <div className="tw-absolute tw-inset-0 tw-bg-gradient-to-b tw-from-blue-50/50 dark:tw-from-slate-800/40 tw-to-transparent tw-pointer-events-none"></div>
@@ -51,28 +57,27 @@ export default function OfficeHoursFeature() {
                     </div>
 
                     {/* TEXT BLOCK */}
-                    <div className="lg:tw-flex-grow md:tw-w-1/2 lg:tw-pl-24 md:tw-pl-16 tw-flex tw-flex-col md:tw-items-start md:tw-text-left tw-items-center tw-text-center">
+                    <div className="lg:tw-flex-grow md:tw-w-1/2 lg:tw-pl-24 md:tw-pl-16 tw-flex tw-flex-col md:tw-items-start md:tw-text-left tw-items-center tw-text-center office-hours-section">
 
-                    <h1 className="tw-title-font sm:tw-text-4xl tw-text-3xl tw-mb-4 tw-font-extrabold tw-text-blue-800 dark:tw-text-white">
-                        Cyberinfrastructure &
+                    <h1 className="tw-title-font sm:tw-text-4xl tw-text-3xl tw-mb-4 tw-font-extrabold tw-text-black dark:tw-text-white">
                         <br className="tw-hidden lg:tw-inline-block" />
                         Community NextGen Monthly Office Hours
                     </h1>
 
                     <p className="tw-mb-8 tw-leading-relaxed tw-text-slate-700 dark:tw-text-gray-300">
                         Advancing hydrological science through{" "}
-                        <span className="tw-text-blue-700 dark:tw-text-cyan-400 tw-font-semibold">innovation</span>,{" "}
-                        <span className="tw-text-blue-700 dark:tw-text-cyan-400 tw-font-semibold">collaboration</span>, and{" "}
-                        <span className="tw-text-blue-700 dark:tw-text-cyan-400 tw-font-semibold">technology development</span>.
+                        <span className="tw-text-cyan-600 dark:tw-text-cyan-300 tw-font-semibold">innovation</span>,{" "}
+                        <span className="tw-text-cyan-600 dark:tw-text-cyan-300 tw-font-semibold">collaboration</span>, and{" "}
+                        <span className="tw-text-cyan-600 dark:tw-text-cyan-300 tw-font-semibold">technology development</span>.
                     </p>
 
                     {/* BUTTONS */}
                     <div className="tw-flex tw-justify-center tw-gap-4">
                         <Link
-                        className={`button tw-inline-flex tw-text-white tw-bg-blue-600 tw-border-0 
+                        className={`button tw-inline-flex tw-text-black tw-bg-cyan-500 tw-border-0 
                         tw-py-3 tw-px-8 tw-rounded-lg tw-text-lg tw-font-semibold
-                        hover:tw-bg-blue-800 tw-transition-colors
-                        dark:tw-bg-white dark:tw-text-slate-900 dark:hover:tw-bg-slate-300`}
+                        hover:tw-bg-cyan-600 tw-transition-colors
+                        dark:tw-bg-cyan-500 dark:tw-text-black dark:hover:tw-bg-cyan-600`}
                         href="/docs/products/ngiab/office-hours"
                         style={{ textDecoration: "none", marginRight: "10px" }}
                         >
