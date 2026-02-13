@@ -42,7 +42,7 @@ export default function DocNavbarItem({
       {...props}
       isActive={() => 
         pageActive ||
-        (!!activeDoc?.sidebar && activeDoc.sidebar === doc.sidebar && !(reduceSubpageHighlightsList.includes("products")))
+        (!!activeDoc?.sidebar && activeDoc.sidebar === doc.sidebar && !(reduceSubpageHighlightsList.includes(doc.sidebar)))
         // Last condition of above added 02/13/2026
       }
       label={staticLabel ?? doc.id}
