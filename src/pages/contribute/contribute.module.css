@@ -146,20 +146,40 @@
   color: var(--ifm-color-emphasis-700);
 }
 
-.zoteroActions { display: flex; justify-content: center; }
+.zoteroActions { display: flex; justify-content: center; gap: 0.8rem; flex-wrap: wrap; }
 
 .zoteroButton {
   display: inline-block;
   padding: 0.65rem 1.1rem;
   border-radius: 10px;
-  color: #fff;
-  background: linear-gradient(135deg, #b91c1c 0%, #c2410c 100%);
+  color: #000;
+  background: #19a7ce;
+  border: 1px solid #19a7ce;
   font-weight: 700;
   text-decoration: none;
-  box-shadow: 0 4px 12px rgba(185, 28, 28, 0.22);
+  box-shadow: 0 4px 12px rgba(25, 167, 206, 0.22);
+  transition: all 0.2s ease;
 }
 
-.zoteroButton:hover { color: #fff; text-decoration: none; filter: brightness(0.98); }
+.zoteroButton:hover { color: #000; text-decoration: none; filter: brightness(1.05); transform: translateY(-1px); }
+
+.zoteroButtonPrimary {
+  background: #19a7ce;
+  border-color: #19a7ce;
+  color: #000;
+}
+
+.zoteroButtonSecondary {
+  background: #ffffff;
+  border-color: #19a7ce;
+  color: #000;
+}
+
+html[data-theme='dark'] .zoteroButtonSecondary {
+  background: #060010;
+  color: #ffffff;
+  border-color: #19a7ce;
+}
 
 .zoteroGrid {
   display: grid;

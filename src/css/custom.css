@@ -10,13 +10,14 @@
 @import "react-responsive-carousel/lib/styles/carousel.min.css";
 
 :root {
-  --ifm-color-primary: #19a7ce;
-  --ifm-color-primary-dark: #1796b9;
-  --ifm-color-primary-darker: #158eaf;
-  --ifm-color-primary-darkest: #117590;
-  --ifm-color-primary-light: #1cb8e3;
-  --ifm-color-primary-lighter: #25bbe5;
-  --ifm-color-primary-lightest: #44c5e8;
+  /* Restricted palette: black, white, cyan */
+  --ifm-color-primary: #19a7ce; /* cyan */
+  --ifm-color-primary-dark: #19a7ce;
+  --ifm-color-primary-darker: #19a7ce;
+  --ifm-color-primary-darkest: #19a7ce;
+  --ifm-color-primary-light: #19a7ce;
+  --ifm-color-primary-lighter: #19a7ce;
+  --ifm-color-primary-lightest: #19a7ce;
 
   --ifm-code-font-size: 95%;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.04);
@@ -29,17 +30,41 @@
   --ifm-dropdown-background-color: #ffffff;
   --ifm-navbar-dropdown-background-color: #ffffff;
 
-  /* Text colors for light mode */
-  --ifm-heading-color: #0f172a;       /* slate-900 */
-  --ifm-font-color-base: #0f172a;     /* slate-900 */
-  --ifm-footer-color: #475569;        /* slate-600 for footer text */
+  /* Text colors constrained to black/white/cyan */
+  --ifm-heading-color: #000000;       /* black */
+  --ifm-font-color-base: #000000;     /* black */
+  --ifm-footer-color: #000000;        /* black for footer text */
 
-  --ifm-cards-resources: #fff;
+  /* fallback card color */
+  --ifm-cards-resources: #ffffff;
+
+  /* Global button theme tokens */
+  --ciroh-button-primary-bg: #19a7ce;
+  --ciroh-button-primary-text: #000000;
+  --ciroh-button-primary-border: #19a7ce;
+  --ciroh-button-secondary-bg: #ffffff;
+  --ciroh-button-secondary-text: #000000;
+  --ciroh-button-secondary-border: #19a7ce;
 }
 
 [data-theme='light'] body {
   background: #ffffff !important;
   color: var(--ifm-font-color-base) !important;
+}
+
+/* Light theme top-level heading/navigation text */
+[data-theme='light'] .navbar__title,
+[data-theme='light'] .navbar__brand,
+[data-theme='light'] .navbar__link,
+[data-theme='light'] .menu__link,
+[data-theme='light'] .breadcrumbs__link {
+  color: #000000 !important;
+}
+
+[data-theme='light'] .navbar__link:hover,
+[data-theme='light'] .menu__link:hover,
+[data-theme='light'] .breadcrumbs__link:hover {
+  color: #000000 !important;
 }
 
 /* Ensure light-mode surface elements (cards, panels) use white or slight shade */
@@ -65,30 +90,38 @@
 }
 
 [data-theme='dark'] {
-    --ifm-cards-resources: #242526;
+  /* Constrain dark theme to same palette: white (text), cyan (links), keep background as-is */
+  --ifm-cards-resources: #141416;
 
-  --ifm-color-primary: #19a7ce;
-  --ifm-color-primary-dark: #1796b9;
-  --ifm-color-primary-darker: #158eaf;
-  --ifm-color-primary-darkest: #117590;
-  --ifm-color-primary-light: #1cb8e3;
-  --ifm-color-primary-lighter: #25bbe5;
-  --ifm-color-primary-lightest: #44c5e8;
+  --ifm-color-primary: #19a7ce; /* cyan */
+  --ifm-color-primary-dark: #19a7ce;
+  --ifm-color-primary-darker: #19a7ce;
+  --ifm-color-primary-darkest: #19a7ce;
+  --ifm-color-primary-light: #19a7ce;
+  --ifm-color-primary-lighter: #19a7ce;
+  --ifm-color-primary-lightest: #19a7ce;
 
-  /* Reset Infima background vars to allow gradient */
+  /* Keep site background control from earlier, but ensure text colors are white */
   --ifm-background-color: transparent !important;
   --ifm-background-surface-color: transparent !important;
 
-  /* Navbar dropdown menus should stay opaque even if surfaces are transparent */
-  --ifm-dropdown-background-color: #2d3748;
-  --ifm-navbar-dropdown-background-color: #2d3748;
+  --ifm-dropdown-background-color: #060010;
+  --ifm-navbar-dropdown-background-color: #060010;
 
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
 
   /* Dark mode text defaults */
-  --ifm-heading-color: #e6eef8;
-  --ifm-font-color-base: #cbd5e1;
-  --ifm-footer-color: #9aa6b2;
+  --ifm-heading-color: #ffffff;
+  --ifm-font-color-base: #ffffff;
+  --ifm-footer-color: #ffffff;
+
+  /* Global button theme tokens (dark mode) */
+  --ciroh-button-primary-bg: #19a7ce;
+  --ciroh-button-primary-text: #000000;
+  --ciroh-button-primary-border: #19a7ce;
+  --ciroh-button-secondary-bg: #060010;
+  --ciroh-button-secondary-text: #ffffff;
+  --ciroh-button-secondary-border: #19a7ce;
 }
 
 :root[data-theme='light'] {
@@ -242,6 +275,43 @@
   max-width: 1000px;
   margin-left: auto;
   margin-right: auto;
+}
+
+/* ----------------------------- */
+/* GLOBAL BUTTON THEME            */
+/* ----------------------------- */
+
+.button,
+a.button {
+  border-radius: 10px;
+  font-weight: 700;
+  transition: all 0.2s ease;
+}
+
+.button.button--primary,
+a.button.button--primary {
+  background: var(--ciroh-button-primary-bg);
+  color: var(--ciroh-button-primary-text);
+  border-color: var(--ciroh-button-primary-border);
+}
+
+.button.button--primary:hover,
+a.button.button--primary:hover {
+  filter: brightness(1.05);
+  transform: translateY(-1px);
+}
+
+.button.button--secondary,
+a.button.button--secondary {
+  background: var(--ciroh-button-secondary-bg);
+  color: var(--ciroh-button-secondary-text);
+  border: 1px solid var(--ciroh-button-secondary-border);
+}
+
+.button.button--secondary:hover,
+a.button.button--secondary:hover {
+  background: var(--ifm-color-primary);
+  color: #000000;
 }
 
 .footer__col {

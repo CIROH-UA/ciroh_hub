@@ -75,6 +75,10 @@
   padding: 1.5rem;
 }
 
+html[data-theme='dark'] .impactItem {
+  background-color: #111827; /* slate-900 */
+}
+
 .impactIcon {
   width: 120px;
   height: 120px;

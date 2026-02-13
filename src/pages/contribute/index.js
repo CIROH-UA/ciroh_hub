@@ -119,10 +119,10 @@ function ContributeContent() {
             </div>
 
             <div className={styles.zoteroActions} style={{ marginTop: '2rem' }}>
-              <a href={addProductUrl} target="_blank" rel="noreferrer noopener" className={styles.zoteroButton} style={{ background: "var(--ifm-color-primary-light)" }}>
+              <a href={addProductUrl} target="_blank" rel="noreferrer noopener" className={clsx(styles.zoteroButton, styles.zoteroButtonPrimary)}>
                 Submit Your Product Documentation
               </a>
-              <a href={contactUrl} className={styles.zoteroButton} style={{ marginLeft: '1rem', background: '#6c757d' }}>
+              <a href={contactUrl} className={clsx(styles.zoteroButton, styles.zoteroButtonSecondary)}>
                 Discuss Categories
               </a>
             </div>

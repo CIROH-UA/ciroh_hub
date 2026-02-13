@@ -10,7 +10,7 @@ export default function TeamGalleryGenerator({team, text}) {
       <div className="team-grid-list">
         {team.map((person) => (
           <div
-            className="tw-bg-slate-100 tw-text-black dark:tw-bg-slate-900 dark:tw-text-blue-800 profile-card"
+            className="profile-card"
             key={person.name}
           >
             <div className="profile-img-wrapper">
@@ -26,11 +26,11 @@ export default function TeamGalleryGenerator({team, text}) {
             </div>
 
             <div className="card-content">
-              <h3 className="tw-text-blue-900 dark:tw-text-cyan-400 profile-name">
+              <h3 className="profile-name">
                 {person.name}
               </h3>
 
-              <p className="tw-text-blue-700 dark:tw-text-white profile-role">
+              <p className="profile-role">
                 {person.role}
               </p>
 

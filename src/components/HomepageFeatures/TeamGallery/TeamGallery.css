@@ -49,6 +49,10 @@
   box-shadow: 0 18px 45px rgba(0, 180, 255, 0.25);
 }
 
+html[data-theme='dark'] .profile-card {
+  background-color: #111827; /* slate-900 */
+}
+
 /* html[data-theme="light"] .profile-card {
   background: #ffffff;
   border-color: rgba(0, 0, 0, 0.05);
@@ -107,22 +111,22 @@ html[data-theme="dark"] .profile-card {
   font-size: 0.95rem;
   opacity: 0.7;
 }
-/* 
-html[data-theme="light"] .profile-name {
-  color: #1e293b;
+/* Theme-aware text colors: black in light, white in dark */
+html[data-theme='light'] .profile-name {
+  color: #000000;
 }
 
-html[data-theme="light"] .profile-role {
-  color: #475569;
+html[data-theme='light'] .profile-role {
+  color: rgba(0,0,0,0.8);
 }
 
-html[data-theme="dark"] .profile-name {
+html[data-theme='dark'] .profile-name {
   color: #ffffff;
 }
 
-html[data-theme="dark"] .profile-role {
-  color: #cbd5e1;
-} */
+html[data-theme='dark'] .profile-role {
+  color: rgba(255,255,255,0.85);
+}
 
 /* ===============================
    LINKEDIN BUTTON (UPDATED)
@@ -135,15 +139,15 @@ html[data-theme="dark"] .profile-role {
   width: 46px;
   height: 46px;
   border-radius: 12px;
-  background: #0A66C2;
+  background: #19a7ce; /* cyan */
   transition: 0.25s ease;
   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.25);
 }
 
 .linkedin-btn:hover {
   transform: scale(1.12);
-  box-shadow: 0 0 14px rgba(14, 165, 233, 0.6);
-  background: #0d7aff;
+  box-shadow: 0 0 14px rgba(25, 167, 206, 0.45);
+  background: #1494b0;
 }
 
 /* Better LinkedIn icon image */
