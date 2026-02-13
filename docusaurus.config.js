@@ -24,6 +24,14 @@ const config = {
     onBrokenMarkdownImages: "warn",
     githubProjectToken: process.env.GITHUB_PROJECT_TOKEN,
 
+    // Workaround to fix page highlighting in the
+    // product/documentation section.
+    // If a docs subfolder is listed here, its navbar entries
+    // will only be highlighted if the page is an exact match.
+    navbarReduceSubpageHighlights: [
+      "products",
+    ],
+
     // Workaround to add descriptive text to blog sidebars.
     // Supports any number of blogs.
     // 
@@ -258,7 +266,6 @@ const config = {
             {
               label: "Documentation",
               position: "left",
-              href: "/docs/intro",
               items: [
                 // The sidebar loader is weirdly brittle. If a page is instantiated in "index.js", that must be specified explicitly.
                 {
