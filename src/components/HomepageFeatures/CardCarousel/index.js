@@ -90,15 +90,14 @@ const CardCarousel = ({ cards, header }) => {
             { header }
 
             {/* Carousel Container */}
-            <div className="tw-relative tw-max-w-7xl tw-mx-auto tw-px-4">
+            <div className="tw-relative tw-max-w-7xl tw-mx-auto tw-px-4 tw-bg-white dark:tw-bg-[#060010]">
                 {/* Carousel Wrapper */}
                 <div
                     className={clsx(
                         'tw-overflow-hidden tw-rounded-3xl tw-p-8 tw-relative',
                         'tw-bg-gradient-to-b tw-from-white tw-to-slate-50',
-                        'dark:tw-from-slate-800 dark:tw-to-slate-900',
-                        'tw-border-2 tw-border-slate-200 dark:tw-border-slate-700',
-                        'tw-shadow-xl dark:tw-shadow-2xl'
+                        'dark:tw-bg-[#060010] tw-border-2 tw-border-slate-200 dark:tw-border-slate-700',
+                        'dark:tw-shadow-2xl'
                     )}
                     onMouseEnter={stopAutoScroll}
                     onMouseLeave={resetAutoScroll}

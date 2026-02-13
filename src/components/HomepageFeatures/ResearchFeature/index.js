@@ -170,7 +170,7 @@ export default function ResearchFeature() {
               </span>
 
               <h2 className="tw-text-5xl md:tw-text-6xl tw-font-extrabold tw-mb-6 tw-mt-4">
-                Our Research
+                CIROH's Research
               </h2>
 
               <p className="tw-text-xl tw-max-w-2xl tw-text-slate-700 dark:tw-text-gray-300 tw-mx-auto">
