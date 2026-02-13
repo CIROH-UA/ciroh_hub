@@ -49,7 +49,7 @@ const config = {
             applications across the field.
           </div>
           <a 
-            href="https://github.com/CIROH-UA/ciroh-ua_website/issues/new?template=docuhub-blog-post.md" 
+            href="https://github.com/CIROH-UA/ciroh_hub/issues/new?template=docuhub-blog-post.md" 
             target="_blank" 
             rel="noopener noreferrer"
             style="
