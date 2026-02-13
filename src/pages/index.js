@@ -2,7 +2,7 @@ import React from 'react';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import Layout from '@theme/Layout';
 import HomepageFeatures from '@site/src/components/HomepageFeatures';
-import Header from '@site/src/components/Header';
+import HomepageHeader from './HomePageHeader';
 import { ConstellationCanvas } from '../components/ConstellationCanvas';
 
 export default function Home() {
@@ -15,22 +15,8 @@ export default function Home() {
         <div className="tw-fixed tw-inset-0 tw-pointer-events-none" style={{ zIndex: 1 }}>
           <ConstellationCanvas isDarkTheme={isDarkTheme} />
         </div>
-        <div className="margin-top--lg">
-          <Header
-            title="CIROH Hub"
-            tagline={siteConfig.tagline}
-            description={
-              "Research data, software, tools, documentation, and other resources of the NOAA-supported Cooperative Institute for Research to Operations in Hydrology."
-            }
-            buttons={[
-              { label: "Publications", href: "/publications", primary: true },
-              { label: "IT Services", href: "/docs/services/access" },
-            ]}
-            notice={
-              "CIROH Hub is the new home for content from CIROH Portal and DocuHub."
-            }
-          />
-        </div>
+        <HomepageHeader />
+
       </section>
 
       {/* Features Section */}
