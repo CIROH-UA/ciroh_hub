@@ -42,33 +42,20 @@ import { Carousel } from "react-responsive-carousel"
 </Carousel>
 <br />
 
-In October 2025, research efforts from Penn State's MHPI group, led by Dr. Chaopeng Shen, and AWI, led by Arpita Patel, converged in a milestone R2O effort that resulted in preliminary operationalization of the daily-scale, high-resolution, distributed differentiable model δHBV 2.0 [2]. This not only resulted in the adoption of a differentiable model into NextGen In A Box (NGIAB), but also provided an opportunity for CIROH researchers to fine-tune the δHBV 2.0 architecture for NextGen operation in addition to providing valuable insights and resources for accelerating this integration in the future.
+In October 2025, Penn State's Multi-scale Hydrology, Processes and Intelligence group (MHPI), led by Dr. Chaopeng Shen, and the Alabama Water Institute (AWI), led by Arpita Patel, achieved a milestone R2O effort: the preliminary integration of δHBV 2.0 [4] – a daily-scale, high-resolution, distributed differentiable model – into a NextGen ecosystem. This resulted in the first adoption of a differentiable model into [NextGen In A Box (NGIAB)](https://github.com/CIROH-UA/NGIAB-CloudInfra) [2] and provided an opportunity for CIROH researchers to fine-tune the δHBV 2.0 architecture for NextGen operation.
 
-Having proven viability for daily timescale predictions on high-resolution river networks [2], MHPI researchers recently adapted δHBV 2.0 into a multi-timescale architecture designed to parameterize HBV and simulate streamflow at hourly intervals, at scale, accross the NextGen HydroFabric. This new model, coined δHBV 2.0 MTS (Multi-TimeScale), is a fusion of a daily and hourly δHBV 2.0 model designed to efficiently handle ML training with high geospatial *and* temporal complexity. (See [MTS Architecture](#mts-architecture-3) for more details about this construction.)
+Having proven viability for daily timescale predictions on high-resolution river networks [4], MHPI researchers recently adapted δHBV 2.0 into a multi-timescale architecture designed to parameterize HBV and simulate streamflow at hourly intervals, at scale, across the NextGen HydroFabric. This new model, δHBV 2.0 MTS (Multi-TimeScale) [5], is a fusion of a daily and hourly δHBV 2.0 model designed to efficiently handle ML training with high geospatial *and* temporal complexity. (See [MTS Architecture](#mts-architecture) for more details about this construction.)
 
-With δHBV 2.0 MTS maintaining similar forecasting skill compared to its daily-scale counterpart [3], Penn State and AWI were once again reunited in a joint effort to plant hourly scale differentiable modeling within AWI's operational ecosystem as a demonstration of model viability and to enable open access to its runtime.
+With δHBV 2.0 MTS maintaining similar forecasting skill compared to its daily-scale counterpart [5], Penn State and AWI were once again reunited in a joint effort to embed hourly scale differentiable modeling within AWI's operational ecosystem as a demonstration of model viability and to facilitate open access to its runtime.
 
-## Building A Stronger Bridge
+## Differentiable Models
+δHBV 2.0 and δHBV 2.0 MTS differentiable model constructions are briefly outlined here to contextualize the development efforts. For further detail, see each model's respective citation.
+At their core, differentiable models embed traditional process-based equations (here, the [HBV](https://en.wikipedia.org/wiki/HBV_hydrology_model) rainfall-runoff model) inside a machine learning training loop. Because these models are designed to be differentiable (e.g., in PyTorch), gradients flow end-to-end from the loss function back through the physical equations and into the neural networks that supply their parameters. This lets the model learn optimal parameterizations directly from observed data while still obeying mass-balance and storage constraints encoded in HBV – combining interpretability and physical consistency of process-based hydrology with the flexibility of deep learning.
 
-In order to support δHBV 2.0 MTS in AWI's NextGen, NGIAB, and NGIAB Data-Preprocess required significant contributions and dialogue between both institutions.
 
-From the Penn State's end, Leo Lonzarich produced an overhaul of the existing [dhbv2](https://github.com/mhpi/dhbv2) NextGen module supporting the new MTS architecture. In the case of MTS, three critical challenges needed resolution for NextGen deployment: 1) recurrence, 2) absence of daily forcing data, and 3) no derived PET forcing.
+### δHBV 2.0
 
-In the first case, both parameterization LSTM and physical backbone (HBV) depend on past temporal data to make future predictions (with some warmup period to initialize their internal states). Therefore, a new ring buffer mechanism was incorporated in the BMI module to support caching batches of input forcings to warmup states (more efficient than sequential) before running the differentiable model sequentially forward in time with the initialized states. It is also important to note that, while δHBV 2.0 MTS requires both a daily and hourly forcing input, NextGen is intended to only provide hourly AORC forcings in current operational arrangements. In such a case, the ring buffer here was also designed to aggregate hourly forcings to daily scale over the duration of NextGen runtime.
-
-The last step to solve was replacing one of the standard inputs for δHBV 2.0 MTS, Hargreaves PET (disaggregated to hourly scale), which was required to be computed in advance of NextGen runtime. (Because Hargreaves' method is fundamentally an daily measure requiring all observations for a given day to compute, this was a fundamentally incompatible with calculation within the MTS BMI.) To resolve this, a Penman-Monteith calculation was added within the BMI to calculate PET on-the-fly during operations. It should be noted that this new input is not a 1:1 replacement for Hargreaves, and the trained weights used for the paramaterization networks in δHBV 2.0 MTS will need to be retrained.
-
-~
-
-From AWI's side, Quinn Lee and Josh Cunningham, with help from Benjamin Lee, handled the integration and evaluation of the dhbv2 module with both daily and hourly models in the NGIAB services. In particular, this involved 1) accurate production of all inputs (forcings, bmi configs, ngen realizations) needed for runtime in NextGen, 2) validation of the BMI runtime in NextGen, and 3) Adding dhbv2 setup to NGIAB and ensuring compatibility with other existing modules. Of these, compatibility was among the most substantial efforts, requiring revisions to both the dhbv2 module and NGIAB Dockerfile to support the integration without bloating or overcomplicating the resulting NextGen Docker images.
-
-## Model Details
-
-To better illustrate the architecture of δHBV 2.0 MTS, it is instructive to first characterize the daily model.
-
-### δHBV 2.0 [2]
-
-The daily model uses an LSTM and MLP to learn parameters for the differentiable physical model HBV 2.0. Weather forcings (precipitation, temperature, PET) and static catchment attributes are used as inputs to simulate hydrological states and fluxes:
+The daily model uses Long Short-Term Memory (LSTM)  and Multi-Layer Perceptron (MLP) neural networks (NNs) to learn time-dynamic and static parameters for HBV 2.0 [4] (a modified form of HBV). Weather forcings (precipitation, temperature, PET) and static catchment attributes are used as inputs to simulate hydrological states and fluxes:
 
 $$
     \begin{align}
@@ -79,51 +66,61 @@ $$
 $$
 
 where:
-
 * $\theta$: Learned dynamic ($d$) and static ($s$) parameters.
 * $x_m, A_m$: Forcings and attributes for unit basin $m$.
 * $Q, S$: Model fluxes (e.g., streamflow) and states (e.g., snowpack).
 
-As this model is designed to operate at the daily timescale, forcings are aggregated at the end of every day to make a single daily prediction. This prediction is then distributed accross the proceeding 24 hours, at which point a new daily prediction is made.
+In NextGen, hourly input forcings are aggregated at the end of every day to produce a single daily prediction, which is then distributed across the following 24 hours before a new prediction is made.
+Because HBV is a recurrent, bucket-based model, its internal states (e.g., groundwater stores) must be "warmed up" by running the model over a period just prior to the target simulation window so that storages can equilibrate. The same process initializes the internal states of the parameterization LSTM, which is itself recurrent.
+### MTS Architecture
+Extending δHBV 2.0 from daily to hourly resolution is not simply a matter of shortening the timestep. Hourly simulation demands sensitivity to rapid forcing variability, yet the model's internal storages still depend on slow-evolving, seasonal-scale memory. Training a single hourly model with a sufficiently long lookback to capture both regimes (i.e., 365 days) would be prohibitively expensive. The MTS (Multi-TimeScale) architecture [5] addresses this by coupling a daily and hourly δHBV 2.0 model in a two-stage design:
 
-Since HBV is a recurrent bucket-based model, it must be "warmed up" making simulations on a period of data just prior to the target simulation window so that it's states can be allowed to saturate. Incidentally, this process also initializes internal states of the parameterization LSTM.
+1. **Daily warmup (long memory)**: The daily model processes ~351 days of aggregated daily inputs, building up slow-evolving states such as deep groundwater and snowpack.
+2. **Hourly warmup (short memory)**: Those states are handed off to the hourly model, which refines them over 7 days of hourly forcing to capture fast dynamics like sub-daily storm response.
+3. **Hourly simulation**: With states fully initialized, the hourly model produces 7 days of predictions.
+4. **Rolling window**: At the end of each 7-day simulation window, the cache shifts forward 7 days and the warmup process repeats.
 
-### MTS Architecture [3]
+A rolling-window input caching mechanism underpins this cycle, storing ~351 days of daily inputs alongside ~7 days of hourly inputs so that each warmup-simulation pass can be executed efficiently without reprocessing the full history.
 
-The **Multi-TimeScale (MTS)** variant adapts the architecture for hourly simulation. It incorporates a rolling window input caching mechanism to bridge the gap between long-term hydrologic memory and high-frequency forcing:
+## Building A Stronger Bridge
 
-* **Caching:** Caches ~351 days of aggregated daily inputs and ~7 days of hourly inputs.
-* **Warmup:** Performs warmup steps using the cache to prime low-frequency (daily) and high-frequency (hourly) model states before generating hourly predictions.
-* **Rolling Window**: After 7 days of hourly simulation, the cache window shifts forward 7 days and the warmup is repeated.
+Supporting δHBV 2.0 MTS in AWI's [NextGen](https://github.com/CIROH-UA/ngen), NGIAB, and [NGIAB Data-Preprocess](https://github.com/CIROH-UA/NGIAB_data_preprocess) required significant contributions and dialogue between both institutions. 
 
-## Looking Skyward
+From Penn State, Leo Lonzarich incorporated MTS into the existing [dhbv2](https://github.com/mhpi/dhbv2) NextGen module, which couples with the differentiable modeling framework [δMG](https://github.com/mhpi/generic_deltamodel) to build hybrid models [3]. This update for MTS architecture addressed three key challenges for NextGen deployment: time-sequential runtimes not traditionally supported by ML models that operate on all timesteps simultaneously, the absence of daily forcing data, and no available derived potential evapotranspiration (PET) forcing.
 
-With both daily- and hourly-scale δHBV 2.0 models implemented in NGIAB and the NGIAB Data-Preprocess, the next step forward is to adopt these models into the NextGen Research DataStream (NRDS) with the combined efforts of Lynker and AWI (and, naturally, Leo on-call). Work on this adoption is already slated and we anticipate having recurrent runtimes of both models with near-realtime simulations on the HydroFabric available to CIROH collaborators in the near future.
+To address the first two challenges, a new ring buffer mechanism was added to the BMI module. As described above, both the LSTM and HBV require warmup with historical data; the ring buffer caches batches of input forcings so that states can be warmed up in bulk (more efficiently than step-by-step) before the model advances sequentially with the initialized states. The ring buffer also handles the fact that NextGen (NWM 4.0, CIROH-UA) are intended to provide an hourly forcing while δHBV 2.0 MTS requires daily inputs as well. In such a case, the buffer aggregates hourly forcings to daily scale on the fly during runtime.
 
-In the meantime, we continue to work with NOAA-OWP to support the integration of δHBV 2.0 MTS model integration into their NextGen test-bench for preliminary evaluation as candidate for the next-generation NWM.
+The final challenge was replacing Hargreaves PET, one of the standard inputs for δHBV 2.0 MTS, which previously needed to be computed in advance of runtime. Hargreaves' method is a daily measure requiring a full day of observations – fundamentally incompatible with the MTS BMI's sequential operation. To resolve this, a Penman-Monteith calculation was added within the BMI to derive PET on-the-fly.
 
-With δHBV 2.0's integration near completion, differentiable models will soon be running as part of CIROH's NRDS nightly forecasts — accessible through the NRDS Visualizer where other researchers and community members will be able to explore, assess, and iterate on simulations from this latest crop of hydrologic models in real time.
+At AWI, Quinn Lee and Josh Cunningham, with help from Benjamin Lee, spearheaded the architectural integration and operational evaluation of the δHBV 2.0 module within the NGIAB ecosystem. AWI's efforts centered on data orchestration, model runtime validation and BMI compliance, and systems integration.
 
-We are also looking forward to the integration of differentiable routing products such as differentiable Muskingum-Cunge developed by Tadd Bindas et al. [1] at Penn State. While the form is not decided, this could appear as a dynamic parameterization module for T-Route or a standalone routing module. Current development is ongoing in [DDR](CITE).
+AWI developed automated workflows within NGIAB Data-Preprocess to generate the inputs required by both the daily and MTS models, aligning high-resolution HydroFabric attributes with hourly AORC forcing data and ensuring that realization and routing configurations met δHBV 2.0 and NextGen expectations. With these inputs, AWI tested the δHBV 2.0 BMI runtime to verify that outputs were reproducible across systems and that Data-Preprocess was producing correct model behavior.
 
-In all cases, we anticipate the continuation of AWI-Penn State synergy into the future as we continue to support and potential integrate new models in their operational ecosystem. Some of these efforts may also arrive in DevCon later this spring as a showcase of this collaboration. Ultimately, these moments stand as testaments to the value of inter-institutional relationships for accelerating the integration of lab-bound research into operations for the broader CIROH community. Once more, the path from scientific discovery to operational forecasting remains focused and in view.
+Perhaps the most substantial effort involved reconciling δHBV 2.0's dependencies with the existing NGIAB architecture for Docker image construction. This ultimately required refactoring δHBV 2.0 and its supporting packages (δMG, [hydrodl2](https://github.com/mhpi/hydrodl2)) as well as parts of NGIAB's Dockerfile for more efficient builds.
+
+In sum, this collaboration ensured that δHBV 2.0 MTS did not remain a standalone model, but a fully containerized, "plug-and-play" component of the NextGen ecosystem, ready for deployment across diverse computing environments.
+
+## Looking Forward
+
+With both daily- and hourly-scale δHBV 2.0 models implemented in NGIAB and NGIAB Data-Preprocess, the next step is adoption into the [NextGen Research DataStream (NRDS)](https://github.com/CIROH-UA/ngen-datastream). This work is already scheduled, and we anticipate recurring runtimes of both models with near-realtime simulations on the Community HydroFabric available to CIROH collaborators in the near future. Differentiable model simulations will then be accessible through the NRDS Visualizer, where researchers and community members can explore, assess, and iterate on outputs in real time.
+
+For NOAA-OWP, ongoing work will continue to support the integration of δHBV 2.0 MTS into their NextGen test bench for preliminary evaluation as a candidate for the NWM 4.0.
+
+Differentiable routing products are also in consideration for operational deployment. For instance, differentiable Muskingum-Cunge, introduced by Tadd Bindas et al. [1] at Penn State, is actively being developed and could appear operationally as a dynamic parameterization module for T-Route or as a standalone routing module. Public development is ongoing in [DDR](https://github.com/DeepGroundwater/ddr).
+
+AWI and Penn State’s strong collaborative track record is anticipated to continue as both teams support and potentially integrate new models into their NGIAB-NRDS ecosystem. Some of these efforts may also appear in DevCon later this spring. Ultimately, these successes stand as testaments to the value of inter-institutional collaboration for accelerating the integration of lab-bound research into operations for the broader CIROH community.
 
 ~
 
-### Resources for the Curious 
-
+### Code
 * [δHBV 2.0 Operational Module Repository](https://github.com/mhpi/dhbv2)
-
 * [δMG Differentiable Modeling Framework](https://github.com/mhpi/generic_deltamodel) (Backbone for δHBV 2.0; includes documentation and tutorials for building custom differentiable hydrologic models.)
-
 * [Differentiable Distributed Routing (DDR)](https://github.com/DeepGroundwater/ddr)
-
 * [MHPI Codebase](https://mhpi.github.io/codes/)
 
-### Publication
-
-<ol>
-    <li>Bindas, T., Tsai, W.-P., Liu, J., Rahmani, F., Feng, D., Bian, Y., et al. (2024). Improving river routing using a differentiable Muskingum-Cunge model and physics-informed machine learning. Water Resources Research, 60, e2023WR035337. https://doi.org/10.1029/2023WR035337</li>
-    <li>Song, Y., Bindas, T., Shen, C., Ji, H., Knoben, W. J. M., Lonzarich, L., et al. (2025). High-resolution national-scale water modeling is enhanced by multiscale differentiable physics-informed machine learning. Water Resources Research, 61, e2024WR038928. https://doi.org/10.1029/2024WR038928</li>
-    <li>Yang, W., Ji, H., Lonzarich, L., Song, Y., Shen, C. (2025). Diffusion-Based Probabilistic Modeling for Hourly Streamflow Prediction and Assimilation. arXiv. https://arxiv.org/abs/2510.08488 [In Review]</li>
-</ol>
+### Publications
+1. Bindas, T., Tsai, W.-P., Liu, J., Rahmani, F., Feng, D., Bian, Y., et al. (2024). Improving river routing using a differentiable Muskingum-Cunge model and physics-informed machine learning. Water Resources Research, 60, e2023WR035337. <https://doi.org/10.1029/2023WR035337>
+2. Patel, A., Halgren, J., Wills, Z., Frazier, N., Lee, B., Cunningham, J., et al. (2025). NextGen In A Box (NGIAB): Open-Source containerization of the NextGen framework to enable community-driven hydrology modeling. Environmental Modelling & Software, Volume 193. <https://doi.org/10.1016/j.envsoft.2025.106666>
+3. Lonzarich, L., Shen, C., Song, Y., Rahmani, F., & Lawson, K. (2025). mhpi/generic_deltamodel: High-resolution differentiable model, 𝛿HBV2.0 (Version v1.4.0) [Computer software]. Zenodo. <https://doi.org/10.5281/zenodo.14828008>
+4. Song, Y., Bindas, T., Shen, C., Ji, H., Knoben, W. J. M., Lonzarich, L., et al. (2025). High-resolution national-scale water modeling is enhanced by multiscale differentiable physics-informed machine learning. Water Resources Research, 61, e2024WR038928. <https://doi.org/10.1029/2024WR038928>
+5. Yang, W., Ji, H., Lonzarich, L., Song, Y., Shen, C. (2025). Diffusion-Based Probabilistic Modeling for Hourly Streamflow Prediction and Assimilation. arXiv. <https://arxiv.org/abs/2510.08488> [In Review]
