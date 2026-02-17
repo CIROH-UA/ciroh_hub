@@ -5,12 +5,15 @@ import { ConstellationCanvas } from '@site/src/components/ConstellationCanvas';
 import Layout from '@theme/Layout';
 import TechBox from "@site/src/components/TechBox";
 import StatsBar from "@site/src/components/StatsBar";
+import CardCarouselGeneric from "@site/src/components/CardCarouselGeneric";
 import { getResourceStats } from "@site/src/utils/resourceStats";
 import TethysLogoDark from '@site/static/img/logos/tethys-platform-dark.png';
 import TethysLogWhite from '@site/static/img/logos/tethys-platform-white.png';
 import HydroShareLogo from '@site/static/img/logos/hydroshare-white.png';
 import useBaseUrl from '@docusaurus/useBaseUrl';
 import { useColorMode } from '@docusaurus/theme-common';
+import curatedApps from "./curatedApps";
+import { ResourceCard } from "@site/src/components/HydroShareResourcesCards";
 
 const items = [
   {
@@ -59,6 +62,25 @@ function AppsPageContent({ contributeUrl, docsUrl, defaultImage }) {
 
   const stats = useMemo(() => getResourceStats(apps), [apps]);
 
+  // Function to render each card in the curated apps carousel.
+  const renderCuratedAppCard = (card, index, cardProperties) => (
+    <ResourceCard
+      resource={{
+        authors: card.authors,
+        description: card.description,
+        docs_url: card.docs_url,
+        embed_url: card.embed_url,
+        page_url: card.page_url,
+        resource_id: card.resource_id,
+        resource_type: card.resource_type,
+        resource_url: card.resource_url,
+        thumbnail_url: card.thumbnail_url,
+        title: card.title,
+      }}
+      defaultImage={defaultImage}
+    />
+  );
+
   return (
     <>
       {/* Hero */}
@@ -76,7 +98,12 @@ function AppsPageContent({ contributeUrl, docsUrl, defaultImage }) {
               ]}
         />
       </div>
-
+      
+      {/* Curated Apps Carousel */}
+      <CardCarouselGeneric
+        cards={curatedApps}
+        renderCard={renderCuratedAppCard}
+      />
 
       </section>
 

@@ -53,7 +53,7 @@ function ActionButton({ onClick, title, children }) {
     );
 }
 
-function ResourceCard({ resource, defaultImage }) {
+export function ResourceCard({ resource, defaultImage }) {
     const placeholder = isPlaceholder(resource);
     const [showEmbed, setShowEmbed] = useState(false);
     const [embedSrc, setEmbedSrc] = useState(null);
