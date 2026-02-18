@@ -17,6 +17,8 @@ With δHBV 2.0 MTS maintaining similar forecasting skill compared to its daily-s
 δHBV 2.0 and δHBV 2.0 MTS differentiable model constructions are briefly outlined here to contextualize the development efforts. For further detail, see each model's respective citation.
 At their core, differentiable models embed traditional process-based equations (here, the [HBV](https://en.wikipedia.org/wiki/HBV_hydrology_model) rainfall-runoff model) inside a machine learning training loop. Because these models are designed to be differentiable (e.g., in PyTorch), gradients flow end-to-end from the loss function back through the physical equations and into the neural networks that supply their parameters. This lets the model learn optimal parameterizations directly from observed data while still obeying mass-balance and storage constraints encoded in HBV -- combining interpretability and physical consistency of process-based hydrology with the flexibility of deep learning.
 
+<!-- truncate -->
+
 ### δHBV 2.0
 
 The daily model uses Long Short-Term Memory (LSTM)  and Multi-Layer Perceptron (MLP) neural networks (NNs) to learn time-dynamic and static parameters for HBV 2.0 [4] (a modified form of HBV). Weather forcings (precipitation, temperature, PET) and static catchment attributes are used as inputs to simulate hydrological states and fluxes:
