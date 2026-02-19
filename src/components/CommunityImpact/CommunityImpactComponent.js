@@ -82,9 +82,9 @@ export default function CommunityImpactComponent() {
         </div>
 
         {/* HERO CONTENT (ignores pointer events EXCEPT buttons/card components) */}
-        <div className="tw-container tw-mx-auto tw-flex tw-px-5 tw-py-16 md:tw-flex-row tw-flex-col tw-items-center tw-relative tw-z-10 tw-pointer-events-none">
+        <div className="tw-container tw-mx-auto tw-flex tw-px-5 tw-py-16 max-[768px]:tw-py-8 max-[480px]:tw-py-6 md:tw-flex-row tw-flex-col tw-items-center tw-relative tw-z-10 tw-pointer-events-none">
 
-          <div className="lg:tw-flex-grow md:tw-w-1/2 lg:tw-pr-24 md:tw-pr-16 tw-flex tw-flex-col md:tw-items-start md:tw-text-left tw-mb-16 md:tw-mb-0 tw-items-center tw-text-center">
+          <div className="lg:tw-flex-grow md:tw-w-1/2 lg:tw-pr-24 md:tw-pr-16 tw-flex tw-flex-col md:tw-items-start md:tw-text-left tw-mb-6 md:tw-mb-0 tw-items-center tw-text-center">
 
             <h1
               className={clsx(
@@ -114,8 +114,8 @@ export default function CommunityImpactComponent() {
           </div>
 
           {/* CARD SWAP SECTION (also restored pointer events) */}
-          <div className="lg:tw-max-w-xl lg:tw-w-full md:tw-w-1/2 tw-w-5/6 tw-pointer-events-auto">
-            <div className="tw-relative tw-h-[600px]">
+          <div className="lg:tw-max-w-xl lg:tw-w-full md:tw-w-1/2 tw-w-full max-[768px]:tw-w-5/6 tw-pointer-events-auto">
+            <div className="tw-relative tw-h-[600px] max-[768px]:tw-h-[430px] max-[480px]:tw-h-[360px]">
               <CardSwap
                 cardDistance={60}
                 verticalDistance={70}
