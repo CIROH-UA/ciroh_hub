@@ -4,7 +4,7 @@
 			{
 			"type": "update",
 			"title": "CIROH Hub",
-            "description": "CIROH Hub is live now.  Check out [latest blogs](https://hub.ciroh.org/blog) to learn more about the new HUB. To learn about how to contribute, please visit our [Contribute page](https://hub.ciroh.org/contribute)."
+            "description": "CIROH Hub is live now.  Check out [latest blogs](/blog) to learn more about the new Hub. To learn about how to contribute, please visit our [Contribute page](/contribute)."
 			},	
 			{
 			"type": "NGIAB",
@@ -15,7 +15,7 @@
 				"https://github.com/CIROH-UA/NGIAB_data_preprocess/releases/tag/v4.8.0",
 				"https://github.com/CIROH-UA/NGIAB_data_preprocess/releases/tag/v4.7.0"
 			],
-			"description":"New release of NGIAB data preprocess, [version v4.8.2](https://github.com/CIROH-UA/NGIAB_data_preprocess/releases/tag/v4.8.2), is now available which includes two major model integrations: [SUMMA](https://github.com/CH-Earth/summa) and [δHBV2](https://github.com/mhpi/dhbv2) (daily and hourly) in NGIAB data preprocessing workflows.", 
+			"description":"New release of NGIAB data preprocess, [v4.8.2](https://github.com/CIROH-UA/NGIAB_data_preprocess/releases/tag/v4.8.2), is now available which includes two major model integrations: [SUMMA](https://github.com/CH-Earth/summa) and [δHBV2](https://github.com/mhpi/dhbv2) (daily and hourly) in NGIAB data preprocessing workflows.", 
 			"release_date": "02/18/2026",
 			"contributors": 2
 			},
@@ -23,10 +23,18 @@
 			"type": "NGIAB",
 			"title": "🎉Differentiable HBV 2.0 (δHBV 2.0) and SUMMA integrated in NGIAB",
 			"link": "https://github.com/CIROH-UA/NGIAB-CloudInfra/releases/tag/v1.8.0",
-            "description": "[δHBV 2.0](https://github.com/mhpi/dhbv2) is a differentiable Hydrologiska Byråns Vattenbalansavdelning (HBV) model, using an LSTM and multilayer perceptron (MLP) to learn parameters. Both the hourly and daily variants are now integrated in the new release of NGIAB. This release also includes [SUMMA](https://github.com/CH-Earth/summa) integration along with the support for hourly and daily δHBV2 to enhance modeling capabilities.",
+            "description": "[δHBV 2.0](https://github.com/mhpi/dhbv2) is a differentiable Hydrologiska Byråns Vattenbalansavdelning (HBV) model, using an LSTM and multilayer perceptron (MLP) to learn parameters. Both the hourly and daily variants are now integrated in the new release of NGIAB. More details on the δHBV work can be found in this blog post: [Hourly Differentiable Modeling Arrives in the NGIAB-NRDS NextGen Ecosystem](/blog/awi-psu-collab2). \n\nIn addition, this release also includes [SUMMA](https://github.com/CH-Earth/summa) integration to enhance modeling capabilities. Background on the SUMMA integration effort is available here: [Moving Hydrologic Prediction Forward — A software integration meeting at the Alabama Water Institute](/blog/software-integration-meeting).",
             "release_date": "02/17/2026",
 			"contributors": 3
-			},			
+			},		
+			{
+			"type": "NGIAB",
+			"title": "NGIAB-HPCInfra",
+			"link": "https://github.com/CIROH-UA/NGIAB-HPCInfra/releases/tag/v1.3.0",
+			"description":"The latest release is now synced with NGIAB-CloudInfra, aligning with Docker [commit 2c3baae](https://github.com/CIROH-UA/NGIAB-CloudInfra/commit/2c3baae9bcdcc169fe0a3d3b8bf93cdbc5062be4). This update introduces support for SUMMA and δHBV models.",
+			"release_date": "02/19/2026",
+			"contributors": 1
+			},	
 			{
 			"type": "NRDS",
 			"title": "ForcingProcessor",
@@ -528,7 +536,7 @@
 			{
 				"type": "news",
 				"title": "Updated Community NextGen Documentation Page",
-				"description": "📢 We've new updates under Community NextGen products tab. 📚 This comprehensive resource includes an overview of NGIAB and its extensions.\n - 🔍 Learn more about Data Preprocess, TEEHR Evaluation, Data Visualizer, and DataStreamCLI. \n - 🛠️ Key features, Capabilities and Access Method are included. \n \n \n 🔗 Visit the new Community Hydrologic Modeling Framework documentation page [here](https://hub.ciroh.org/docs/products/ngiab/):",
+				"description": "📢 We've new updates under Community NextGen products tab. 📚 This comprehensive resource includes an overview of NGIAB and its extensions.\n - 🔍 Learn more about Data Preprocess, TEEHR Evaluation, Data Visualizer, and DataStreamCLI. \n - 🛠️ Key features, Capabilities and Access Method are included. \n \n \n 🔗 Visit the new Community Hydrologic Modeling Framework documentation page [here](/docs/products/ngiab/):",
 				"link": "https://hub.ciroh.org/docs/products/ngiab/"
 			},
 			{
