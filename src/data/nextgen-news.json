@@ -2,6 +2,11 @@
 
 	"February 2026 Update": [
 			{
+			"type": "update",
+			"title": "CIROH Hub",
+            "description": "CIROH Hub is live now.  Check out [latest blogs](https://hub.ciroh.org/blog) to learn more about the new HUB. To learn about how to contribute, please visit our [Contribute page](https://hub.ciroh.org/contribute)."
+			},	
+			{
 			"type": "NGIAB",
 			"title": "NGIAB-data-preprocess",
 			"links": [
@@ -25,10 +30,10 @@
 			{
 			"type": "NRDS",
 			"title": "ForcingProcessor",
-			"link": "",
-			"description":"",
-			"release_date": "",
-			"contributors": 0
+			"link": "https://github.com/CIROH-UA/forcingprocessor/releases/tag/v2.0.1",
+			"description":"This latest release continues to improve forcingprocessor through CI/CD enhancements and minor bug fixes.",
+			"release_date": "02/19/2026",
+			"contributors": 3
 			},
 			{
 			"type": "NRDS",
@@ -49,10 +54,31 @@
             {
 			"type": "NRDS",
 			"title": "NRDS Visualizer (nrds-client)",
-			"link": "",
-			"description":"",
-			"release_date": "",
-			"contributors": 0
+			"link": "https://github.com/CIROH-UA/nrds-client/releases/tag/v1.1.1",
+			"description":"Version 1.1.1 now supports S3 Parquet output, while still being compatible with the legacy NetCDF format.",
+			"release_date": "02/19/2026",
+			"contributors": 1
+			},
+			{
+			"type": "NGIAB",
+			"title": "NGIAB Website",
+			"link": "https://github.com/CIROH-UA/ngiab-website/releases/tag/v1.1.0",
+			"description":"NGIAB website has been updated to include NRDS Status Dashboard and [Data Visualizers](https://ngiab.ciroh.org/#/nrds).",
+			"release_date": "02/20/2026",
+			"contributors": 2
+			},
+			{
+			"type": "update",
+			"title": "CIROH 2i2c JupyterHub",
+			"link": "https://github.com/CIROH-UA/awi-ciroh-image/releases/tag/v1.2.2",
+			"description":"CIROH 2i2c JupyterHub image has been updated to the latest dask version.",
+			"release_date": "02/10/2026",
+			"contributors": 2
+			},
+			{
+			"type": "update",
+			"title": "DevCon Workshops IT needs - Due on April 1st, 2026❗",
+			"description":"If you are planning a workshop for DevCon, please submit your IT requirements using the [workshop IT request form](https://github.com/CIROH-UA/NGIAB-CloudInfra/issues/new?assignees=&projects=&template=workshop_IT_request.md)."
 			}
 		],
 
