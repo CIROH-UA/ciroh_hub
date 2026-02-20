@@ -38,7 +38,7 @@ export default function BlogFilter() {
       const category = tagToCategory(tag?.label);
       if (category) return category;
     }
-    return 'conference';
+    return 'unknown';
   };
 
   const filteredPosts = useMemo(() => {

@@ -70,16 +70,18 @@ function ContributeContent() {
               showcased right here in CIROH Hub for broader reach. Publish your papers to <a href={zoteroLogin} target="_blank" rel="noreferrer noopener">Zotero</a> and they'll appear here as part of CIROH's shared library.
             </p>
           </div>
-          {/* Note: horizontal rules around Hydroshare have added margins for spacing */}
-          <hr className="margin-vert--xl" />
+
+          {/* Note: page anchors are placed on horizontal rules, as this plays a bit more nicely with browsers */}
+          {/* Also, horizontal rules around Hydroshare have added margins for spacing */}
+          <hr className="margin-vert--xl" id="hydroshare"/>
 
           {/* Contribute to HydroShare */}
           <HydroShareCard />
           
-          <hr className="margin-top--xl" />
+          <hr className="margin-top--xl" id="resources-documentation" />
 
           {/* Contribute to Resources Documentation */}
-          <section id="resources-documentation" className={clsx(styles.zoteroSection, "margin-vert--xl")}>
+          <section className={clsx(styles.zoteroSection, "margin-vert--xl")}>
             <div className={styles.zoteroHeader}>
               <h2 className={styles.zoteroTitle}>Contribute to Resources Documentation</h2>
               <p className={styles.zoteroSubtitle}>
@@ -128,7 +130,7 @@ function ContributeContent() {
             </div>
           </section>
 
-          <hr />
+          <hr id="zotero" />
 
           {/* Contribute to Zotero Publications */}
           <section className={clsx(styles.zoteroSection, "margin-vert--xl")}>
@@ -186,10 +188,10 @@ function ContributeContent() {
             </p>
           </div>
 
-          <hr />
+          <hr id="community-working-group" />
 
           {/* Join the Community Section */}
-          <section id="community-working-group" className={clsx(styles.brandCard, "margin-top--xl margin-bottom--lg")}>
+          <section className={clsx(styles.brandCard, "margin-top--xl margin-bottom--lg")}>
             <div className={styles.brandHeader}>
               <div style={{ fontSize: '3rem', marginRight: '1.5rem' }}>👥</div>
               <div className={styles.brandTitleWrap}>

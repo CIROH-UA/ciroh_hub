@@ -41,7 +41,7 @@ leo:
   url: 'https://www.linkedin.com/in/leoglonz'
   image_url: https://ca.slack-edge.com/T03UUB7CE83-U075PFL5NUE-150fbf871a79-512
 
-james:
+james-halgren:
   name: James Halgren
   title: Assistant Director of Science
   url: 'https://github.com/jameshalgren'
@@ -213,4 +213,28 @@ benjamin-lee:
   name: Benjamin Lee
   title: Development Operations Engineer
   url: https://www.linkedin.com/in/seungchanlee/
-  image_url: /img/blog/authors/benjamin-lee.jpeg
+  image_url: /img/blog/authors/benjamin-lee.png
+
+dan-ames:
+  name: Dan Ames
+  title: Professor at Brigham-Young University
+  url: https://cce.byu.edu/directory/dan-ames
+  image_url: /img/profiles/Dan_Ames.jpg
+
+james-dolinar:
+  name: James Dolinar
+  title: Software Engineer at Aquaveo
+  url: https://github.com/James-Dolinar
+  image_url: /img/blog/authors/james-dolinar.png
+
+nia-minor:
+  name: Nia Minor
+  title: Graduate Research Assistant
+  url: https://github.com/sheargrub
+  image_url: /img/blog/authors/nia-minor.png
+
+prajwal-halalae:
+  name: Prajwal Halalae
+  title: Undergraduate Research Intern
+  url: https://www.linkedin.com/in/prajwal-nh/
+  image_url: /img/profiles/Prajwal_Halalae.jpg
