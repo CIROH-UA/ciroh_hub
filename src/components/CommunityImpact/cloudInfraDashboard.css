@@ -166,16 +166,108 @@
 @media (max-width:1200px) {
     .cloud-dashboard-root .cards-grid {
         grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+    }
+
+    .cloud-dashboard-root .card {
+        padding: 32px 24px;
+    }
+
+    .cloud-dashboard-root .stat-value {
+        font-size: 2rem;
     }
 }
 
 @media (max-width:600px) {
     .cloud-dashboard-root .cards-grid {
         grid-template-columns: 1fr;
+        gap: 16px;
     }
 
     .cloud-dashboard-root .header h1 {
         font-size: 2rem;
+    }
+
+    .cloud-dashboard-root .container {
+        padding: 40px 16px;
+    }
+
+    .cloud-dashboard-root .card {
+        padding: 24px 16px;
+        border-radius: 16px;
+    }
+
+    .cloud-dashboard-root .stat-value {
+        font-size: 1.8rem;
+    }
+
+    .cloud-dashboard-root .card-title {
+        font-size: 1rem;
+        margin-bottom: 16px;
+    }
+
+    .cloud-dashboard-root .icon-container {
+        width: 60px;
+        height: 60px;
+        margin-bottom: 16px;
+    }
+
+    .cloud-dashboard-root .icon-wrapper img,
+    .cloud-dashboard-root .icon-wrapper svg {
+        width: 45px;
+        height: 45px;
+    }
+
+    .cloud-dashboard-root .stat-label {
+        font-size: 0.75rem;
+    }
+
+    .cloud-dashboard-root .stats {
+        gap: 16px;
+    }
+}
+
+/* Extra small screens */
+@media (max-width: 480px) {
+    .cloud-dashboard-root .cards-grid {
+        gap: 12px;
+    }
+
+    .cloud-dashboard-root .container {
+        padding: 30px 12px;
+    }
+
+    .cloud-dashboard-root .card {
+        padding: 16px 12px;
+        border-radius: 12px;
+    }
+
+    .cloud-dashboard-root .stat-value {
+        font-size: 1.5rem;
+    }
+
+    .cloud-dashboard-root .card-title {
+        font-size: 0.9rem;
+    }
+
+    .cloud-dashboard-root .header h1 {
+        font-size: 1.5rem;
+    }
+
+    .cloud-dashboard-root .header p {
+        font-size: 0.95rem;
+    }
+
+    .cloud-dashboard-root .icon-container {
+        width: 50px;
+        height: 50px;
+        margin-bottom: 12px;
+    }
+
+    .cloud-dashboard-root .icon-wrapper img,
+    .cloud-dashboard-root .icon-wrapper svg {
+        width: 35px;
+        height: 35px;
     }
 }
 

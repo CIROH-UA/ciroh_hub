@@ -101,9 +101,9 @@
   --ifm-color-primary-lighter: #19a7ce;
   --ifm-color-primary-lightest: #19a7ce;
 
-  /* Keep site background control from earlier, but ensure text colors are white */
-  --ifm-background-color: transparent !important;
-  --ifm-background-surface-color: transparent !important;
+  /* Opaque backgrounds for sidebar and surface elements in dark mode */
+  --ifm-background-color: #060010 !important;
+  --ifm-background-surface-color: #060010 !important;
 
   --ifm-dropdown-background-color: #060010;
   --ifm-navbar-dropdown-background-color: #060010;
