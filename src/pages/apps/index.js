@@ -103,6 +103,7 @@ function AppsPageContent({ contributeUrl, docsUrl, defaultImage }) {
       <CardCarouselGeneric
         cards={curatedApps}
         renderCard={renderCuratedAppCard}
+        cardsPerView={1}
       />
 
       </section>

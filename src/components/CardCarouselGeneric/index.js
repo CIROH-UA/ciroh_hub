@@ -6,32 +6,15 @@ import './CardCarouselGeneric.css';
 /**
  * Generic CardCarousel component
  * @param {Object[]} cards - Array of card data
+ * @param {number} cardsPerView - Number of cards to show per view (default: 3)
  * @param {React.ReactNode} header - Optional header
  * @param {(card: Object, index: number, cardProperties: {ref: (el: HTMLElement|null) => void, style: Object}) => React.ReactNode} renderCard - Function to render a card.
  */
-const CardCarouselGeneric = ({ cards, header, renderCard }) => {
+const CardCarouselGeneric = ({ cards, cardsPerView = 3, header, renderCard }) => {
     const [currentIndex, setCurrentIndex] = useState(0);
-    const [cardsPerView, setCardsPerView] = useState(3);
     const autoScrollRef = useRef(null);
     const [maxContentHeight, setMaxContentHeight] = useState(0);
     const contentRefsRef = useRef({});
-
-    // Calculate cards per view based on screen size
-    const updateCardsPerView = () => {
-        if (window.innerWidth >= 1024) {
-            setCardsPerView(3);
-        } else if (window.innerWidth >= 768) {
-            setCardsPerView(2);
-        } else {
-            setCardsPerView(1);
-        }
-    };
-
-    useEffect(() => {
-        updateCardsPerView();
-        window.addEventListener('resize', updateCardsPerView);
-        return () => window.removeEventListener('resize', updateCardsPerView);
-    }, []);
 
     // Measure card content heights and find the maximum
     useEffect(() => {
