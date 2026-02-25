@@ -113,7 +113,7 @@ function AppsPageContent({ contributeUrl, docsUrl, defaultImage }) {
 
       <main className="tw-relative tw-z-20">
         {/* Curated Apps Carousel */}
-        <div style={{ backgroundColor: '#060010' }}>
+        <div className="tw-bg-white dark:tw-bg-[#060010]">
           <CardCarouselGeneric
             cards={curatedApps}
             renderCard={renderCuratedAppCard}
