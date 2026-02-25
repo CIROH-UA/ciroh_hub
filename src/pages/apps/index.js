@@ -13,7 +13,7 @@ import HydroShareLogo from '@site/static/img/logos/hydroshare-white.png';
 import useBaseUrl from '@docusaurus/useBaseUrl';
 import { useColorMode } from '@docusaurus/theme-common';
 import curatedApps from "./curatedApps";
-import { ResourceCard } from "@site/src/components/HydroShareResourcesCards";
+import ResourceCardCurated from "@site/src/components/HydroShareResourceCardsCurated";
 
 const items = [
   {
@@ -64,7 +64,7 @@ function AppsPageContent({ contributeUrl, docsUrl, defaultImage }) {
 
   // Function to render each card in the curated apps carousel.
   const renderCuratedAppCard = (card, index, cardProperties) => (
-    <ResourceCard
+    <ResourceCardCurated
       resource={{
         authors: card.authors,
         description: card.description,
