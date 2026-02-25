@@ -81,92 +81,96 @@ const CardCarouselGeneric = ({ cards, cardsPerView = 3, header, renderCard }) =>
 
             {/* Carousel Container */}
             <div className="tw-relative tw-max-w-7xl tw-mx-auto tw-px-4">
-                {/* Carousel Wrapper */}
-                <div
-                    className={clsx(
-                        'tw-overflow-hidden tw-rounded-3xl tw-p-8 tw-relative',
-                        'tw-bg-gradient-to-b tw-from-white tw-to-slate-50',
-                        'dark:tw-from-slate-800 dark:tw-to-slate-900',
-                        'tw-border-2 tw-border-slate-200 dark:tw-border-slate-700',
-                        'tw-shadow-xl dark:tw-shadow-2xl'
-                    )}
-                    onMouseEnter={stopAutoScroll}
-                    onMouseLeave={resetAutoScroll}
-                >
-                    {/* Carousel Stage */}
-                    <div className="tw-relative tw-overflow-hidden tw-w-full">
-                        <div
-                            className="tw-flex tw-transition-transform tw-duration-600 tw-ease-out tw-w-full"
-                            style={{
-                                transform: `translateX(${offset}%)`,
-                            }}
-                        >
-                            {cards.map((card, index) => (
-                                <div
-                                    key={index}
-                                    className="tw-flex-shrink-0"
-                                    style={{ width: `${100 / cardsPerView}%` }}
-                                >
-                                    <div className="tw-px-4">
-                                        {/**
-                                         * The renderCard property is responsible for rendering the card content.
-                                         * It receives the card, its index, and a cardProperties object with a ref and style for measuring content height.
-                                         */}
-                                        {renderCard(
-                                            card,
-                                            index,
-                                            {
-                                                ref: (el) => {
-                                                    if (el) contentRefsRef.current[index] = el;
-                                                },
-                                                style: { height: `${maxContentHeight + 224}px` },
-                                            }
-                                        )}
+
+                {/* Flexbox */}
+                <div className="tw-flex tw-items-center tw-relative">
+                    
+                    {/* Navigation Arrow Left */}
+                    <button
+                        onClick={() => {
+                            prevSlide();
+                            resetAutoScroll();
+                        }}
+                        className={clsx(
+                            'tw-p-3 tw-rounded-full tw-transition-all tw-duration-300',
+                            'tw-bg-slate-200 dark:tw-bg-slate-700 tw-text-slate-900 dark:tw-text-white',
+                            'hover:tw-scale-110 hover:tw-bg-blue-500 hover:tw-text-white dark:hover:tw-bg-blue-500',
+                            'tw-shadow-lg dark:tw-shadow-xl tw-z-10'
+                        )}
+                        aria-label="Previous slide"
+                    >
+                        <svg className="tw-w-6 tw-h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                        </svg>
+                    </button>
+
+                    {/* Carousel Wrapper */}
+                    <div
+                        className={clsx(
+                            'tw-overflow-hidden tw-rounded-3xl tw-p-8 tw-relative',
+                            'tw-bg-gradient-to-b tw-from-white tw-to-slate-50',
+                            'dark:tw-from-slate-800 dark:tw-to-slate-900',
+                            'tw-border-2 tw-border-slate-200 dark:tw-border-slate-700',
+                            'tw-shadow-xl dark:tw-shadow-2xl tw-flex-1'
+                        )}
+                        onMouseEnter={stopAutoScroll}
+                        onMouseLeave={resetAutoScroll}
+                    >
+                        {/* Carousel Stage */}
+                        <div className="tw-relative tw-overflow-hidden tw-w-full">
+                            <div
+                                className="tw-flex tw-transition-transform tw-duration-600 tw-ease-out tw-w-full"
+                                style={{
+                                    transform: `translateX(${offset}%)`,
+                                }}
+                            >
+                                {cards.map((card, index) => (
+                                    <div
+                                        key={index}
+                                        className="tw-flex-shrink-0"
+                                        style={{ width: `${100 / cardsPerView}%` }}
+                                    >
+                                        <div className="tw-px-4">
+                                            {/**
+                                             * The renderCard property is responsible for rendering the card content.
+                                             * It receives the card, its index, and a cardProperties object with a ref and style for measuring content height.
+                                             */}
+                                            {renderCard(
+                                                card,
+                                                index,
+                                                {
+                                                    ref: (el) => {
+                                                        if (el) contentRefsRef.current[index] = el;
+                                                    },
+                                                    style: { height: `${maxContentHeight + 224}px` },
+                                                }
+                                            )}
+                                        </div>
                                     </div>
-                                </div>
-                            ))}
+                                ))}
+                            </div>
                         </div>
                     </div>
+                    
+                    {/* Navigation Arrow Right */}
+                    <button
+                        onClick={() => {
+                            nextSlide();
+                            resetAutoScroll();
+                        }}
+                        className={clsx(
+                            'tw-p-3 tw-rounded-full tw-transition-all tw-duration-300',
+                            'tw-bg-slate-200 dark:tw-bg-slate-700 tw-text-slate-900 dark:tw-text-white',
+                            'hover:tw-scale-110 hover:tw-bg-blue-500 hover:tw-text-white dark:hover:tw-bg-blue-500',
+                            'tw-shadow-lg dark:tw-shadow-xl tw-z-10'
+                        )}
+                        aria-label="Next slide"
+                    >
+                        <svg className="tw-w-6 tw-h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                        </svg>
+                    </button>
                 </div>
-
-                {/* Navigation Arrows */}
-                <button
-                    onClick={() => {
-                        prevSlide();
-                        resetAutoScroll();
-                    }}
-                    className={clsx(
-                        'tw-absolute tw-left-0 tw-top-1/2 -tw-translate-y-1/2 -tw-translate-x-6',
-                        'tw-p-3 tw-rounded-full tw-transition-all tw-duration-300',
-                        'tw-bg-slate-200 dark:tw-bg-slate-700 tw-text-slate-900 dark:tw-text-white',
-                        'hover:tw-scale-110 hover:tw-bg-blue-500 hover:tw-text-white dark:hover:tw-bg-blue-500',
-                        'tw-shadow-lg dark:tw-shadow-xl tw-z-10'
-                    )}
-                    aria-label="Previous slide"
-                >
-                    <svg className="tw-w-6 tw-h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                    </svg>
-                </button>
-
-                <button
-                    onClick={() => {
-                        nextSlide();
-                        resetAutoScroll();
-                    }}
-                    className={clsx(
-                        'tw-absolute tw-right-0 tw-top-1/2 -tw-translate-y-1/2 tw-translate-x-6',
-                        'tw-p-3 tw-rounded-full tw-transition-all tw-duration-300',
-                        'tw-bg-slate-200 dark:tw-bg-slate-700 tw-text-slate-900 dark:tw-text-white',
-                        'hover:tw-scale-110 hover:tw-bg-blue-500 hover:tw-text-white dark:hover:tw-bg-blue-500',
-                        'tw-shadow-lg dark:tw-shadow-xl tw-z-10'
-                    )}
-                    aria-label="Next slide"
-                >
-                    <svg className="tw-w-6 tw-h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                    </svg>
-                </button>
 
                 {/* Navigation Dots */}
                 <div className="tw-flex tw-justify-center tw-gap-3 tw-mt-8">
