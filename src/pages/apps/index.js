@@ -98,14 +98,6 @@ function AppsPageContent({ contributeUrl, docsUrl, defaultImage }) {
               ]}
         />
       </div>
-      
-      {/* Curated Apps Carousel */}
-      <CardCarouselGeneric
-        cards={curatedApps}
-        renderCard={renderCuratedAppCard}
-        cardsPerView={1}
-      />
-
       </section>
 
       {/* Stats */}
@@ -120,6 +112,15 @@ function AppsPageContent({ contributeUrl, docsUrl, defaultImage }) {
       />
 
       <main className="tw-relative tw-z-20">
+        {/* Curated Apps Carousel */}
+        <div style={{ backgroundColor: '#060010' }}>
+          <CardCarouselGeneric
+            cards={curatedApps}
+            renderCard={renderCuratedAppCard}
+            cardsPerView={1}
+          />
+        </div>
+
         <HydroShareResourcesSelector
           keyword="nwm_portal_app,ciroh_hub_app"
           defaultImage={defaultImage}
