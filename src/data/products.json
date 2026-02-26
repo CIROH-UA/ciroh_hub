@@ -139,6 +139,7 @@
       ],
       "iconUrl": "https://img.icons8.com/fluency/96/000000/tsunami.png",
       "links": {
+        "docs": "/docs/products/community-fim/",
         "github": "https://github.com/sdmlua/FIMserv"
       }
     },

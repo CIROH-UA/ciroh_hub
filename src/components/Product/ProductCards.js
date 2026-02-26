@@ -2,6 +2,7 @@ import React from "react";
 import styles from "./ProductCards.module.css";
 import useBaseUrl from "@docusaurus/useBaseUrl";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
+import Link from '@docusaurus/Link';
 
 // Icons for different link types
 const LinkIcon = ({ type, url }) => {
@@ -68,7 +69,7 @@ const ProductCard = ({ product }) => {
           </div>
         </div>
         <div className={styles.cardHeaderContent}>
-          <h3 className={styles.productName}>{product.name}</h3>
+          <Link to={product.links.docs}><h3 className={styles.productName}>{product.name}</h3></Link>
           <CategoryBadge category={product.category} />
         </div>
       </div>
