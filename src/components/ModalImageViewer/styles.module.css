@@ -1,0 +1,4 @@
+.modalBelowNavbar {
+  top: var(--ifm-navbar-height);
+  height: calc(100vh - var(--ifm-navbar-height));
+}
