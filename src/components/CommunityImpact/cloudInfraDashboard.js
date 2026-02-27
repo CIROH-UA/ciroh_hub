@@ -180,9 +180,9 @@ export default function CloudInfraDashboard({ cards = [] }) {
                 <div className="header">
                     <h1 className="tw-text-4xl tw-font-extrabold tw-text-center tw-mb-6
                 tw-text-black dark:tw-text-white">
-                Cloud Infrastructure
+                Research to Operations Hybrid Cloud (R2OHC)
             </h1>
-                    <p className="tw-text-gray-700 dark:tw-text-white">Real-time metrics across all platforms</p>
+                    <p className="tw-text-gray-700 dark:tw-text-white">Last updated: September 2025</p>
                 </div>
 
                 <div className="cards-grid">

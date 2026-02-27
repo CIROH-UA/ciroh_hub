@@ -4,6 +4,7 @@ import styles from "./styles.module.css";
 import ExploreFeature from './ExploreFeature';
 import FeedbackFeature from './FeedbackFeature';
 import ResearchFeature from './ResearchFeature';
+import InfrastructureFeature from './InfrastructureFeature';
 import TestimonialGallery from './TestimonialGallery';
 import TeamGallery from './TeamGallery';
 import OrgGallery from './OrgGallery';
@@ -17,6 +18,8 @@ export default function HomepageFeatures() {
         
         <ExploreFeature />
         <ResearchFeature />
+        <br /> {/* Protects against these panels melding together */}
+        <InfrastructureFeature />
         <TeamGallery />
         <FeedbackFeature />
         <TestimonialGallery />

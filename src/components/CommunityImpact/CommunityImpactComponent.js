@@ -8,6 +8,7 @@ import CardSwap, { Card } from './cardSwap'
 import Particles from './particleBG';
 import CloudInfraDashboard from "./cloudInfraDashboard";
 import Link from '@docusaurus/Link';
+import { communityImpactData } from '@site/src/data/communityImpactData';
 
 
 const ImpactItem = ({ title, count, imageSrc, users }) => (
@@ -27,28 +28,28 @@ export default function CommunityImpactComponent() {
     color: "#FF9900",
     svg: <img src={useBaseUrl("/img/logos/corp/aws-black.svg")} alt="AWS Logo" />,
     stats: [
-      { value: 24, bar: "38%", label: "Ongoing Projects" },
-      { value: 69, bar: "17%", label: "Active Users" },
+      { value: communityImpactData.aws.projects, bar: communityImpactData.aws.projectsBar, label: "Ongoing Projects" },
+      { value: communityImpactData.aws.users, bar: communityImpactData.aws.usersBar, label: "Active Users" },
     ],
   },
   {
     accent: "gcp",
-    title: "GCP / JupyterHub",
+    title: "GCP + 2i2c JupyterHub",
     color: "#4285F4",
     svg: <img src={useBaseUrl("/img/logos/corp/google-cloud.jpg")} alt="GCP Logo" />,
     stats: [
-      { value: 63, bar: "100%", label: "Ongoing Projects" },
-      { value: 183, bar: "45%", label: "Active Users" },
+      { value: communityImpactData.gcp.projects, bar: communityImpactData.gcp.projectsBar, label: "Ongoing Projects" },
+      { value: communityImpactData.gcp.users, bar: communityImpactData.gcp.usersBar, label: "Active Users" },
     ],
   },
   {
     accent: "hpc",
-    title: "On-premise HPC",
+    title: "On-Premise HPC",
     color: "#10B981",
     svg: <img src={useBaseUrl("/img/logos/pantarhei.jpg")} alt="HPC Logo" />,
     stats: [
-      { value: 57, bar: "75%", label: "Ongoing Projects" },
-      { value: 78, bar: "30%", label: "Active Users" },
+      { value: communityImpactData.nsf.projects, bar: communityImpactData.nsf.projectsBar, label: "Ongoing Projects" },
+      { value: communityImpactData.nsf.users, bar: communityImpactData.nsf.usersBar, label: "Active Users" },
     ],
   },
   {
@@ -57,8 +58,8 @@ export default function CommunityImpactComponent() {
     color: "#8B5CF6",
     svg: <img src={useBaseUrl("/img/logos/nsf-logo.png")} alt="NSF Logo" />,
     stats: [
-      { value: 7, bar: "50%", label: "Ongoing Projects" },
-      { value: 75, bar: "60%", label: "Active Users" },
+      { value: communityImpactData.nsf.projects, bar: communityImpactData.nsf.projectsBar, label: "Ongoing Projects" },
+      { value: communityImpactData.nsf.users, bar: communityImpactData.nsf.usersBar, label: "Active Users" },
     ],
   },
 ];
