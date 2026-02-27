@@ -1,8 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { LiaExternalLinkSquareAltSolid } from 'react-icons/lia';
-import { FaGraduationCap } from 'react-icons/fa';
+import { FaGraduationCap, FaRegImage } from 'react-icons/fa';
 import { IoTvOutline } from 'react-icons/io5';
 import { HiOutlineGlobeAlt, HiOutlineUserGroup } from 'react-icons/hi';
+import ModalImageViewer from '@site/src/components/ModalImageViewer';
 
 
 function isPlaceholder(resource) {
@@ -69,6 +70,9 @@ export default function ResourceCardCurated({ resource, defaultImage }) {
     const resourceUrl = resource?.resource_url;
     const embedUrl = resource?.embed_url;
     const resourceType = resource?.resource_type;
+    const resourceImages = resource?.images || [];
+
+    const [showImageModal, setShowImageModal] = useState(false);
 
     useEffect(() => {
         if (!showEmbed || !embedUrl) {
@@ -114,106 +118,124 @@ export default function ResourceCardCurated({ resource, defaultImage }) {
         return () => window.removeEventListener('keydown', onKeyDown);
     }, [showEmbed]);
 
+    // Close image modal on Escape key press
+    useEffect(() => {
+        if (!showImageModal) return;
+        const onKeyDown = (e) => {
+            if (e.key === 'Escape') setShowImageModal(false);
+        };
+        window.addEventListener('keydown', onKeyDown);
+        return () => window.removeEventListener('keydown', onKeyDown);
+    }, [showImageModal]);
+
     return (
-        // Card Container
-        <div className="tw-flex tw-h-80 tw-rounded-xl tw-shadow-md tw-bg-slate-100 dark:tw-bg-slate-900">
+        <>
+            {/* Card Container */}
+            <article className="tw-flex tw-h-80 tw-rounded-xl tw-shadow-md tw-bg-slate-100 dark:tw-bg-slate-900">
 
-            {/* Content Container */}
-            <div className="tw-flex tw-flex-row tw-w-full">
+                {/* Content Container */}
+                <div className="tw-flex tw-flex-row tw-w-full">
 
-                {/* Image Container */}
-                <div className="tw-flex tw-items-center tw-justify-center tw-w-72 tw-h-full tw-rounded-xl tw-bg-slate-100 dark:tw-bg-slate-900">
-                    {/* Image Background */}
-                    <div className="tw-flex tw-items-center tw-justify-center tw-w-[80%] tw-h-[80%] tw-rounded-xl dark:tw-bg-slate-800">
-                        {/* Image */}
-                        <img
-                            src={thumbnailUrl}
-                            alt={`${title} thumbnail`}
-                            className="tw-w-full tw-h-full tw-object-contain tw-rounded-md tw-p-8 dark:tw-bg-slate-800"
-                        />
-                    </div>
-                </div>
+                    {/* Image Container */}
+                    <div className="tw-relative tw-flex tw-flex-col tw-items-center tw-justify-center tw-w-72 tw-h-full tw-rounded-xl tw-bg-slate-100 dark:tw-bg-slate-900">
+                        {/* Image Background */}
+                        <div className="tw-relative tw-flex tw-items-center tw-justify-center tw-w-[80%] tw-h-[80%] tw-rounded-xl dark:tw-bg-slate-800" onClick={() => setShowImageModal(true)}>
+                            {/* Image */}
+                            <img
+                                src={thumbnailUrl}
+                                alt={`${title} thumbnail`}
+                                className="tw-w-full tw-h-full tw-object-contain tw-rounded-md tw-p-8 dark:tw-bg-slate-800"
+                            />
 
-                {/* Vertical Divider */}
-                <div className="tw-w-[2px] tw-bg-slate-200 dark:tw-bg-slate-800"></div>
-
-                {/* Details & Links Container */}
-                <div className="tw-flex tw-flex-col tw-flex-1 tw-pt-4 tw-relative tw-rounded-xl">
-        
-                    {/* Title Authors Description Container */}
-                    <div className="tw-flex tw-flex-1 tw-flex-col tw-pl-4 tw-pr-4">
-                        {/* Title */}
-                        <h3 className="tw-text-base sm:tw-text-lg tw-font-semibold tw-leading-snug tw-mt-3 tw-mb-0 tw-text-slate-900 dark:tw-text-white tw-line-clamp-2">
-                            {pageUrl || resourceUrl ? (
-                                <a
-                                    href={pageUrl || resourceUrl}
-                                    target="_blank"
-                                    rel="noreferrer"
-                                    className="tw-no-underline hover:tw-text-cyan-700 dark:hover:tw-text-cyan-300"
-                                >
-                                    {title}
-                                </a>
-                        ) : (
-                            title
-                        )}
-                        </h3>
-
-                        {/* Authors */}
-                        {authors.length > 0 && (
-                            <div className="tw-flex tw-items-center tw-gap-2 tw-text-xs tw-mt-3 tw-mb-3 tw-text-slate-600 dark:tw-text-slate-300 tw-whitespace-normal tw-break-words">
-                                <span className="tw-shrink-0 tw-text-slate-500 dark:tw-text-slate-400" aria-hidden="true">
-                                    <HiOutlineUserGroup size={16} />
-                                </span>
-                                <span>
-                                    {authors.join(' • ')}
-                                </span>
+                            {/* Images Icon */}
+                            <div className="tw-absolute tw-inset-0 tw-flex tw-items-center tw-justify-center tw-bg-black/50 tw-opacity-0 hover:tw-opacity-100 tw-transition-opacity tw-text-white">
+                                <FaRegImage size={40} />
                             </div>
-                        )}
-
-                        {/* Description */}
-                        <div className="">
-                            {description && (
-                                <p className="tw-text-sm tw-leading-relaxed tw-text-slate-600 dark:tw-text-slate-300 tw-line-clamp-6">
-                                    {description}
-                                </p>
-                            )}
                         </div>
                     </div>
 
-                    {/* Links & Resource Type Container */}
-                    <div className="tw-flex tw-justify-between tw-items-center tw-w-full tw-rounded-br-xl tw-bg-blue-800 dark:tw-bg-slate-800 tw-px-4 tw-py-2">
-                        {/* Resource Type */}
-                        <div className="tw-flex tw-flex-wrap tw-gap-2 tw-justify-start">
-                            {resourceType && !placeholder && <StatTag>{resourceType}</StatTag>}
-                            {!resourceType && !placeholder && <StatTag>Resource</StatTag>}
+                    {/* Vertical Divider */}
+                    <div className="tw-w-[2px] tw-bg-slate-200 dark:tw-bg-slate-800"></div>
+
+                    {/* Details & Links Container */}
+                    <div className="tw-flex tw-flex-col tw-flex-1 tw-pt-4 tw-relative tw-rounded-xl">
+            
+                        {/* Title Authors Description Container */}
+                        <div className="tw-flex tw-flex-1 tw-flex-col tw-pl-4 tw-pr-4">
+                            {/* Title */}
+                            <h3 className="tw-text-base sm:tw-text-lg tw-font-semibold tw-leading-snug tw-mt-3 tw-mb-0 tw-text-slate-900 dark:tw-text-white tw-line-clamp-2">
+                                {pageUrl || resourceUrl ? (
+                                    <a
+                                        href={pageUrl || resourceUrl}
+                                        target="_blank"
+                                        rel="noreferrer"
+                                        className="tw-no-underline hover:tw-text-cyan-700 dark:hover:tw-text-cyan-300"
+                                    >
+                                        {title}
+                                    </a>
+                            ) : (
+                                title
+                            )}
+                            </h3>
+
+                            {/* Authors */}
+                            {authors.length > 0 && (
+                                <div className="tw-flex tw-items-center tw-gap-2 tw-text-xs tw-mt-3 tw-mb-3 tw-text-slate-600 dark:tw-text-slate-300 tw-whitespace-normal tw-break-words">
+                                    <span className="tw-shrink-0 tw-text-slate-500 dark:tw-text-slate-400" aria-hidden="true">
+                                        <HiOutlineUserGroup size={16} />
+                                    </span>
+                                    <span>
+                                        {authors.join(' • ')}
+                                    </span>
+                                </div>
+                            )}
+
+                            {/* Description */}
+                            <div className="">
+                                {description && (
+                                    <p className="tw-text-sm tw-leading-relaxed tw-text-slate-600 dark:tw-text-slate-300 tw-line-clamp-6">
+                                        {description}
+                                    </p>
+                                )}
+                            </div>
                         </div>
 
-                        {/* Links */}
-                        <div className="tw-flex tw-justify-end tw-gap-2">
-                            {embedUrl && (
-                                <ActionButton onClick={() => setShowEmbed(true)} title="View Embed">
-                                    <IoTvOutline size={20} />
-                                </ActionButton>
-                            )}
-                            {pageUrl && (
-                                <ActionLink href={pageUrl} title="View Page">
-                                    <HiOutlineGlobeAlt size={20} />
-                                </ActionLink>
-                            )}
-                            {docsUrl && (
-                                <ActionLink href={docsUrl} title="View Documentation">
-                                    <FaGraduationCap size={20} />
-                                </ActionLink>
-                            )}
-                            {resourceUrl && (
-                                <ActionLink href={resourceUrl} title="View Resource">
-                                    <LiaExternalLinkSquareAltSolid size={20} />
-                                </ActionLink>
-                            )}
+                        {/* Links & Resource Type Container */}
+                        <div className="tw-flex tw-justify-between tw-items-center tw-w-full tw-rounded-br-xl tw-bg-blue-800 dark:tw-bg-slate-800 tw-px-4 tw-py-2">
+                            {/* Resource Type */}
+                            <div className="tw-flex tw-flex-wrap tw-gap-2 tw-justify-start">
+                                {resourceType && !placeholder && <StatTag>{resourceType}</StatTag>}
+                                {!resourceType && !placeholder && <StatTag>Resource</StatTag>}
+                            </div>
+
+                            {/* Links */}
+                            <div className="tw-flex tw-justify-end tw-gap-2">
+                                {embedUrl && (
+                                    <ActionButton onClick={() => setShowEmbed(true)} title="View Embed">
+                                        <IoTvOutline size={20} />
+                                    </ActionButton>
+                                )}
+                                {pageUrl && (
+                                    <ActionLink href={pageUrl} title="View Page">
+                                        <HiOutlineGlobeAlt size={20} />
+                                    </ActionLink>
+                                )}
+                                {docsUrl && (
+                                    <ActionLink href={docsUrl} title="View Documentation">
+                                        <FaGraduationCap size={20} />
+                                    </ActionLink>
+                                )}
+                                {resourceUrl && (
+                                    <ActionLink href={resourceUrl} title="View Resource">
+                                        <LiaExternalLinkSquareAltSolid size={20} />
+                                    </ActionLink>
+                                )}
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
+            </article>
+            <ModalImageViewer className="tw-absolute" open={showImageModal} onClose={() => setShowImageModal(false)} title={title} images={resourceImages} />
+        </>
     );
 }

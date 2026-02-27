@@ -76,6 +76,7 @@ function AppsPageContent({ contributeUrl, docsUrl, defaultImage }) {
         resource_url: card.resource_url,
         thumbnail_url: card.thumbnail_url,
         title: card.title,
+        images: card.images,
       }}
       defaultImage={defaultImage}
     />

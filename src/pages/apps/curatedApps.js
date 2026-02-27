@@ -10,6 +10,7 @@ export default [
         resource_url: "https://www.hydroshare.org/resource/e48fa7b8ef554e8e973b81fbca266013/",
         thumbnail_url: "https://ciroh-portal-static-data.s3.us-east-1.amazonaws.com/e789e659-41c1-4683-bc3a-f7e68d41719c.png",
         title: "National Water Prediction Service (NWPS) Website",
+        images: [],
     },
     {
         authors: "Cuahsi",
@@ -22,6 +23,7 @@ export default [
         resource_url: "https://www.hydroshare.org/resource/cef9cfb6785e4836b63471622f48ce29/",
         thumbnail_url: "https://ciroh-portal-static-data.s3.us-east-1.amazonaws.com/55f0dd78-a0be-4523-8a8d-5ec3523036d1.png",
         title: "HydroShare",
+        images: [],
     },
     {
         authors: " Manjila Singh 🖊  Arpita Patel 🖊  Nia Minor",
@@ -34,6 +36,7 @@ export default [
         resource_url: "https://www.hydroshare.org/resource/3bcdb3f7cefd48f4af74cd4c83a647f3/",
         thumbnail_url: "https://ciroh-portal-static-data.s3.us-east-1.amazonaws.com/a551dc55-5f40-4217-aaf9-c4dff155d13e.jpg",
         title: "NGIAB Product Portfolio Website",
+        images: [],
     },
     {
         authors: ' Corey Krewson',
@@ -46,6 +49,7 @@ export default [
         resource_url: 'https://www.hydroshare.org/resource/16e3318a244c4817b5d7c22759346c95/',
         thumbnail_url: 'https://ciroh-portal-static-data.s3.us-east-1.amazonaws.com/e7f50c88-adcb-48b8-8e99-c1f54d0b9960.png',
         title: 'TethysDash',
+        images: [],
     },
     {
         authors: " Anthony Castronova",
@@ -58,6 +62,7 @@ export default [
         resource_url: "https://www.hydroshare.org/resource/33c45575b95f45c4bf7335faab67ed36/",
         thumbnail_url: "https://avatars0.githubusercontent.com/u/17927519?v=3&s=400",
         title: "CUAHSI JupyterHub",
+        images: [],
     },
     {
         authors: " Arpita Patel 🖊  Benjamin Lee 🖊  Nia Minor 🖊  Manjila Singh 🖊  Anthony Castronova",
@@ -70,6 +75,7 @@ export default [
         resource_url: "https://www.hydroshare.org/resource/2dd1ac86e8854d4fb9fe5fbafaec2b98/",
         thumbnail_url: "https://ciroh.ua.edu/wp-content/uploads/2022/08/CIROHLogo_200x200.png",
         title: "CIROH-2i2c JupyterHub",
+        images: [],
     },
 ]
 
