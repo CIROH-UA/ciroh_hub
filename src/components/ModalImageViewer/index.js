@@ -129,12 +129,14 @@ export default function ModalImageViewer({ open, onClose, title, images }) {
                 <h2 className="tw-text-lg tw-font-bold tw-self-center tw-mb-0 tw-text-cyan-700 dark:tw-text-cyan-300">{title}</h2>
 
                 {/* Selected Image Container */}
-                <div className="tw-flex tw-flex-col tw-flex-1 tw-w-full tw-h-4/5 tw-items-center tw-gap-4">
-                    <img
-                        src={images[selectedImageIndex]}
-                        alt="Selected"
-                        className="tw-w-full tw-h-full tw-object-contain tw-rounded"
-                    />
+                <div className="tw-flex tw-flex-col tw-flex-1 tw-w-full tw-h-4/5 tw-items-center tw-justify-center tw-gap-4">
+                    { images[selectedImageIndex] ? (
+                         <img
+                            src={images[selectedImageIndex]}
+                            alt="Selected"
+                            className="tw-w-full tw-h-full tw-object-contain tw-rounded"
+                        />
+                    ) : <h1 className="tw-flex tw-text-center tw-text tw-text-[#2F455C] dark:tw-text-[#B8C7D9]">No images available</h1>}
                 </div>
 
                 {/* Thumbnail Images Row */}
@@ -144,7 +146,8 @@ export default function ModalImageViewer({ open, onClose, title, images }) {
                     <div
                         className={
                             `tw-absolute pointer-events-none tw-border-solid tw-border-8 tw-border-blue-700 dark:tw-border-white tw-rounded-lg` +
-                            (enableTransition ? ' tw-transition-all tw-duration-300 tw-ease-in-out' : '')
+                            (enableTransition ? ' tw-transition-all tw-duration-300 tw-ease-in-out' : '') +
+                            (images.length <= 0 ? ' tw-invisible' : '')
                         }
                         style={{
                             left: indicatorRect.left,
@@ -153,9 +156,7 @@ export default function ModalImageViewer({ open, onClose, title, images }) {
                             height: indicatorRect.height,
                             zIndex: 1,
                         }}
-                    >
-                        {/* <div className="tw-w-full tw-h-full tw-border-solid tw-border-2 tw-border-black dark:tw-border-white"></div> */}
-                    </div>
+                    />
 
                     {/* Thumbnail Images */}
                     {images.map((src, idx) => (
