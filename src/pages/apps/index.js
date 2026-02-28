@@ -116,6 +116,7 @@ function AppsPageContent({ contributeUrl, docsUrl, defaultImage }) {
         {/* Curated Apps Carousel */}
         <div className="tw-bg-white dark:tw-bg-[#060010]">
           <CardCarouselGeneric
+            header="Featured Apps"
             cards={curatedApps}
             renderCard={renderCuratedAppCard}
             cardsPerView={1}

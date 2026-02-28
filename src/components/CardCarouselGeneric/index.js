@@ -77,7 +77,9 @@ const CardCarouselGeneric = ({ cards, cardsPerView = 3, header, renderCard }) =>
     return (
         <div className="tw-w-full tw-relative tw-py-12">
             {/* Header */}
-            { header }
+            <div className="tw-text-2xl sm:tw-text-3xl tw-font-bold tw-text-cyan-600 dark:tw-text-cyan-400 tw-text-center">
+                { header }
+            </div>
 
             {/* Carousel Container */}
             <div className="tw-relative tw-max-w-7xl tw-mx-auto tw-px-4">
