@@ -1,0 +1,17 @@
+.curatedScrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: #9ca6b1 #e0e0e000;
+}
+
+.curatedScrollbar::-webkit-scrollbar {
+    width: 8px;
+}
+
+.curatedScrollbar::-webkit-scrollbar-thumb {
+    background-color: #9ca6b1;
+    border-radius: 4px;
+}
+
+.curatedScrollbar::-webkit-scrollbar-track {
+    background-color: #e0e0e000;
+}
