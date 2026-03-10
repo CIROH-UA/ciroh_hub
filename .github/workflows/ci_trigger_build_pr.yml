@@ -1,0 +1,44 @@
+# Triggers a CI/CD deployment from the main branch to staging.
+
+name: 'CI: Trigger deployment from PR'
+run-name: 'Trigger PR deployment on ref "${{github.ref}}"'
+
+on:
+  pull_request:
+    types: [labeled, reopened, synchronize]
+
+env:
+  STAGING_REPO: ${{ vars.COMPOSITE_TARGET_REPO }}
+  STAGING_PATH: staging/
+
+jobs:
+  trigger-build:
+    if: contains(${{github.event.labels.*.name}}, 'Preview on staging')
+    runs-on: ubuntu-latest
+    steps:
+    - name: 'Set deployment target'
+      run: echo "DEPLOY_ENV=pr-staging" >> $GITHUB_ENV
+
+    - name: Set deployment target
+      run: |
+        echo "DEPLOY_ENV=pr-staging" >> $GITHUB_ENV
+        echo "TARGET_REPO=$STAGING_REPO" >> $GITHUB_ENV
+        echo "TARGET_PATH=${{ env.STAGING_PATH }}${{ github.event.number }}/" >> $GITHUB_ENV
+        echo "Deploying to $STAGING_REPO as STAGING at path $STAGING_PATH${{ github.event.number }}/"
+        echo "SOURCE_REF=${{ github.ref }}" >> $GITHUB_ENV
+
+    # Checkout to fetch commit header
+    - name: Checkout
+      uses: actions/checkout@v4
+      
+    - name: Fetch commit header
+      run: |
+        header="$(git log -1 --pretty=%B | head -n 1)"
+        echo "COMMIT_HEADER=${header}" >> $GITHUB_ENV
+      # Credit to the solution at https://github.com/orgs/community/discussions/106392
+
+    - name: 'Send repository dispatch'
+      uses: peter-evans/repository-dispatch@v4
+      with:
+        event-type: create-build
+        client-payload: '{"deploy_env": "${{ env.DEPLOY_ENV }}", "source_ref": "${{ env.SOURCE_REF }}", "target_repo": "${{ env.TARGET_REPO }}", "target_path": "${{ env.TARGET_PATH }}", "commit_header": "${{ env.COMMIT_HEADER }}", "pr_number": "${{ github.event.number }}", "type_description": "PR #${{ github.event.number }} staging"}'

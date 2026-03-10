@@ -1,10 +1,11 @@
 # This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
 # For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
 
-# Will soon be renamed to cd_build_artifact.yml.
+# Will soon be renamed to ci_build_artifact.yml.
 # Trigger logic has been spun out into the various 'ci_trigger_*.yml' workflows.
 
 name: 'CI: Create Build Artifact'
+run-name: 'Create build artifact for ${{github.event.client_payload.type_description}}: "${{github.event.client_payload.commit_header}}"'
 
 on:
   repository_dispatch:
@@ -21,21 +22,31 @@ jobs:
     steps:
     - name: Extract payload inputs
       run: |
-        echo "DEPLOY_ENV = ${{ github.event.client_payload.deploy_env }}" >> $GITHUB_ENV
-        echo "BASE_URL = ${{ vars.BASE_URL_PREFIX }}${{ github.event.client_payload.base_url }}" >> $GITHUB_ENV
+        echo "DEPLOY_ENV=${{ github.event.client_payload.deploy_env }}" >> $GITHUB_ENV
+        echo "TARGET_REPO=${{ github.event.client_payload.target_repo }}" >> $GITHUB_ENV
+        echo "TARGET_PATH=${{ github.event.client_payload.target_path }}" >> $GITHUB_ENV
+        echo "COMMIT_HEADER=${{ github.events.client_payload.commit_header }}" >> $GITHUB_ENV
+        echo "PR_NUMBER=${{ github.event.client_payload.pr_number }}" >> $GITHUB_ENV
+        
+        if {{ target_path != '.' }}; then
+          echo "BASE_URL=${{ vars.BASE_URL_PREFIX }}/${{ github.event.client_payload.target_path }}" >> $GITHUB_ENV
+        else
+          echo "BASE_URL=${{ vars.BASE_URL_PREFIX }}/" >> $GITHUB_ENV
+        fi
+      # PR_NUMBER can and should be left empty for non-PR builds
       # BASE_URL_PREFIX is purely to allow testing on forks; it should be left empty on the main branch
     
     - name: Validate payload inputs
       run: |
-        if ![["$DEPLOY_ENV" = "production"] || ["$DEPLOY_ENV" = "staging"]]; then
-          echo "Invalid DEPLOY_ENV value. Expected 'production' or 'staging'; recieved '$DEPLOY_ENV'. "
+        if ![["$DEPLOY_ENV" = "production"] || ["$DEPLOY_ENV" = "staging"]] || ["$DEPLOY_ENV" = "pr-staging"]; then
+          echo "Invalid DEPLOY_ENV value '$DEPLOY_ENV'. Expected 'production', 'staging', or 'pr-staging'."
           exit 1
         fi
 
     - name: Checkout
       uses: actions/checkout@v4
       with:
-       fetch-depth: 0
+        ref: ${{ github.event.client_payload.source_ref }}
        
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v4
@@ -45,7 +56,10 @@ jobs:
         
     - name: Generate version
       id: version
-      run: echo "VERSION=$(date +'%Y%m%d-%H%M%S')" >> $GITHUB_OUTPUT
+      run: |
+        version=$(date +'%Y%m%d-%H%M%S')
+        echo "VERSION=${version}" >> $GITHUB_OUTPUT
+        echo "VERSION=${version}" >> $GITHUB_ENV
 
     - name: Install dependencies
       run: |
@@ -57,37 +71,22 @@ jobs:
     # a fresh lock file.
     # See also: https://github.com/npm/cli/issues/4828
 
-    # Determine if this is a production build
-    - name: Determine build type and version
-      id: build-info
-      run: |
-        echo "VERSION=$(date +'%Y%m%d-%H%M%S')" >> $GITHUB_ENV
-        
-        if [[ "${{ github.event_name }}" == "workflow_dispatch" && "${{ github.event.inputs.deploy_env }}" == "production" ]]; then
-          VERSION=$(date +'%Y%m%d-%H%M%S')
-          echo "DEPLOY_ENV=production" >> $GITHUB_ENV
-          echo "Building for PRODUCTION environment"
-        else
-          echo "DEPLOY_ENV=staging" >> $GITHUB_ENV
-          echo "Building for STAGING environment"
-        fi
-
     - name: Configure baseUrl
-      if: ${{ env.DEPLOY_ENV == 'staging' && env.deploy_env == 'staging-composite' }}
       run: |
         # Create a backup of the original config
         cp docusaurus.config.js docusaurus.config.js.bak
         
         # Use sed to replace the baseUrl value
         echo "Setting baseUrl to path '$BASE_URL'"
-        sed -i 's|baseUrl: '\''\/local\/'\''|baseUrl: '\''$BASE_URL'\''|g' docusaurus.config.js
-        sed -i 's|baseUrl: "\/local\/"|baseUrl: '\''$BASE_URL'\''|g' docusaurus.config.js
-        sed -i 's|baseUrl = '\''\/local\/'\''|baseUrl = '\''$BASE_URL'\''|g' docusaurus.config.js
-        sed -i 's|baseUrl = "\/local\/"|baseUrl = '\''$BASE_URL'\''|g' docusaurus.config.js
+        sed -i 's|baseUrl: '\''\/local\/'\''|baseUrl: '\''${{ env.BASE_URL }}'\''|g' docusaurus.config.js
+        sed -i 's|baseUrl: "\/local\/"|baseUrl: '\''${{ env.BASE_URL }}'\''|g' docusaurus.config.js
+        sed -i 's|baseUrl = '\''\/local\/'\''|baseUrl = '\''${{ env.BASE_URL }}'\''|g' docusaurus.config.js
+        sed -i 's|baseUrl = "\/local\/"|baseUrl = '\''${{ env.BASE_URL }}'\''|g' docusaurus.config.js
         
         # Show the changed config
-        echo "Modified docusaurus.config.js:"
-        cat docusaurus.config.js
+        config_out="$(cat docusaurus.config.js | head -n 10)"
+        echo "Modified docusaurus.config.js (first 10 lines):"
+        echo "${config_out}"
 
     # Build the site
     - name: Build website
@@ -106,7 +105,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         # Artifact name
-        name: build-${{ env.DEPLOY_ENV }}
+        name: build-${{ env.DEPLOY_ENV }}${{ env.PR_NUMBER }}
         #name: ${{env.GitVersion_SemVer}}
         # A file, directory or wildcard pattern that describes what to upload
         path: build/
@@ -135,4 +134,4 @@ jobs:
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
         event-type: build-completed
-        client-payload: '{"short_hash": "${{ steps.short-sha.outputs.SHORT_SHA }}", "commit_hash": "${{ github.sha }}", "commit_message": ${{ toJSON(github.event.head_commit.message) }}, "branch": "${{ github.ref_name }}", "env": "${{ env.DEPLOY_ENV }}", "version": "${{ env.VERSION }}"}'
+        client-payload: '{"env": "${{ env.DEPLOY_ENV }}", "version": "${{ env.VERSION }}", "target_repo": "${{ env.TARGET_REPO }}", "target_path": "{{ env.TARGET_PATH }}", "short_hash": "${{ steps.short-sha.outputs.SHORT_SHA }}", "commit_hash": "${{ github.sha }}", "commit_header": "${{ env.COMMIT_HEADER }}", "branch": "${{ github.ref_name }}", "pr_number": "${{ env.PR_NUMBER }}", "target_description": "/${{ env.TARGET_PATH }} @ ${{ env.TARGET_REPO }}"}'

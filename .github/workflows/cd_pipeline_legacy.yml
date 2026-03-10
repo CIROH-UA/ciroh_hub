@@ -4,6 +4,7 @@
 # Will soon be renamed to cd_deploy_legacy.yml.
 
 name: 'CD: Deploy build artifact to GitHub Pages (legacy)'
+run-name: 'CD: Deploy build artifact to GitHub Pages (legacy)'
 
 on:
   repository_dispatch:
@@ -68,7 +69,7 @@ jobs:
           token: ${{ secrets.GH_STAGING_TOKEN }}
           branch: main
           folder: build
-          repository-name: ${{ env.TARGET_REPO }}
+          repository-name: CIROH-UA/ciroh_hub_staging
 
       # Production: Upload pages artifact for deployment in current repo
       - name: Upload pages artifact for production
@@ -85,7 +86,7 @@ jobs:
             echo "Production build artifact uploaded. Deployment to GitHub Pages will complete in the next job." >> $GITHUB_STEP_SUMMARY
           else
             echo "Staging deployment completed successfully!"
-            echo "To deploy to production, manually trigger the 'CI: Trigger staging deployment from main' workflow."
+            echo "To deploy to production, manually trigger the 'CI: Trigger deployment from main' workflow."
           fi
 
   deploy-production:
