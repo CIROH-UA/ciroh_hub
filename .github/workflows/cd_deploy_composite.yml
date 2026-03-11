@@ -76,8 +76,8 @@ jobs:
           fi
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "- **Environment**: $ENVIRONMENT" >> $GITHUB_STEP_SUMMARY
-          echo "- **Version**: ${{ needs.deploy.outputs.version }}" >> $GITHUB_STEP_SUMMARY
-          echo "- **Deploy Target**: /${{ env.TARGET_PATH }} @ ${{ env.TARGET_REPO }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Version**: ${{ env.VERSION }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Deploy Target**: ${{ env.TARGET_PATH }} @ ${{ env.TARGET_REPO }}" >> $GITHUB_STEP_SUMMARY
           echo "- **URL (once live)**: https://hub.ciroh.org${{ env.BASE_URL }}" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "Deployment to GitHub Pages will be completed by the composite target repository, $TARGET_REPO." >> $GITHUB_STEP_SUMMARY
