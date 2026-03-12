@@ -1,3 +1,5 @@
+const { XMLParser } = require("fast-xml-parser");
+
 /**
  * Sample endpoint: 
  *   GET https://www.hydroshare.org/hsapi/resources/?subject=YOUR_KEYWORD
@@ -502,6 +504,86 @@ async function fetchRawCuratedResources(curated_parent_id) {
   }
 };
 
+/**
+ * Fetch the HydroShare resources that have been added to the specified collection resource.
+ * @param {string} collectionId - The ID of the HydroShare collection resource to fetch contained resources from.
+ * @returns {Promise<Array>} An array of HydroShare resources.
+ */
+async function fetchResourcesFromCollection(collectionId) {
+  // Fetch the collection metadata to extract its contained resource ids
+  const collectionMetadataUrl = `https://www.hydroshare.org/hsapi/resource/${collectionId}/scimeta/`;
+  const collectionMetadataResponse = await fetch(collectionMetadataUrl);
+  
+  // Error occurred
+  if (!collectionMetadataResponse.ok) {
+    throw new Error(`Error fetching collection metadata for ${collectionId} (status: ${collectionMetadataResponse.status})`);
+  }
+
+  // Parse the XML metadata to extract resource ids
+  const collectionMetadataText = await collectionMetadataResponse.text();
+  const xmlParser = new XMLParser();
+  const collectionMetadata = xmlParser.parse(collectionMetadataText);
+
+  // Extract each resource id from the collection metadata
+  const resourceIds = [];
+  for (const relation of collectionMetadata['rdf:RDF']['hsterms:CollectionResource']['dc:relation'])
+  {
+    // Extract resource id
+    const hasPartText = relation['rdf:Description']['dcterms:hasPart']
+    const url = hasPartText.split(' ').pop();
+    const resourceId = url.split('/').pop();
+    
+    // Add resource id to list
+    resourceIds.push(resourceId);
+  }
+
+  // Fetch all resources in parallel
+  const resourcePromises = resourceIds.map(resourceId =>
+    fetchResource(resourceId).catch(err => {
+      console.error(`Error fetching resource ${resourceId} from collection ${collectionId}:`, err);
+      return null;
+    })
+  );
+
+  const resources = (await Promise.all(resourcePromises)).filter(Boolean);
+
+  // Return the list of resources
+  return resources;
+}
+
+/**
+ * Fetch the URLs of image files for a given HydroShare resource.
+ * @param {string} resourceId - The ID of the HydroShare resource.
+ * @returns {Promise<Array<string>>} A promise that resolves to an array of image URLs.
+ */
+async function fetchResourceImageUrls(resourceId) {
+  // Fetch the list of files for the resource to find image files
+  const filesUrl = `https://www.hydroshare.org/hsapi/resource/${resourceId}/file_list/`;
+  const filesResponse = await fetch(filesUrl);
+
+  if (!filesResponse.ok) {
+    throw new Error(`Error fetching file list for resource ${resourceId} (status: ${filesResponse.status})`);
+  }
+
+  // Get the response data as JSON
+  const filesData = await filesResponse.json();
+
+  // Get the URLs of files that are images based on their content type
+  const imageUrls = [];
+  for (const result of filesData.results)
+  {
+    // Check if the content type indicates an image
+    if (result.content_type && result.content_type.startsWith('image/'))
+    {
+      // Add image URL to list
+      imageUrls.push(result.url);
+    }
+  }
+
+  // Return the list of image URLs
+  return imageUrls;
+}
+
 export {
   getCuratedIds, 
   fetchResource, 
@@ -513,5 +595,7 @@ export {
   fetchResourceMetadata,
   joinExtraResources, 
   fetchRawCuratedResources,
-  convertAuthorToLastFirst
+  convertAuthorToLastFirst,
+  fetchResourcesFromCollection,
+  fetchResourceImageUrls
 };

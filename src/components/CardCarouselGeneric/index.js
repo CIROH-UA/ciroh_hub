@@ -9,12 +9,50 @@ import './CardCarouselGeneric.css';
  * @param {number} cardsPerView - Number of cards to show per view (default: 3)
  * @param {React.ReactNode} header - Optional header
  * @param {(card: Object, index: number, cardProperties: {ref: (el: HTMLElement|null) => void, style: Object}) => React.ReactNode} renderCard - Function to render a card.
+ * @param {() => Promise<Object[]>} fetchCards - Function to fetch cards asynchronously. Should return a promise that resolves to an array of card objects. If not provided, the component will use the cards passed in the `cards` prop.
  */
-const CardCarouselGeneric = ({ cards, cardsPerView = 3, header, renderCard }) => {
+const CardCarouselGeneric = ({ cards = [], cardsPerView = 3, header, renderCard, fetchCards }) => {
     const [currentIndex, setCurrentIndex] = useState(0);
     const autoScrollRef = useRef(null);
     const [maxContentHeight, setMaxContentHeight] = useState(0);
     const contentRefsRef = useRef({});
+
+    const [fetchingCards, setFetchingCards] = useState(false);
+    const [carouselCards, setCarouselCards] = useState(cards || []);
+
+    // Fetch cards if fetchCards function is provided
+    useEffect(() => {
+        function fetchCardsHelper() {
+            let isMounted = true;
+            // Fetch cards asynchronously
+            async function doFetch() {
+                // fetchCards function provided
+                if (fetchCards)
+                {
+                    // Fetch cards and update state if component is still mounted
+                    setFetchingCards(true);
+                    const fetchedCards = await fetchCards();
+                    if (isMounted)
+                    {
+                        setCarouselCards(cards.concat(fetchedCards || []));
+                        setFetchingCards(false);
+                    }
+                }
+                // fetchCards function NOT provided
+                else
+                {
+                    setCarouselCards(cards || []);
+                }
+            }
+
+            // Start fetching cards
+            doFetch();
+
+            // Cleanup function to prevent state updates if component unmounts during fetch
+            return () => { isMounted = false; };
+        }
+        fetchCardsHelper();
+    }, []);
 
     // Measure card content heights and find the maximum
     useEffect(() => {
@@ -29,9 +67,9 @@ const CardCarouselGeneric = ({ cards, cardsPerView = 3, header, renderCard }) =>
                 setMaxContentHeight(maxHeight);
             }
         }, 100);
-    }, [cards, renderCard]);
+    }, [carouselCards, renderCard]);
 
-    const maxIndex = Math.max(0, cards.length - cardsPerView);
+    const maxIndex = Math.max(0, carouselCards.length - cardsPerView);
 
     const nextSlide = () => {
         setCurrentIndex(prev => {
@@ -126,7 +164,7 @@ const CardCarouselGeneric = ({ cards, cardsPerView = 3, header, renderCard }) =>
                                     transform: `translateX(${offset}%)`,
                                 }}
                             >
-                                {cards.map((card, index) => (
+                                {carouselCards.map((card, index) => (
                                     <div
                                         key={index}
                                         className="tw-flex-shrink-0"
@@ -176,7 +214,7 @@ const CardCarouselGeneric = ({ cards, cardsPerView = 3, header, renderCard }) =>
 
                 {/* Navigation Dots */}
                 <div className="tw-flex tw-justify-center tw-gap-3 tw-mt-8">
-                    {Array.from({ length: Math.ceil(cards.length / cardsPerView) }).map((_, i) => (
+                    {Array.from({ length: Math.ceil(carouselCards.length / cardsPerView) }).map((_, i) => (
                         <button
                             key={i}
                             onClick={() => {

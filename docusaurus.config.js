@@ -96,6 +96,8 @@ const config = {
     hs_redirect_uri: "https://portal.ciroh.org/contribute",
     hs_logout_endpoint: "https://www.hydroshare.org/accounts/logout/",
     hs_logout_redirect: "https://portal.ciroh.org/contribute",
+    hs_featured_apps_collection_id: process.env.HS_FEATURED_APPS_COLLECTION_ID || "dummy",
+
     // URL for submitting a new product request (used in ProductCards component)
     productIssueUrl: "https://github.com/CIROH-UA/ciroh-ua_website/issues/new?template=product-request.md",
 

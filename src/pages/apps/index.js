@@ -14,6 +14,8 @@ import useBaseUrl from '@docusaurus/useBaseUrl';
 import { useColorMode } from '@docusaurus/theme-common';
 import curatedApps from "./curatedApps";
 import ResourceCardCurated from "@site/src/components/HydroShareResourceCardsCurated";
+import { fetchResourcesFromCollection, fetchResourceCustomMetadata, fetchResourceImageUrls } from "@site/src/components/HydroShareImporter";
+import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 
 const items = [
   {
@@ -62,6 +64,9 @@ function AppsPageContent({ contributeUrl, docsUrl, defaultImage }) {
 
   const stats = useMemo(() => getResourceStats(apps), [apps]);
 
+  const { siteConfig } = useDocusaurusContext();
+  const featuredAppsCollectionId = siteConfig.customFields.hs_featured_apps_collection_id;
+
   // Function to render each card in the curated apps carousel.
   const renderCuratedAppCard = (card, index, cardProperties) => (
     <ResourceCardCurated
@@ -81,6 +86,62 @@ function AppsPageContent({ contributeUrl, docsUrl, defaultImage }) {
       defaultImage={defaultImage}
     />
   );
+
+  // Function to fetch resources from HydroShare and prepare the featured app cards for the carousel.
+  const fetchCuratedAppCards = async () => {
+    try {
+      // Fetch resources from the specified HydroShare collection for featured apps.
+      const resources = await fetchResourcesFromCollection(featuredAppsCollectionId);
+
+      // Map the fetched resources to the card format expected by the carousel.
+      const resourcesMapped = resources.map(resource => ({
+        authors: resource.authors.map(
+          (author) => author.split(',').reverse().join(' ')
+        ).join(' 🖊 '),
+        description: resource.abstract,
+        docs_url: resource.docs_url,
+        embed_url: resource.embed_url,
+        page_url: resource.page_url,
+        resource_id: resource.resource_id,
+        resource_type: resource.resource_type,
+        resource_url: resource.resource_url,
+        thumbnail_url: resource.thumbnail_url,
+        title: resource.resource_title,
+        images: resource.images,
+      }));
+
+      // Fetch metadata for each resource and update them individually
+      for (let resource of resourcesMapped) {
+        const customMetadata = await fetchResourceCustomMetadata(resource.resource_id);
+        let embedUrl = "";
+        if (customMetadata?.pres_path) embedUrl = `https://www.hydroshare.org/resource/${resource.resource_id}/data/contents/${customMetadata.pres_path}`;
+        resource.thumbnail_url = customMetadata?.thumbnail_url || resource.thumbnail_url;
+        resource.page_url = customMetadata?.page_url || resource.page_url;
+        resource.docs_url = customMetadata?.docs_url || resource.docs_url;
+        resource.embed_url = embedUrl;
+      }
+
+      // Fetch image URLs for each resource and update them individually
+      for (let resource of resourcesMapped) {
+        const imageUrls = await fetchResourceImageUrls(resource.resource_id);
+        resource.images = imageUrls;
+      }
+
+      // Override resource attributes with hardcoded values from curatedApps.js if they exist
+      for (const resource of resourcesMapped) {
+        const overrides = curatedApps[resource.resource_id];
+        if (overrides) {
+          Object.assign(resource, overrides);
+        }
+      }
+
+      // Return resources
+      return resourcesMapped;
+    } catch (error) {
+        console.error("Error fetching featured app cards:", error);
+        return [];
+    }
+  };
 
   return (
     <>
@@ -117,8 +178,8 @@ function AppsPageContent({ contributeUrl, docsUrl, defaultImage }) {
         <div className="tw-bg-white dark:tw-bg-[#060010]">
           <CardCarouselGeneric
             header="Featured Apps"
-            cards={curatedApps}
             renderCard={renderCuratedAppCard}
+            fetchCards={fetchCuratedAppCards}
             cardsPerView={1}
           />
         </div>
