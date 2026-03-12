@@ -24,7 +24,7 @@ const config = {
       'https://67h5z9ih7j.execute-api.us-east-1.amazonaws.com/default',
     onBrokenMarkdownLinks: "warn",
     onBrokenMarkdownImages: "warn",
-    githubProjectToken: process.env.GITHUB_PROJECT_TOKEN,
+    githubProjectToken: process.env.GH_PROJECT_TOKEN,
 
     // Workaround to fix page highlighting in the
     // product/documentation section.
@@ -274,6 +274,7 @@ const config = {
             {
               label: "Documentation",
               position: "left",
+              to: "/docs/products/intro",
               items: [
                 // The sidebar loader is weirdly brittle. If a page is instantiated in "index.js", that must be specified explicitly.
                 {
@@ -343,23 +344,24 @@ const config = {
               ],
             },
             {
-            label: "Updates",
-            position: "left",
-            items: [
-              {
-                href: "/blog",
-                label: "Blog",
-              },
-              {
-                href: "/news",
-                label: "News",
-              },
-              {
-                href: "/release-notes",
-                label: "Release Notes",
-              }
-            ]
-          },
+              
+              label: "Blog",
+              position: "right",
+              to: "/blog",
+            },
+            {
+              
+              label: "News",
+              position: "right",
+              to: "/news",
+            },
+            {
+              
+              label: "Release Notes",
+              position: "right",
+              to: "/release-notes",
+            },
+            
           ],
         },
         footer: {

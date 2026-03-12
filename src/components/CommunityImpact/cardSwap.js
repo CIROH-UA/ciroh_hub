@@ -3,11 +3,14 @@ import React, {
     cloneElement,
     forwardRef,
     isValidElement,
+    useState,
     useEffect,
     useMemo,
     useRef
 } from 'react';
 import gsap from 'gsap';
+
+const TW_LG = 1024; // Tailwind responsive breakpoint, in px
 
 export const Card = forwardRef(({ customClass, ...rest }, ref) => (
     <div
@@ -15,7 +18,9 @@ export const Card = forwardRef(({ customClass, ...rest }, ref) => (
         {...rest}
         className={`
       tw-absolute tw-top-1/2 tw-left-1/2
-      tw-rounded-xl tw-outline tw-border-2 tw-border-white tw-outline-white tw-bg-slate-900 tw-text-white tw-p-10
+      tw-rounded-xl tw-outline tw-border-2 tw-border-white tw-outline-white tw-bg-slate-900 tw-text-white
+      tw-p-6 lg:tw-p-10
+      tw-text-base
       [transform-style:preserve-3d]
       [will-change:transform]
       [backface-visibility:hidden]
@@ -51,6 +56,10 @@ const CardSwap = ({
     height = 400,
     cardDistance = 60,
     verticalDistance = 70,
+    mobileWidth = 320,
+    mobileHeight = 260,
+    mobileCardDistance = 28,
+    mobileVerticalDistance = 30,
     delay = 5000,
     pauseOnHover = false,
     onCardClick,
@@ -58,6 +67,34 @@ const CardSwap = ({
     easing = 'elastic',
     children
 }) => {
+    const [isMobile, setIsMobile] = useState(false);
+
+    // Adjust dimensions for mobile
+    const {
+        responsiveWidth,
+        responsiveHeight,
+        responsiveCardDistance,
+        responsiveVerticalDistance,
+    } = useMemo(
+        () => ({
+            responsiveWidth: isMobile ? mobileWidth : width,
+            responsiveHeight: isMobile ? mobileHeight : height,
+            responsiveCardDistance: isMobile ? mobileCardDistance : cardDistance,
+            responsiveVerticalDistance: isMobile ? mobileVerticalDistance : verticalDistance,
+        }),
+        [isMobile]
+    )
+
+    React.useEffect(() => {
+        const checkMobile = () => {
+            setIsMobile(window.innerWidth < TW_LG);
+        };
+
+        checkMobile();
+        window.addEventListener('resize', checkMobile);
+        return () => window.removeEventListener('resize', checkMobile);
+    }, []);
+
     const config =
         easing === 'elastic'
             ? {
@@ -89,7 +126,7 @@ const CardSwap = ({
     useEffect(() => {
         const total = refs.length;
         refs.forEach((r, i) =>
-            placeNow(r.current, makeSlot(i, cardDistance, verticalDistance, total), skewAmount)
+            placeNow(r.current, makeSlot(i, responsiveCardDistance, responsiveVerticalDistance, total), skewAmount)
         );
 
         const swap = () => {
@@ -110,7 +147,7 @@ const CardSwap = ({
 
             rest.forEach((idx, i) => {
                 const el = refs[idx].current;
-                const slot = makeSlot(i, cardDistance, verticalDistance, refs.length);
+                const slot = makeSlot(i, responsiveCardDistance, responsiveVerticalDistance, refs.length);
                 tl.set(el, { zIndex: slot.zIndex }, 'promote');
                 tl.to(
                     el,
@@ -127,8 +164,8 @@ const CardSwap = ({
 
             const backSlot = makeSlot(
                 refs.length - 1,
-                cardDistance,
-                verticalDistance,
+                responsiveCardDistance,
+                responsiveVerticalDistance,
                 refs.length
             );
 
@@ -183,14 +220,14 @@ const CardSwap = ({
 
         return () => clearInterval(intervalRef.current);
 
-    }, [cardDistance, verticalDistance, delay, pauseOnHover, skewAmount, easing]);
+    }, [responsiveCardDistance, responsiveVerticalDistance, delay, pauseOnHover, skewAmount, easing]);
 
     const rendered = childArr.map((child, i) =>
         isValidElement(child)
             ? cloneElement(child, {
                 key: i,
                 ref: refs[i],
-                style: { width, height, ...(child.props.style ?? {}) },
+                style: { width: responsiveWidth, height: responsiveHeight, ...(child.props.style ?? {}) },
                 onClick: e => {
                     child.props.onClick?.(e);
                     onCardClick?.(i);
@@ -200,26 +237,17 @@ const CardSwap = ({
     );
 
     return (
-        <div
-            ref={container}
-            className="
-        tw-absolute tw-bottom-0 tw-right-0
-        tw-transform tw-translate-x-[5%] tw-translate-y-[20%]
-        tw-origin-bottom-right
-        tw-perspective-[900px]
-        tw-overflow-visible
-
-        max-[768px]:tw-translate-x-[25%]
-        max-[768px]:tw-translate-y-[25%]
-        max-[768px]:tw-scale-[0.75]
-
-        max-[480px]:tw-translate-x-[25%]
-        max-[480px]:tw-translate-y-[25%]
-        max-[480px]:tw-scale-[0.55]
-      "
-            style={{ width, height }}
-        >
-            {rendered}
+        <div className="tw-absolute tw-inset-x-0 tw-bottom-0 tw-flex tw-justify-center tw-overflow-visible tw-perspective-[900px]">
+            <div
+                ref={container}
+                className="
+          tw-relative tw-origin-bottom tw-overflow-visible
+          tw-scale-[0.64] lg:tw-scale-100
+        "
+                style={{ width: responsiveWidth, height: responsiveHeight }}
+            >
+                {rendered}
+            </div>
         </div>
     );
 };

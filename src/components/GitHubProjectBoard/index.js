@@ -16,7 +16,7 @@ export default function GitHubProjectBoard() {
   useEffect(() => {
     const fetchProjectData = async () => {
       if (!token) {
-        setError('Missing GitHub token. Set GITHUB_PROJECT_TOKEN in your .env and expose via customFields.githubProjectToken');
+        setError('Missing GitHub token. Set GH_PROJECT_TOKEN in your .env and expose via customFields.githubProjectToken');
         setLoading(false);
         return;
       }
@@ -180,7 +180,7 @@ export default function GitHubProjectBoard() {
 
       <div className={styles.fallback}>
         <p>
-          <strong>Note:</strong> This view uses the GitHub GraphQL API. Ensure a read-only fine-grained token is provided via <code>GITHUB_PROJECT_TOKEN</code> in your <code>.env</code> and exposed in <code>customFields.githubProjectToken</code>.
+          <strong>Note:</strong> This view uses the GitHub GraphQL API. Ensure a read-only fine-grained token is provided via <code>GH_PROJECT_TOKEN</code> in your <code>.env</code> and exposed in <code>customFields.githubProjectToken</code>.
         </p>
       </div>
     </div>

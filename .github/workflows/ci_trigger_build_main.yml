@@ -1,0 +1,66 @@
+# Triggers a CI/CD deployment from the main branch to staging.
+
+name: 'CI: Trigger deployment from main'
+run-name: 'Trigger deployment on ref "${{github.ref}}"'
+
+on:
+  push:
+    branches:
+    - main
+    - test-deploy
+  workflow_dispatch:
+    inputs:
+      type:
+        description: 'Which environment to deploy to.'
+        required: true
+        default: 'staging'
+        type: choice
+        options:
+        - staging
+        - production
+
+env:
+  PROD_REPO: ${{ vars.COMPOSITE_TARGET_REPO }}
+  PROD_PATH: .
+  STAGING_REPO: ${{ vars.COMPOSITE_TARGET_REPO }}
+  STAGING_PATH: staging/
+  STAGING_MAIN_FOLDER: main/ # Since PRs will use an alternate path
+
+jobs:
+  trigger-build:
+    runs-on: ubuntu-latest
+    steps:      
+    - name: Set deployment target
+      run: |
+        if ${{ github.event.inputs.type == 'production' }}; then
+          echo "DEPLOY_ENV=production" >> $GITHUB_ENV
+          echo "TARGET_REPO=$PROD_REPO" >> $GITHUB_ENV
+          echo "TARGET_PATH=$PROD_PATH" >> $GITHUB_ENV
+          echo "Deploying to $TARGET_REPO as PRODUCTION at path $TARGET_PATH"
+        else
+          echo "DEPLOY_ENV=staging" >> $GITHUB_ENV
+          echo "TARGET_REPO=$STAGING_REPO" >> $GITHUB_ENV
+          echo "TARGET_PATH=${{ env.STAGING_PATH }}${{ env.STAGING_MAIN_FOLDER }}" >> $GITHUB_ENV
+          echo "Deploying to $STAGING_REPO as STAGING at path $STAGING_PATH$STAGING_MAIN_FOLDER"
+        fi
+        echo "SOURCE_REF=${{ github.ref }}" >> $GITHUB_ENV
+        echo "COMMIT_HEADER=${{ github.event.client_payload.commit_header }}" >> $GITHUB_ENV
+
+    # Checkout to fetch commit header
+    - name: Checkout
+      uses: actions/checkout@v5
+      with:
+        ref: ${{ env.SOURCE_REF }}
+        filter: 'blob:none' # only retrieve metadata
+
+    - name: Fetch commit header
+      run: |
+        header="$(git log -1 --pretty=%B | head -n 1)"
+        echo "COMMIT_HEADER=${header}" >> $GITHUB_ENV
+      # Credit to the solution at https://github.com/orgs/community/discussions/106392
+
+    - name: 'Send repository dispatch'
+      uses: peter-evans/repository-dispatch@v4
+      with:
+        event-type: create-build
+        client-payload: '{"deploy_env": "${{ env.DEPLOY_ENV }}", "source_ref": "${{ env.SOURCE_REF }}", "target_repo": "${{ env.TARGET_REPO }}", "target_path": "${{ env.TARGET_PATH }}", "commit_header": "${{ env.COMMIT_HEADER }}", "type_description": "${{ env.DEPLOY_ENV }}"}'

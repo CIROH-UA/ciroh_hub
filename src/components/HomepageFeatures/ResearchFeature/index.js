@@ -181,109 +181,99 @@ export default function ResearchFeature() {
 
     // ---------- PAGE CONTENT ----------
     return (
-        <section className="tw-relative tw-overflow-hidden tw-py-24 tw-bg-slate-100 dark:tw-bg-slate-900 tw-text-blue-800 dark:tw-text-white tw-rounded-2xl tw-no-underline">
-          <div className="tw-container tw-mx-auto tw-flex tw-px-5 tw-items-center tw-justify-center tw-flex-col tw-relative tw-z-10">
+      <section className="tw-relative tw-overflow-hidden tw-py-14 tw-bg-slate-100 dark:tw-bg-slate-900 tw-text-blue-800 dark:tw-text-white tw-rounded-2xl tw-no-underline">
+        <div className="tw-container tw-mx-auto tw-flex tw-px-5 tw-items-center tw-justify-center tw-flex-col tw-relative tw-z-10">
+          <div className="tw-text-center tw-lg:w-2/3 tw-w-full">
+            <span className="tw-bg-blue-100 dark:tw-bg-blue-900/40 tw-text-blue-800 dark:tw-text-blue-300 
+                    tw-text-sm tw-font-semibold tw-px-4 tw-py-1.5 tw-rounded-full">
+              Innovation & Discovery
+            </span>
 
-            <div className="image-container tw-lg:w-2/6 tw-md:w-3/6 tw-w-5/6 tw-mb-16 tw-rounded-2xl tw-shadow-2xl tw-animate-fade-in-scale">
-              <img
-                src={useBaseUrl("/img/graphics/OurResearch.png")}
-                alt="research hero"
-                className="tw-w-full tw-object-cover tw-object-center tw-rounded-2xl"
-              />
-            </div>
+            <h2 className="tw-text-5xl md:tw-text-6xl tw-font-extrabold tw-mb-6 tw-mt-4">
+              CIROH's Research
+            </h2>
 
-            <div className="tw-text-center tw-lg:w-2/3 tw-w-full">
-              <span className="tw-bg-blue-100 dark:tw-bg-blue-900/40 tw-text-blue-800 dark:tw-text-blue-300 
-                      tw-text-sm tw-font-semibold tw-px-4 tw-py-1.5 tw-rounded-full">
-                Innovation & Discovery
-              </span>
+            <p className="tw-text-xl tw-max-w-2xl tw-text-slate-700 dark:tw-text-gray-300 tw-mx-auto">
+              The CIROH community's research advances hydrological science through{" "}
+              <span className="tw-text-blue-700 dark:tw-text-cyan-400 tw-font-semibold">innovation</span>,{" "}
+              <span className="tw-text-blue-700 dark:tw-text-cyan-400 tw-font-semibold">collaboration</span>, and{" "}
+              <span className="tw-text-blue-700 dark:tw-text-cyan-400 tw-font-semibold">technology development</span>.
+            </p>
 
-              <h2 className="tw-text-5xl md:tw-text-6xl tw-font-extrabold tw-mb-6 tw-mt-4">
-                CIROH's Research
-              </h2>
+            {/* ---------- KEYWORD-BASED STATS ---------- */}
+            <div className="tw-mt-12 tw-grid tw-grid-cols-2 md:tw-grid-cols-3 lg:tw-grid-cols-3 tw-gap-6 tw-max-w-5xl tw-mx-auto">
 
-              <p className="tw-text-xl tw-max-w-2xl tw-text-slate-700 dark:tw-text-gray-300 tw-mx-auto">
-                The CIROH community's research advances hydrological science through{" "}
-                <span className="tw-text-blue-700 dark:tw-text-cyan-400 tw-font-semibold">innovation</span>,{" "}
-                <span className="tw-text-blue-700 dark:tw-text-cyan-400 tw-font-semibold">collaboration</span>, and{" "}
-                <span className="tw-text-blue-700 dark:tw-text-cyan-400 tw-font-semibold">technology development</span>.
-              </p>
-
-              {/* ---------- KEYWORD-BASED STATS ---------- */}
-              <div className="tw-mt-12 tw-grid tw-grid-cols-2 md:tw-grid-cols-3 lg:tw-grid-cols-3 tw-gap-6 tw-max-w-5xl tw-mx-auto">
-
-                {/* PRODUCTS (APPLICATIONS) */}
-                <div className="tw-text-center tw-p-6 tw-bg-white dark:tw-bg-slate-800 tw-rounded-2xl tw-shadow-lg hover:tw-shadow-xl tw-transition-shadow">
-                  <div className="tw-text-4xl tw-font-bold tw-text-black dark:tw-text-cyan-300">
-                    {statsLoading ? <span className="tw-animate-ping">...</span> : stats.products}
-                  </div>
-                  <div className="tw-mt-2 tw-text-sm tw-font-semibold tw-text-gray-700 dark:tw-text-gray-300">
-                    APPLICATIONS
-                  </div>
+              {/* PRODUCTS (APPLICATIONS) */}
+              <div className="tw-text-center tw-p-6 tw-bg-white dark:tw-bg-slate-800 tw-rounded-2xl tw-shadow-lg hover:tw-shadow-xl tw-transition-shadow">
+                <div className="tw-text-4xl tw-font-bold tw-text-black dark:tw-text-cyan-300">
+                  {statsLoading ? <span className="tw-animate-ping">...</span> : stats.products}
                 </div>
-
-                {/* DATASETS */}
-                <div className="tw-text-center tw-p-6 tw-bg-white dark:tw-bg-slate-800 tw-rounded-2xl tw-shadow-lg hover:tw-shadow-xl tw-transition-shadow">
-                  <div className="tw-text-4xl tw-font-bold tw-text-black dark:tw-text-cyan-300">
-                    {statsLoading ? <span className="tw-animate-ping">...</span> : stats.datasets}
-                  </div>
-                  <div className="tw-mt-2 tw-text-sm tw-font-semibold tw-text-gray-700 dark:tw-text-gray-300">
-                    DATASETS
-                  </div>
+                <div className="tw-mt-2 tw-text-sm tw-font-semibold tw-text-gray-700 dark:tw-text-gray-300">
+                  APPLICATIONS
                 </div>
-
-                {/* PRESENTATIONS */}
-                <div className="tw-text-center tw-p-6 tw-bg-white dark:tw-bg-slate-800 tw-rounded-2xl tw-shadow-lg hover:tw-shadow-xl tw-transition-shadow">
-                  <div className="tw-text-4xl tw-font-bold tw-text-black dark:tw-text-cyan-300">
-                    {statsLoading ? <span className="tw-animate-ping">...</span> : stats.presentations}
-                  </div>
-                  <div className="tw-mt-2 tw-text-sm tw-font-semibold tw-text-gray-700 dark:tw-text-gray-300">
-                    PRESENTATIONS
-                  </div>
-                </div>
-
-                {/* NOTEBOOKS */}
-                <div className="tw-text-center tw-p-6 tw-bg-white dark:tw-bg-slate-800 tw-rounded-2xl tw-shadow-lg hover:tw-shadow-xl tw-transition-shadow">
-                  <div className="tw-text-4xl tw-font-bold tw-text-black dark:tw-text-cyan-300">
-                    {statsLoading ? <span className="tw-animate-ping">...</span> : stats.publications}
-                  </div>
-                  <div className="tw-mt-2 tw-text-sm tw-font-semibold tw-text-gray-700 dark:tw-text-gray-300">
-                    PUBLICATIONS
-                  </div>
-                </div>
-
-                {/* NOTEBOOKS */}
-                <div className="tw-text-center tw-p-6 tw-bg-white dark:tw-bg-slate-800 tw-rounded-2xl tw-shadow-lg hover:tw-shadow-xl tw-transition-shadow">
-                  <div className="tw-text-4xl tw-font-bold tw-text-black dark:tw-text-cyan-300">
-                    {statsLoading ? <span className="tw-animate-ping">...</span> : stats.notebooks}
-                  </div>
-                  <div className="tw-mt-2 tw-text-sm tw-font-semibold tw-text-gray-700 dark:tw-text-gray-300">
-                    NOTEBOOKS
-                  </div>
-                </div>
-
-                {/* COURSES */}
-                <div className="tw-text-center tw-p-6 tw-bg-white dark:tw-bg-slate-800 tw-rounded-2xl tw-shadow-lg hover:tw-shadow-xl tw-transition-shadow tw-col-span-1">
-                  <div className="tw-text-4xl tw-font-bold tw-text-black dark:tw-text-cyan-300">
-                    {statsLoading ? <span className="tw-animate-ping">...</span> : stats.courses}
-                  </div>
-                  <div className="tw-mt-2 tw-text-sm tw-font-semibold tw-text-gray-700 dark:tw-text-gray-300">
-                    COURSES
-                  </div>
-                </div>
-
-
               </div>
 
-              {/* small error hint */}
-              {statsError && (
-                <div className="tw-mt-4 tw-text-sm tw-text-red-600">
-                  Error loading stats: {statsError}
+              {/* DATASETS */}
+              <div className="tw-text-center tw-p-6 tw-bg-white dark:tw-bg-slate-800 tw-rounded-2xl tw-shadow-lg hover:tw-shadow-xl tw-transition-shadow">
+                <div className="tw-text-4xl tw-font-bold tw-text-black dark:tw-text-cyan-300">
+                  {statsLoading ? <span className="tw-animate-ping">...</span> : stats.datasets}
                 </div>
-              )}
+                <div className="tw-mt-2 tw-text-sm tw-font-semibold tw-text-gray-700 dark:tw-text-gray-300">
+                  DATASETS
+                </div>
+              </div>
+
+              {/* PRESENTATIONS */}
+              <div className="tw-text-center tw-p-6 tw-bg-white dark:tw-bg-slate-800 tw-rounded-2xl tw-shadow-lg hover:tw-shadow-xl tw-transition-shadow">
+                <div className="tw-text-4xl tw-font-bold tw-text-black dark:tw-text-cyan-300">
+                  {statsLoading ? <span className="tw-animate-ping">...</span> : stats.presentations}
+                </div>
+                <div className="tw-mt-2 tw-text-sm tw-font-semibold tw-text-gray-700 dark:tw-text-gray-300">
+                  PRESENTATIONS
+                </div>
+              </div>
+
+              {/* NOTEBOOKS */}
+              <div className="tw-text-center tw-p-6 tw-bg-white dark:tw-bg-slate-800 tw-rounded-2xl tw-shadow-lg hover:tw-shadow-xl tw-transition-shadow">
+                <div className="tw-text-4xl tw-font-bold tw-text-black dark:tw-text-cyan-300">
+                  {statsLoading ? <span className="tw-animate-ping">...</span> : stats.publications}
+                </div>
+                <div className="tw-mt-2 tw-text-sm tw-font-semibold tw-text-gray-700 dark:tw-text-gray-300">
+                  PUBLICATIONS
+                </div>
+              </div>
+
+              {/* NOTEBOOKS */}
+              <div className="tw-text-center tw-p-6 tw-bg-white dark:tw-bg-slate-800 tw-rounded-2xl tw-shadow-lg hover:tw-shadow-xl tw-transition-shadow">
+                <div className="tw-text-4xl tw-font-bold tw-text-black dark:tw-text-cyan-300">
+                  {statsLoading ? <span className="tw-animate-ping">...</span> : stats.notebooks}
+                </div>
+                <div className="tw-mt-2 tw-text-sm tw-font-semibold tw-text-gray-700 dark:tw-text-gray-300">
+                  NOTEBOOKS
+                </div>
+              </div>
+
+              {/* COURSES */}
+              <div className="tw-text-center tw-p-6 tw-bg-white dark:tw-bg-slate-800 tw-rounded-2xl tw-shadow-lg hover:tw-shadow-xl tw-transition-shadow tw-col-span-1">
+                <div className="tw-text-4xl tw-font-bold tw-text-black dark:tw-text-cyan-300">
+                  {statsLoading ? <span className="tw-animate-ping">...</span> : stats.courses}
+                </div>
+                <div className="tw-mt-2 tw-text-sm tw-font-semibold tw-text-gray-700 dark:tw-text-gray-300">
+                  COURSES
+                </div>
+              </div>
 
             </div>
+
+            {/* small error hint */}
+            {statsError && (
+              <div className="tw-mt-4 tw-text-sm tw-text-red-600">
+                Error loading stats: {statsError}
+              </div>
+            )}
+
           </div>
-        </section>
+        </div>
+      </section>
     )
 }
