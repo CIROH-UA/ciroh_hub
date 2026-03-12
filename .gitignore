@@ -1,9 +1,6 @@
 .docusaurus/
 build/
 node_modules/
-.github/
-!".github/ISSUE-TEMPLATE/**"
-!".github/workflows/**"
 .DS_Store
 .idea/
 .env

@@ -1,0 +1,55 @@
+name: 'CD: Clean up PR staging content from composite target'
+run-name: 'Clean up PR #${{github.event.pull_request.number}} from composite target'
+
+on:
+  pull_request_target:
+    branches: [main]
+    types: [closed]
+
+env:
+  TARGET_REPO: ${{ vars.COMPOSITE_TARGET_REPO }}
+  STAGING_PATH: staging
+  TARGET_PATH: staging/${{ github.event.pull_request.number }}
+
+concurrency:
+  group: ci-ngiab-website-pr-#{{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  pr-clean-up:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout staging repository
+        uses: actions/checkout@v5
+        with:
+          repository: ${{ env.TARGET_REPO }}
+          fetch-depth: 0
+          ssh-key: ${{ secrets.SSH_DEPLOY_NGIAB_SUBDOMAIN }}
+
+      - name: Remove PR folder from staging repository
+        run: |
+          # Make local branch to prevent working tree conflicts
+          git checkout -b local
+
+          # If no such folder exists, exit
+          if [ ! -d "./${{ env.TARGET_PATH }}" ]; then
+            echo "Nothing to clean up, exiting."
+            echo "SKIP_DEPLOY=true" >> $GITHUB_ENV
+            exit 0
+          fi
+
+          # Clear existing content
+          git rm -rf ${{ env.TARGET_PATH }}
+          git commit -m local_branch_change
+
+      - name: Deploy cleaned staging to composite repository
+        uses: JamesIves/github-pages-deploy-action@v4
+        if: ${{ !env.SKIP_DEPLOY }}
+        with:
+          folder: ${{ env.STAGING_PATH }}
+          ssh-key: ${{ secrets.SSH_DEPLOY_HUB_SUBDOMAIN }}
+          repository-name: ${{ env.TARGET_REPO }}
+          target-folder: ${{ env.STAGING_PATH }}
+          clean: true # Set to false if deploying to a composite repository's root!
+          git-config-name: "github-actions"
+          git-config-email: "github-actions@github.com"

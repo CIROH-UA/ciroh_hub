@@ -88,7 +88,7 @@ export default function Header({ title, tagline, description, buttons, notice })
           </div>
 
           {/* RIGHT SIDE - LOGO */}
-          <div className="tw-flex tw-items-center sm:tw-justify-end tw-justify-center tw-order-1 md:tw-order-2 lg:tw-order-2">
+          <div className="tw-flex tw-items-center tw-justify-center md:tw-justify-end tw-order-1 md:tw-order-2">
             <div className="tw-relative">
 
               {/* DROPLET GLOW */}
@@ -106,7 +106,7 @@ export default function Header({ title, tagline, description, buttons, notice })
               <div
                 className={clsx(
                   styles.logoBg,
-                  'tw-relative tw-w-72 tw-h-72 tw-rounded-full tw-flex tw-items-center  sm:tw-justify-end tw-justify-center',
+                  'tw-relative tw-w-72 tw-h-72 tw-rounded-full tw-flex tw-items-center tw-justify-center md:tw-justify-end',
                 )}
               >
                 <img
