@@ -136,7 +136,7 @@ export default function ModalImageViewer({ open, onClose, title, images }) {
                             alt="Selected"
                             className="tw-w-full tw-h-full tw-object-contain tw-rounded"
                         />
-                    ) : <h1 className="tw-flex tw-text-center tw-text tw-text-[#2F455C] dark:tw-text-[#B8C7D9]">No images available</h1>}
+                    ) : <h1 className="tw-flex tw-text-center tw-text tw-text-[#2F455C] dark:tw-text-[#B8C7D9]">Images Not Available</h1>}
                 </div>
 
                 {/* Thumbnail Images Row */}
