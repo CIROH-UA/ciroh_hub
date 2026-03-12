@@ -14,6 +14,7 @@ export default function ModalImageViewer({ open, onClose, title, images }) {
     const [selectedImageIndex, setSelectedImageIndex] = useState(0);    // Index of the currently selected image in the modal
     const [indicatorRect, setIndicatorRect] = useState({});             // State to hold the position and size of the selected image indicator
     const [enableTransition, setEnableTransition] = useState(false);    // State to control transition animation for indicator
+    const [imagesLoadedCount, setImagesLoadedCount] = useState(0);      // State to track how many images have loaded
     const imageRefs = useRef([]);                                       // Refs to hold references to the thumbnail image elements for calculating indicator position
 
     /**
@@ -73,6 +74,15 @@ export default function ModalImageViewer({ open, onClose, title, images }) {
             });
         }
     }
+
+    // Set the size and position of the indicator once all images have loaded
+    useEffect(() => {
+        if (imagesLoadedCount === images.length && images.length > 0)
+        {
+            // All images loaded
+            imageSelectedIndicatorUpdate(selectedImageIndex);
+        }
+    }, [imagesLoadedCount, images.length]);
 
     // Update indicator position and size when selected image changes
     useEffect(() => {
@@ -171,7 +181,7 @@ export default function ModalImageViewer({ open, onClose, title, images }) {
                                 src={images[idx]}
                                 alt={`Gallery ${idx}`}
                                 className="tw-flex tw-w-full tw-h-32 tw-rounded tw-object-contain"
-                                onLoad={idx === selectedImageIndex ? () => imageSelectedIndicatorUpdate(idx) : undefined}
+                                onLoad={() => setImagesLoadedCount(count => count + 1)}
                             />
                         </div>
                     ))}
