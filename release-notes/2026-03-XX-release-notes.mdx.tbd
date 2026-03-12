@@ -1,0 +1,14 @@
+---
+title: 03-XX-2026 Release Notes
+description: Major CIROH Hub update for March!
+slug: v202603XX
+tags: ["Release Notes", "CIROH Hub"]
+hide_table_of_contents: false
+---
+
+## Updates
+
+- Backfilled release notes ([#78](https://github.com/CIROH-UA/ciroh_hub/pull/78))
+- Fixed responsive scaling and transparency issues on mobile devices ([#59](https://github.com/CIROH-UA/ciroh_hub/pull/59))
+
+<!-- truncate -->
