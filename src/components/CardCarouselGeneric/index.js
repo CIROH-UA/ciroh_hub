@@ -34,6 +34,10 @@ const CardCarouselGeneric = ({ cards = [], cardsPerView = 3, header, renderCard,
                     const fetchedCards = await fetchCards();
                     if (isMounted)
                     {
+                        // Remove placeholder cards
+                        cards = cards.filter(card => !card.resource_id?.startsWith('placeholder-'));
+
+                        // Add retrieved cards
                         setCarouselCards(cards.concat(fetchedCards || []));
                         setFetchingCards(false);
                     }

@@ -34,6 +34,19 @@ const items = [
   },
 ];
 
+const appFeaturedPlaceholder = {
+  authors: "",
+  description: "",
+  docs_url: "",
+  embed_url: "",
+  page_url: "",
+  resource_id: "placeholder-1",
+  resource_type: "Resource",
+  resource_url: "",
+  thumbnail_url: "",
+  title: "",
+}
+
 export default function AppsPage() {
   const contributeUrl = useBaseUrl('/contribute?current-contribution=apps');
   const docsUrl = useBaseUrl('/docs/products/intro');
@@ -178,6 +191,7 @@ function AppsPageContent({ contributeUrl, docsUrl, defaultImage }) {
         <div className="tw-bg-white dark:tw-bg-[#060010]">
           <CardCarouselGeneric
             header="Featured Apps"
+            cards={[appFeaturedPlaceholder]}
             renderCard={renderCuratedAppCard}
             fetchCards={fetchCuratedAppCards}
             cardsPerView={1}
