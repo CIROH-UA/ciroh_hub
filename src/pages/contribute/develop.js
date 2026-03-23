@@ -40,7 +40,7 @@ function DevelopContent() {
     return (
       <div className={styles.mainContainer}>
         <TethysSection 
-          title="Geospatial and scientfic web applications for the 21st century"
+          title="Geospatial and scientific web applications for the 21st century"
           description={
             <div>
               Tethys is an open-source Python-based framework designed specifically for developing geospatial web applications. 
