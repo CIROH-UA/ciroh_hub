@@ -1,5 +1,54 @@
 {
-
+	"March 2026 Update": [
+			{
+			"type": "NRDS",
+			"title": "ForcingProcessor",
+			"link": "",
+			"description":"",
+			"release_date": "",
+			"contributors": 0
+			},
+			{
+			"type": "NRDS",
+			"title": "DataStreamCLI",
+			"link": "",
+			"description":"",
+			"release_date": "",
+			"contributors": 0
+			},
+            {
+			"type": "NRDS",
+			"title": "Ngen-DataStream",
+			"link": "https://github.com/CIROH-UA/ngen-datastream/releases/tag/v3.0.0",
+			"description":"In the most important release yet, The NRDS system has successfully implemented GitHub Actions workflows to deploy the CFE NOM NextGen hydrologic simulation datastream using an automated pipeline. This new CI/CD capability has since allowed for the rapid deployment of three additional datastreams: the NWM->NextGen forcing processing, routing-only, and lstm_0 datastreams. These first datastream deployments demonstrates the uniquely powerful ability to modify and scale the NRDS numerical prediction system just through individual pull requests to this repository.",
+			"release_date": "03/25/2026",
+			"contributors": 2
+			},
+			{
+			"type": "NGIAB",
+			"title": "TEEHR",
+			"link": "",
+			"description":"",
+			"release_date": "",
+			"contributors": 0
+			},
+			{
+			"type": "NGIAB",
+			"title": "NGIAB Website",
+			"link": "",
+			"description":"",
+			"release_date": "",
+			"contributors": 0
+			},
+			{
+			"type": "NGIAB",
+			"title": "CIROH 2i2c JupyterHub - CIROH Community NextGen Hub (CCNH) image",
+			"link": "https://github.com/CIROH-UA/awi-ciroh-image/pull/101",
+			"description":"This PR updates pandas version to 2.0 to resolve compatibility errors during forcings generation.",
+			"release_date": "03/12/2026",
+			"contributors": 1
+			}
+		],
 	"February 2026 Update": [
 			{
 			"type": "update",
