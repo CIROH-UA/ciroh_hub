@@ -13,7 +13,7 @@
 			"title": "DataStreamCLI",
 			"link": "https://github.com/CIROH-UA/datastreamcli/releases/tag/v1.6.0",
 			"description":"The updates this release focus on enhancements to the routing-only tooling by adding file/path validation and improving resource usage through tuning t-route run parameters.",
-			"release_date": "03/25/2026",
+			"release_date": "03/26/2026",
 			"contributors": 3
 			},
             {
