@@ -20,6 +20,8 @@ export default function Develop() {
 // Needed to be spun out so that useColorMode can be called from a child of Layout
 function DevelopHero() {
     const { colorMode } = useColorMode();
+    const tethysCirohPortalUrl = 'https://tethys.ciroh.org/apps/';
+    const docsUrl = 'https://docs.tethysplatform.org/en/stable/index.html';
 
     return (
       <section className="tw-relative tw-z-20 tw-overflow-hidden tw-pb-8">
@@ -30,6 +32,10 @@ function DevelopHero() {
           <Header
             title="Develop with Tethys Platform"
             tagline=""
+            buttons={[
+                { label: "Tethys CIROH Portal", href: tethysCirohPortalUrl, primary: true },
+                { label: "Tethys Documentation", href: docsUrl }
+              ]}
           />
         </div>
       </section>
