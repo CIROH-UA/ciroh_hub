@@ -23,7 +23,7 @@ function Step({ number, title, children }) {
 
 
 /** Main Tethys installation section component */
-export default function TethysSection({ title, description }) {
+export default function TethysSection({ title, description, examples }) {
     const { colorMode } = useColorMode();
   
   return (
@@ -191,6 +191,8 @@ class HomeMap(MapLayout):
           </Step>
           </TabItem>
         </Tabs>
+
+          <h3 className={styles.examples}>{examples}</h3>
 
           <div className={styles.spacer30} />
             <div className={styles.actionButtons}>

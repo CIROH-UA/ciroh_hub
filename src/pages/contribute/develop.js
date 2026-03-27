@@ -47,6 +47,11 @@ function DevelopContent() {
               It simplifies the creation of apps that process, visualize, and analyze spatial data.
             </div>
           }
+          examples={
+            <div>
+              Explore real-world Tethys apps built by the CIROH community at the <a href="https://tethys.ciroh.org/apps/">CIROH Tethys Portal</a>
+            </div>
+          }
        />
       </div>
     );
