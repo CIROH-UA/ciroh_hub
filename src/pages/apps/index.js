@@ -92,6 +92,11 @@ function AppsPageContent({ contributeUrl, docsUrl, defaultImage }) {
       />
 
       <main className="tw-relative tw-z-20">
+        {/* Link to tethys.ciroh.org */}
+        <div className="tw-flex tw-w-full tw-h-full tw-pt-10 tw-justify-center tw-items-center tw-bg-white dark:tw-bg-[#060010]">
+            <h2 className="tw-flex">Explore real-world Tethys apps built by the CIROH community at the <a href="https://tethys.ciroh.org/apps/">CIROH Tethys Portal</a></h2>
+        </div>
+
         <HydroShareResourcesSelector
           keyword="nwm_portal_app,ciroh_hub_app"
           defaultImage={defaultImage}
