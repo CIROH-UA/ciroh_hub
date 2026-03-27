@@ -3,7 +3,7 @@ import styles from './styles.module.css';
 import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
-import { FaWindows,FaLinux } from "react-icons/fa";
+import { FaWindows,FaLinux,FaPython } from "react-icons/fa";
 import { useColorMode } from '@docusaurus/theme-common';
 
 import AppExampleLight from '@site/static/img/contribute/develop/apps_light_theme.png';
@@ -37,7 +37,6 @@ export default function TethysSection({ title, description, examples }) {
             alt="CIROH application example interface"
           />
           <h3 className={styles.description}>{description}</h3>
-
         </div>
         <div>
         <Tabs className={styles.codeTabs}>
@@ -190,6 +189,30 @@ class HomeMap(MapLayout):
             </CodeBlock>
           </Step>
           </TabItem>
+          <TabItem 
+            value="pip"
+            label={
+              <span className={styles.tabLabel}>
+                <FaPython  className={styles.tabIcon} /> Pip
+              </span>
+            }
+            default
+          >
+          <Step number="1" title="Install tethys-platform">
+            <CodeBlock language="powershell" >
+                {`$ pip install tethys-platform`}
+            </CodeBlock>
+          </Step>
+          <div className={`${styles.spacer} ${styles.spacer30}`} />
+
+          <Step number="2" title="Start Developing">
+            <CodeBlock language="language-bash" >
+                {"$ tethys quickstart"}
+            </CodeBlock>
+          </Step>
+
+          </TabItem>
+
         </Tabs>
 
           <h3 className={styles.examples}>{examples}</h3>
