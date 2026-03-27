@@ -153,6 +153,9 @@
   opacity: 1;
 }
 
+.examples {
+  color: var(--ifm-font-color-secondary);
+}
 
 /* Action buttons */
 .actionButtons {
