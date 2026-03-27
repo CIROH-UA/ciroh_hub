@@ -3,18 +3,18 @@
 			{
 			"type": "NRDS",
 			"title": "ForcingProcessor",
-			"link": "",
-			"description":"",
-			"release_date": "",
-			"contributors": 0
+			"link": "https://github.com/CIROH-UA/forcingprocessor/releases/tag/v2.1.0",
+			"description":"In this latest release, forcingprocessor has been enhanced with the capability of generating NextGen troute restart files from NWM standard analysis/assimilation outputs, a novel feature by [Quinn Lee](https://github.com/quinnylee). Additional changes focus on implementation of the uv package manager and python version upgrade to 3.11 by [Kamal Chowdhury](https://github.com/kamalcou) and [Harsha Vemula](https://github.com/harshavemula-ua).",
+			"release_date": "03/25/2026",
+			"contributors": 4
 			},
 			{
 			"type": "NRDS",
 			"title": "DataStreamCLI",
-			"link": "",
-			"description":"",
-			"release_date": "",
-			"contributors": 0
+			"link": "https://github.com/CIROH-UA/datastreamcli/releases/tag/v1.6.0",
+			"description":"The updates this release focus on enhancements to the routing-only tooling by adding file/path validation and improving resource usage through tuning t-route run parameters.",
+			"release_date": "03/25/2026",
+			"contributors": 3
 			},
             {
 			"type": "NRDS",
@@ -27,18 +27,17 @@
 			{
 			"type": "NGIAB",
 			"title": "TEEHR",
-			"link": "",
-			"description":"",
-			"release_date": "",
-			"contributors": 0
+			"link": "https://github.com/RTIInternational/teehr/releases/tag/v0.6.0",
+			"description":"This release introduces major architectural changes and new features. A core change in this release is the integration of Apache Iceberg as the underlying table format for TEEHR evaluations. In addition to local warehouse support, users now have access to the TEEHR-Cloud data warehouse hosted on AWS S3 via the download methods, which provides CONUS-scale historical and real-time NWM simulations and forecasts ready for evaluation. For more information, please visit the [TEEHR Release Notes](https://rtiinternational.github.io/teehr/changelog/index.html#id1).",
+			"release_date": "03/19/2026"
 			},
 			{
 			"type": "NGIAB",
 			"title": "NGIAB Website",
-			"link": "",
-			"description":"",
-			"release_date": "",
-			"contributors": 0
+			"link": "https://github.com/CIROH-UA/ngiab-website/releases/tag/v1.2.0",
+			"description":"This release adds a new 'Five Ways to Run NGIAB' section, a homepage stat fix, and includes CI/CD changes along with updated copyright notices.",
+			"release_date": "03/27/2026",
+			"contributors": 3
 			},
 			{
 			"type": "NGIAB",
@@ -54,7 +53,7 @@
 			"type": "update",
 			"title": "CIROH Hub",
             "description": "CIROH Hub is live now.  Check out [latest blogs](/blog) to learn more about the new Hub. To learn about how to contribute, please visit our [Contribute page](/contribute)."
-			},	
+			},
 			{
 			"type": "NGIAB",
 			"title": "NGIAB-data-preprocess",
