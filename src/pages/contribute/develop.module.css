@@ -1,0 +1,5 @@
+.mainContainer {
+  composes: mainContainer from './contribute.module.css';
+  max-width: 100%;
+  width: 100%;
+}

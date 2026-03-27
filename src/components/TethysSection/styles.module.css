@@ -8,7 +8,7 @@
 }
 
 :root[data-theme='dark'] .wrapper {
-  background-color: #222227;
+  background-color: #060010;
 }
 
 .tabLabel {
@@ -33,6 +33,11 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  background-color: #F7F7F7;
+}
+
+:root[data-theme='dark'] .container {
+  background-color: #060010;
 }
 
 .headerContainer {

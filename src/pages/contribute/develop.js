@@ -3,7 +3,7 @@ import { ConstellationCanvas } from '@site/src/components/ConstellationCanvas';
 import Layout from '@theme/Layout';
 import TethysSection from "@site/src/components/TethysSection";
 import { useColorMode } from '@docusaurus/theme-common';
-import styles from './contribute.module.css';
+import styles from './develop.module.css';
 
 export default function Develop() {
   return (
