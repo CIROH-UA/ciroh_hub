@@ -199,9 +199,9 @@ class HomeMap(MapLayout):
               <a href="https://docs.tethysplatform.org/en/stable/installation/production.html">
                 <button className={styles.install}>Install Tethys</button>
               </a>
-              <a href="https://docs.tethysplatform.org/en/stable/index.html">
+              <a href="https://docs.tethysplatform.org/en/stable/tutorials.html">
                 <button className={styles.quick}>
-                  Quick start
+                  Tutorials
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 24 24"
