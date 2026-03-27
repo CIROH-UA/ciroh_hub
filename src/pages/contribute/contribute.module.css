@@ -491,6 +491,14 @@ html[data-theme='dark'] .brandLogo { background: rgba(15,23,42,0.6); }
   transform: translateY(-1px);
 }
 
+.tethysLogo {
+  display: block;
+  height: auto;
+  width: 55%;
+  margin: 0 auto 1.5rem;
+  filter: drop-shadow(0 1px 2px rgba(12,74,110,0.15));
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .bannerTitle {

@@ -25,6 +25,7 @@ function ContributeContent() {
   const isDarkTheme = colorMode === 'dark';
   const contactUrl = useBaseUrl('/contact');
   const zoteroLogin = siteConfig?.customFields?.externalLinks?.zoteroLogin || 'https://www.zotero.org/user/login';
+  const tethysDevelopUrl = useBaseUrl('/contribute/develop');
   const feedbackUrl = siteConfig?.customFields?.externalLinks?.feedbackForm || 'https://forms.cloud.microsoft/r/NzA2sLrzeJ';
   const addProductUrl = "https://github.com/CIROH-UA/ciroh_hub/issues/new?assignees=&labels=on-prem&projects=&template=product-request.md";
   const blogIdeaUrl = siteConfig?.customFields?.blogIdeaUrl || 'https://github.com/CIROH-UA/ciroh_hub/issues/new?template=docuhub-blog-post.md';
@@ -173,6 +174,29 @@ function ContributeContent() {
                 <img src={useBaseUrl('/img/contribute/zotero/add-publications-zotero.png')} alt="Add your publications" />
                 <h4>5. Add your publications</h4>
                 <p>Drag-and-drop PDFs or add by DOI to share your work with the CIROH community.</p>
+              </div>
+            </div>
+          </section>
+
+          <hr />
+
+          {/* Create Apps with Tethys Platform */}
+          <section className={clsx(styles.zoteroSection, "margin-vert--xl")}>
+
+            <img
+              className={styles.tethysLogo}
+              src={useBaseUrl(isDarkTheme ? '/img/logos/tethys-platform-white.png' : '/img/logos/tethys-platform-dark.png')}
+              alt="Tethys Platform"
+            />
+            <div className={styles.zoteroHeader}>
+              <h2 className={styles.zoteroTitle}>Create Apps with Tethys Platform</h2>
+              <p className={styles.zoteroSubtitle}>
+                Easily build and share geospatial web applications using Tethys Platform.
+              </p>
+              <div className={styles.zoteroActions}>
+                <a href={tethysDevelopUrl} target="_blank" rel="noreferrer noopener" className={styles.zoteroButton}>
+                  Create with Tethys Platform
+                </a>
               </div>
             </div>
           </section>
