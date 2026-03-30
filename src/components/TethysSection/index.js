@@ -215,7 +215,7 @@ class HomeMap(MapLayout):
 
         </Tabs>
 
-          <h3 className={styles.examples}>{examples}</h3>
+          <h3 className={styles.container}>{examples}</h3>
 
           <div className={styles.spacer30} />
             <div className={styles.actionButtons}>
