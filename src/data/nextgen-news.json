@@ -1,5 +1,16 @@
 {
 	"March 2026 Update": [
+		 	{
+			"type": "update",
+			"title": "CIROH DocuHub and Portal Redirect",
+			"links": [
+				"https://github.com/CIROH-UA/ciroh-ua_website/pull/557",
+				"https://github.com/CIROH-UA/ciroh-portal/pull/46"
+			],
+			"description":"CIROH DocuHub and Portal now redirect to Hub. All existing links to DocuHub and Portal remain fully functional and will redirect to the corresponding page on the Hub.",
+			"release_date": "03/27/2026",
+			"contributors": 1
+			},
 			{
 			"type": "NRDS",
 			"title": "ForcingProcessor",
@@ -25,11 +36,12 @@
 			"contributors": 2
 			},
 			{
-			"type": "NGIAB",
+			"type": "TEEHR",
 			"title": "TEEHR",
 			"link": "https://github.com/RTIInternational/teehr/releases/tag/v0.6.0",
 			"description":"This release introduces major architectural changes and new features. A core change in this release is the integration of Apache Iceberg as the underlying table format for TEEHR evaluations. In addition to local warehouse support, users now have access to the TEEHR-Cloud data warehouse hosted on AWS S3 via the download methods, which provides CONUS-scale historical and real-time NWM simulations and forecasts ready for evaluation. For more information, please visit the [TEEHR Release Notes](https://rtiinternational.github.io/teehr/changelog/index.html#id1).",
-			"release_date": "03/19/2026"
+			"release_date": "03/19/2026",
+			"contributors": 3
 			},
 			{
 			"type": "NGIAB",
@@ -40,7 +52,7 @@
 			"contributors": 3
 			},
 			{
-			"type": "NGIAB",
+			"type": "CCNH",
 			"title": "CIROH 2i2c JupyterHub - CIROH Community NextGen Hub (CCNH) image",
 			"link": "https://github.com/CIROH-UA/awi-ciroh-image/pull/101",
 			"description":"This PR updates pandas version to 2.0 to resolve compatibility errors during forcings generation.",

@@ -159,7 +159,20 @@ const NewsHeader = ({ date, isExpanded, onToggle }) => {
     </div>
   );
 };
-
+function ReleaseTagIcon() {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 16 16"
+      width={14}
+      height={14}
+      fill="currentColor"
+      aria-label="Release tag"
+    >
+      <path d="M1 7.775V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 0 1 0 2.474l-5.026 5.026a1.75 1.75 0 0 1-2.474 0l-6.25-6.25A1.752 1.752 0 0 1 1 7.775Zm1.5 0c0 .066.026.13.073.177l6.25 6.25a.25.25 0 0 0 .354 0l5.025-5.025a.25.25 0 0 0 0-.354l-6.25-6.25a.25.25 0 0 0-.177-.073H2.75a.25.25 0 0 0-.25.25ZM6 5a1 1 0 1 1 0 2 1 1 0 0 1 0-2Z" />
+    </svg>
+  );
+}
 const NewsCard = ({ item }) => {
   const links = getLinksFromItem(item);
   const { releaseLinks, prLinks } = categorizeLinks(links);
@@ -195,7 +208,8 @@ const NewsCard = ({ item }) => {
                 rel="noopener noreferrer"
                 className={styles.versionTag}
               >
-                {version.label}
+                <ReleaseTagIcon />
+                {`${version.label}`}
               </Link>
             ))}
           </div>
@@ -243,16 +257,15 @@ const NewsCard = ({ item }) => {
 
 function getBadgeClass(type) {
   const badgeMap = {
-    bug: "danger",
-    note: "info",
     feature: "success",
-    news: "info",
+    news: "primary",
     update: "warning",
     NGIAB: "info",
-    NRDS: "primary",
-    blog: "info",
+    NRDS: "teal",
+    blog: "rose",
+    TEEHR: "cyan",
   };
-  return badgeMap[type] || "primary";
+  return badgeMap[type] || "danger";
 }
 
 function renderDescription(description) {
@@ -315,12 +328,24 @@ function isReleaseLink(link) {
 }
 
 function extractPRNumber(link) {
-  const match = link.match(/\/pull\/(\d+)|\/pr\/(\d+)/);
-  if (match) {
-    const prNumber = match[1] || match[2];
-    return `PR #${prNumber}`;
-  }
-  return "PR";
+const match = link.match(/\/pull\/(\d+)|\/pr\/(\d+)/);
+const prNumber = match ? `#${match[1] || match[2]}` : null;
+
+return (
+  <span style={{ display: "inline-flex", alignItems: "center", gap: 4 }}>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 16 16"
+      width={16}
+      height={16}
+      fill="currentColor"
+      aria-label="Merged pull request"
+    >
+      <path d="M5.45 5.154A4.25 4.25 0 0 0 9.25 7.5h1.378a2.251 2.251 0 1 1 0 1.5H9.25A5.734 5.734 0 0 1 5 7.123v3.505a2.25 2.25 0 1 1-1.5 0V5.372a2.25 2.25 0 1 1 1.95-.218ZM4.25 13.5a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Zm8.5-4.5a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5ZM5 3.25a.75.75 0 1 0 0 .005V3.25Z" />
+    </svg>
+    {prNumber ? `PR ${prNumber}` : "PR"}
+  </span>
+);
 }
 
 function extractVersionFromLink(link) {
