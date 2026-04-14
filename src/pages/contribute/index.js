@@ -4,6 +4,7 @@ import useBaseUrl from '@docusaurus/useBaseUrl';
 import styles from './contribute.module.css';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import HydroShareCard from '@site/src/components/HydroShareCard';
+import PublicationsImporter from '@site/src/components/PublicationsImporter';
 import clsx from 'clsx';
 import Header from '@site/src/components/Header';
 import { ConstellationCanvas } from '@site/src/components/ConstellationCanvas';
@@ -25,6 +26,9 @@ function ContributeContent() {
   const isDarkTheme = colorMode === 'dark';
   const contactUrl = useBaseUrl('/contact');
   const zoteroLogin = siteConfig?.customFields?.externalLinks?.zoteroLogin || 'https://www.zotero.org/user/login';
+  const zoteroGroupId = siteConfig?.customFields?.zotero_group_id;
+  const zoteroApiKey = siteConfig?.customFields?.zotero_api_key;
+
   const tethysDevelopUrl = useBaseUrl('/contribute/develop');
   const feedbackUrl = siteConfig?.customFields?.externalLinks?.feedbackForm || 'https://forms.cloud.microsoft/r/NzA2sLrzeJ';
   const addProductUrl = "https://github.com/CIROH-UA/ciroh_hub/issues/new?assignees=&labels=on-prem&projects=&template=product-request.md";
@@ -176,6 +180,16 @@ function ContributeContent() {
                 <p>Drag-and-drop PDFs or add by DOI to share your work with the CIROH community.</p>
               </div>
             </div>
+
+            <p className={styles.zoteroSubtitleRequestForm}>
+              Or request a publication be added using the form below
+            </p>
+
+            {/* Publications Importer */}
+            <PublicationsImporter
+              groupId={zoteroGroupId}
+              zoteroApiKey={zoteroApiKey}
+            />
           </section>
 
           <hr />

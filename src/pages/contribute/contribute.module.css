@@ -146,6 +146,15 @@
   color: var(--ifm-color-emphasis-700);
 }
 
+.zoteroSubtitleRequestForm {
+  padding-top: 2rem;
+  text-align: center;
+  margin: 0.35rem auto 0.8rem;
+  max-width: 820px;
+  font-size: 0.98rem;
+  color: var(--ifm-color-emphasis-700);
+}
+
 .zoteroActions { display: flex; justify-content: center; gap: 0.8rem; flex-wrap: wrap; }
 
 .zoteroButton {
