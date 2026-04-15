@@ -23,7 +23,7 @@ const items = [
 export default function PublicationsPage() {
 
   const { siteConfig } = useDocusaurusContext();
-  const contributeUrl = useBaseUrl('/contribute?current-contribution=publications');
+  const contributeUrl = useBaseUrl('/contribute#zotero');
   const { isDarkTheme } = useDocusaurusContext();
   return (
     <Layout title="Publications" description="Ciroh pubs">
