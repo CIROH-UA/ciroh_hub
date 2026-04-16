@@ -86,6 +86,7 @@ const config = {
     ],
     zotero_api_key: process.env.ZOTERO_API_KEY || "dummy",
     zotero_group_id: process.env.ZOTERO_CIROH_GROUP_ID || 999999999,
+    zotero_staging_group_id: process.env.ZOTERO_CIROH_STAGING_GROUP_ID,
     captcha_key: process.env.CAPTCHA_KEY || "dummy",
     s3_bucket: process.env.S3_BUCKET_NAME,
     s3_access_key: process.env.S3_ACCESS_KEY,

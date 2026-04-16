@@ -26,7 +26,7 @@ function ContributeContent() {
   const isDarkTheme = colorMode === 'dark';
   const contactUrl = useBaseUrl('/contact');
   const zoteroLogin = siteConfig?.customFields?.externalLinks?.zoteroLogin || 'https://www.zotero.org/user/login';
-  const zoteroGroupId = siteConfig?.customFields?.zotero_group_id;
+  const zoteroGroupId = siteConfig?.customFields?.zotero_staging_group_id;
   const zoteroApiKey = siteConfig?.customFields?.zotero_api_key;
 
   const tethysDevelopUrl = useBaseUrl('/contribute/develop');
