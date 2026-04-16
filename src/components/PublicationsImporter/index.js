@@ -43,6 +43,8 @@ export default function PublicationsImporter({ groupId, zoteroApiKey  }) {
   const [dataLocation, setDataLocation] = useState(dataLocationOptions[0]);
   const [codeLocationUrl, setCodeLocationUrl] = useState('');
   const [dataLocationUrl, setDataLocationUrl] = useState('');
+  const [thumbnailFile, setThumbnailFile] = useState(null);
+  const [thumbnailWarning, setThumbnailWarning] = useState('');
 
   // Wikimedia REST API base (using the official REST endpoint)
   const wikimediaBaseUrl = 'https://en.wikipedia.org/api/rest_v1';
@@ -58,6 +60,7 @@ export default function PublicationsImporter({ groupId, zoteroApiKey  }) {
     setError('');
     setProgressMessage('');
     setCitationUrl('');
+    setThumbnailWarning('');
     
     if (!query.trim()) {
       setError('Please enter an article identifier (URL, DOI, PMID, etc.).');
@@ -159,13 +162,21 @@ export default function PublicationsImporter({ groupId, zoteroApiKey  }) {
         notes.push('Acknowledges CIROH: No');
       }
 
+      // Read thumbnail file as ArrayBuffer if one was selected
+      let thumbnailData = null;
+      if (thumbnailFile)
+      {
+        setProgressMessage('Reading thumbnail image...');
+        thumbnailData = await thumbnailFile.arrayBuffer();
+      }
+
       // Call the Zotero API client to import the citation.
       const importedUrl = await importCitation(
-        citationData, 
-        // zoteroApiKey, 
-        // groupId,
+        citationData,
         selectedCollections.map(o => o.value),
-        notes
+        notes,
+        thumbnailFile,
+        thumbnailData
       );
       
       setCitationUrl(importedUrl);
@@ -180,11 +191,11 @@ export default function PublicationsImporter({ groupId, zoteroApiKey  }) {
 
   // Import the citation using the Zotero API client.
   async function importCitation(
-    citationData, 
-    // apiKey, 
-    // groupId,  
+    citationData,
     collectionKeys = [],
-    notes = []
+    notes = [],
+    thumbnailFileObj = null,
+    thumbnailArrayBuffer = null
   ) {
     try {
       // Initialize the client with your API key and configure for the group library.
@@ -261,6 +272,36 @@ export default function PublicationsImporter({ groupId, zoteroApiKey  }) {
           }
 
           throw err;
+        }
+      }
+
+      // Upload thumbnail image as a child attachment if provided
+      if (thumbnailFileObj && thumbnailArrayBuffer) {
+        setProgressMessage('Uploading thumbnail image...');
+        try {
+          // Create the attachment item as a child of the main item
+          const attachmentItem = {
+            itemType: 'attachment',
+            linkMode: 'imported_file',
+            parentItem: itemKey,
+            title: thumbnailFileObj.name,
+            filename: thumbnailFileObj.name,
+            contentType: thumbnailFileObj.type || 'image/png',
+            charset: '',
+            url: '',
+            note: '',
+            tags: [],
+            relations: {},
+          };
+
+          const attachmentResponse = await zotero.items().post([attachmentItem]);
+          const attachmentKey = attachmentResponse.getData()[0].key;
+
+          // Upload the actual file data to the attachment
+          await zotero.items(attachmentKey).attachment(thumbnailFileObj.name, thumbnailArrayBuffer).post();
+        } catch (err) {
+          console.error('Failed to upload thumbnail:', err);
+          setThumbnailWarning('Citation was imported, but the thumbnail upload failed. You can add it manually in Zotero.');
         }
       }
 
@@ -372,6 +413,25 @@ export default function PublicationsImporter({ groupId, zoteroApiKey  }) {
           <label className={styles.label}>Does the Paper Acknowledge CIROH?</label>
         </div>
 
+        {/* Thumbnail Image Upload */}
+        <label className={styles.label}>Thumbnail Image (optional)</label>
+        <input
+          type="file"
+          accept="image/*"
+          className={styles.fileInput}
+          onChange={(e) => {
+            const file = e.target.files[0] || null;
+            if (file && file.size > 10 * 1024 * 1024) {
+              setError('Thumbnail image must be smaller than 10 MB.');
+              setThumbnailFile(null);
+              e.target.value = '';
+              return;
+            }
+            setThumbnailFile(file);
+            setError('');
+          }}
+        />
+
         {/* ReCAPTCHA */}
         <div className={styles.captchaContainer}>
           <ReCAPTCHA
@@ -396,6 +456,11 @@ export default function PublicationsImporter({ groupId, zoteroApiKey  }) {
           {loading ? 'Processing...' : 'Import Citation'}
         </button>
       </form>
+      {thumbnailWarning && (
+        <div className={styles.warningMessage}>
+          {thumbnailWarning}
+        </div>
+      )}
       {progressMessage && (
         <div className={styles.progressMessage}>
           {loading && <FaSpinner className={styles.spinner} />}

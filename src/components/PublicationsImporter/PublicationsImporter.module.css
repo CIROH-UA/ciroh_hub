@@ -118,9 +118,31 @@
   transform: translate(-50%, -50%);
 } */
   
+.fileInput {
+  padding: 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+  width: 100%;
+  cursor: pointer;
+  background-color: #FFFFFF;
+}
+
+:root[data-theme='dark'] .fileInput {
+  background-color: #060010;
+  border: 1px solid #ccc;
+  color: #fff;
+}
+
 .errorMessage {
   color: #e00;
   margin-bottom: 1rem;
+}
+
+.warningMessage {
+  color: #c90;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
 }
   
 .progressMessage {
