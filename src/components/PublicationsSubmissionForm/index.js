@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { FaSpinner } from 'react-icons/fa';
-import styles from './PublicationsImporter.module.css';
+import styles from './PublicationsSubmissionForm.module.css';
 import clsx from 'clsx';
 import api from 'zotero-api-client';
 import useRecaptcha from '@site/src/components/Captcha/useRecaptcha';
@@ -26,7 +26,7 @@ const dataLocationOptions = [
 ];
 
 
-export default function PublicationsImporter({ groupId, zoteroApiKey  }) {
+export default function PublicationsSubmissionForm({ groupId, zoteroApiKey }) {
   const { capchaToken, recaptchaRef, handleRecaptcha } = useRecaptcha();
   const [query, setQuery] = useState('');
   const [loading, setLoading] = useState(false);

@@ -4,7 +4,7 @@ import useBaseUrl from '@docusaurus/useBaseUrl';
 import styles from './contribute.module.css';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import HydroShareCard from '@site/src/components/HydroShareCard';
-import PublicationsImporter from '@site/src/components/PublicationsImporter';
+import PublicationsSubmissionForm from '@site/src/components/PublicationsSubmissionForm';
 import clsx from 'clsx';
 import Header from '@site/src/components/Header';
 import { ConstellationCanvas } from '@site/src/components/ConstellationCanvas';
@@ -185,8 +185,8 @@ function ContributeContent() {
               Or request a publication be added using the form below
             </p>
 
-            {/* Publications Importer */}
-            <PublicationsImporter
+            {/* Publications Submission Form */}
+            <PublicationsSubmissionForm
               groupId={zoteroGroupId}
               zoteroApiKey={zoteroApiKey}
             />
