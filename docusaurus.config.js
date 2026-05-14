@@ -88,6 +88,7 @@ const config = {
     zotero_group_id: process.env.ZOTERO_CIROH_GROUP_ID || 999999999,
     zotero_staging_group_id: process.env.ZOTERO_CIROH_STAGING_GROUP_ID,
     captcha_key: process.env.CAPTCHA_KEY || "dummy",
+    zotero_import_request_api_url: process.env.ZOTERO_IMPORT_REQUEST_API_URL || "http://127.0.0.1:3000/zotero-import-request",
     s3_bucket: process.env.S3_BUCKET_NAME,
     s3_access_key: process.env.S3_ACCESS_KEY,
     s3_secret_key: process.env.S3_SECRET_KEY,

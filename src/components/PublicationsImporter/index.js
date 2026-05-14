@@ -35,9 +35,7 @@ export default function PublicationsImporter({ groupId, zoteroApiKey  }) {
   const [citationUrl, setCitationUrl] = useState('');
   const [error, setError] = useState('');
   const { colorMode } = useColorMode();
-  const {
-      siteConfig: {customFields},
-    } = useDocusaurusContext();
+  const { siteConfig: {customFields}, } = useDocusaurusContext();
   const [acknowledgesCIROH, setAcknowledgesCIROH] = useState(false);
   const [codeLocation, setCodeLocation] = useState(codeLocationOptions[0]);
   const [dataLocation, setDataLocation] = useState(dataLocationOptions[0]);
@@ -46,14 +44,24 @@ export default function PublicationsImporter({ groupId, zoteroApiKey  }) {
   const [thumbnailFile, setThumbnailFile] = useState(null);
   const [thumbnailWarning, setThumbnailWarning] = useState('');
 
-  // Wikimedia REST API base (using the official REST endpoint)
-  const wikimediaBaseUrl = 'https://en.wikipedia.org/api/rest_v1';
-
   const zoteroClient = React.useMemo(
     () => api(zoteroApiKey).library('group', groupId),
     [zoteroApiKey, groupId],
   );
 
+  /**
+   * Convert an ArrayBuffer to a Base64 encoded string
+   * @param {ArrayBuffer} buffer The ArrayBuffer to convert
+   * @returns {string} Base64 encoded string
+   */
+  function arrayBufferToBase64(buffer) {
+    const bytes = new Uint8Array(buffer);
+    let binary = '';
+    for (let i = 0; i < bytes.length; i++) {
+      binary += String.fromCharCode(bytes[i]);
+    }
+    return btoa(binary);
+  }
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -62,8 +70,10 @@ export default function PublicationsImporter({ groupId, zoteroApiKey  }) {
     setCitationUrl('');
     setThumbnailWarning('');
     
+    // Validate DOI input
     if (!query.trim()) {
       setError('Please enter an article identifier (URL, DOI, PMID, etc.).');
+      setProgressMessage('Please enter an article identifier (URL, DOI, PMID, etc.).');
       handleRecaptcha('');
       if (recaptchaRef.current) {
         recaptchaRef.current.reset();
@@ -72,14 +82,18 @@ export default function PublicationsImporter({ groupId, zoteroApiKey  }) {
     }
     if (!validateDOI(query.trim())) {
       setError('Please enter a valid DOI.');
+      setProgressMessage('Please enter a valid DOI.');
       handleRecaptcha('');
       if (recaptchaRef.current) {
         recaptchaRef.current.reset();
       }
       return;
     }
+
+    // Validate reCAPTCHA
     if (!capchaToken){
       setError('Please complete the reCAPTCHA to proceed.');
+      setProgressMessage('Please complete the reCAPTCHA to proceed.');
       handleRecaptcha('');
       if (recaptchaRef.current) {
         recaptchaRef.current.reset();
@@ -89,34 +103,6 @@ export default function PublicationsImporter({ groupId, zoteroApiKey  }) {
 
     setLoading(true);
     try {
-      setProgressMessage('Fetching citation data...');
-      const encodedQuery = encodeURIComponent('https://doi.org/' + query.trim());
-      const targetUrl = `${wikimediaBaseUrl}/data/citation/zotero/${encodedQuery}`;
-      const resp = await fetch(targetUrl);
-      if (!resp.ok) {
-        const text = await resp.text();
-        const status = resp.status;
-
-        // Get a user friendly error message
-        let userFriendlyMessage = 'Error fetching citation data: ';
-
-        if (status === 404) {
-          userFriendlyMessage += 'No citation data found for the provided identifier. Please check your input and try again.';
-        } else if (status === 500) {
-          userFriendlyMessage += 'The server encountered an error. Please try again later.';
-        } else if (status >= 400 && status < 500) {
-          userFriendlyMessage += 'There was an issue with your request. Please verify your input and try again.';
-        } else if (status >= 500) {
-          userFriendlyMessage += 'The server is currently unavailable. Please try again later.';
-        }
-        recaptchaRef.current?.reset();
-
-        throw new Error(userFriendlyMessage || text || `Error fetching citation data: ${resp.status}`);
-      }
-      const citationData = await resp.json();
-
-      setProgressMessage('Citation data fetched. Importing citation...');
-      
       // Holds any notes we want to add to the Zotero item based on user input
       const notes = [];
 
@@ -170,15 +156,56 @@ export default function PublicationsImporter({ groupId, zoteroApiKey  }) {
         thumbnailData = await thumbnailFile.arrayBuffer();
       }
 
-      // Call the Zotero API client to import the citation.
-      const importedUrl = await importCitation(
-        citationData,
-        selectedCollections.map(o => o.value),
-        notes,
-        thumbnailFile,
-        thumbnailData
-      );
-      
+      // Build request headers for the backend API call
+      const requestHeaders = {
+        'Content-Type': 'application/json',
+      }
+
+      // Build request body for the backend API call
+      const requestBody = JSON.stringify({
+        recaptchaToken: capchaToken,
+        doi: query.trim(),
+        notes: notes,
+        collections: selectedCollections.map(o => o.value),
+        thumbnail: thumbnailFile ? {
+          name: thumbnailFile.name,
+          type: thumbnailFile.type,
+          size: thumbnailFile.size,
+          data: arrayBufferToBase64(thumbnailData),
+        } : null,
+      });
+
+      // Give feedback if thumbnail was not selected
+      if (!thumbnailFile || !thumbnailData)
+      {
+        setProgressMessage('Importing Citation...');
+      }
+
+      // Make request to the backend API to verify reCAPTCHA and import the citation data into Zotero
+      const response = await fetch(customFields.zotero_import_request_api_url, {method: 'POST', headers: requestHeaders, body: requestBody});
+
+      // Check for failure
+      if (!response.ok) {
+        let errorMessage = `Error importing citation: ${response.status}`;
+        try {
+          const errorData = await response.json();
+          if (errorData.message) {
+            errorMessage = errorData.message;
+          }
+        } catch {
+          // Body wasn't valid JSON — fall back to the default message above
+        }
+        throw new Error(errorMessage);
+      }
+
+      // Reset reCAPTCHA after submission
+      recaptchaRef.current.reset();
+
+      // Extract the imported citation URL from the response
+      const responseData = await response.json();
+      const importedUrl = responseData.importedUrl;
+
+      // Update state with the imported citation URL to display it to the user
       setCitationUrl(importedUrl);
       setProgressMessage('Citation imported successfully! Visit your citation ');
     } catch (err) {
@@ -189,128 +216,12 @@ export default function PublicationsImporter({ groupId, zoteroApiKey  }) {
     }
   }
 
-  // Import the citation using the Zotero API client.
-  async function importCitation(
-    citationData,
-    collectionKeys = [],
-    notes = [],
-    thumbnailFileObj = null,
-    thumbnailArrayBuffer = null
-  ) {
-    try {
-      // Initialize the client with your API key and configure for the group library.
-      // const zotero = api(apiKey).library('group', groupId);
-      const zotero = zoteroClient; 
-      // Use the post() execution function to create the new item.
-      // The API expects an array of entities.
-      const newItem = { ...citationData[0], collections: collectionKeys };
-      let response;
-
-      try {
-        response = await zotero.items().post([newItem]);
-      }
-      catch (err) {
-        // Check for errors in the response
-        if (err.response.status >= 400 && err.response.status < 600) {
-          // Handle specific status codes with user-friendly messages
-          if (err.response.status === 400) {
-            throw new Error('The citation data is invalid. Please check the input and try again.');
-          } else if (err.response.status === 401) {
-            throw new Error('Your Zotero API key is invalid or expired. Please check your API key and try again.');
-          } else if (err.response.status === 403) {
-            throw new Error('You do not have permission to add items to this Zotero group library. Please check your permissions.');
-          } else if (err.response.status === 404) {
-            throw new Error('The Zotero group could not be found. Please check the group ID and try again.');
-          } else if (err.response.status === 429) {
-            throw new Error('You have exceeded the API rate limit. Please wait a moment and try again.');
-          } else if (err.response.status === 500) {
-            throw new Error('The Zotero server encountered an error. Please try again later.');
-          } else if (err.response.status === 503) {
-            throw new Error('The Zotero API is currently unavailable. Please try again later.');
-          } else {
-            throw new Error(`An unexpected error occurred: ${err.response.status}`);
-          }
-        }
-
-        throw err;
-      }
-
-      const createdItems = response.getData(); // returns an array
-      const itemKey = createdItems[0].key; // get the key of the first created item
-
-      // Create and add notes to the created item
-      if (notes.length > 0) {
-        const noteObjects = notes.map(note => ({
-          itemType: 'note',
-          parentItem: itemKey,
-          note: note,
-        }));
-      
-
-        try {
-          response = await zotero.items().post(noteObjects);
-        } catch (err) {
-          // Handle errors when adding notes
-          if (err.response && err.response.status >= 400 && err.response.status < 600) {
-            if (err.response.status === 400) {
-              throw new Error('The note data is invalid. Please check the input and try again.');
-            } else if (err.response.status === 401) {
-              throw new Error('Your Zotero API key is invalid or expired. Please check your API key and try again.');
-            } else if (err.response.status === 403) {
-              throw new Error('You do not have permission to add notes to this Zotero group library. Please check your permissions.');
-            } else if (err.response.status === 404) {
-              throw new Error('The Zotero group could not be found. Please check the group ID and try again.');
-            } else if (err.response.status === 429) {
-              throw new Error('You have exceeded the API rate limit. Please wait a moment and try again.');
-            } else if (err.response.status === 500) {
-              throw new Error('The Zotero server encountered an error. Please try again later.');
-            } else if (err.response.status === 503) {
-              throw new Error('The Zotero API is currently unavailable. Please try again later.');
-            } else {
-              throw new Error(`An unexpected error occurred: ${err.response.status}`);
-            }
-          }
-
-          throw err;
-        }
-      }
-
-      // Upload thumbnail image as a child attachment if provided
-      if (thumbnailFileObj && thumbnailArrayBuffer) {
-        setProgressMessage('Uploading thumbnail image...');
-        try {
-          // Create the attachment item as a child of the main item
-          const attachmentItem = {
-            itemType: 'attachment',
-            linkMode: 'imported_file',
-            parentItem: itemKey,
-            title: thumbnailFileObj.name,
-            filename: thumbnailFileObj.name,
-            contentType: thumbnailFileObj.type || 'image/png',
-            charset: '',
-            url: '',
-            note: '',
-            tags: [],
-            relations: {},
-          };
-
-          const attachmentResponse = await zotero.items().post([attachmentItem]);
-          const attachmentKey = attachmentResponse.getData()[0].key;
-
-          // Upload the actual file data to the attachment
-          await zotero.items(attachmentKey).attachment(thumbnailFileObj.name, thumbnailArrayBuffer).post();
-        } catch (err) {
-          console.error('Failed to upload thumbnail:', err);
-          setThumbnailWarning('Citation was imported, but the thumbnail upload failed. You can add it manually in Zotero.');
-        }
-      }
-
-      return `https://www.zotero.org/groups/${groupId}/items/${itemKey}`;
-    } catch (err) {
-      throw err;
-    }
-  }
-
+  /**
+   * Checks if a given DOI is valid based on the standard DOI format (10.1234/abcd.efgh).
+   * This is a basic validation and may not cover all edge cases, but it ensures that the input follows the general structure of a DOI.
+   * @param {String} doi The DOI to validate, which should follow the format 10.1234/abcd.efgh
+   * @returns {Boolean} True if the DOI is valid, false otherwise
+   */
   function validateDOI(doi) {
     const doiRegex = /^(10\.\d{4,9}\/[-._;()/:A-Z0-9]+)$/i;
     return doiRegex.test(doi);
