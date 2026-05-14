@@ -138,7 +138,7 @@ function ContributeContent() {
           <hr id="zotero" />
 
           {/* Contribute to Zotero Publications */}
-          <section className={clsx(styles.zoteroSection, "margin-vert--xl")}>
+          <section className={clsx(styles.zoteroSection)}>
             <div className={styles.zoteroHeader}>
               <h2 className={styles.zoteroTitle}>Contribute your publications to Zotero</h2>
               <p className={styles.zoteroSubtitle}>
@@ -190,6 +190,11 @@ function ContributeContent() {
               groupId={zoteroGroupId}
               zoteroApiKey={zoteroApiKey}
             />
+
+            {/* Wikimedia Privacy and Terms of Use Notice */}
+            <div className={styles.wikimediaPrivacyNotice}>
+              <b>By using this form you acknowledge and agree to Wikimedia's <a href="https://foundation.wikimedia.org/wiki/Policy:Privacy_policy" target="_blank" rel="noopener noreferrer">Privacy Policy</a> and <a href="https://foundation.wikimedia.org/wiki/Policy:Terms_of_Use#12._API_Terms" target="_blank" rel="noopener noreferrer">Terms of Use</a>.</b>
+            </div>
           </section>
 
           <hr />

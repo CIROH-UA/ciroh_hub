@@ -238,6 +238,14 @@ html[data-theme='dark'] .zoteroCard {
   box-shadow: 0 2px 10px rgba(0,0,0,0.25);
 }
 
+.wikimediaPrivacyNotice {
+  margin-top: auto;
+  margin-bottom: 3rem;
+  font-size: 0.95rem;
+  line-height: 1.4;
+  text-align: center;
+}
+
 /* removed deprecated flatBannerCallout in favor of .flatMissionText */
 
 /* Flat mission text (plain page text, no blockquote styling) */
