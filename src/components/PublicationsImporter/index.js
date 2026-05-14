@@ -421,8 +421,8 @@ export default function PublicationsImporter({ groupId, zoteroApiKey  }) {
           className={styles.fileInput}
           onChange={(e) => {
             const file = e.target.files[0] || null;
-            if (file && file.size > 10 * 1024 * 1024) {
-              setError('Thumbnail image must be smaller than 10 MB.');
+            if (file && file.size > 4 * 1024 * 1024) {
+              setError('Thumbnail image must be smaller than 4 MB.');
               setThumbnailFile(null);
               e.target.value = '';
               return;
