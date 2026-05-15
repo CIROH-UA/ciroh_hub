@@ -101,6 +101,7 @@ jobs:
           ZOTERO_CIROH_GROUP_ID: ${{ secrets.ZOTERO_CIROH_GROUP_ID }}
           ZOTERO_STAGING_API_KEY: ${{ secrets.ZOTERO_STAGING_API_KEY }}
           ZOTERO_CIROH_STAGING_GROUP_ID: ${{ secrets.ZOTERO_CIROH_STAGING_GROUP_ID }}
+          ZOTERO_IMPORT_REQUEST_API_URL: ${{ vars.ZOTERO_IMPORT_REQUEST_API_URL }}
           CAPTCHA_KEY: ${{ secrets.CAPTCHA_KEY }}
           S3_BUCKET_NAME: ${{ secrets.S3_BUCKET_NAME }}
           S3_ACCESS_KEY: ${{ secrets.S3_ACCESS_KEY }}
