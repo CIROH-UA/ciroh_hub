@@ -15,7 +15,7 @@ import {
   HiOutlineSearch,
 } from 'react-icons/hi';
 
-const PAGE_SIZE        = 40;
+const DEFAULT_PAGE_SIZE = 40;
 const SCROLL_THRESHOLD = 800;
 let   debounceTimer    = null;
 const DEBOUNCE_MS      = 1_000;
@@ -25,6 +25,7 @@ export default function HydroShareResourcesSelector({
   defaultImage,
   variant = 'legacy',
   onResultsChange,
+  pageSize = DEFAULT_PAGE_SIZE,
 }) {
   const { colorMode } = useColorMode(); // Get the current theme
   const PLACEHOLDER_ITEMS = 10;
@@ -52,6 +53,8 @@ export default function HydroShareResourcesSelector({
   const [view, setView] = useState("row");
   const [currentPage, setCurrentPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
+  const [nextToken, setNextToken] = useState(undefined);
+  const [groupPage, setGroupPage] = useState(1);
   const fetching = useRef(false);
 
   // Search State
@@ -63,7 +66,7 @@ export default function HydroShareResourcesSelector({
 
 
   const fetchResources = useCallback(
-    async (page) => {
+    async (paginationToken, currentGroupPage) => {
       if (fetching.current) return;
       fetching.current = true;
 
@@ -71,11 +74,11 @@ export default function HydroShareResourcesSelector({
         let resourceList = undefined;
         
         // Add placeholders for loading state (only for pagination, not first page)
-        if (page > 1) {
+        if (paginationToken !== undefined || currentGroupPage > 1) {
           setResources(prev => [
             ...prev,
-            ...Array.from({ length: PAGE_SIZE }, (_, i) => ({
-              resource_id: `placeholder-page${page}-${i}`,
+            ...Array.from({ length: pageSize }, (_, i) => ({
+              resource_id: `placeholder-load-${i}`,
               title: "",
               authors: "",
               resource_type: "",
@@ -96,10 +99,14 @@ export default function HydroShareResourcesSelector({
         let communityResponse = null;
         if (keyword.includes('data')) {
           const firstKeyword = keyword.split(',')[0].trim();
-          communityResponse = await getCommunityResources(firstKeyword, "4", filterSearch, ascending, sortType, undefined, page, PAGE_SIZE);
+          communityResponse = await getCommunityResources(firstKeyword, "4", filterSearch, ascending, sortType, undefined, paginationToken, pageSize, currentGroupPage);
           resourceList = communityResponse.resources || [];
         } else {
-          resourceList = await fetchResourcesBySearch(keyword, filterSearch, ascending, sortType, undefined, page);
+          const result = await fetchResourcesBySearch(keyword, filterSearch, ascending, sortType, undefined, paginationToken, pageSize);
+          resourceList = result.resources;
+          const newToken = result.nextToken;
+          setNextToken(newToken);
+          setHasMore(!!newToken);
         }
 
         const mappedList = resourceList.map((res) => ({
@@ -120,7 +127,7 @@ export default function HydroShareResourcesSelector({
         }));
 
         // Handle first page vs pagination
-        if (page === 1) {
+        if (paginationToken === undefined && currentGroupPage === 1) {
           setResources(mappedList); // Replace for first page
         } else {
           setResources(prev => [
@@ -132,10 +139,10 @@ export default function HydroShareResourcesSelector({
         // Update hasMore based on API response
         if (communityResponse) {
           // For datasets using getCommunityResources
-          setHasMore(communityResponse.groupResourcesPageData?.hasMorePages || communityResponse.extraResourcesPageData?.hasMorePages || false);
-        } else {
-          // For other resources using fetchResourcesBySearch
-          setHasMore(mappedList.length === PAGE_SIZE);
+          const searchNextToken = communityResponse.extraResourcesPageData?.nextToken ?? null;
+          const groupHasMore = communityResponse.groupResourcesPageData?.hasMorePages ?? false;
+          setNextToken(searchNextToken);
+          setHasMore(groupHasMore || !!searchNextToken);
         }
         setLoading(false);
 
@@ -170,7 +177,7 @@ export default function HydroShareResourcesSelector({
         fetching.current = false;
       }
     },
-    [keyword, filterSearch, sortDirection, sortType, hs_icon]
+    [keyword, filterSearch, sortDirection, sortType, hs_icon, pageSize]
   );
 
 
@@ -180,11 +187,13 @@ export default function HydroShareResourcesSelector({
     setResources(initialPlaceholders);
     setCurrentPage(1);
     setHasMore(true);
+    setNextToken(undefined);
+    setGroupPage(1);
     
     // Reset the fetching flag to allow new requests (fixes race condition)
     fetching.current = false;
     
-    fetchResources(1);
+    fetchResources(undefined, 1);
   }, [keyword, filterSearch, sortDirection, sortType, fetchResources]);
 
   const nonPlaceholderResources = useMemo(
@@ -217,10 +226,6 @@ export default function HydroShareResourcesSelector({
     onResultsChange,
   ]);
 
-  if (error) {
-    return <p style={{ color: "red" }}>Error: {error}</p>;
-  }
-
   /* infinite scroll */
   useEffect(() => {
     const onScroll = () => {
@@ -228,13 +233,19 @@ export default function HydroShareResourcesSelector({
       const { scrollTop, clientHeight, scrollHeight } = document.documentElement;
       if (scrollTop + clientHeight >= scrollHeight - SCROLL_THRESHOLD) {
         const next = currentPage + 1;
+        const nextGroup = groupPage + 1;
         setCurrentPage(next);
-        fetchResources(next);
+        setGroupPage(nextGroup);
+        fetchResources(nextToken, nextGroup);
       }
     };
     window.addEventListener('scroll', onScroll);
     return () => window.removeEventListener('scroll', onScroll);
-  }, [currentPage, hasMore, fetchResources]);
+  }, [currentPage, hasMore, nextToken, groupPage, fetchResources]);
+
+  if (error) {
+    return <p style={{ color: "red" }}>Error: {error}</p>;
+  }
 
   /* search helpers */
   const commitSearch = (q) => {

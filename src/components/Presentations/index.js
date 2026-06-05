@@ -7,7 +7,6 @@ import HydroShareResourcesRows from "@site/src/components/HydroShareResourcesRow
 import { 
   fetchResource,
   fetchResourcesBySearch,
-  fetchKeywordPageData, 
   getCuratedIds,
   fetchResourceCustomMetadata, 
   joinExtraResources 
@@ -128,7 +127,8 @@ export default function Presentations({ community_id = 4 }) {
 
   // Pagination State
   const [currentPage, setCurrentPage] = useState(1);
-  const [lastPage, setLastPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+  const [presPageNextToken, setPresPageNextToken] = useState(undefined);
   const fetching = useRef(false);
 
   // Search State
@@ -174,15 +174,18 @@ export default function Presentations({ community_id = 4 }) {
         const ascending = sortDirection === 'asc';
 
         // Retrieve resources
-        let [rawCuratedResources, invKeywordResources, invCollections, pageData] = await Promise.all([
+        let [rawCuratedResources, presResult, collResult] = await Promise.all([
           fetchRawCuratedResources(CURATED_PARENT_ID), // get array of curated resource IDs
-          fetchResourcesBySearch('ciroh_portal_presentation,ciroh_hub_presentation', filterSearch, ascending, sortType, undefined, page),
-          fetchResourcesBySearch('ciroh_portal_pres_collections', filterSearch, ascending, sortType, undefined, page),
-          fetchKeywordPageData('ciroh_portal_presentation,ciroh_hub_presentation', filterSearch, ascending, sortType, undefined)
+          fetchResourcesBySearch('ciroh_portal_presentation,ciroh_hub_presentation', filterSearch, ascending, sortType, undefined, undefined, PAGE_SIZE),
+          fetchResourcesBySearch('ciroh_portal_pres_collections', filterSearch, ascending, sortType, undefined, undefined, PAGE_SIZE),
         ]);
 
-        // Set last page
-        setLastPage(pageData.pageCount);
+        const invKeywordResources = presResult.resources;
+        const invCollections = collResult.resources;
+
+        // Capture the pagination token from the first page so fetchPage can continue from here
+        setPresPageNextToken(presResult.nextToken ?? null);
+        setHasMore(!!presResult.nextToken);
         
         // Apply search filtering to curated resources
         if (usingSearch()) {
@@ -258,27 +261,23 @@ export default function Presentations({ community_id = 4 }) {
   );
 
   const fetchPage = useCallback(
-    async (page) => {
+    async () => {
       if (fetching.current) return;
       fetching.current = true;
 
       try {
-        // Add placeholders for loading state (only for pagination, not first page)
-        if (page > 1) {
-          addPlaceholderResources(page);
-        }
+        // Add placeholders for loading state
+        addPlaceholderResources(currentPage + 1);
 
         // Search parameters
         const ascending = sortDirection === 'asc';
 
         // Retrieve resources
-        let [invKeywordResources, pageData] = await Promise.all([
-          fetchResourcesBySearch('ciroh_portal_presentation', filterSearch, ascending, sortType, undefined, page),
-          fetchKeywordPageData('ciroh_portal_presentation', filterSearch, ascending, sortType, undefined)
-        ]);
+        const { resources: invKeywordResources, nextToken } = await fetchResourcesBySearch('ciroh_portal_presentation', filterSearch, ascending, sortType, undefined, presPageNextToken, PAGE_SIZE);
 
-        // Set last page
-        setLastPage(pageData.pageCount);
+        // Update token and hasMore for subsequent pages
+        setPresPageNextToken(nextToken);
+        setHasMore(!!nextToken);
 
         const rawKeywordResources = invKeywordResources.reverse(); // Reverse chronological order
 
@@ -314,6 +313,8 @@ export default function Presentations({ community_id = 4 }) {
   useEffect(() => {
     setResources(initialPlaceholders);
     setCurrentPage(1);
+    setHasMore(true);
+    setPresPageNextToken(undefined);
     
     // Reset the fetching flag to allow new requests
     fetching.current = false;
@@ -325,17 +326,17 @@ export default function Presentations({ community_id = 4 }) {
   useEffect(() => {
     const onScroll = () => {
       // Check if we can fetch more pages
-      if (fetching.current || currentPage >= lastPage) return;
+      if (fetching.current || !hasMore) return;
       const { scrollTop, clientHeight, scrollHeight } = document.documentElement;
       if (scrollTop + clientHeight >= scrollHeight - SCROLL_THRESHOLD) {
         const next = currentPage + 1;
         setCurrentPage(next);
-        fetchPage(next);
+        fetchPage();
       }
     };
     window.addEventListener('scroll', onScroll);
     return () => window.removeEventListener('scroll', onScroll);
-  }, [currentPage, lastPage, fetchPage]);
+  }, [currentPage, hasMore, fetchPage]);
 
   /* search helpers */
   const commitSearch = q => {

@@ -1,3 +1,4 @@
+import { fetchSearchResourcesCore, HS_SEARCH_PAGE_SIZE } from "@site/src/api/hydroshareAPI";
 const { XMLParser } = require("fast-xml-parser");
 
 /**
@@ -10,30 +11,6 @@ const { XMLParser } = require("fast-xml-parser");
  * Adjust or add query parameters (e.g., page, count) as needed.
  */
 
-/**
- * Convert author name from "First Middle Last" to "Last, First Middle"
- * @param {string} author - The author name in "First Middle Last" format
- * @returns {string} The author name in "Last, First Middle" format
- */
-function convertAuthorToLastFirst(author) {
-  if (!author || typeof author !== 'string') {
-    return author;
-  }
-  
-  const nameParts = author.split(' ');
-
-  if (nameParts.length === 1) {
-    // Single-word name, leave as-is
-    author = nameParts[0];
-  } else {
-    const lastName = nameParts.pop();
-    const firstName = nameParts.join(' ');
-    author = `${lastName}, ${firstName}`;
-  }
-
-  return author;
-}
-
 async function fetchJson(url, errorContext = "resources") {
   const response = await fetch(url);
   if (!response.ok) {
@@ -41,80 +18,6 @@ async function fetchJson(url, errorContext = "resources") {
   }
   return response.json();
 }
-
-function buildDiscoverApiUrl(
-  keyword,
-  searchText,
-  ascending = false,
-  sortBy = undefined,
-  author = undefined,
-  pageNumber = 1,
-) {
-  const filterAuthor = author !== undefined ? convertAuthorToLastFirst(author) : undefined;
-  const filter = {
-    author: [filterAuthor].filter(a => a !== undefined),
-    subject: keyword.split(","),
-  };
-  const params = new URLSearchParams({
-    q: searchText ? searchText : "",
-    subject: keyword,
-    asc: ascending ? "1" : "-1",
-    pnum: pageNumber.toString(),
-    filter: JSON.stringify(filter),
-  });
-  if (sortBy !== undefined) {
-    params.set("sort", sortBy);
-  }
-  return `https://www.hydroshare.org/discoverapi/?${params.toString()}`;
-}
-
-function mapDiscoverResource(resource) {
-  return {
-    resource_id: resource.short_id,
-    resource_title: resource.title,
-    authors: resource.authors,
-    resource_type: resource.type,
-    resource_url: `https://www.hydroshare.org${resource.link}`,
-    abstract: resource.abstract,
-    date_created: resource.created,
-    date_last_updated: resource.modified,
-  };
-}
-
-function parseDiscoverResources(data, { pageNumber } = {}) {
-  if (pageNumber !== undefined && pageNumber > data.pagecount) {
-    return [];
-  }
-
-  if (typeof data.resources === "string") {
-    try {
-      return JSON.parse(data.resources).map(mapDiscoverResource);
-    } catch (error) {
-      console.error("Failed to parse data.resources as JSON string:", error);
-      return [];
-    }
-  }
-
-  if (Array.isArray(data.resources)) {
-    return data.resources.map(mapDiscoverResource);
-  }
-
-  console.warn("Unexpected format for data.resources:", data.resources);
-  return [];
-}
-
-// Helper function to fetch detailed metadata for a specific resource
-// async function fetchResourceMetadata(resourceId="302dcbef13614ac486fb260eaa1ca87c") {
-//   const url = `https://www.hydroshare.org/hsapi/resource/${resourceId}/scimeta/elements/`;
-//   const response = await fetch(url);
-//   if (!response.ok) {
-//     throw new Error(
-//       `Error fetching metadata for resource ${resourceId} (status: ${response.status})`
-//     );
-//   }
-//   const metadata = await response.json();
-//   return metadata;
-// }
 
 async function fetchResource(id) {
   const url = `https://www.hydroshare.org/hsapi/resource/${encodeURIComponent(id)}/sysmeta`;
@@ -262,13 +165,17 @@ function joinExtraResources(groupResources, extraResources) {
 
 }
 
-async function getCommunityResources(keyword="ciroh_portal_data,ciroh_hub_data", communityId="4", fullTextSearch=undefined, ascending=false, sortBy=undefined, author=undefined, pageNumber=undefined, pageSize=undefined) {
+async function getCommunityResources(keyword="ciroh_portal_data,ciroh_hub_data", communityId="4", fullTextSearch=undefined, ascending=false, sortBy=undefined, author=undefined, paginationToken=undefined, pageSize=HS_SEARCH_PAGE_SIZE, groupPage=1) {
   try {
-    // Fetch resources
     const groupIds = await getGroupIds(communityId);
+    // paginationToken === null means search is exhausted; skip the search call.
+    // paginationToken === undefined means first page; fetch normally.
+    const searchExhausted = paginationToken === null;
     const [groupResourcesResponse, extraResourcesResponse] = await Promise.all([
-      joinGroupResources(groupIds, fullTextSearch, pageNumber, pageSize),
-      fetchResourcesWithPaginationData(keyword, fullTextSearch, ascending, sortBy, author, pageNumber)
+      joinGroupResources(groupIds, fullTextSearch, groupPage, pageSize),
+      searchExhausted
+        ? Promise.resolve({ resources: [], resourcesLength: 0, nextToken: null })
+        : fetchResourcesWithPaginationData(keyword, fullTextSearch, ascending, sortBy, author, paginationToken, pageSize)
     ]);
 
     // Extract resources
@@ -282,9 +189,7 @@ async function getCommunityResources(keyword="ciroh_portal_data,ciroh_hub_data",
       groupResourcesPageData: groupResourcesResponse,
       extraResourcesPageData: extraResourcesResponse,
       resources: joinedResources
-    }
-
-    // return await joinGroupResources(groupIds);
+    };
   } catch (error) {
     console.error('Community resource fetch failed:', error);
     return {};
@@ -307,24 +212,6 @@ async function fetchResourcesByKeyword(keyword, { page = 1, count = 15, fullText
   return data.results;
 }
 
-async function fetchDiscoverResourcesCore({
-  keyword,
-  searchText,
-  ascending = false,
-  sortBy = undefined,
-  author = undefined,
-  pageNumber = 1,
-  clampToPageCount = false,
-}) {
-  const url = buildDiscoverApiUrl(keyword, searchText, ascending, sortBy, author, pageNumber);
-  const data = await fetchJson(url, "resources");
-  const resources = parseDiscoverResources(
-    data,
-    clampToPageCount ? { pageNumber } : undefined,
-  );
-  return { data, resources };
-}
-
 /**
  * Fetch resources from HydroShare based on search criteria.
  * @param {string} keyword  - The keyword (subject) to use for the api request
@@ -332,18 +219,12 @@ async function fetchDiscoverResourcesCore({
  * @param {boolean} ascending - Whether to sort results in ascending order (true) or descending order (false)
  * @param {string} sortBy - The field to sort by. One of 'title', 'author', 'created', 'modified'
  * @param {string} author - The author to filter by
- * @returns {Promise<Array>} Array of resource objects
+ * @param {string} paginationToken - Token from previous response for next page, or undefined for first page
+ * @param {number} pageSize - Number of results per page
+ * @returns {Promise<{resources: Array, nextToken: string|null}>}
  */
-async function fetchResourcesBySearch(keyword, searchText, ascending=false, sortBy=undefined, author=undefined, pageNumber=1) {
-  const { resources } = await fetchDiscoverResourcesCore({
-    keyword,
-    searchText,
-    ascending,
-    sortBy,
-    author,
-    pageNumber,
-  });
-  return resources;
+async function fetchResourcesBySearch(keyword, searchText, ascending=false, sortBy=undefined, author=undefined, paginationToken=undefined, pageSize=HS_SEARCH_PAGE_SIZE) {
+  return fetchSearchResourcesCore({ keyword, searchText, ascending, sortBy, author, paginationToken, pageSize });
 }
 
 /**
@@ -353,51 +234,16 @@ async function fetchResourcesBySearch(keyword, searchText, ascending=false, sort
  * @param {boolean} ascending - Whether to sort results in ascending order (true) or descending order (false)
  * @param {string} sortBy - The field to sort by. One of 'title', 'author', 'created', 'modified'
  * @param {string} author - The author to filter by
- * @param {number} pageNumber - The page number to fetch (1-based indexing)
- * @returns {Promise<Object>} Object containing resources array and pagination metadata
+ * @param {string} paginationToken - Token from previous response for next page, or undefined for first page
+ * @param {number} pageSize - Number of results per page
+ * @returns {Promise<{resources: Array, resourcesLength: number, nextToken: string|null}>}
  */
-async function fetchResourcesWithPaginationData(keyword, searchText, ascending=false, sortBy=undefined, author=undefined, pageNumber=1) {
-  const { data, resources } = await fetchDiscoverResourcesCore({
-    keyword,
-    searchText,
-    ascending,
-    sortBy,
-    author,
-    pageNumber,
-    clampToPageCount: true,
-  });
-
-  // Return the corrected resources with pagination data
+async function fetchResourcesWithPaginationData(keyword, searchText, ascending=false, sortBy=undefined, author=undefined, paginationToken=undefined, pageSize=HS_SEARCH_PAGE_SIZE) {
+  const { resources, nextToken } = await fetchSearchResourcesCore({ keyword, searchText, ascending, sortBy, author, paginationToken, pageSize });
   return {
     resources,
     resourcesLength: resources.length,
-    resourceCountTotal: data.rescount,
-    pageCount: data.pagecount,
-    pageSize: data.perpage,
-    pageNumber: pageNumber,
-    pageLast: data.pagecount,
-    hasMorePages: pageNumber < data.pagecount,
-  };
-}
-
-/**
- * Fetch the pagination data for a given keyword and search criteria.
- * Uses the discoverapi endpoint to get resource count, page count, and resources per page.
- * @param {String} keyword The keyword/subject of the desired resources
- * @param {String} searchText The text to search for within the resources
- * @param {Boolean} ascending Whether to sort the results in ascending order
- * @param {String} sortBy The field to sort by. One of 'title', 'author', 'created', 'modified'
- * @param {String} author The author to filter the results by
- * @returns {Promise<Object>} An object containing pagination data
- */
-async function fetchKeywordPageData(keyword, searchText, ascending=false, sortBy=undefined, author=undefined) {
-  const url = buildDiscoverApiUrl(keyword, searchText, ascending, sortBy, author, 1);
-  const data = await fetchJson(url, "resources");
-
-  return {
-    resourceCount: data.rescount,
-    pageCount: data.pagecount,
-    resourcesPerPage: data.perpage
+    nextToken,
   };
 }
 
@@ -594,12 +440,13 @@ export {
   fetchResourcesByGroup, 
   fetchResourcesByKeyword, 
   fetchResourcesByKeywordsIntersection,
-  fetchResourcesBySearch, fetchResourcesWithPaginationData, fetchKeywordPageData, getCommunityResources, 
+  fetchResourcesBySearch,
+  fetchResourcesWithPaginationData,
+  getCommunityResources, 
   fetchResourceCustomMetadata, 
   fetchResourceMetadata,
   joinExtraResources, 
   fetchRawCuratedResources,
-  convertAuthorToLastFirst,
   fetchResourcesFromCollection,
   fetchResourceImageUrls
 };

@@ -24,7 +24,7 @@ export default function ResourceBrowser({
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [hasMore, setHasMore] = useState(true);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [nextToken, setNextToken] = useState(undefined);
 
   const [searchInput, setSearchInput] = useState('');
   const [activeSearch, setActiveSearch] = useState('');
@@ -56,7 +56,7 @@ export default function ResourceBrowser({
     resourceUrl: res.resource_url,
   }), []);
 
-  const fetchPage = useCallback(async (page, replace = false) => {
+  const fetchPage = useCallback(async (paginationToken = undefined, replace = false) => {
     if (fetchingRef.current) return;
     fetchingRef.current = true;
 
@@ -71,26 +71,26 @@ export default function ResourceBrowser({
       const ascending = sortDirection === 'asc';
       
       // Use fetchResourcesBySearch for keyword-specific filtering
-      const response = await fetchResourcesBySearch(
+      const { resources: raw, nextToken: newToken } = await fetchResourcesBySearch(
         keyword,
         activeSearch,
         ascending,
         sortBy,
         undefined, // author filter
-        page
+        paginationToken
       );
 
       // Extract resources from response
-      const raw = response || [];
       const normalized = raw.map(normalize);
 
-      if (page === 1 && replace) {
+      if (paginationToken === undefined && replace) {
         setResources(normalized);
       } else {
         setResources((prev) => [...prev.filter((r) => !r.isPlaceholder), ...normalized]);
       }
 
-      setHasMore(raw.length === pageSize);
+      setHasMore(!!newToken);
+      setNextToken(newToken);
       setLoading(false);
 
       // Lazy metadata enrichment
@@ -118,10 +118,10 @@ export default function ResourceBrowser({
 
   // Reset + fetch whenever filters change
   useEffect(() => {
-    setCurrentPage(1);
+    setNextToken(undefined);
     setHasMore(true);
     fetchingRef.current = false;
-    fetchPage(1, true);
+    fetchPage(undefined, true);
   }, [keyword, activeSearch, sortBy, sortDirection, fetchPage]);
 
   // Infinite scroll
@@ -130,14 +130,12 @@ export default function ResourceBrowser({
       if (fetchingRef.current || !hasMore || loading) return;
       const { scrollTop, clientHeight, scrollHeight } = document.documentElement;
       if (scrollTop + clientHeight >= scrollHeight - scrollThreshold) {
-        const next = currentPage + 1;
-        setCurrentPage(next);
-        fetchPage(next);
+        fetchPage(nextToken);
       }
     };
     window.addEventListener('scroll', onScroll);
     return () => window.removeEventListener('scroll', onScroll);
-  }, [currentPage, hasMore, loading, fetchPage, scrollThreshold]);
+  }, [nextToken, hasMore, loading, fetchPage, scrollThreshold]);
 
   // Debounced search
   const handleSearchChange = (val) => {

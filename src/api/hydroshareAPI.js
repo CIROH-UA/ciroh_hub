@@ -8,6 +8,15 @@
  * Adjust or add query parameters (e.g., page, count) as needed.
  */
 
+const HS_SEARCH_ENDPOINT = "https://www.hydroshare.org/hsapi/discovery-atlas/search"
+const HS_SEARCH_PAGE_SIZE = 40;
+const HS_SORT_MAP = {
+  "modified": "lastModified",
+  "created": "dateCreated",
+  "title": "name",
+  "author": "creatorName",
+};
+
 /**
  * Convert author name from "First Middle Last" to "Last, First Middle"
  * @param {string} author - The author name in "First Middle Last" format
@@ -30,6 +39,53 @@ function convertAuthorToLastFirst(author) {
   }
 
   return author;
+}
+
+async function fetchJson(url, errorContext = "resources") {
+  const response = await fetch(url);
+  if (!response.ok) {
+    throw new Error(`Error fetching ${errorContext} (status: ${response.status})`);
+  }
+  return response.json();
+}
+
+function buildSearchUrl(keyword, searchText, ascending, sortBy, author, paginationToken, pageSize = HS_SEARCH_PAGE_SIZE) {
+  const paramsObj = {
+    pageSize: pageSize.toString(),
+    term: searchText ? searchText.trim() : undefined,
+    keyword: keyword ? keyword : undefined,
+    order: ascending ? "asc" : "desc",
+    sortBy: sortBy ? HS_SORT_MAP[sortBy.toLowerCase()] : undefined,
+    creatorName: author ? convertAuthorToLastFirst(author) : undefined,
+    paginationToken: paginationToken ? paginationToken : undefined,
+  };
+  const params = new URLSearchParams(Object.fromEntries(Object.entries(paramsObj).filter(([, v]) => v !== undefined)));
+  return `${HS_SEARCH_ENDPOINT}?${params.toString()}`;
+}
+
+function mapSearchResource(item) {
+  const doc = item.document?.[0] ?? {};
+  return {
+    resource_id: doc.url?.split('/').pop() ?? item._id,
+    resource_title: item.name ?? null,
+    authors: (item.creator ?? []).map(c => c.name),
+    resource_type: doc.additionalType ?? null,
+    resource_url: doc.url ?? null,
+    abstract: item.description ?? null,
+    date_created: doc.dateCreated ?? null,
+    date_last_updated: doc.dateModified ?? null,
+  };
+}
+
+async function fetchSearchResourcesCore({ keyword, searchText, ascending = false, sortBy, author, paginationToken, pageSize = HS_SEARCH_PAGE_SIZE }) {
+  const url = buildSearchUrl(keyword, searchText, ascending, sortBy, author, paginationToken, pageSize);
+  const items = await fetchJson(url, "resources");
+  if (!Array.isArray(items) || items.length === 0) {
+    return { resources: [], nextToken: null };
+  }
+  const resources = items.map(mapSearchResource);
+  const nextToken = resources.length === pageSize ? (items[items.length - 1].paginationToken ?? null) : null;
+  return { resources, nextToken };
 }
 
 // Helper function to fetch detailed metadata for a specific resource
@@ -256,195 +312,11 @@ async function fetchResourcesByKeyword(keyword, fullTextSearch=undefined) {
  * @param {boolean} ascending - Whether to sort results in ascending order (true) or descending order (false)
  * @param {string} sortBy - The field to sort by. One of 'title', 'author', 'created', 'modified'
  * @param {string} author - The author to filter by
- * @returns {Promise<Array>} Array of resource objects
+ * @param {string} paginationToken - Token from previous response for next page, or undefined for first page
+ * @returns {Promise<{resources: Array, nextToken: string|null}>}
  */
-async function fetchResourcesBySearch(keyword, searchText, ascending=false, sortBy=undefined, author=undefined, pageNumber=1) {
-  // Use hsapi/resource API (same as fetchResourcesByKeyword)
-  let url = `https://www.hydroshare.org/hsapi/resource/?subject=${encodeURIComponent(keyword)}&page=${pageNumber}&count=40`;
-
-  // Add search text if provided
-  if (searchText && searchText.trim()) {
-    url += `&full_text_search=${encodeURIComponent(searchText)}`;
-  }
-
-  console.log(`[fetchResourcesBySearch] URL: ${url}`);
-  console.log(`[fetchResourcesBySearch] KEYWORD: ${keyword}, PAGE: ${pageNumber}, SEARCH: "${searchText}"`);
-
-  // Fetch data from the API
-  const response = await fetch(url);
-  if (!response.ok) {
-    console.error(`[fetchResourcesBySearch] HTTP Error: ${response.status} ${response.statusText} for URL: ${url}`);
-    throw new Error(`Error fetching resources (status: ${response.status})`);
-  }
-  const data = await response.json();
-
-  console.log(`[fetchResourcesBySearch] Response received: count=${data.count}, results=${data.results?.length || 0}, for keyword="${keyword}"`);
-
-  // The API returns results directly as an array in data.results
-  const resources = data.results || [];
-
-  let resourcesCorrected = [];
-
-  for (let i = 0; i < resources.length; i++) {
-    let resource = resources[i];
-    let resourceCorrected = {
-      resource_id: resource.resource_id,
-      resource_title: resource.resource_title,
-      authors: resource.authors,
-      resource_type: resource.resource_type,
-      resource_url: resource.resource_url,
-      abstract: resource.abstract,
-      date_created: resource.date_created,
-      date_last_updated: resource.date_last_updated,
-    };
-
-    resourcesCorrected.push(resourceCorrected);
-  }
-
-  console.log(`[fetchResourcesBySearch] Returned ${resourcesCorrected.length} corrected resources for keyword="${keyword}"`);
-
-  // Return the corrected resources
-  return resourcesCorrected;
-}
-
-/**
- * Fetch resources from HydroShare based on search criteria and include pagination data in the returned object.
- * @param {string} keyword  - The keyword (subject) to use for the api request
- * @param {string} searchText - The text to look for in all the resource fields
- * @param {boolean} ascending - Whether to sort results in ascending order (true) or descending order (false)
- * @param {string} sortBy - The field to sort by. One of 'title', 'author', 'created', 'modified'
- * @param {string} author - The author to filter by
- * @param {number} pageNumber - The page number to fetch (1-based indexing)
- * @returns {Promise<Object>} Object containing resources array and pagination metadata
- */
-async function fetchResourcesWithPaginationData(keyword, searchText, ascending=false, sortBy=undefined, author=undefined, pageNumber=1) {
-  // API Url with query parameters
-  let url = `https://www.hydroshare.org/discoverapi/?q=${searchText ? encodeURIComponent(searchText) : ''}&subjects=${encodeURIComponent(keyword)}`;
-
-  // Add sort order parameter
-  if (ascending) {
-    url += `&asc=1`;
-  } else {
-    url += `&asc=-1`;
-  }
-
-  // Add sort parameter if provided
-  if (sortBy !== undefined) {
-    url += `&sort=${encodeURIComponent(sortBy)}`;
-  }
-
-  // Add page number parameter (1-based indexing)
-  url += `&pnum=${pageNumber}`;
-
-  console.log(`[fetchResourcesWithPaginationData] Fetching page ${pageNumber} with URL: ${url}`, {searchText: searchText || '(empty)'});
-
-  // Fetch data from the API
-  const response = await fetch(url);
-  if (!response.ok) {
-    console.error(`[fetchResourcesWithPaginationData] HTTP Error: ${response.status} ${response.statusText} for URL: ${url}`);
-    throw new Error(`Error fetching resources (status: ${response.status})`);
-  }
-  const data = await response.json();
-
-  // Put resources into a corrected format
-  let resources;
-
-  if (pageNumber > data.pagecount) {
-    resources = [];
-  } else {
-    if (typeof data.resources === "string") {
-        try {
-          resources = JSON.parse(data.resources);
-        } catch (e) {
-          console.error("Failed to parse data.resources as JSON string:", e);
-        resources = [];
-      }
-    } else if (Array.isArray(data.resources)) {
-      resources = data.resources;
-    } else {
-      console.warn("Unexpected format for data.resources:", data.resources);
-      resources = [];
-    }
-  }
-
-  let resourcesCorrected = [];
-
-  for (let i = 0; i < resources.length; i++) {
-    let resource = resources[i];
-    let resourceCorrected = {
-      resource_id: resource.short_id,
-      resource_title: resource.title,
-      authors: resource.authors,
-      resource_type: resource.type,
-      resource_url: 'https://www.hydroshare.org' + resource.link,
-      abstract: resource.abstract,
-      date_created: resource.created,
-      date_last_updated: resource.modified,
-    };
-
-    resourcesCorrected.push(resourceCorrected);
-  }
-
-  console.log(`[fetchResourcesWithPaginationData] Fetched ${resourcesCorrected.length} of ${data.rescount} total resources`);
-
-  // Return the corrected resources with pagination data
-  return {
-    resources: resourcesCorrected,
-    resourcesLength: resourcesCorrected.length,
-    resourceCountTotal: data.rescount,
-    pageCount: data.pagecount,
-    pageSize: data.perpage,
-    pageNumber: pageNumber,
-    pageLast: data.pagecount,
-    hasMorePages: pageNumber < data.pagecount,
-  };
-}
-
-/**
- * Fetch the pagination data for a given keyword and search criteria.
- * Uses the discoverapi endpoint to get resource count, page count, and resources per page.
- * @param {String} keyword The keyword/subject of the desired resources
- * @param {String} searchText The text to search for within the resources
- * @param {Boolean} ascending Whether to sort the results in ascending order
- * @param {String} sortBy The field to sort by. One of 'title', 'author', 'created', 'modified'
- * @param {String} author The author to filter the results by
- * @returns {Promise<Object>} An object containing pagination data
- */
-async function fetchKeywordPageData(keyword, searchText, ascending=false, sortBy=undefined, author=undefined) {
-  // API Url with query parameters
-  let url = `https://www.hydroshare.org/discoverapi/?q=${encodeURIComponent(searchText)}&subject=${encodeURIComponent(keyword)}`;
-
-  // Add sort order parameter
-  if (ascending) {
-    url += `&asc=1`;
-  } else {
-    url += `&asc=-1`;
-  }
-
-  // Add sort parameter if provided
-  if (sortBy !== undefined) {
-    url += `&sort=${encodeURIComponent(sortBy)}`;
-  }
-
-  // Add page number parameter (1-based indexing)
-  url += `&pnum=${1}`;
-
-  console.log(`[fetchKeywordPageData] Fetching page data with URL: ${url}`, {searchText: searchText || '(empty)'});
-
-  const response = await fetch(url);
-  if (!response.ok) {
-    console.error(`[fetchKeywordPageData] HTTP Error: ${response.status} ${response.statusText} for URL: ${url}`);
-    throw new Error(`Error fetching resources (status: ${response.status})`);
-  }
-  const data = await response.json();
-
-  console.log(`[fetchKeywordPageData] Total resources for keyword '${keyword}': ${data.rescount}, pages: ${data.pagecount}`);
-
-  return {
-    resourceCount: data.rescount,
-    pageCount: data.pagecount,
-    resourcesPerPage: data.perpage
-  };
+async function fetchResourcesBySearch(keyword, searchText, ascending=false, sortBy=undefined, author=undefined, paginationToken=undefined) {
+  return fetchSearchResourcesCore({ keyword, searchText, ascending, sortBy, author, paginationToken });
 }
 
 async function fetchResourceCustomMetadata(resourceId) {
@@ -481,7 +353,10 @@ export {
   fetchResource, 
   fetchResourcesByGroup, 
   fetchResourcesByKeyword, 
-  fetchResourcesBySearch, fetchResourcesWithPaginationData, fetchKeywordPageData, getCommunityResources, 
+  fetchResourcesBySearch,
+  fetchSearchResourcesCore,
+  HS_SEARCH_PAGE_SIZE,
+  getCommunityResources, 
   fetchResourceCustomMetadata, 
   joinExtraResources, 
   fetchRawCuratedResources,
