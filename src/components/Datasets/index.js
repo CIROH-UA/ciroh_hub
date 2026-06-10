@@ -95,11 +95,10 @@ export default function Datasets({ community_id = 4 }) {
   const [activeTab, setActiveTab] = useState("all");
 
   // Pagination State
-  const [currentPage, setCurrentPage] = useState(1);
+  const [groupPage, setGroupPage] = useState(1);
+  const [searchToken, setSearchToken] = useState(undefined);
   const [hasMore, setHasMore] = useState(true);
   const fetching = useRef(false);
-  const lastFetchedPage = useRef(0); // Track the highest page number fetched
-  const fetchedPages = useRef(new Set()); // Track fetched pages
 
   // Search State
   const [searchInput,    setSearchInput]    = useState('');
@@ -109,27 +108,17 @@ export default function Datasets({ community_id = 4 }) {
 
   // Fetch all resources by group, then filter them based on curated IDs
   const fetchAll = useCallback(
-    async (page) => {
+    async (paginationToken, groupPage) => {
       // Prevent concurrent fetches
       if (fetching.current) return;
-      
-      // Prevent refetching same or lower page numbers
-      if (page <= lastFetchedPage.current) {
-        return;
-      }
-
-      if (fetchedPages.current.has(page)) {
-        return;
-      }
-      
       fetching.current = true;
 
       // Add placeholders for loading state (only for pagination, not first page)
-      if (page > 1) {
+      if (paginationToken !== undefined || groupPage > 1) {
         setResources(prev => [
           ...prev,
           ...Array.from({ length: PAGE_SIZE }, (_, i) => ({
-            resource_id: `placeholder-page${page}-${i}`,
+            resource_id: `placeholder-${Date.now()}-${i}`,
             title: "",
             authors: "",
             resource_type: "",
@@ -151,14 +140,16 @@ export default function Datasets({ community_id = 4 }) {
       try {
         const [curatedIds, communityResourcesResponse] = await Promise.all([
           fetchCuratedIds(),                // get array of curated resource IDs
-          getCommunityResources("ciroh_portal_data,ciroh_hub_data", "4", fullTextSearch, ascending, sortBy, undefined, page, PAGE_SIZE) // get all resources for the group
+          getCommunityResources("ciroh_portal_data,ciroh_hub_data", "4", fullTextSearch, ascending, sortBy, undefined, paginationToken, PAGE_SIZE, groupPage)
         ]);
 
         const resourceList = communityResourcesResponse.resources;
-        fetchedPages.current.add(page);
 
         // Update pagination state
-        setHasMore(communityResourcesResponse.groupResourcesPageData.hasMorePages || communityResourcesResponse.extraResourcesPageData.hasMorePages);
+        const searchNextToken = communityResourcesResponse.extraResourcesPageData?.nextToken ?? null;
+        const groupHasMore = communityResourcesResponse.groupResourcesPageData?.hasMorePages ?? false;
+        setSearchToken(searchNextToken);
+        setHasMore(groupHasMore || !!searchNextToken);
 
         // Map the full resource list to your internal format
         let mappedList = resourceList.map((res) => ({
@@ -180,7 +171,7 @@ export default function Datasets({ community_id = 4 }) {
         // Sort locally to account for curated resources
         mappedList = sortResources(mappedList, sortBy, sortDirection);
 
-        if (page === 1) {
+        if (paginationToken === undefined && groupPage === 1) {
           setResources(mappedList);
         } else {
           // Replace placeholders from this page with actual data
@@ -198,7 +189,7 @@ export default function Datasets({ community_id = 4 }) {
         curatedSubset = sortResources(curatedSubset, sortBy, sortDirection);
         
         // Accumulate curated resources across pages (like main resources)
-        if (page === 1) {
+        if (paginationToken === undefined && groupPage === 1) {
           setCuratedResources(curatedSubset);
         } else {
           // Replace placeholders from this page with actual data
@@ -208,11 +199,6 @@ export default function Datasets({ community_id = 4 }) {
           ]);
         }
         setLoading(false);
-
-        // Update the last fetched page tracker (only if this page is higher)
-        if (page > lastFetchedPage.current) {
-          lastFetchedPage.current = page;
-        }
 
         // Allow pagination to continue - core data is loaded
         fetching.current = false;
@@ -253,20 +239,15 @@ export default function Datasets({ community_id = 4 }) {
   useEffect(() => {
     setResources(initialPlaceholders);
     setCuratedResources(initialPlaceholders);
-    setCurrentPage(1);
     setHasMore(true);
+    setSearchToken(undefined);
+    setGroupPage(1);
     
     // Reset the fetching flag to allow new requests
     fetching.current = false;
     
-    // Reset the last fetched page tracker
-    lastFetchedPage.current = 0;
-    
-    // Reset the fetched pages set
-    fetchedPages.current.clear();
-    
     // Fetch first page with new filters
-    fetchAll(1);
+    fetchAll(undefined, 1);
   }, [filterSearch, sortDirection, sortType, fetchAll]);
 
   /* infinite scroll */
@@ -275,14 +256,14 @@ export default function Datasets({ community_id = 4 }) {
       if (fetching.current || !hasMore) return;
       const { scrollTop, clientHeight, scrollHeight } = document.documentElement;
       if (scrollTop + clientHeight >= scrollHeight - SCROLL_THRESHOLD) {
-        const next = currentPage + 1;
-        setCurrentPage(next);
-        fetchAll(next);
+        const nextGroupPage = groupPage + 1;
+        setGroupPage(nextGroupPage);
+        fetchAll(searchToken, nextGroupPage);
       }
     };
     window.addEventListener('scroll', onScroll);
     return () => window.removeEventListener('scroll', onScroll);
-  }, [currentPage, hasMore, fetchAll]);
+  }, [hasMore, searchToken, groupPage, fetchAll]);
 
   /* search helpers */
   const commitSearch = q => {

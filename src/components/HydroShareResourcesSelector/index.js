@@ -78,7 +78,7 @@ export default function HydroShareResourcesSelector({
           setResources(prev => [
             ...prev,
             ...Array.from({ length: pageSize }, (_, i) => ({
-              resource_id: `placeholder-load-${i}`,
+              resource_id: `placeholder-load-${Date.now()}-${i}`,
               title: "",
               authors: "",
               resource_type: "",

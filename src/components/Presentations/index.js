@@ -126,7 +126,6 @@ export default function Presentations({ community_id = 4 }) {
   const [activeTab, setActiveTab] = useState("presentations");
 
   // Pagination State
-  const [currentPage, setCurrentPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [presPageNextToken, setPresPageNextToken] = useState(undefined);
   const fetching = useRef(false);
@@ -160,15 +159,11 @@ export default function Presentations({ community_id = 4 }) {
 
 
   const fetchAll = useCallback(
-    async (page) => {
+    async () => {
       if (fetching.current) return;
       fetching.current = true;
 
       try {
-        // Add placeholders for loading state (only for pagination, not first page)
-        if (page > 1) {
-          addPlaceholderResources(page);
-        }
 
         // Search parameters
         const ascending = sortDirection === 'asc';
@@ -234,16 +229,7 @@ export default function Presentations({ community_id = 4 }) {
         const mappedResources = await mapWithCustomMetadata(rawResources, hs_icon);
         const mappedCollections = await mapWithCustomMetadata(rawCollections, hs_icon);
         
-        // Handle first page vs pagination
-        if (page === 1) {
-          setResources(mappedResources);
-        } else {
-          setResources(prev => [
-            ...prev.filter(r => !r.resource_id.startsWith('placeholder-')),
-            ...mappedResources
-          ]);
-        }
-
+        setResources(mappedResources);
         setCollections(mappedCollections);
         //setCuratedResources(mappedCurated);
 
@@ -257,7 +243,7 @@ export default function Presentations({ community_id = 4 }) {
         fetching.current = false;
       }
     },
-    [addPlaceholderResources, hs_icon, sortDirection, sortType, filterSearch, usingSearch]
+    [hs_icon, sortDirection, sortType, filterSearch, usingSearch]
   );
 
   const fetchPage = useCallback(
@@ -267,7 +253,7 @@ export default function Presentations({ community_id = 4 }) {
 
       try {
         // Add placeholders for loading state
-        addPlaceholderResources(currentPage + 1);
+        addPlaceholderResources(Date.now());
 
         // Search parameters
         const ascending = sortDirection === 'asc';
@@ -284,15 +270,11 @@ export default function Presentations({ community_id = 4 }) {
         // Map the full resource lists to your internal format (with custom metadata)
         const mappedResources = await mapWithCustomMetadata(rawKeywordResources, hs_icon);
         
-        // Handle first page vs pagination
-        if (page === 1) {
-          setResources(mappedResources);
-        } else {
-          setResources(prev => [
-            ...prev.filter(r => !r.resource_id.startsWith('placeholder-')),
-            ...mappedResources
-          ]);
-        }
+        // Append to existing resources (fetchPage is never called for the first page)
+        setResources(prev => [
+          ...prev.filter(r => !r.resource_id.startsWith('placeholder-')),
+          ...mappedResources
+        ]);
 
         //setCuratedResources(mappedCurated);
 
@@ -306,20 +288,19 @@ export default function Presentations({ community_id = 4 }) {
         fetching.current = false;
       }
     },
-    [addPlaceholderResources, hs_icon, sortDirection, sortType, filterSearch]
+    [addPlaceholderResources, hs_icon, sortDirection, sortType, filterSearch, presPageNextToken]
   );
 
   // Reset and load first page when filters change
   useEffect(() => {
     setResources(initialPlaceholders);
-    setCurrentPage(1);
     setHasMore(true);
     setPresPageNextToken(undefined);
     
     // Reset the fetching flag to allow new requests
     fetching.current = false;
     
-    fetchAll(1); // Use fetchAll for first page (includes curated resources)
+    fetchAll(); // Use fetchAll for first page (includes curated resources)
   }, [filterSearch, sortDirection, sortType, fetchAll]);
 
   /* infinite scroll */
@@ -329,14 +310,12 @@ export default function Presentations({ community_id = 4 }) {
       if (fetching.current || !hasMore) return;
       const { scrollTop, clientHeight, scrollHeight } = document.documentElement;
       if (scrollTop + clientHeight >= scrollHeight - SCROLL_THRESHOLD) {
-        const next = currentPage + 1;
-        setCurrentPage(next);
         fetchPage();
       }
     };
     window.addEventListener('scroll', onScroll);
     return () => window.removeEventListener('scroll', onScroll);
-  }, [currentPage, hasMore, fetchPage]);
+  }, [hasMore, fetchPage]);
 
   /* search helpers */
   const commitSearch = q => {

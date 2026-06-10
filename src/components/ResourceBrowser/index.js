@@ -61,11 +61,11 @@ export default function ResourceBrowser({
     fetchingRef.current = true;
 
     try {
-      if (page === 1 && replace) {
+      if (paginationToken === undefined && replace) {
         setResources(createPlaceholders());
         setLoading(true);
-      } else if (page > 1) {
-        setResources((prev) => [...prev, ...createPlaceholders(pageSize, page)]);
+      } else if (paginationToken !== undefined) {
+        setResources((prev) => [...prev, ...createPlaceholders(pageSize, Date.now())]);
       }
 
       const ascending = sortDirection === 'asc';

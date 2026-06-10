@@ -8,7 +8,7 @@
  * Adjust or add query parameters (e.g., page, count) as needed.
  */
 
-const HS_SEARCH_ENDPOINT = "https://www.hydroshare.org/hsapi/discovery-atlas/search"
+const HS_SEARCH_ENDPOINT = "https://www.hydroshare.org/hsapi/discovery-atlas/search";
 const HS_SEARCH_PAGE_SIZE = 40;
 const HS_SORT_MAP = {
   "modified": "lastModified",
@@ -356,7 +356,6 @@ export {
   fetchResourcesBySearch,
   fetchSearchResourcesCore,
   HS_SEARCH_PAGE_SIZE,
-  getCommunityResources, 
   fetchResourceCustomMetadata, 
   joinExtraResources, 
   fetchRawCuratedResources,
