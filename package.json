@@ -4,7 +4,10 @@
   "private": true,
   "scripts": {
     "docusaurus": "docusaurus",
+    "fetch-project-board": "node scripts/fetch-project-board.mjs",
+    "prestart": "node scripts/fetch-project-board.mjs",
     "start": "docusaurus start",
+    "prebuild": "node scripts/fetch-project-board.mjs",
     "build": "docusaurus build",
     "swizzle": "docusaurus swizzle",
     "deploy": "docusaurus deploy",

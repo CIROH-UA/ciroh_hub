@@ -1,139 +1,18 @@
-import React, { useState, useEffect } from 'react';
-import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
+import React from 'react';
+import boardData from '@site/src/data/githubProjectBoard.json';
 import styles from './styles.module.css';
 
 const ORG = 'CIROH-UA';
 const PROJECT_NUMBER = 10;
 
+// Data is fetched at BUILD TIME by scripts/fetch-project-board.mjs (server-side,
+// using GH_PROJECT_TOKEN) and written to src/data/githubProjectBoard.json. The
+// token is never shipped to the browser; this component only reads static data.
 export default function GitHubProjectBoard() {
-  const [items, setItems] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const items = boardData?.items || [];
+  const error = boardData?.error;
 
-  const { siteConfig } = useDocusaurusContext();
-  const token = siteConfig?.customFields?.githubProjectToken;
-
-  useEffect(() => {
-    const fetchProjectData = async () => {
-      if (!token) {
-        setError('Missing GitHub token. Set GH_PROJECT_TOKEN in your .env and expose via customFields.githubProjectToken');
-        setLoading(false);
-        return;
-      }
-
-      const query = `
-        query($org: String!, $number: Int!) {
-          organization(login: $org) {
-            projectV2(number: $number) {
-              title
-              url
-              items(first: 50) {
-                nodes {
-                  id
-                  content {
-                    __typename
-                    ... on Issue {
-                      title
-                      url
-                      state
-                      number
-                      repository { name }
-                    }
-                    ... on PullRequest {
-                      title
-                      url
-                      state
-                      number
-                      repository { name }
-                    }
-                  }
-                  fieldValues(first: 10) {
-                    nodes {
-                      __typename
-                      ... on ProjectV2ItemFieldSingleSelectValue {
-                        name
-                        field { name }
-                      }
-                      ... on ProjectV2ItemFieldTextValue {
-                        text
-                        field { name }
-                      }
-                      ... on ProjectV2ItemFieldNumberValue {
-                        number
-                        field { name }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      `;
-
-      try {
-        const res = await fetch('https://api.github.com/graphql', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({ query, variables: { org: ORG, number: PROJECT_NUMBER } }),
-        });
-
-        if (!res.ok) {
-          const text = await res.text();
-          throw new Error(`GitHub API error: ${res.status} ${res.statusText} - ${text}`);
-        }
-
-        const json = await res.json();
-        if (json.errors) {
-          throw new Error(json.errors.map((e) => e.message).join('; '));
-        }
-
-        const nodes = json?.data?.organization?.projectV2?.items?.nodes || [];
-
-        const parsed = nodes.map((node) => {
-          const content = node.content || {};
-          const status = extractField(node.fieldValues?.nodes, 'Status');
-          const priority = extractField(node.fieldValues?.nodes, 'Priority');
-          const owner = extractField(node.fieldValues?.nodes, 'Owner');
-          const due = extractField(node.fieldValues?.nodes, 'Due date');
-          return {
-            id: node.id,
-            title: content.title || 'Untitled',
-            url: content.url,
-            state: content.state,
-            repo: content.repository?.name,
-            number: content.number,
-            type: content.__typename,
-            status,
-            priority,
-            owner,
-            due,
-          };
-        });
-
-        setItems(parsed);
-        setLoading(false);
-      } catch (err) {
-        setError(err.message);
-        setLoading(false);
-      }
-    };
-
-    fetchProjectData();
-  }, [token]);
-
-  if (loading) {
-    return (
-      <div className={styles.container}>
-        <div className={styles.loading}>Loading infrastructure requests...</div>
-      </div>
-    );
-  }
-
-  if (error) {
+  if (error && items.length === 0) {
     return (
       <div className={styles.container}>
         <div className={styles.error}>Error loading data: {error}</div>
@@ -180,23 +59,11 @@ export default function GitHubProjectBoard() {
 
       <div className={styles.fallback}>
         <p>
-          <strong>Note:</strong> This view uses the GitHub GraphQL API. Ensure a read-only fine-grained token is provided via <code>GH_PROJECT_TOKEN</code> in your <code>.env</code> and exposed in <code>customFields.githubProjectToken</code>.
+          <strong>Note:</strong> This dashboard is generated at build time from the GitHub GraphQL API
+          (CIROH-UA Project #{PROJECT_NUMBER}). The read-only token is used only during the build via
+          <code> GH_PROJECT_TOKEN</code> and is never exposed to the browser.
         </p>
       </div>
     </div>
   );
-}
-
-function extractField(nodes = [], targetFieldName) {
-  const match = nodes.find((n) => {
-    const fieldName = n?.field?.name || n?.field?.__typename || '';
-    return fieldName.toLowerCase() === targetFieldName.toLowerCase();
-  });
-
-  if (!match) return null;
-
-  if (match.__typename === 'ProjectV2ItemFieldSingleSelectValue') return match.name;
-  if (match.__typename === 'ProjectV2ItemFieldTextValue') return match.text;
-  if (match.__typename === 'ProjectV2ItemFieldNumberValue') return match.number;
-  return null;
 }
