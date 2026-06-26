@@ -3,7 +3,7 @@
 version = 0.1
 
 [default.global.parameters]
-stack_name = "ciroh-hub-backend"
+stack_name = "CIROHHub-Backend"
 
 [default.build.parameters]
 cached = true
