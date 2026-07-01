@@ -1,12 +1,12 @@
-import React, {useContext, useState} from React;
+import React, {useContext, useState} from 'react';
 import {ReducedMotionContext} from "@theme/Contexts";
 
-const {reducedMotionMode, setReducedMotionMode} = useState('disabled');
-
 export default function Root({children}) {
+  const [reducedMotionMode, setReducedMotionMode] = useState(null);
+  const value = {reducedMotionMode, setReducedMotionMode};
   return (
-    <ReducedMotionContext value={reducedMotionMode, setReducedMotionMode}>
+    <ReducedMotionContext.Provider value={value}>
       {children}
-    </ReducedMotionContext>
+    </ReducedMotionContext.Provider>
   );
 }

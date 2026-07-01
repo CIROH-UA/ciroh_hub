@@ -10,7 +10,6 @@ export default function NavbarColorModeToggle({className}) {
   const navbarStyle = useThemeConfig().navbar.style;
   const {disableSwitch, respectPrefersReducedMotion} = useThemeConfig().customFields.reducedMotionMode;
   const {reducedMotionMode, setReducedMotionMode} = useContext(ReducedMotionContext);
-  console.log(setReducedMotionMode);
   if (disableSwitch) {
     return null;
   }
@@ -21,7 +20,7 @@ export default function NavbarColorModeToggle({className}) {
         navbarStyle === 'dark' ? styles.darkNavbarColorModeToggle : undefined
       }
       respectPrefersReducedMotion={respectPrefersReducedMotion}
-      value={null}
+      value={reducedMotionMode}
       onChange={setReducedMotionMode}
     />
   );

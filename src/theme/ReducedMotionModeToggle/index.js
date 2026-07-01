@@ -8,9 +8,11 @@ import { IoAccessibility } from "react-icons/io5";
 import styles from './styles.module.css';
 // The order of color modes is defined here, and can be customized with swizzle
 function getNextReducedMotionMode(reducedMotionMode, respectPrefersReducedMotion) {
+  console.log(reducedMotionMode);
+  console.log(reducedMotionMode === 'disabled');
   // 2-value transition
   if (!respectPrefersReducedMotion) {
-    return reducedMotionMode === 'dark' ? 'light' : 'dark';
+    return reducedMotionMode === 'disabled' ? 'enabled' : 'disabled';
   }
   // 3-value transition
   switch (reducedMotionMode) {
@@ -19,33 +21,33 @@ function getNextReducedMotionMode(reducedMotionMode, respectPrefersReducedMotion
     case 'enabled':
       return 'disabled';
     case 'disabled':
-      return null;
+      return 'enabled';
     default:
-      throw new Error(`unexpected reduced motion mode ${reducedMotionMode}`);
+      throw new Error(`unexpected reduced motion mode '${reducedMotionMode}'`);
   }
 }
 function getReducedMotionModeLabel(reducedMotionMode) {
   switch (reducedMotionMode) {
     case null:
       return 'using browser\'s reduced motion preference';
-    case 'light':
+    case 'enabled':
       return 'reduced motion mode enabled';
-    case 'dark':
+    case 'disabled':
       return 'reduced motion mode disabled';
     default:
-      throw new Error(`unexpected reduced motion mode ${reducedMotionMode}`);
+      throw new Error(`unexpected reduced motion mode '${reducedMotionMode}'`);
   }
 }
 function getReducedMotionModeAriaLabel(reducedMotionMode) {
   switch (reducedMotionMode) {
     case null:
       return 'Toggle reduced motion mode (currently using browser default)';
-    case 'light':
+    case 'enabled':
       return 'Toggle reduced motion mode (currently enabled)';
-    case 'dark':
+    case 'disabled':
       return 'Toggle reduced motion mode (currently disabled)';
     default:
-      throw new Error(`unexpected reduced motion mode ${reducedMotionMode}`);
+      throw new Error(`unexpected reduced motion mode '${reducedMotionMode}'`);
   }
 }
 function CurrentReducedMotionModeIcon() {
