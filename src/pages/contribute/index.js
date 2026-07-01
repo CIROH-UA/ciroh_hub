@@ -182,7 +182,8 @@ function ContributeContent() {
             </div>
 
             <p className={styles.zoteroSubtitleRequestForm}>
-              Or request a publication be added using the form below
+              Alternatively, request a publication be added using the form below.<br />
+              <i>Submissions via this form are subject to approval by the CIROH Hub team.</i>
             </p>
 
             {/* Publications Submission Form */}
@@ -191,10 +192,6 @@ function ContributeContent() {
               zoteroApiKey={zoteroApiKey}
             />
 
-            {/* Wikimedia Privacy and Terms of Use Notice */}
-            <div className={styles.wikimediaPrivacyNotice}>
-              <b>By using this form you acknowledge and agree to Wikimedia's <a href="https://foundation.wikimedia.org/wiki/Policy:Privacy_policy" target="_blank" rel="noopener noreferrer">Privacy Policy</a> and <a href="https://foundation.wikimedia.org/wiki/Policy:Terms_of_Use#12._API_Terms" target="_blank" rel="noopener noreferrer">Terms of Use</a>.</b>
-            </div>
           </section>
 
           <hr />

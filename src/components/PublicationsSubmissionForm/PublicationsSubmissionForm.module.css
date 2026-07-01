@@ -169,3 +169,11 @@
   justify-content: center;
   align-items: center;
 }
+
+.wikimediaPrivacyNotice {
+  margin-top: auto;
+  margin-bottom: 3rem;
+  font-size: 0.95rem;
+  line-height: 1.4;
+  text-align: center;
+}

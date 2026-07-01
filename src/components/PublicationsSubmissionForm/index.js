@@ -385,6 +385,11 @@ export default function PublicationsSubmissionForm({ groupId, zoteroApiKey }) {
           </span>
         </div>
       )}
+      {/* Wikimedia Privacy and Terms of Use Notice */}
+      <br />
+      <div className={styles.wikimediaPrivacyNotice}>
+        This form uses <a href='https://www.mediawiki.org/wiki/Citoid'>Wikimedia's Citoid service</a> to identify your paper. <b>By using this form, you acknowledge and agree to Wikimedia's <a href="https://foundation.wikimedia.org/wiki/Policy:Privacy_policy" target="_blank" rel="noopener noreferrer">Privacy Policy</a> and <a href="https://foundation.wikimedia.org/wiki/Policy:Terms_of_Use#12._API_Terms" target="_blank" rel="noopener noreferrer">Terms of Use</a>.</b>
+      </div>
     </div>
   );
 }
