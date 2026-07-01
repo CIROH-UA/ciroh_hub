@@ -162,7 +162,7 @@ export const lambdaHandler = async (event, context) => {
 
   // Wikimedia REST API base (using the official REST endpoint)
   const wikimediaBaseUrl = 'https://en.wikipedia.org/api/rest_v1';
-  const wikimediaUserAgent = 'CirohHub/1.0 (https://hub.ciroh.org; ciroh_it_support@ua.edu)';
+  const wikimediaUserAgent = 'CirohHub/1.0 (https://hub.ciroh.org; ciroh-it-support@ua.edu)';
 
   // Get the request body and parse it as JSON
   let body;
