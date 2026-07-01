@@ -288,6 +288,10 @@
 a.button {
   border-radius: 10px;
   font-weight: 700;
+}
+
+[data-reduce-motion="false"] .button,
+[data-reduce-motion="false"] a.button {
   transition: all 0.2s ease;
 }
 
@@ -301,6 +305,10 @@ a.button.button--primary {
 .button.button--primary:hover,
 a.button.button--primary:hover {
   filter: brightness(1.05);
+}
+
+[data-reduce-motion="false"] .button.button--primary:hover,
+[data-reduce-motion="false"] a.button.button--primary:hover {
   transform: translateY(-1px);
 }
 
