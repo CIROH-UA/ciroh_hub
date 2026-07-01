@@ -204,7 +204,7 @@ export function ConstellationCanvas({ isDarkTheme }) {
   return (
     <canvas
       ref={canvasRef}
-      className="tw-fixed tw-inset-0 tw-pointer-events-none tw-bg-transparent"
+      className="tw-fixed tw-inset-0 tw-pointer-events-none tw-bg-transparent base-motion"
       style={{ zIndex: 1 }}
     />
   );

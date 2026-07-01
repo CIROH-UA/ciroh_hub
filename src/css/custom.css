@@ -469,6 +469,14 @@ a.button.button--secondary:hover {
   background-color: whitesmoke; /* Hide dark image in light mode */
 }
 
+[data-reduce-motion="true"] .base-motion {
+  display: none;
+}
+
+[data-reduce-motion="false"] .reduced-motion {
+  display: none;
+}
+
 /* Quick fix for KaTeX double-rendering */
 .katex-html {
   display: none;
