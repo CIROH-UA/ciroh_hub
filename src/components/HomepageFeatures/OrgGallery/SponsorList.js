@@ -29,7 +29,7 @@ export default [
     },
     {
         name: "OWP",
-        logo: "https://portal.ciroh.org/assets/images/owp_logo-cf6a5647bff6e38e14b683fb5ba3299c.png",
+        logo: "https://avatars.githubusercontent.com/u/60660814",
         link: "https://water.noaa.gov/",
         width: "300",
         height: "300",
