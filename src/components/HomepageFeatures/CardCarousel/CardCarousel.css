@@ -28,7 +28,6 @@
 /* Button glow effect */
 .carousel-card a:hover {
     background: rgba(255, 255, 255, 0.35) !important;
-    transform: translateY(-2px);
     box-shadow: 0 8px 16px rgba(59, 130, 246, 0.4);
 }
 

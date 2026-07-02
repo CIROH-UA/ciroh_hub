@@ -8,8 +8,6 @@ import { IoAccessibility } from "react-icons/io5";
 import styles from './styles.module.css';
 // The order of color modes is defined here, and can be customized with swizzle
 function getNextReducedMotionMode(reducedMotionMode, respectPrefersReducedMotion) {
-  console.log(reducedMotionMode);
-  console.log(reducedMotionMode === 'disabled');
   // 2-value transition
   if (!respectPrefersReducedMotion) {
     return reducedMotionMode === 'disabled' ? 'enabled' : 'disabled';
