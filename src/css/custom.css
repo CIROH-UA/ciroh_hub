@@ -6,8 +6,11 @@
 
 @import "react-responsive-carousel/lib/styles/carousel.min.css";
 
-:root {
+[data-reduce-motion="true"] * {
+  transition: none !important;
+}
 
+:root {
   /* Font size adjustments (note: these need to have the font tag recalculate for scoping reasons) */
 
   /* Increase text size for markdown components (see Issue #107) */
