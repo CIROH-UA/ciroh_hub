@@ -69,7 +69,8 @@ export default function CommunityImpactComponent() {
       <section className="tw-text-black dark:tw-text-white tw-body-font tw-relative tw-overflow-hidden">
 
         {/* PARTICLES BACKGROUND (receives mouse events) */}
-        <div className="tw-absolute tw-inset-0 tw--z-10 tw-pointer-events-auto">
+        {/*
+        <div className="tw-absolute tw-inset-0 tw--z-10 tw-pointer-events-auto base-motion">
           <Particles
             particleColors={['#ffffff', '#ffffff']}
             particleCount={200}
@@ -81,6 +82,7 @@ export default function CommunityImpactComponent() {
             disableRotation={false}
           />
         </div>
+        */}
 
         {/* HERO CONTENT (ignores pointer events EXCEPT buttons/card components) */}
         <div className="tw-container tw-mx-auto tw-flex tw-px-5 tw-py-6 md:tw-py-8 lg:tw-py-16 tw-flex-col lg:tw-flex-row tw-items-center tw-relative tw-z-10 tw-pointer-events-none">

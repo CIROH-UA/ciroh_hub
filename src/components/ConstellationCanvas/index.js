@@ -89,6 +89,7 @@ export function ConstellationCanvas({ isDarkTheme }) {
     window.addEventListener("click", handleClick);
 
     const animate = () => {
+      if (reducedMotionMode === 'enabled') return;
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       const nodeColor = isDark

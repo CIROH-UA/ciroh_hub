@@ -64,8 +64,6 @@ export default function Root({children}) {
         default:
             throw new Error(`unexpected reduced motion mode '${reducedMotionMode}'`);
     }
-
-    if (storageAvailable('localStorage')) console.log(localStorage.getItem('reduce-motion'));
   }, [reducedMotionMode]);
 
   return (

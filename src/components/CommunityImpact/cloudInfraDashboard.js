@@ -172,7 +172,7 @@ export default function CloudInfraDashboard({ cards = [] }) {
             <div className="bg-glow bg-glow-2"></div>
 
             {/* Particles */}
-            <div className="particles" ref={particlesRef}></div>
+            <div className="particles base-motion" ref={particlesRef}></div>
 
             {/* Content */}
             <div className="container">
