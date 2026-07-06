@@ -15,12 +15,12 @@ Note that catchment IDs may not be persistent across hydrofabrics. Instead, [poi
 ### Calibration
 The process of tuning a hydrologic model's parameters to more accurately match observed outcomes.
 
-The NGIAB ecosystem offers the [NGIAB Calibration](/docs/products/ngiab/components/ngiab-calibration) utility to streamline this process.
+The NGIAB ecosystem offers the [NGIAB Calibration](/docs/products/ngiab-ecosystem/ngiab/components/ngiab-calibration) utility to streamline this process.
 
 ### Evaluation
 The process of assessing the quality and performance of a hydrologic model.
 
-The NGIAB ecosystem offers [integration](/docs/products/ngiab/components/ngiab-teehr) with the [TEEHR](#teehr) toolkit to streamline this process.
+The NGIAB ecosystem offers [integration](/docs/products/ngiab-ecosystem/ngiab/components/ngiab-teehr) with the [TEEHR](#teehr) toolkit to streamline this process.
 
 ### Forcing
 Values provided as inputs for a hydrologic model. The term comes from the practice of experimentally "forcing" certain input values by overriding the usual flow of data into a model.
@@ -57,7 +57,7 @@ Realizations are stored in model realization files. These files contain [formula
 ### Subsetting
 The practice of taking a subset of a larger dataset. Subsetting is both common and highly recommended for model runs, as it can greatly reduce the computational load required.
 
-Both GUI and command-line utilities for subsetting the NextGen reference fabric are available within the [Data Preprocess](/docs/products/ngiab/components/ngiab-preprocessor/) utility.
+Both GUI and command-line utilities for subsetting the NextGen reference fabric are available within the [Data Preprocess](/docs/products/ngiab-ecosystem/ngiab/components/ngiab-preprocessor/) utility.
 
 ### Vector Processing Unit (VPU)
 Regional discretizations used by the [USGS-NOAA reference fabric](#usgs-noaa-reference-fabric). These VPUs designate fixed regions for model runs and data collections.
@@ -103,12 +103,12 @@ A comprehensive reference [hydrofabric](#hydrofabric) for the United States, mai
 Relevant to NextGen due to its use as a base for the [USGS-NOAA reference fabric](#usgs-noaa-reference-fabric). As such, many tools and utilities designed for the NHD and its descendents will also work for NextGen hydrofabrics.
 
 ### TEEHR
-Short for "Tools for Exploratory Evolution in Hydrologic Research", TEEHR is a Python library that provides comprehensive tooling for model [evaluation](#evaluation). TEEHR is [included as a part of the NGIAB ecosystem](/docs/products/ngiab/components/ngiab-teehr).
+Short for "Tools for Exploratory Evolution in Hydrologic Research", TEEHR is a Python library that provides comprehensive tooling for model [evaluation](#evaluation). TEEHR is [included as a part of the NGIAB ecosystem](/docs/products/ngiab-ecosystem/ngiab/components/ngiab-teehr).
 
 Information on TEEHR is available [here](https://rtiinternational.github.io/teehr/).
 
 ### Tethys Platform
-Tethys is a Python-based platform for building geospatial web apps. It forms the core of NGIAB's [Data Visualizer](/docs/products/ngiab/components/ngiab-visualizer), alongside many other CIROH applications.
+Tethys is a Python-based platform for building geospatial web apps. It forms the core of NGIAB's [Data Visualizer](/docs/products/ngiab-ecosystem/ngiab/components/ngiab-visualizer), alongside many other CIROH applications.
 
 Information on the Tethys Platform is available [here](https://www.tethysplatform.org/).
 

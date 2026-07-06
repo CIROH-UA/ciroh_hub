@@ -13,7 +13,7 @@
       "iconUrl": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg",
       "links": {
         "github": "https://github.com/ciroh-ua/ngiab-cloudinfra",
-        "docs": "/docs/products/ngiab",
+        "docs": "/docs/products/ngiab-ecosystem/ngiab",
         "hydroshare": "https://www.hydroshare.org/resource/88e0ebf2719c492381efcb27fba71032/",
         "zotero": "https://www.sciencedirect.com/science/article/pii/S1364815225003500"
       }
@@ -30,7 +30,7 @@
       ],
       "iconUrl": "https://img.icons8.com/fluency/96/000000/water.png",
       "links": {
-        "docs": "/docs/products/national-water-model"
+        "docs": "/docs/products/ngiab-ecosystem/about-nwm"
       }
     },
     {
@@ -46,7 +46,7 @@
       "iconUrl": "https://img.icons8.com/fluency/96/000000/geography.png",
       "links": {
         "github": "https://github.com/NOAA-OWP/hydrofabric",
-        "docs": "/docs/products/Hydrofabric",
+        "docs": "/docs/products/hydrofabric",
         "zotero": "https://www.nature.com/articles/s41597-025-05941-6"
       }
     },
@@ -63,7 +63,7 @@
       "iconUrl": "https://img.icons8.com/fluency/96/000000/data-configuration.png",
       "links": {
         "github": "https://github.com/CIROH-UA/ngen-datastream",
-        "docs": "/docs/products/research-datastream"
+        "docs": "/docs/products/ngiab-ecosystem/nrds"
       }
     },
     {

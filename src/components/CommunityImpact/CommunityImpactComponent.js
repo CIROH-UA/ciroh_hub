@@ -106,7 +106,7 @@ export default function CommunityImpactComponent() {
 
               <Link
                                 className={`tw-no-underline lg:tw-text-xl tw-inline-flex tw-items-center tw-justify-center tw-px-6 tw-py-3 tw-rounded-lg tw-font-semibold tw-transition-all tw-duration-300 tw-border-2 tw-outline tw-outline-cyan-500 tw-text-cyan-600 hover:tw-bg-cyan-500 hover:tw-text-black dark:tw-outline-cyan-500 dark:tw-text-cyan-300 dark:hover:tw-bg-cyan-500 dark:hover:tw-text-black`}
-                                href="/docs/products/ngiab/office-hours"
+                                href="/docs/products/ngiab-ecosystem/ngiab/office-hours"
                                 style={{ textDecoration: "none", marginRight: "10px" }}
                               >
                                 Get Involved
