@@ -2,8 +2,8 @@
   "products": [
     {
       "id": "nextgen-in-a-box",
-      "name": "NextGen In A Box",
-      "description": "A comprehensive containerized solution for NextGen framework deployment, providing easy setup and management of hydrological modeling workflows.",
+      "name": "NGIAB Ecosystem",
+      "description": "Comprehensive containerized solutions for NextGen framework deployment, providing easy setup and management of hydrological modeling workflows.",
       "category": "Modeling Framework",
       "tags": [
         "Docker",
@@ -13,57 +13,25 @@
       "iconUrl": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg",
       "links": {
         "github": "https://github.com/ciroh-ua/ngiab-cloudinfra",
-        "docs": "/docs/products/ngiab-ecosystem/ngiab",
+        "docs": "/docs/products/ngiab-ecosystem/",
         "hydroshare": "https://www.hydroshare.org/resource/88e0ebf2719c492381efcb27fba71032/",
         "zotero": "https://www.sciencedirect.com/science/article/pii/S1364815225003500"
       }
     },
     {
-      "id": "national-water-model",
-      "name": "National Water Model",
-      "description": "Advanced hydrologic modeling system that simulates observed and forecast streamflow over the continental United States.",
-      "category": "Water Modeling",
+      "id": "flood-mapping-publication",
+      "name": "Flood Inundation Mapping Ecosystem",
+      "description": "Comprehensive community-driven flood mapping methodologies for real-time inundation prediction and risk assessment.",
+      "category": "Flood Management",
       "tags": [
-        "NWM",
-        "Forecasting",
-        "Streamflow"
+        "Flood Mapping",
+        "Research",
+        "Methodology"
       ],
-      "iconUrl": "https://img.icons8.com/fluency/96/000000/water.png",
+      "iconUrl": "https://img.icons8.com/fluency/96/000000/tsunami.png",
       "links": {
-        "docs": "/docs/products/ngiab-ecosystem/about-nwm"
-      }
-    },
-    {
-      "id": "hydrofabric",
-      "name": "Hydrofabric",
-      "description": "Geospatial fabric for hydrological modeling providing standardized catchment and flowline representations for water resource applications.",
-      "category": "Geospatial Tools",
-      "tags": [
-        "GIS",
-        "Catchments",
-        "Hydrology"
-      ],
-      "iconUrl": "https://img.icons8.com/fluency/96/000000/geography.png",
-      "links": {
-        "github": "https://github.com/NOAA-OWP/hydrofabric",
-        "docs": "/docs/products/hydrofabric",
-        "zotero": "https://www.nature.com/articles/s41597-025-05941-6"
-      }
-    },
-    {
-      "id": "nextgen-datastream",
-      "name": "NextGen Research Datastream",
-      "description": "Real-time data streaming platform for NextGen framework, enabling efficient data ingestion and processing for hydrological research.",
-      "category": "Data Management",
-      "tags": [
-        "Data Stream",
-        "Real-time",
-        "Research"
-      ],
-      "iconUrl": "https://img.icons8.com/fluency/96/000000/data-configuration.png",
-      "links": {
-        "github": "https://github.com/CIROH-UA/ngen-datastream",
-        "docs": "/docs/products/ngiab-ecosystem/nrds"
+        "docs": "/docs/products/community-fim/",
+        "github": "https://github.com/sdmlua/FIMserv"
       }
     },
     {
@@ -125,22 +93,6 @@
       "iconUrl": "https://img.icons8.com/fluency/96/000000/combo-chart.png",
       "links": {
         "docs": "/docs/products/visualization/"
-      }
-    },
-    {
-      "id": "flood-mapping-publication",
-      "name": "Flood Inundation Mapping Methods",
-      "description": "Comprehensive research publication on community-driven flood mapping methodologies for real-time inundation prediction and risk assessment.",
-      "category": "Flood Management",
-      "tags": [
-        "Flood Mapping",
-        "Research",
-        "Methodology"
-      ],
-      "iconUrl": "https://img.icons8.com/fluency/96/000000/tsunami.png",
-      "links": {
-        "docs": "/docs/products/community-fim/",
-        "github": "https://github.com/sdmlua/FIMserv"
       }
     },
     {
