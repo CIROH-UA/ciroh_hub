@@ -298,23 +298,19 @@ const config = {
                 {
                   type: "doc",
                   docId: "products/ngiab/index",
-                  label: "NGIAB",
+                  label: "NGIAB Ecosystem",
                 },
                 {
                   type: "doc",
-                  docId: "products/research-datastream/index",
-                  label: "NRDS",
+                  docId: "products/community-fim/index",
+                  label: "FIM Ecosystem",
                 },
                 {
                   type: "doc",
                   docId: "products/evaluation/rtiteehr/index",
                   label: "TEEHR",
                 },
-                {
-                  type: "doc",
-                  docId: "products/community-fim/fimserv/index",
-                  label: "FIM as a Service",
-                },
+                
                 {
                   type: "doc",
                   docId: "products/data-management/bigquery-api/index",
