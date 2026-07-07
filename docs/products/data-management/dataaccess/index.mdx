@@ -5,34 +5,34 @@ description: "Input and Output of NWM"
 tags: [Products, CIROH, National Water Model, AWS, Google Cloud, NOAA]
 ---
 
-#National Water Model Data Access 
+# National Water Model Data Access
 
-Within projects at CIROH ([learn more about the consortium here](https://ciroh.ua.edu/about/)), we encounter a wide range of data resources and data access inquiries. Frequently asked questions include what type of hydrological data is available to use, where it is stored, and how to access it. The purpose of this page is to illustrate what types of hydrological data are available, where it is stored, and to provide a few examples of how to access it.  
+Within projects at CIROH ([learn more about the consortium here](https://ciroh.ua.edu/about/)), we encounter a wide range of data resources and data access inquiries. Frequently asked questions include what type of hydrological data is available to use, where it is stored, and how to access it. The purpose of this page is to illustrate what types of hydrological data are available, where it is stored, and to provide a few examples of how to access it.
 
+## What Type of Data is Available?
 
-##What Type of Data is Available?  
+The official national water model (NWM) meteorological inputs and hydrology and routing outputs are available for use. The inputs and outputs are accessible through HTTP and FTP. These resources are provided by the National Center for Environmental Prediction (NCEP). All outputs from the NWM are stored in NetCDF format in one of these three file types:
 
-The official national water model (NWM) meteorological inputs and hydrology and routing outputs are available for use. The inputs and outputs are accessible through HTTP and FTP. These resources are provided by the National Center for Environmental Prediction (NCEP). All outputs from the NWM are stored in NetCDF format in one of these three file types:  
+1. 1 km gridded NetCDF (land surface variables and forcing data)
+2. 100 m/250 m gridded NetCDF (ponded water depth and depth to soil saturation)
+3. Point-type NetCDF (stream routing and reservoir variables)
 
-1. 1 km gridded NetCDF (land surface variables and forcing data)   
-2. 100 m/250 m gridded NetCDF (ponded water depth and depth to soil saturation)    
-3. Point-type NetCDF (stream routing and reservoir variables)  
+(see [https://water.noaa.gov/about/nwm](https://water.noaa.gov/about/nwm) for more details about outputs spatial coverage)
 
-(see [https://water.noaa.gov/about/nwm](https://water.noaa.gov/about/nwm) for more details about outputs spatial coverage) 
+In addition, output from the NWM is visualized using an experimental interactive map and image view, provided by the Office of Water Prediction (OWP). To explore those tools, [go here](https://water.noaa.gov/map) and [here](https://water.noaa.gov/imageviewer).
 
-In addition, output from the NWM is visualized using an experimental interactive map and image view, provided by the Office of Water Prediction (OWP).  To explore those tools, [go here](https://water.noaa.gov/map) and [here](https://water.noaa.gov/imageviewer).
 ## Input and Output Data of the National Water Model
-Below are listed the major resources that grant access to the input data used and the output data produced by the operational national water model. 
+
+Below are listed the major resources that grant access to the input data used and the output data produced by the operational national water model.
 
 ### Offical NOMADS Resource
 
-Through NOAA Operational Model Archive and Distribution System (NOMADS) and National Centers for Environmental Protection (NCEP) FTP server, the full set of NWM output data and a subset of forcing files are both through HTTP and FTP. They are at the following locations:  
+Through NOAA Operational Model Archive and Distribution System (NOMADS) and National Centers for Environmental Protection (NCEP) FTP server, the full set of NWM output data and a subset of forcing files are both through HTTP and FTP. They are at the following locations:
 
-* NCEP NOMADS [HTTP Service](https://nomads.ncep.noaa.gov/pub/data/nccf/com/nwm/)   
-* NCEP [FTP Service](ftp://ftpprd.ncep.noaa.gov/pub/data/nccf/com/nwm)  
+- NCEP NOMADS [HTTP Service](https://nomads.ncep.noaa.gov/pub/data/nccf/com/nwm/)
+- NCEP [FTP Service](ftp://ftpprd.ncep.noaa.gov/pub/data/nccf/com/nwm)
 
-
-As of June 4, 2026, these resources include the following directories 
+As of June 4, 2026, these resources include the following directories
 
 ```
 para_post-processed/    31-Mar-2025 19:36   -
@@ -41,37 +41,36 @@ prod/                   04-Jun-2026 00:16   -
 v3.0/                   04-Jun-2026 00:18   -
 ```
 
-The `para\_post-processed` directory lacks specific documentation, although the "para" designation suggests it is a "parallel" execution, indicating a candidate production run under testing for operational use. When the National Water Center (NWC) is experimenting with new or proposed products, these will often be placed in the `para\_post-processed` folder for examination before official adoption. 
+The `para\_post-processed` directory lacks specific documentation, although the "para" designation suggests it is a "parallel" execution, indicating a candidate production run under testing for operational use. When the National Water Center (NWC) is experimenting with new or proposed products, these will often be placed in the `para\_post-processed` folder for examination before official adoption.
 
-- [NOMADS post-processed](https://nomads.necp.noaa.gov/pub/data/nccf/com/nwm/post-processed/) 
-    - RFC: Outputs filtered down to RFC locations.   
-    - WMS: Contains re-indexed/reformatted outputs in per-forecast netCDFs suitable for rapid querying and responsive for graph visualizations on the water.noaa.gov/map site.   
-    - IMAGES: .png-formatted renderings of NWM output for various domains and variables.   
-    - logs: Logs. 
+- [NOMADS post-processed](https://nomads.necp.noaa.gov/pub/data/nccf/com/nwm/post-processed/)
+  - RFC: Outputs filtered down to RFC locations.
+  - WMS: Contains re-indexed/reformatted outputs in per-forecast netCDFs suitable for rapid querying and responsive for graph visualizations on the water.noaa.gov/map site.
+  - IMAGES: .png-formatted renderings of NWM output for various domains and variables.
+  - logs: Logs.
 
-The NWM is a rolling, real-time forecast that produces terabytes of data every day. Because of this, only data from the last 48 hours are held in the NOMADS service. Data from any other time period must be accessed through partner services, as described below.  
+The NWM is a rolling, real-time forecast that produces terabytes of data every day. Because of this, only data from the last 48 hours are held in the NOMADS service. Data from any other time period must be accessed through partner services, as described below.
 
- 
+### NODD – NOAA Open Data Dissemination Program
 
-### NODD – NOAA Open Data Dissemination Program 
-
-"The NOAA Open Data Dissemination (NODD) Program provides public access to NOAA's open data on commercial cloud platforms through public-private partnerships. These partnerships remove obstacles to public use of NOAA data, help avoid costs and risks associated with federal data access services, and leverage operational public-private partnerships with the cloud computing and information services industries." (For more information, visit NODD [https://www.noaa.gov/information-technology/open-data-dissemination](https://www.noaa.gov/information-technology/open-data-dissemination)) 
-
+"The NOAA Open Data Dissemination (NODD) Program provides public access to NOAA's open data on commercial cloud platforms through public-private partnerships. These partnerships remove obstacles to public use of NOAA data, help avoid costs and risks associated with federal data access services, and leverage operational public-private partnerships with the cloud computing and information services industries." (For more information, visit NODD [https://www.noaa.gov/information-technology/open-data-dissemination](https://www.noaa.gov/information-technology/open-data-dissemination))
 
 The NODD datasets, as made available through several public cloud vendors, are an incredible resource for accessing NWM data for research and evaluative purposes. The following NODD datasets have proven to be of particular value for hydrological modeling and experimentation with the NWM.
 
 #### Amazon Web Services
 
-Amazon Web Services (AWS) hosts two repositories as part of their sustainability data initiative. 
+Amazon Web Services (AWS) hosts two repositories as part of their sustainability data initiative.
 
 The first repository contains the operational data. It now hosts 4-week rolling collection of all output; it used to only be short range and the registry entry retains the description only for the short_range data [here](https://registry.opendata.aws/noaa-nwm-pds/). Alternatively, the same resource is described under the sustainability initiative page [here](https://aws.amazon.com/marketplace/pp/prodview-73iwu7dcfuge2).)
+
 - The catalog of AWS-hosted operational NWM data can be browsed [here](https://noaa-nwm-pds.s3.amazonaws.com/index.html).
 
 The second AWS repository contains several versions of the retrospective dataset each described on the main page under the open data registry [here](https://registry.opendata.aws/nwm-archive/).
-{/* (The same information is also on the AWS sustainability initiative webpage [here](https://registry.opendata.aws/collab/asdi/) ) 
+{/* (The same information is also on the AWS sustainability initiative webpage [here](https://registry.opendata.aws/collab/asdi/) )
 Commenting this part since the AWS link throws a 404 error */}
 
 The different catalogs of those [currently] five versions of that resource are linked below:
+
 - Two versions of NWM v2.1 retrospective
   - netCDF, [here](https://noaa-nwm-retrospective-2-1-pds.s3.amazonaws.com/index.html)
   - zarr, [here](https://noaa-nwm-retrospective-2-1-zarr-pds.s3.amazonaws.com/index.html)
@@ -148,13 +147,13 @@ dan.ames@byu.edu
 #### Google – Operational NWM Data
 
 Google hosts the most complete operational data archive of inputs and outputs from the National Water Model, with nearly every file since August 2018. The Google open data registry provides additional explanations [here](https://console.cloud.google.com/marketplace/product/noaa-public/national-water-model?project=explore-ai-387703).
+
 - Operational data can be browsed [here](https://console.cloud.google.com/storage/browser/national-water-model).
 - Google also hosts a copy of the NWM v1.2 retrospective [here](https://console.cloud.google.com/storage/browser/national-water-model-reanalysis).
 
 #### NWM BigQuery API
 
 Some of the datasets from the NWM operational and retrospective simulations are available on BigQuery for ultra-high-bandwidth access. For more information, visit the [NWM BigQuery API page](/docs/products/data-management/bigquery-api).
-
 
 #### Azure/Planetary Computer
 
@@ -164,6 +163,7 @@ Tom Augspurger of Microsoft has a series of notebooks providing examples of how 
 [Tom Augspurger's Notebooks](https://github.com/TomAugspurger/noaa-nwm)
 
 ### CIROH Resources
+
 More detailed information and example usage will be available soon.
 
 - Kerchunk Retro (points to AWS 2.1 NetCDF Retro)
@@ -172,19 +172,17 @@ More detailed information and example usage will be available soon.
   - [Kerchunk Operational](https://ciroh-nwm-zarr-copy.s3.amazonaws.com/index.html)
 
 ### Other resources
+
 #### ESRI Living Atlas
 
 ESRI Living Atlas provides a map-enabled version of the NWM output, which can be accessed [here](https://www.esri.com/arcgis-blog/products/analytics/analytics/esri-visualizes-noaas-national-water-model/).
 
-#### Description of WRF-Hydro code: 
+#### Description of WRF-Hydro code:
 
 A detailed description of various aspects of the WRF-Hydro code, which produces the current NWM, can be found [here](https://ral.ucar.edu/sites/default/files/public/projects/wrf_hydro/technical-description-user-guide/wrf-hydro-v5.1.1-technical-description.pdf).
 
+---
 
-
-
-------------------------------------------------
-
-import DocCardList from '@theme/DocCardList';
+import DocCardList from "@theme/DocCardList";
 
 <DocCardList />
