@@ -1,6 +1,7 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useContext } from "react";
 import gsap from "gsap";
 import "./cloudInfraDashboard.css";
+import { ReducedMotionContext } from '@theme/Contexts';
 
 /**
  * CloudInfraDashboard
@@ -24,6 +25,7 @@ export default function CloudInfraDashboard({ cards = [] }) {
     const particlesRef = useRef(null);
     const cardsRef = useRef([]);
     const observersRef = useRef([]);
+    const {reducedMotionMode} = useContext(ReducedMotionContext);
 
     useEffect(() => {
         // -----------------------------
@@ -48,7 +50,7 @@ export default function CloudInfraDashboard({ cards = [] }) {
         const animateCounter = (el, target) => {
             gsap.to(el, {
                 innerHTML: target,
-                duration: 1.6,
+                duration: reducedMotionMode ? 0 : 1.6,
                 ease: "power2.out",
                 snap: { innerHTML: 1 },
             });
@@ -94,19 +96,28 @@ export default function CloudInfraDashboard({ cards = [] }) {
                 const x = e.clientX - rect.left - rect.width / 2;
                 const y = e.clientY - rect.top - rect.height / 2;
 
-                gsap.to(cardEl, {
-                    rotationY: x * 0.05,
-                    rotationX: -y * 0.05,
-                    duration: 0.45,
-                    ease: "power2.out",
-                });
+                if (!reducedMotionMode) {
+                    gsap.to(cardEl, {
+                        rotationY: x * 0.05,
+                        rotationX: -y * 0.05,
+                        duration: 0.45,
+                        ease: "power2.out",
+                    });
+                } else {
+                    gsap.to(cardEl, {
+                        rotationY: 0,
+                        rotationX: 0,
+                        duration: 0,
+                        ease: "power2.out",
+                    });
+                }
             };
 
             const onLeave = () => {
                 gsap.to(cardEl, {
                     rotationY: 0,
                     rotationX: 0,
-                    duration: 0.45,
+                    duration: reducedMotionMode ? 0 : 0.45,
                     ease: "power2.out",
                 });
             };
@@ -127,7 +138,7 @@ export default function CloudInfraDashboard({ cards = [] }) {
             observersRef.current = [];
             if (particlesRef.current) particlesRef.current.innerHTML = "";
         };
-    }, [cards]);
+    }, [cards, reducedMotionMode]);
 
     // fallback demo if no cards provided
     const demoCards = [

@@ -485,6 +485,10 @@ a.button.button--secondary:hover {
   display: none;
 }
 
+.reduced-motion {
+  --foo: "bar"; /* Override TailwindCSS cleanup */
+}
+
 [data-reduce-motion="false"] .reduced-motion {
   display: none;
 }
