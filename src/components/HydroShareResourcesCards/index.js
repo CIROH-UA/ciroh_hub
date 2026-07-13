@@ -6,6 +6,7 @@ import { LuLayers3 } from 'react-icons/lu';
 import { HiOutlineGlobeAlt, HiOutlineUserGroup } from 'react-icons/hi';
 import styles from './styles.module.css';
 import { isPlaceholder, splitAuthors, StatTag, ActionLink, ActionButton } from './shared';
+import { HydroShareCollectionCard } from "@site/src/components/HydroShareCollectionCard";
 
 
 export function ResourceCard({ resource, defaultImage }) {
@@ -222,7 +223,7 @@ export function ResourceCard({ resource, defaultImage }) {
 
 export default function HydroShareResourcesCards({ resources, defaultImage }) {
     // Registry mapping resource types to their corresponding card components
-    const card_registry = {CompositeResource: ResourceCard, CollectionResource: ResourceCard, placeholder: ResourceCard};
+    const card_registry = {CompositeResource: ResourceCard, CollectionResource: HydroShareCollectionCard, placeholder: ResourceCard};
 
     return (
         <div className="tw-grid tw-grid-cols-1 lg:tw-grid-cols-2 2xl:tw-grid-cols-3 tw-gap-6">

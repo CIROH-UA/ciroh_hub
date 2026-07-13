@@ -4,6 +4,7 @@ import { useLocation } from '@docusaurus/router';
 
 import styles from './styles.module.css';
 import HydroShareResourceCard from './HydroShareResourceCard';
+import { HydroShareCollectionCard } from "@site/src/components/HydroShareCollectionCard";
 
 /**
  * Grid wrapper for HydroShareResourceCard.
@@ -11,7 +12,7 @@ import HydroShareResourceCard from './HydroShareResourceCard';
  *    scroll smoothly to the corresponding element.
  */
 export default function HydroShareResourcesTiles({ resources, defaultImage }) {
-  const card_registry = {CompositeResource: HydroShareResourceCard, CollectionResource: HydroShareResourceCard, placeholder: HydroShareResourceCard};
+  const card_registry = {CompositeResource: HydroShareResourceCard, CollectionResource: HydroShareCollectionCard, placeholder: HydroShareResourceCard};
 
   const location = useLocation();
 
