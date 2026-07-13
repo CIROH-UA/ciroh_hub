@@ -4,6 +4,7 @@ import { zoteroApiCreate, zoteroFetchTopItems } from "@site/src/components/Zoter
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import React, { useState, useRef, useEffect } from 'react';
 
+const noisy = false;
 
 export default function ResearchFeature() {
 
@@ -43,7 +44,7 @@ export default function ResearchFeature() {
         let paginationToken = undefined;
         let pagesFetched = 0;
         try {
-            console.log(`[hsCountByKeyword] Starting count for: ${keyword}`);
+            if (noisy) console.log(`[hsCountByKeyword] Starting count for: ${keyword}`);
             while (true) {
                 const response = await fetchResourcesBySearch(
                     keyword,
@@ -58,24 +59,24 @@ export default function ResearchFeature() {
                 const items = response?.resources || [];
                 pagesFetched++;
 
-                console.log(`[hsCountByKeyword] Page ${pagesFetched}: ${items.length} items returned for ${keyword}`);
+                if (noisy) console.log(`[hsCountByKeyword] Page ${pagesFetched}: ${items.length} items returned for ${keyword}`);
 
                 if (items.length === 0) {
-                    console.log(`[hsCountByKeyword] Empty page, stopping`);
+                    if (noisy) console.log(`[hsCountByKeyword] Empty page, stopping`);
                     break;
                 }
 
                 total += items.length;
 
                 if (!response?.hasMorePages) {
-                    console.log(`[hsCountByKeyword] No more pages signaled, stopping`);
+                    if (noisy) console.log(`[hsCountByKeyword] No more pages signaled, stopping`);
                     break;
                 }
                 paginationToken = response.nextPaginationToken;
             }
-            console.log(`[hsCountByKeyword] ${keyword}: Total ${total} resources across ${pagesFetched} pages`);
+            if (noisy) console.log(`[hsCountByKeyword] ${keyword}: Total ${total} resources across ${pagesFetched} pages`);
         } catch (err) {
-            console.error(`[hsCountByKeyword] ${keyword} error after ${pagesFetched} pages:`, err);
+            if (noisy) console.error(`[hsCountByKeyword] ${keyword} error after ${pagesFetched} pages:`, err);
             throw err;
         }
         return total;
@@ -89,7 +90,7 @@ export default function ResearchFeature() {
         let pagesFetched = 0;
         const resourceIds = new Set();
         try {
-            console.log(`[hsCountCommunityResources] Starting count for: ${keyword}`);
+            if (noisy) console.log(`[hsCountCommunityResources] Starting count for: ${keyword}`);
             while (true) {
                 const response = await getCommunityResources(
                   keyword,
@@ -114,17 +115,17 @@ export default function ResearchFeature() {
 
                 const hasMorePages = Boolean(response?.hasMorePages);
 
-                console.log(`[hsCountCommunityResources] Page ${pagesFetched}: ${items.length} items returned for ${keyword}`);
+                if (noisy) console.log(`[hsCountCommunityResources] Page ${pagesFetched}: ${items.length} items returned for ${keyword}`);
 
                 if (!hasMorePages || items.length === 0) {
-                    console.log(`[hsCountCommunityResources] No more items, stopping`);
+                    if (noisy) console.log(`[hsCountCommunityResources] No more items, stopping`);
                     break;
                 }
 
                 groupPageNumber = (response.groupResourcesPageData?.pageNumber || 1) + 1;
                 paginationToken = response.extraResourcesPageData?.nextPaginationToken;
             }
-            console.log(`[hsCountCommunityResources] ${keyword}: Total ${resourceIds.size} resources across ${pagesFetched} pages`);
+            if (noisy) console.log(`[hsCountCommunityResources] ${keyword}: Total ${resourceIds.size} resources across ${pagesFetched} pages`);
         } catch (err) {
             console.error(`[hsCountCommunityResources] ${keyword} error after ${pagesFetched} pages:`, err);
             throw err;

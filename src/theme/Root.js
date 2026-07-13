@@ -26,7 +26,7 @@ function getMotionPreference() {
     if (localStorageAvailable && (localStorage.getItem('reduce-motion') == 'enabled' || localStorage.getItem('reduce-motion') == 'disabled')) {
         return localStorage.getItem('reduce-motion');
     } else {
-        mode = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'enabled' : 'disabled';
+        const mode = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'enabled' : 'disabled';
         if (localStorageAvailable) localStorage.setItem('reduce-motion', mode);
         return mode;
     }
