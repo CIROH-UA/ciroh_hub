@@ -318,7 +318,7 @@ const config = {
                 {
                   type: "doc",
                   docId: "products/ngiab-ecosystem/index",
-                  label: "NGIAB Ecosystem",
+                  label: "NGIAB-NRDS Ecosystem",
                 },
                 {
                   type: "doc",
