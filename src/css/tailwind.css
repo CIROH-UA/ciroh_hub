@@ -1,3 +1,22 @@
 /* Remove preflight to avoid breaking Infima */
 @tailwind components;
 @tailwind utilities;
+
+/*
+ * Preflight (@tailwind base) is disabled above to avoid clobbering Infima.
+ * That also drops the --tw-* defaults it normally sets on every element, which
+ * makes Tailwind's transform utilities (translate/scale/rotate/skew) produce an
+ * invalid `transform` value that the browser discards. Re-declare just those
+ * defaults so transform utilities work.
+ */
+*,
+::before,
+::after {
+  --tw-translate-x: 0;
+  --tw-translate-y: 0;
+  --tw-rotate: 0;
+  --tw-skew-x: 0;
+  --tw-skew-y: 0;
+  --tw-scale-x: 1;
+  --tw-scale-y: 1;
+}
