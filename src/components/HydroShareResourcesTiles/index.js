@@ -11,6 +11,8 @@ import HydroShareResourceCard from './HydroShareResourceCard';
  *    scroll smoothly to the corresponding element.
  */
 export default function HydroShareResourcesTiles({ resources, defaultImage }) {
+  const card_registry = {CompositeResource: HydroShareResourceCard, CollectionResource: HydroShareResourceCard, placeholder: HydroShareResourceCard};
+
   const location = useLocation();
 
   const scrollToHash = useCallback(() => {
@@ -30,13 +32,14 @@ export default function HydroShareResourcesTiles({ resources, defaultImage }) {
   return (
     <div className={clsx('container', 'margin-bottom--lg')}>
       <div className={styles.gridContainer}>
-        {resources.map(res => (
-          <HydroShareResourceCard
+        {resources.map(res => {
+          const Card = card_registry[res.resource_type] ?? HydroShareResourceCard;
+          return <Card
             key={res.resource_id}
             resource={res}
             defaultImage={defaultImage}
           />
-        ))}
+        })}
       </div>
     </div>
   );

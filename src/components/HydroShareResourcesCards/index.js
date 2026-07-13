@@ -221,15 +221,22 @@ export function ResourceCard({ resource, defaultImage }) {
 }
 
 export default function HydroShareResourcesCards({ resources, defaultImage }) {
+    // Registry mapping resource types to their corresponding card components
+    const card_registry = {CompositeResource: ResourceCard, CollectionResource: ResourceCard, placeholder: ResourceCard};
+
     return (
         <div className="tw-grid tw-grid-cols-1 lg:tw-grid-cols-2 2xl:tw-grid-cols-3 tw-gap-6">
-            {resources.map(resource => (
-                <ResourceCard
-                    key={resource.resource_id}
-                    resource={resource}
-                    defaultImage={defaultImage}
-                />
-            ))}
+            {resources.map(resource => {
+                // Determine the appropriate card component for the resource based on its type
+                const Card = card_registry[resource.resource_type] ?? ResourceCard;
+                return (
+                    <Card
+                        key={resource.resource_id}
+                        resource={resource}
+                        defaultImage={defaultImage}
+                    />
+                )
+            })}
         </div>
     );
 }
