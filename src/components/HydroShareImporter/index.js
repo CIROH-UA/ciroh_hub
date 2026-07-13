@@ -98,7 +98,7 @@ function mapDiscoveryResource(resource) {
     resource_id: resource.document[0].url.match(/resource\/([^/]+)/)[1],
     resource_title: resource.name,
     authors: resource.creator.map(c => c.name),
-    resource_type: resource.document[0].additionalType,
+    resource_type: resource.document[0].additionalType ?? resource.document[0].content_types?.[0],
     resource_url: resource.document[0].url.replace(/^http:/, 'https:'),
     abstract: resource.description,
     date_created: resource.document[0].dateCreated,
