@@ -111,12 +111,15 @@ function SelectCollectionInner({zotero, onChange}) {
     option: (base,state) => ({
       ...base,
       backgroundColor: state.isFocused
-        ? 'var(--ifm-color-primary-lightest)'
+        ? 'var(--ifm-color-primary)'
         : base.backgroundColor,
       color: state.isFocused
-        ? 'var(--ifm-color-primary-dark)'
+        ? 'var(--ifm-color-white)'
         : base.color,
-      ...(state.isSelected && {background:'var(--ifm-color-primary-lighter)'}),
+      ...(state.isSelected && {
+        backgroundColor: 'var(--ifm-color-primary)',
+        color: 'var(--ifm-color-white)',
+      }),
     }),
   }), [colorMode]);
 
