@@ -107,6 +107,7 @@ function SelectCollectionInner({zotero, onChange}) {
   const styles = useMemo(() => ({
     control:        s => ({...s, border:'1px solid #ccc'}),
     valueContainer: s => ({...s, padding:'2px 8px'}),
+    menuPortal:     s => ({...s, zIndex: 9999}),
     option: (base,state) => ({
       ...base,
       backgroundColor: state.isFocused
