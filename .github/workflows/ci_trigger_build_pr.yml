@@ -45,7 +45,11 @@ jobs:
     - name: Fetch commit header
       run: |
         header="$(git log -1 --pretty=%B | head -n 1)"
-        echo "COMMIT_HEADER=${header}" >> $GITHUB_ENV
+        if [[ $header == *"\""* ]]; then
+          echo "COMMIT_HEADER="(Unsafe header)" >> $GITHUB_ENV
+        else
+          echo "COMMIT_HEADER=${header}" >> $GITHUB_ENV
+        fi
       # Credit to the solution at https://github.com/orgs/community/discussions/106392
 
     - name: 'Send repository dispatch'
