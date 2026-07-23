@@ -14,12 +14,15 @@ jobs:
     outputs:
       environment: ${{ steps.set-outputs.outputs.environment }}
       version: ${{ steps.set-outputs.outputs.version }}
-      
+    permissions:
+      content: read
+      artifact_metadata: read
+      actions_secrets: read
     name: ${{ github.event.client_payload.deploy_env }} - Deploy ${{ github.event.client_payload.short_hash }} from ${{ github.event.client_payload.branch }}
     steps:
       # Mostly for the sake of the deploy action, which assumes a git directory is present
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
         with:
           filter: 'blob:none' # only retrieve metadata
 

@@ -17,6 +17,9 @@ concurrency:
 
 jobs:
   pr-clean-up:
+    permissions:
+      contents: read
+      actions_secrets: read
     runs-on: ubuntu-latest
     if: ${{ github.event.action != 'labeled' || github.event.label.name == 'manual cleanup' }}
     steps:
@@ -26,7 +29,7 @@ jobs:
           git config --global user.email github-actions@github.com
 
       - name: Checkout staging repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
         with:
           repository: ${{ env.TARGET_REPO }}
           ref: "gh-pages"

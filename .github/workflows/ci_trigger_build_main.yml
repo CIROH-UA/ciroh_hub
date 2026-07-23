@@ -29,6 +29,8 @@ env:
 jobs:
   trigger-build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:      
     - name: Set deployment target
       run: |
@@ -48,7 +50,7 @@ jobs:
 
     # Checkout to fetch commit header
     - name: Checkout
-      uses: actions/checkout@v5
+      uses: actions/checkout@v7
       with:
         ref: ${{ env.SOURCE_REF }}
         filter: 'blob:none' # only retrieve metadata

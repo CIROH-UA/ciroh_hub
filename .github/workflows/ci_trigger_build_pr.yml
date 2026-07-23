@@ -4,7 +4,7 @@ name: 'CI: Trigger deployment from PR'
 run-name: 'Trigger PR deployment from PR #${{ github.event.number }}'
 
 on:
-  pull_request_target:
+  pull_request:
     types: [labeled, reopened, synchronize]
 
 env:
@@ -24,6 +24,8 @@ jobs:
   trigger-build:
     if: ${{ contains(github.event.pull_request.labels.*.name, 'preview on staging') && ( github.event.action != 'labeled' || github.event.label.name == 'preview on staging' ) }}
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
     - name: Set deployment target
       run: |
@@ -36,7 +38,7 @@ jobs:
 
     # Checkout to fetch commit header
     - name: Checkout
-      uses: actions/checkout@v5
+      uses: actions/checkout@v7
       with:
         repository: ${{ env.SOURCE_REPO }}
         ref: ${{ env.SOURCE_REF }}
@@ -52,6 +54,13 @@ jobs:
         fi
       # Credit to the solution at https://github.com/orgs/community/discussions/106392
 
+  send-dispatch:
+    runs-on: ubuntu-latest
+    needs: trigger-build
+    permissions:
+      contents: write # for repository dispatch
+      metadata: read
+    steps:
     - name: 'Send repository dispatch'
       uses: peter-evans/repository-dispatch@v4
       with:

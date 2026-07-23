@@ -21,7 +21,13 @@ jobs:
       matrix:
         node-version: [22.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
-
+    permissions:
+      artifact_metadata: write
+      content: write # for repository dispatch
+      deployments: write
+      metadata: read
+      secrets: read
+      variables: read
     steps:
     - name: Extract payload inputs
       run: |
@@ -41,17 +47,22 @@ jobs:
     
     - name: Generate base URL
       run: |
-        if ${{ env.TARGET_PATH != '.' }}; then
-          echo "BASE_URL=/${{ env.TARGET_PATH }}" >> $GITHUB_ENV
+        if ["$TARGET_PATH" != "."]; then
+          echo "BASE_URL=/$TARGET_PATH" >> $GITHUB_ENV
         else
           echo "BASE_URL=/" >> $GITHUB_ENV
         fi
 
     - name: Checkout
-      uses: actions/checkout@v5
+      uses: actions/checkout@v7
       with:
         ref: ${{ github.event.client_payload.source_ref }}
         repository: ${{ github.event.client_payload.source_repo }}
+        allow-unsafe-pr-checkout: true
+        # The above flag doesn't technically get checked,
+        # but this can be an unsafe checkout when called from a PR.
+        # The 'preview on staging' label is protective, but we should consider hardening this further.
+        # See https://securitylab.github.com/resources/github-actions-preventing-pwn-requests/#preventing-pwn-requests
        
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v5
