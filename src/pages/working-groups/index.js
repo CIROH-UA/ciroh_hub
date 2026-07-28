@@ -91,7 +91,7 @@ export default function WorkingGroupsPage() {
   const { siteConfig } = useDocusaurusContext();
   const containerRef = useRef(null);
   const [query, setQuery] = useState('');
-  const wgIntakeFormUrl = siteConfig?.customFields?.externalLinks?.wgIntakeForm || 'https://app.smartsheet.com/b/form/07569d6285f643c1a57fd18daab98f7e';
+  const wgIntakeFormUrl = siteConfig?.customFields?.externalLinks?.wgIntakeForm || 'https://app.smartsheet.com/b/form/019f1f425a1d717180af65a76b9fa26f';
 
   const filteredGroups = useMemo(() => {
     const q = normalize(query);

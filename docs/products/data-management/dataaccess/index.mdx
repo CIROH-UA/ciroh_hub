@@ -56,30 +56,40 @@ The NWM is a rolling, real-time forecast that produces terabytes of data every d
 "The NOAA Open Data Dissemination (NODD) Program provides public access to NOAA's open data on commercial cloud platforms through public-private partnerships. These partnerships remove obstacles to public use of NOAA data, help avoid costs and risks associated with federal data access services, and leverage operational public-private partnerships with the cloud computing and information services industries." (For more information, visit NODD [https://www.noaa.gov/information-technology/open-data-dissemination](https://www.noaa.gov/information-technology/open-data-dissemination))
 
 The NODD datasets, as made available through several public cloud vendors, are an incredible resource for accessing NWM data for research and evaluative purposes. The following NODD datasets have proven to be of particular value for hydrological modeling and experimentation with the NWM.
-#### Amazon Web Services
 
-Amazon Web Services (AWS) hosts two repositories as part of their sustainability data initiative. 
+### Amazon Web Services
+Amazon Web Services (AWS) hosts two repositories as part of their sustainability data initiative. Information about their sustainability data initiative can be found at [this link](https://registry.opendata.aws/collab/asdi/). All data is stored in S3 buckets. 
 
-The first repository contains the operational data. It now hosts 4-week rolling collection of all output; it used to only be short range and the registry entry retains the description only for the short_range data [here](https://registry.opendata.aws/noaa-nwm-pds/). Alternatively, the same resource is described under the sustainability initiative page [here](https://aws.amazon.com/marketplace/pp/prodview-73iwu7dcfuge2).)
-- The catalog of AWS-hosted operational NWM data can be browsed [here](https://noaa-nwm-pds.s3.amazonaws.com/index.html).
+#### NOAA National Water Model Short-Range Forecast Dataset
+The first repository is the NOAA National Water Model Short-Range Forecast and contains the operational data. It was first launched in August 2016 and hosts the 4-week rolling collection of all model output and the corresponding forcing data. {/* Could not verify which version of the NWM is being used to make the Short-Range Forecast Model. Documentation says v1.2 but it is from 5 years ago */} The forcing data for this model comes from the High Resolution Rapid Refresh (HRRR) and the Rapid Refresh (RAP) models. The Short-Range Forecast configuration cycles hourly and produces hourly determinist forecasts of streamflow and hydrologic states out to 18 hours. This repository is updated daily. (See [this site](https://registry.opendata.aws/noaa-nwm-pds/) for more information and relevant AWS CLI paths.)
 
-The second AWS repository contains several versions of the retrospective dataset each described on the main page under the open data registry [here](https://registry.opendata.aws/nwm-archive/).
-{/* (The same information is also on the AWS sustainability initiative webpage [here](https://registry.opendata.aws/collab/asdi/) ) 
-Commenting this part since the AWS link throws a 404 error */}
+All data is in NetCDF format and follows these general configurations:
+- 1 km gridded NetCDF (land surface variables and forcing)
+- 250 m gridded NetCDF (ponded water depth and depth to soil saturation)
+- Point-type NetCDF (stream routing and reservoir variables)
+- Point-type reservoir NetCDF (water surface elevation, inflow, outflow)
 
-The different catalogs of those [currently] five versions of that resource are linked below:
-- Two versions of NWM v2.1 retrospective
-  - netCDF, [here](https://noaa-nwm-retrospective-2-1-pds.s3.amazonaws.com/index.html)
-  - zarr, [here](https://noaa-nwm-retrospective-2-1-zarr-pds.s3.amazonaws.com/index.html)
-- Two versions of NWM v2.0 retrospective
-  - netCDF, [here](https://noaa-nwm-retro-v2-0-pds.s3.amazonaws.com/index.html)
-  - zarr, [here](https://noaa-nwm-retro-v2-zarr-pds.s3.amazonaws.com/index.html)
-- NWM v1.2 retrospective data
-  - netCDF, [here](https://nwm-archive.s3.amazonaws.com/index.html)
+To browse the bucket, go [here](https://noaa-nwm-pds.s3.amazonaws.com/index.html). More detailed documentation about data file naming conventions and configuration can be found [here](https://github.com/awslabs/open-data-docs/tree/main/docs/noaa/noaa-nwm-pds).
 
-The AWS retrospective resource is the primary publicly available source for the version 1.0 of the Analysis of Record for Calibration dataset (AORC), which is a 40-year best-available estimate of most common meteorological parameters required for hydrological modeling. Version 1.1 of the dataset accompanied the release of the NWM model version 3.0 retrospective and aimed to resolve issues from version 1.0.
+#### NOAA National Water Model Retrospective Datasets
+The second AWS repository is called the NOAA National Water Model CONUS Retrospective Dataset. AWS hosts four different versions of the retrospective dataset corresponding to different versions of the National Water Model. Below is a description of each version that includes what geographical areas are represented, which years are represented in each retrospective simulation, what outputs and forcing data inputs are provided, and what file formats are the data stored in. Each version also has links to the corresponding buckets holding the data. 
 
-Jupyter notebook instructions for processing NWM Zarr and NetCDF output formats are available [here](https://github.com/CIROH-UA/data_access_example/).
+***Version 3.0***
+
+Version 3.0 is a 44-year retrospective simiulation using v3.0 of the NWM spanning from February 1979-January 2023. It provides output for all of the continential United States (CONUS) as well as coverage fro Alaska, Hawaii, Puerto Rico, and US Virgin Island domains. This makes v3.0 unique because all other versions have output for CONUS
+
+Forcing data for the model is avaliable. For CONUS domains, the simulation uses v1.1 forcing data from the Office of Water Prediction Analysis of Record for Calibration (AORC) dataset. AORC Alaska forcing data is used in Alaska,  North American Regional Reanalysis (NARR) data along with precipitation from the Alaska Pacific River Forecast Center (APRFC) was used to drive the Hawaii retrospective simulation. Similarly, the Puerto Rico & US Virgin Island retrospective simulation was driven by NARR data along with precipitation from the Southeast River Forecast Center.
+
+NWM Retrospective data is avaliable in 2 formats: NetCDF and Zarr. The NetCDF files for v3.0 contain the full set data (forcing and output) while the Zarr files contain all the output data and precipitation forcing fields.
+- Browse either the NetCDF or Zarr files [here](https://noaa-nwm-retrospective-3-0-pds.s3.amazonaws.com/index.html). 
+
+***Version 2.1***
+
+Version 2.1 is a 42-year retrospective simulation using v2.1 of the NWM spanning from February 1979-December 2020. Its output domain is CONUS. Forcing data is avaliable for this similation. The model uses forcing data from AORC. For 1979-2006, NWM v2.1 uses forcing data from AORC v1.0, and for 2007-2020, NWM v2.1 uses forcing data from AORC v1.1. 
+
+All model output and forcing input fields are avaliable in NetCDF format. In Zarr formats, many of the output fields and the forcing precipitation fields are avaliable. 
+- Browse [NetCDF files here](https://noaa-nwm-retrospective-2-1-pds.s3.amazonaws.com/index.html) 
+- Browse [Zarr files here](https://noaa-nwm-retrospective-2-1-zarr-pds.s3.amazonaws.com/index.html)
 
 <details>
 <summary> Click to see an example of pulling data from the channel output zarr 2.1 archive and writing the results to csv. </summary>
@@ -135,12 +145,35 @@ for reach_id in feature_ids:
 Simple Script for Retrieving Retrospective NWM Data from AWS Store
 Dan Ames, 11/17/2023
 dan.ames@byu.edu
-'''
+''' 
 
 ```
 
 </details>
 
+<br />
+
+***Version 2.0***
+
+Version 2.0 is a 26-year retrospective simulation using v2.0 of the NWM spanning from January 1993-December 2018. Its output domain is CONUS. No forcing data for this version is avaliable through AWS. 
+
+All model output fields are avaliable in NetCDF format. Model channel output including streamflow and related fields are available in Zarr format.
+- Browse [NetCDF files here](https://noaa-nwm-retro-v2-0-pds.s3.amazonaws.com/index.html)
+- Browse [Zarr files here](https://noaa-nwm-retro-v2-zarr-pds.s3.amazonaws.com/index.html)
+
+***Version 1.2***
+
+Version 1.2 is a 25-year retrospective simulation using v1.2 of the NWM, spanning January 1993-December 2027. Its output domain is CONUS. No forcing data is avaliable through AWS for this version. 
+
+All model output fields are avaliable in NetCDF format. No Zarr format files are avaliable for this version. 
+- Browse [NetCDF files here](https://nwm-archive.s3.amazonaws.com/index.html)
+
+
+For more general information about the retrospective data sets see [this site](https://registry.opendata.aws/nwm-archive/), and for more detailed documentation, [go here](https://github.com/NOAA-Big-Data-Program/nodd-data-docs/blob/main/nwm/README.md). 
+
+The AWS retrospective resource is the primary publicly available source for the version 1.0 of the Analysis of Record for Calibration dataset (AORC), which is a 40-year best-available estimate of most common meteorological parameters required for hydrological modeling. Version 1.1 of the dataset accompanied the release of the NWM model version 3.0 retrospective and aimed to resolve issues from version 1.0.
+
+Additional Jupyter notebook instructions for processing NWM Zarr and NetCDF output formats are available [here](https://github.com/CIROH-UA/data_access_example/).
 #### Google – Operational NWM Data
 
 Google hosts the most complete operational data archive of inputs and outputs from the National Water Model, with nearly every file since August 2018. The Google open data registry provides additional explanations [here](https://console.cloud.google.com/marketplace/product/noaa-public/national-water-model?project=explore-ai-387703).
