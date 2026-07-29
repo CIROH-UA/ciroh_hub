@@ -34,7 +34,7 @@ async function importCitationIntoZotero(
 ) {
   try {
     // Initialize the client with your API key and configure for the group library.
-    const apiKey = process.env.ZOTERO_API_KEY;
+    const apiKey = process.env.ZOTERO_API_KEY_READ_WRITE;
     const groupId = process.env.ZOTERO_STAGING_GROUP_ID;
     const zotero = api(apiKey).library('group', groupId);
 

@@ -44,7 +44,7 @@ export default function PublicationsPage() {
       <main className="tw-relative tw-z-20">
         
        <Publications 
-          apiKey={siteConfig.customFields.zotero_api_key}
+          apiKey={siteConfig.customFields.zotero_api_key_read_only}
           groupId={siteConfig.customFields.zotero_group_id}
        />
        <TechBox items={items} type={"Publications"}  />

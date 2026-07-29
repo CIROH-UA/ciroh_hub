@@ -30,7 +30,7 @@ The Lambda needs several environment variables. Create a file `env.json` in this
     "ALLOWED_ORIGIN": "http://localhost:3001",
     "RECAPTCHA_SECRET_KEY": "your_recaptcha_secret_key",
     "RECAPTCHA_ALLOWED_HOSTS": "localhost,hub.ciroh.org",
-    "ZOTERO_API_KEY": "your_zotero_write_key",
+    "ZOTERO_API_KEY_READ_WRITE": "your_zotero_write_key",
     "ZOTERO_STAGING_GROUP_ID": "5943481"
   }
 }

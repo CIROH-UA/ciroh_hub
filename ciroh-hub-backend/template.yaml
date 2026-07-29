@@ -73,7 +73,7 @@ Resources:
           ALLOWED_ORIGIN: !Ref AllowedOrigin
           RECAPTCHA_ALLOWED_HOSTS: !Ref AllowedRecaptchaHosts
           RECAPTCHA_SECRET_KEY: !Ref RecaptchaSecretKey
-          ZOTERO_API_KEY: !Ref ZoteroApiKey
+          ZOTERO_API_KEY_READ_WRITE: !Ref ZoteroApiKey
           ZOTERO_STAGING_GROUP_ID: !Ref ZoteroStagingGroupId
 
 
