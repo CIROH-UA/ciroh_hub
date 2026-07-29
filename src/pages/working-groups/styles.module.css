@@ -9,10 +9,10 @@
   width: 520px;
   height: 520px;
   border-radius: 9999px;
-  filter: blur(40px);
-  opacity: 0.55;
   transform: translate3d(0, 0, 0);
   pointer-events: none;
+  filter: blur(40px);
+  opacity: 0.55;
 }
 
 .orbA {
@@ -27,7 +27,7 @@
   background: radial-gradient(circle at 30% 30%, rgba(21, 142, 175, 0.70), rgba(23, 150, 185, 0.16) 55%, rgba(0, 0, 0, 0) 70%);
 }
 
-.glass {
+[data-reduce-motion="false"] .glass {
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
 }
@@ -35,11 +35,14 @@
 .card {
   position: relative;
   border-radius: 18px;
+}
+
+[data-reduce-motion="false"] .card {
   transition: transform 200ms ease, box-shadow 200ms ease, border-color 200ms ease;
   will-change: transform;
 }
 
-.card:hover {
+[data-reduce-motion="false"] .card:hover {
   transform: translateY(-3px);
 }
 
@@ -56,8 +59,10 @@
   -webkit-mask-composite: xor;
   mask-composite: exclude;
   opacity: 0;
-  transition: opacity 200ms ease;
   pointer-events: none;
+}
+[data-reduce-motion="false"] .card::before {
+  transition: opacity 200ms ease;
 }
 
 .card:hover::before {

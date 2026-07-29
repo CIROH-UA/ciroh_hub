@@ -226,6 +226,14 @@ const config = {
           disableSwitch: false,
           respectPrefersColorScheme: false,
         },
+        customFields: {
+          // Configuration for reduced motion plugin.
+          reducedMotionMode: {
+            defaultMode: 'disabled',
+            disableSwitch: false,
+            respectPrefersReducedMotion: true,
+          },
+        },
         docs: {
           sidebar: {
             autoCollapseCategories: false,
