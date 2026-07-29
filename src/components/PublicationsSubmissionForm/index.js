@@ -348,7 +348,7 @@ export default function PublicationsSubmissionForm({ groupId, zoteroApiKey }) {
           <ReCAPTCHA
             key={colorMode}
             ref={recaptchaRef}
-            sitekey={customFields.captcha_key}
+            sitekey={customFields.recaptcha_site_key}
             onChange={handleRecaptcha}
             theme={colorMode === 'dark' ? 'dark' : 'light'}
           />
