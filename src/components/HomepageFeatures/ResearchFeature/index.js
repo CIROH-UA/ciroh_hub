@@ -9,7 +9,7 @@ export default function ResearchFeature() {
 
     // ---------- ZOTERO API HANDLING ----------
     const { siteConfig } = useDocusaurusContext();
-    const zotero_api_key = siteConfig.customFields.zotero_api_key;
+    const zotero_api_key = siteConfig.customFields.zotero_api_key_read_only;
     const zotero_group_id = siteConfig.customFields.zotero_group_id;
 
     // Count total publications in the configured Zotero group library.

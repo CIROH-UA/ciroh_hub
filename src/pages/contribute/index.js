@@ -27,7 +27,7 @@ function ContributeContent() {
   const contactUrl = useBaseUrl('/contact');
   const zoteroLogin = siteConfig?.customFields?.externalLinks?.zoteroLogin || 'https://www.zotero.org/user/login';
   const zoteroGroupId = siteConfig?.customFields?.zotero_staging_group_id;
-  const zoteroApiKey = siteConfig?.customFields?.zotero_api_key;
+  const zoteroApiKey = siteConfig?.customFields?.zotero_api_key_read_only;
 
   const tethysDevelopUrl = useBaseUrl('/contribute/develop');
   const feedbackUrl = siteConfig?.customFields?.externalLinks?.feedbackForm || 'https://forms.cloud.microsoft/r/NzA2sLrzeJ';

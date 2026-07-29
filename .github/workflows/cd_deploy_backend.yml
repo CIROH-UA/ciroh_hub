@@ -51,5 +51,5 @@ jobs:
               AllowedOrigin=https://hub.ciroh.org \
               AllowedRecaptchaHosts=hub.ciroh.org \
               RecaptchaSecretKey=${{ secrets.RECAPTCHA_SECRET_KEY }} \
-              ZoteroApiKey=${{ secrets.ZOTERO_API_KEY }} \
+              ZoteroApiKey=${{ secrets.ZOTERO_API_KEY_READ_WRITE }} \
               ZoteroStagingGroupId=${{ secrets.ZOTERO_CIROH_STAGING_GROUP_ID }}

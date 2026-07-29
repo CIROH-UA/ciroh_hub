@@ -97,9 +97,8 @@ jobs:
     - name: Build website
       run: npm run build
       env:
-          ZOTERO_API_KEY: ${{ secrets.ZOTERO_API_KEY }}
+          ZOTERO_API_KEY_READ_ONLY: ${{ secrets.ZOTERO_API_KEY_READ_ONLY }}
           ZOTERO_CIROH_GROUP_ID: ${{ secrets.ZOTERO_CIROH_GROUP_ID }}
-          ZOTERO_STAGING_API_KEY: ${{ secrets.ZOTERO_STAGING_API_KEY }}
           ZOTERO_CIROH_STAGING_GROUP_ID: ${{ secrets.ZOTERO_CIROH_STAGING_GROUP_ID }}
           ZOTERO_IMPORT_REQUEST_API_URL: ${{ vars.ZOTERO_IMPORT_REQUEST_API_URL }}
           RECAPTCHA_SITE_KEY: ${{ vars.RECAPTCHA_SITE_KEY }}
