@@ -210,6 +210,7 @@ export default function PublicationsSubmissionForm({ groupId, zoteroApiKey }) {
       setProgressMessage('Citation imported successfully! Visit your citation ');
     } catch (err) {
       setError(err.message);
+      setProgressMessage(err.message);
       console.log(err);
     } finally {
       setLoading(false);
@@ -373,7 +374,7 @@ export default function PublicationsSubmissionForm({ groupId, zoteroApiKey }) {
         </div>
       )}
       {progressMessage && (
-        <div className={styles.progressMessage}>
+        <div className={clsx(styles.progressMessage, error && styles.errorMessage)}>
           {loading && <FaSpinner className={styles.spinner} />}
           <span>
             {progressMessage}
