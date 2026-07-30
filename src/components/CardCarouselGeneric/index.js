@@ -102,7 +102,8 @@ const CardCarouselGeneric = ({ cards = [], cardsPerView = 3, header, renderCard 
                             'tw-p-3 tw-rounded-full tw-transition-all tw-duration-300',
                             'tw-bg-slate-200 dark:tw-bg-slate-700 tw-text-slate-900 dark:tw-text-white',
                             'hover:tw-scale-110 hover:tw-bg-blue-500 hover:tw-text-white dark:hover:tw-bg-blue-500',
-                            'tw-shadow-lg dark:tw-shadow-xl tw-z-10'
+                            'tw-shadow-lg dark:tw-shadow-xl tw-z-10',
+                            'base-motion-transition'
                         )}
                         aria-label="Previous slide"
                     >
@@ -126,7 +127,7 @@ const CardCarouselGeneric = ({ cards = [], cardsPerView = 3, header, renderCard 
                         {/* Carousel Stage */}
                         <div className="tw-relative tw-overflow-hidden tw-w-full">
                             <div
-                                className="tw-flex tw-transition-transform tw-duration-600 tw-ease-out tw-w-full"
+                                className="tw-flex tw-transition-transform tw-duration-600 tw-ease-out tw-w-full base-motion-transition"
                                 style={{
                                     transform: `translateX(${offset}%)`,
                                 }}
@@ -169,7 +170,8 @@ const CardCarouselGeneric = ({ cards = [], cardsPerView = 3, header, renderCard 
                             'tw-p-3 tw-rounded-full tw-transition-all tw-duration-300',
                             'tw-bg-slate-200 dark:tw-bg-slate-700 tw-text-slate-900 dark:tw-text-white',
                             'hover:tw-scale-110 hover:tw-bg-blue-500 hover:tw-text-white dark:hover:tw-bg-blue-500',
-                            'tw-shadow-lg dark:tw-shadow-xl tw-z-10'
+                            'tw-shadow-lg dark:tw-shadow-xl tw-z-10',
+                            'base-motion-transition'
                         )}
                         aria-label="Next slide"
                     >
@@ -192,7 +194,8 @@ const CardCarouselGeneric = ({ cards = [], cardsPerView = 3, header, renderCard 
                                 'tw-w-3 tw-h-3 tw-rounded-full tw-transition-all tw-duration-300',
                                 i === Math.floor(currentIndex / cardsPerView)
                                     ? 'tw-bg-blue-500 tw-shadow-lg tw-scale-125'
-                                    : 'tw-bg-slate-400 dark:tw-bg-slate-600 hover:tw-bg-slate-500'
+                                    : 'tw-bg-slate-400 dark:tw-bg-slate-600 hover:tw-bg-slate-500',
+                                'base-motion-transition'
                             )}
                             aria-label={`Go to slide ${i + 1}`}
                             aria-current={i === Math.floor(currentIndex / cardsPerView)}

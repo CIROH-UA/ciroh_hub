@@ -23,7 +23,7 @@ const items = [
 export default function PublicationsPage() {
 
   const { siteConfig } = useDocusaurusContext();
-  const contributeUrl = useBaseUrl('/contribute?current-contribution=publications');
+  const contributeUrl = useBaseUrl('/contribute#zotero');
   const { isDarkTheme } = useDocusaurusContext();
   return (
     <Layout title="Publications" description="Ciroh pubs">
@@ -44,7 +44,7 @@ export default function PublicationsPage() {
       <main className="tw-relative tw-z-20">
         
        <Publications 
-          apiKey={siteConfig.customFields.zotero_api_key}
+          apiKey={siteConfig.customFields.zotero_api_key_read_only}
           groupId={siteConfig.customFields.zotero_group_id}
        />
        <TechBox items={items} type={"Publications"}  />

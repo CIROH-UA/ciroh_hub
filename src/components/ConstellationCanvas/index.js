@@ -1,4 +1,5 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useContext } from 'react';
+import { ReducedMotionContext } from '@theme/Contexts';
 
 export function ConstellationCanvas({ isDarkTheme }) {
   const canvasRef = useRef(null);
@@ -7,8 +8,10 @@ export function ConstellationCanvas({ isDarkTheme }) {
   const animationIdRef = useRef(null);
   const groupCounterRef = useRef(1);
   const isDark = Boolean(isDarkTheme);
+  const {reducedMotionMode} = useContext(ReducedMotionContext);
 
   useEffect(() => {
+    if (reducedMotionMode === 'enabled') return;
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
@@ -86,6 +89,7 @@ export function ConstellationCanvas({ isDarkTheme }) {
     window.addEventListener("click", handleClick);
 
     const animate = () => {
+      if (reducedMotionMode === 'enabled') return;
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       const nodeColor = isDark
@@ -199,12 +203,12 @@ export function ConstellationCanvas({ isDarkTheme }) {
       window.removeEventListener("click", handleClick);
       if (animationIdRef.current) cancelAnimationFrame(animationIdRef.current);
     };
-  }, [isDark]);
+  }, [isDark, reducedMotionMode]);
 
   return (
     <canvas
       ref={canvasRef}
-      className="tw-fixed tw-inset-0 tw-pointer-events-none tw-bg-transparent"
+      className="tw-fixed tw-inset-0 tw-pointer-events-none tw-bg-transparent base-motion"
       style={{ zIndex: 1 }}
     />
   );

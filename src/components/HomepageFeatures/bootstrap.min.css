@@ -42,10 +42,8 @@
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
     border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
-@media (prefers-reduced-motion: reduce) {
-  .btn {
-    transition: none;
-  }
+[data-reduce-motion="false"] .btn {
+  transition: none;
 }
 .btn:hover {
   color: var(--bs-btn-hover-color);
@@ -391,11 +389,11 @@ fieldset:disabled .btn {
 .fade {
   transition: opacity 0.15s linear;
 }
-@media (prefers-reduced-motion: reduce) {
-  .fade {
-    transition: none;
-  }
+
+[data-reduce-motion="false"] .fade {
+  transition: none;
 }
+
 .fade:not(.show) {
   opacity: 0;
 }
@@ -407,20 +405,19 @@ fieldset:disabled .btn {
   overflow: hidden;
   transition: height 0.35s ease;
 }
-@media (prefers-reduced-motion: reduce) {
-  .collapsing {
-    transition: none;
-  }
+
+[data-reduce-motion="false"] .collapsing {
+  transition: none;
 }
+
 .collapsing.collapse-horizontal {
   width: 0;
   height: auto;
   transition: width 0.35s ease;
 }
-@media (prefers-reduced-motion: reduce) {
-  .collapsing.collapse-horizontal {
+
+[data-reduce-motion="false"] .collapsing.collapse-horizontal {
     transition: none;
-  }
 }
 .dropdown,
 .dropdown-center,
@@ -1039,10 +1036,9 @@ fieldset:disabled .btn {
   overflow-anchor: none;
   transition: var(--bs-accordion-transition);
 }
-@media (prefers-reduced-motion: reduce) {
-  .accordion-button {
-    transition: none;
-  }
+
+[data-reduce-motion="false"] .accordion-button {
+  transition: none;
 }
 .accordion-button:not(.collapsed) {
   color: var(--bs-accordion-active-color);
@@ -1065,10 +1061,8 @@ fieldset:disabled .btn {
   background-size: var(--bs-accordion-btn-icon-width);
   transition: var(--bs-accordion-btn-icon-transition);
 }
-@media (prefers-reduced-motion: reduce) {
-  .accordion-button::after {
-    transition: none;
-  }
+[data-reduce-motion="false"] .accordion-button::after {
+  transition: none;
 }
 .accordion-button:hover {
   z-index: 2;
@@ -1206,10 +1200,8 @@ fieldset:disabled .btn {
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
     border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
-@media (prefers-reduced-motion: reduce) {
-  .page-link {
-    transition: none;
-  }
+[data-reduce-motion="false"] .page-link {
+  transition: none;
 }
 .page-link:hover {
   z-index: 2;
@@ -1402,10 +1394,8 @@ fieldset:disabled .btn {
   background-color: var(--bs-progress-bar-bg);
   transition: var(--bs-progress-bar-transition);
 }
-@media (prefers-reduced-motion: reduce) {
-  .progress-bar {
-    transition: none;
-  }
+[data-reduce-motion="false"] .progress-bar {
+  transition: none;
 }
 .progress-bar-striped {
   background-image: linear-gradient(
@@ -1429,10 +1419,8 @@ fieldset:disabled .btn {
 .progress-bar-animated {
   animation: 1s linear infinite progress-bar-stripes;
 }
-@media (prefers-reduced-motion: reduce) {
-  .progress-bar-animated {
-    animation: none;
-  }
+[data-reduce-motion="false"] .progress-bar-animated {
+  animation: none;
 }
 .list-group {
   --bs-list-group-color: var(--bs-body-color);
@@ -1925,10 +1913,8 @@ fieldset:disabled .btn {
   transition: transform 0.3s ease-out;
   transform: translate(0, -50px);
 }
-@media (prefers-reduced-motion: reduce) {
-  .modal.fade .modal-dialog {
-    transition: none;
-  }
+[data-reduce-motion="false"] .modal.fade .modal-dialog {
+  transition: none;
 }
 .modal.show .modal-dialog {
   transform: none;
@@ -2484,10 +2470,8 @@ fieldset:disabled .btn {
   backface-visibility: hidden;
   transition: transform 0.6s ease-in-out;
 }
-@media (prefers-reduced-motion: reduce) {
-  .carousel-item {
-    transition: none;
-  }
+[data-reduce-motion="false"] .carousel-item {
+  transition: none;
 }
 .carousel-item-next,
 .carousel-item-prev,
@@ -2519,11 +2503,9 @@ fieldset:disabled .btn {
   opacity: 0;
   transition: opacity 0s 0.6s;
 }
-@media (prefers-reduced-motion: reduce) {
-  .carousel-fade .active.carousel-item-end,
-  .carousel-fade .active.carousel-item-start {
-    transition: none;
-  }
+[data-reduce-motion="false"] .carousel-fade .active.carousel-item-end,
+[data-reduce-motion="false"] .carousel-fade .active.carousel-item-start {
+  transition: none;
 }
 .carousel-control-next,
 .carousel-control-prev {
@@ -2543,11 +2525,9 @@ fieldset:disabled .btn {
   opacity: 0.5;
   transition: opacity 0.15s ease;
 }
-@media (prefers-reduced-motion: reduce) {
-  .carousel-control-next,
-  .carousel-control-prev {
-    transition: none;
-  }
+[data-reduce-motion="false"] .carousel-control-next,
+[data-reduce-motion="false"] .carousel-control-prev {
+  transition: none;
 }
 .carousel-control-next:focus,
 .carousel-control-next:hover,
@@ -2610,10 +2590,8 @@ fieldset:disabled .btn {
   opacity: 0.5;
   transition: opacity 0.6s ease;
 }
-@media (prefers-reduced-motion: reduce) {
-  .carousel-indicators [data-bs-target] {
-    transition: none;
-  }
+[data-reduce-motion="false"] .carousel-indicators [data-bs-target] {
+  transition: none;
 }
 .carousel-indicators .active {
   opacity: 1;
@@ -2704,11 +2682,9 @@ fieldset:disabled .btn {
   --bs-spinner-width: 1rem;
   --bs-spinner-height: 1rem;
 }
-@media (prefers-reduced-motion: reduce) {
-  .spinner-border,
-  .spinner-grow {
-    --bs-spinner-animation-speed: 1.5s;
-  }
+[data-reduce-motion="false"] .spinner-border,
+[data-reduce-motion="false"] .spinner-grow {
+  --bs-spinner-animation-speed: 1.5s;
 }
 .offcanvas,
 .offcanvas-lg,
@@ -2745,8 +2721,8 @@ fieldset:disabled .btn {
     transition: var(--bs-offcanvas-transition);
   }
 }
-@media (max-width: 575.98px) and (prefers-reduced-motion: reduce) {
-  .offcanvas-sm {
+@media (max-width: 575.98px) {
+  [data-reduce-motion="false"] .offcanvas-sm {
     transition: none;
   }
 }
@@ -2829,8 +2805,8 @@ fieldset:disabled .btn {
     transition: var(--bs-offcanvas-transition);
   }
 }
-@media (max-width: 767.98px) and (prefers-reduced-motion: reduce) {
-  .offcanvas-md {
+@media (max-width: 767.98px) {
+  [data-reduce-motion="false"] .offcanvas-md {
     transition: none;
   }
 }
@@ -2913,8 +2889,8 @@ fieldset:disabled .btn {
     transition: var(--bs-offcanvas-transition);
   }
 }
-@media (max-width: 991.98px) and (prefers-reduced-motion: reduce) {
-  .offcanvas-lg {
+@media (max-width: 991.98px) {
+  [data-reduce-motion="false"] .offcanvas-lg {
     transition: none;
   }
 }
@@ -2997,8 +2973,8 @@ fieldset:disabled .btn {
     transition: var(--bs-offcanvas-transition);
   }
 }
-@media (max-width: 1199.98px) and (prefers-reduced-motion: reduce) {
-  .offcanvas-xl {
+@media (max-width: 1199.98px) {
+  [data-reduce-motion="false"] .offcanvas-xl {
     transition: none;
   }
 }
@@ -3081,8 +3057,8 @@ fieldset:disabled .btn {
     transition: var(--bs-offcanvas-transition);
   }
 }
-@media (max-width: 1399.98px) and (prefers-reduced-motion: reduce) {
-  .offcanvas-xxl {
+@media (max-width: 1399.98px) {
+  [data-reduce-motion="false"] .offcanvas-xxl {
     transition: none;
   }
 }
@@ -3163,10 +3139,8 @@ fieldset:disabled .btn {
   outline: 0;
   transition: var(--bs-offcanvas-transition);
 }
-@media (prefers-reduced-motion: reduce) {
-  .offcanvas {
+[data-reduce-motion="false"] .offcanvas {
     transition: none;
-  }
 }
 .offcanvas.offcanvas-start {
   top: 0;
@@ -3635,10 +3609,8 @@ fieldset:disabled .btn {
   fill: currentcolor;
   transition: 0.2s ease-in-out transform;
 }
-@media (prefers-reduced-motion: reduce) {
-  .icon-link > .bi {
-    transition: none;
-  }
+[data-reduce-motion="false"] .icon-link > .bi {
+  transition: none;
 }
 .icon-link-hover:focus-visible > .bi,
 .icon-link-hover:hover > .bi {
