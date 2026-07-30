@@ -205,9 +205,9 @@ export default function PublicationsSubmissionForm({ groupId, zoteroApiKey }) {
       const responseData = await response.json();
       const importedUrl = responseData.importedUrl;
 
-      // Update state with the imported citation URL to display it to the user
-      setCitationUrl(importedUrl);
-      setProgressMessage('Citation imported successfully! Visit your citation ');
+      // Update state. Do not show citation URL at this time, as the library is private
+      // setCitationUrl(importedUrl);
+      setProgressMessage('Citation imported successfully! Your submission will be reviewed soon.');
     } catch (err) {
       setError(err.message);
       setProgressMessage(err.message);
