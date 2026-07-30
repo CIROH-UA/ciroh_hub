@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState, useContext } from 'react';
 import Layout from '@theme/Layout';
 import clsx from 'clsx';
 import { gsap } from 'gsap';
@@ -7,6 +7,7 @@ import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 
 import styles from './styles.module.css';
 import { workingGroups } from '@site/src/data/workingGroupsData';
+import { ReducedMotionContext } from '@theme/Contexts';
 
 const normalize = (s) => (s ?? '').toLowerCase().trim();
 
@@ -92,6 +93,7 @@ export default function WorkingGroupsPage() {
   const containerRef = useRef(null);
   const [query, setQuery] = useState('');
   const wgIntakeFormUrl = siteConfig?.customFields?.externalLinks?.wgIntakeForm || 'https://app.smartsheet.com/b/form/019f1f425a1d717180af65a76b9fa26f';
+  const { reducedMotionMode } = useContext(ReducedMotionContext);
 
   const filteredGroups = useMemo(() => {
     const q = normalize(query);
@@ -107,6 +109,7 @@ export default function WorkingGroupsPage() {
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
+    if (reducedMotionMode === 'enabled') return;
 
     let ctx;
     let cancelled = false;
@@ -173,7 +176,7 @@ export default function WorkingGroupsPage() {
       cancelled = true;
       ctx?.revert();
     };
-  }, [filteredGroups.length]);
+  }, [filteredGroups.length, reducedMotionMode]);
 
   return (
     <Layout

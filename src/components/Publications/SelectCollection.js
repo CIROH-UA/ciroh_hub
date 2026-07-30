@@ -107,15 +107,19 @@ function SelectCollectionInner({zotero, onChange}) {
   const styles = useMemo(() => ({
     control:        s => ({...s, border:'1px solid #ccc'}),
     valueContainer: s => ({...s, padding:'2px 8px'}),
+    menuPortal:     s => ({...s, zIndex: 9999}),
     option: (base,state) => ({
       ...base,
       backgroundColor: state.isFocused
-        ? 'var(--ifm-color-primary-lightest)'
+        ? 'var(--ifm-color-primary)'
         : base.backgroundColor,
       color: state.isFocused
-        ? 'var(--ifm-color-primary-dark)'
+        ? 'var(--ifm-color-white)'
         : base.color,
-      ...(state.isSelected && {background:'var(--ifm-color-primary-lighter)'}),
+      ...(state.isSelected && {
+        backgroundColor: 'var(--ifm-color-primary)',
+        color: 'var(--ifm-color-white)',
+      }),
     }),
   }), [colorMode]);
 

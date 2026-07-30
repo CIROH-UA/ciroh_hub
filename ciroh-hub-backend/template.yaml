@@ -1,0 +1,92 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  ciroh-hub-backend
+
+  SAM Template for ciroh-hub-backend
+  
+# More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
+Globals:
+  Function:
+    Timeout: 15
+  Api:
+    Cors:
+      AllowMethods: "'GET,POST,OPTIONS'"
+      AllowHeaders: "'Content-Type'"
+      AllowOrigin: !Sub "'${AllowedOrigin}'"
+
+Parameters:
+  AllowedOrigin:
+    Type: String
+    Description: Allowed origin for CORS (e.g., http://localhost:3001 for local development)
+    Default: http://localhost:3001
+
+  AllowedRecaptchaHosts:
+    Type: String
+    Default: "localhost"
+    Description: Comma-separated list of allowed reCAPTCHA hostnames (e.g., "localhost,ciroh-hub-frontend.vercel.app")
+
+  RecaptchaSecretKey:
+    Type: String
+    NoEcho: true
+    Description: Google reCAPTCHA secret key
+  
+  ZoteroApiKey:
+    Type: String
+    NoEcho: true
+    Description: Zotero API key with write access to the staging group library
+  
+  ZoteroStagingGroupId:
+    Type: String
+    Description: Zotero group library ID for the staging environment (not secret)
+
+Resources:
+  CommonLayer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      LayerName: ciroh-common
+      ContentUri: layers/common/
+      CompatibleRuntimes:
+        - nodejs22.x
+      RetentionPolicy: Retain
+    Metadata:
+      BuildMethod: nodejs22.x
+
+  ZoteroImportRequestFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: zotero-import-request/
+      Handler: app.lambdaHandler
+      Runtime: nodejs22.x
+      Architectures:
+        - x86_64
+      Layers:
+        - !Ref CommonLayer
+      Events:
+        ZoteroImportRequest:
+          Type: Api
+          Properties:
+            Path: /zotero-import-request
+            Method: post
+      Environment:
+        Variables:
+          ALLOWED_ORIGIN: !Ref AllowedOrigin
+          RECAPTCHA_ALLOWED_HOSTS: !Ref AllowedRecaptchaHosts
+          RECAPTCHA_SECRET_KEY: !Ref RecaptchaSecretKey
+          ZOTERO_API_KEY_READ_WRITE: !Ref ZoteroApiKey
+          ZOTERO_STAGING_GROUP_ID: !Ref ZoteroStagingGroupId
+
+
+Outputs:
+  # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
+  # Find out more about other implicit resources you can reference within SAM
+  # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
+  ZoteroImportRequestApi:
+    Description: "API Gateway endpoint URL for Prod stage for Zotero import request function"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.${AWS::URLSuffix}/Prod/zotero-import-request/"
+  ZoteroImportRequestFunction:
+    Description: "Zotero Import Request Lambda Function ARN"
+    Value: !GetAtt ZoteroImportRequestFunction.Arn
+  ZoteroImportRequestFunctionIamRole:
+    Description: "Implicit IAM Role created for Zotero Import Request function"
+    Value: !GetAtt ZoteroImportRequestFunctionRole.Arn

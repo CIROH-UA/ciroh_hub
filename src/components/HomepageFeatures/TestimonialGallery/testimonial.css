@@ -51,6 +51,7 @@
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
+[data-reduce-motion="false"]
 .researcher-card:hover {
     transform: translateY(-5px);
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
@@ -88,6 +89,7 @@
     transition: transform 0.3s ease, background-color 0.3s ease;
 }
 
+[data-reduce-motion="false"]
 .researcher-card:hover .researcher-initials {
     transform: scale(1.05);
 }
@@ -122,6 +124,7 @@
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
+[data-reduce-motion="false"]
 .researcher-card:hover .researcher-quote {
     transform: scale(1.05);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);

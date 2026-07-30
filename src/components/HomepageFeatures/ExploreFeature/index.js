@@ -5,7 +5,7 @@ import ExploreHeader from "./ExploreHeader";
 export default function ExploreFeature() {
     return (
         <div className="container">
-          <CardCarousel cards={cardList} header={ExploreHeader} />
+          <CardCarousel cards={cardList} header={ExploreHeader()} />
         </div>
     );
 }
