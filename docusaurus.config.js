@@ -305,7 +305,7 @@ const config = {
                 {
                   type: "doc",
                   docId: "products/community-fim/index",
-                  label: "FIM Ecosystem",
+                  label: "Community FIM Ecosystem",
                 },
                 {
                   type: "doc",
