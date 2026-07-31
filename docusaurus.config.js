@@ -328,12 +328,12 @@ const config = {
                 {
                   type: "doc",
                   docId: "products/ngiab-ecosystem/index",
-                  label: "NGIAB-NRDS Ecosystem",
+                  label: "Community NextGen Ecosystem",
                 },
                 {
                   type: "doc",
                   docId: "products/community-fim/index",
-                  label: "FIM Ecosystem",
+                  label: "Community FIM Ecosystem",
                 },
                 {
                   type: "doc",

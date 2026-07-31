@@ -2,7 +2,7 @@
   "products": [
     {
       "id": "nextgen-in-a-box",
-      "name": "NGIAB-NRDS Ecosystem",
+      "name": "Community NextGen Ecosystem",
       "description": "Comprehensive containerized solutions for NextGen framework deployment, providing easy setup and management of hydrological modeling workflows.",
       "category": "Modeling Framework",
       "tags": [
