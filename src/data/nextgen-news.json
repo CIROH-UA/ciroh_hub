@@ -140,7 +140,7 @@
 			"type": "update",
 			"title": "CIROH Hub — April Content Update",
 			"link": "https://github.com/CIROH-UA/ciroh_hub/releases/tag/v20260416-161726",
-			"description": "This update features an updated Cyberinfrastructure forms for better user experience, a fully revamped [NextGen on CIROH-2i2c JupyterHub tutorial](/docs/products/ngiab/distributions/nextgen-2i2c/) and adds [featured resource carousels to Research Portal pages](/apps).",
+			"description": "This update features an updated Cyberinfrastructure forms for better user experience, a fully revamped [NextGen on CIROH-2i2c JupyterHub tutorial](/docs/products/ngiab-ecosystem/ngiab/distributions/nextgen-2i2c/) and adds [featured resource carousels to Research Portal pages](/apps).",
 			"release_date": "04/16/2026",
 			"version": "v20260416-161726",
 			"contributors": 4
@@ -813,8 +813,8 @@
 			{
 				"type": "news",
 				"title": "Updated Community NextGen Documentation Page",
-				"description": "📢 We've new updates under Community NextGen products tab. 📚 This comprehensive resource includes an overview of NGIAB and its extensions.\n - 🔍 Learn more about Data Preprocess, TEEHR Evaluation, Data Visualizer, and DataStreamCLI. \n - 🛠️ Key features, Capabilities and Access Method are included. \n \n \n 🔗 Visit the new Community Hydrologic Modeling Framework documentation page [here](/docs/products/ngiab/):",
-				"link": "https://hub.ciroh.org/docs/products/ngiab/"
+				"description": "📢 We've new updates under Community NextGen products tab. 📚 This comprehensive resource includes an overview of NGIAB and its extensions.\n - 🔍 Learn more about Data Preprocess, TEEHR Evaluation, Data Visualizer, and DataStreamCLI. \n - 🛠️ Key features, Capabilities and Access Method are included. \n \n \n 🔗 Visit the new Community Hydrologic Modeling Framework documentation page [here](/docs/products/ngiab-ecosystem/ngiab/):",
+				"link": "https://hub.ciroh.org/docs/products/ngiab-ecosystem/ngiab/"
 			},
 			{
 			  "type": "feature",
@@ -985,7 +985,7 @@
 			"type": "news",
 			"title": "NextGen Community Office Hours",
 			"description": "We are excited to invite you to join our NextGen Community Office Hours. It is an excellent opportunity for everyone to stay up to date with the latest developments in hydrologic modeling at CIROH. Join us to engage with the team and learn more about ongoing projects and advancements.",
-			"link": "https://hub.ciroh.org/docs/products/ngiab/office-hours"
+			"link": "https://hub.ciroh.org/docs/products/ngiab-ecosystem/ngiab/office-hours"
 		} , 
 		
 		{
@@ -1224,7 +1224,7 @@
 			"type": "news",
 			"title": "NextGen In A Box (NGIAB)",
 			"description": "We have made some improvements to NGIAB: 10 PRs merged. Sample input data updated to use AWI_003(with new data provider names). Boost upgraded to v1.79. Self-hosted Runner can start and stop automatically with GitHub Actions. NGIAB image can run in auto mode. Geopackage support added. Documentation available at CIROH DocuHub",
-			"link": " https://hub.ciroh.org/docs/products/ngiab/distributions/ngiab-docker"
+			"link": " https://hub.ciroh.org/docs/products/ngiab-ecosystem/ngiab/distributions/ngiab-docker"
 		},
 		{
 			"type": "feature",
