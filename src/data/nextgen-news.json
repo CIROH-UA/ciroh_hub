@@ -1224,7 +1224,7 @@
 			"type": "news",
 			"title": "NextGen In A Box (NGIAB)",
 			"description": "We have made some improvements to NGIAB: 10 PRs merged. Sample input data updated to use AWI_003(with new data provider names). Boost upgraded to v1.79. Self-hosted Runner can start and stop automatically with GitHub Actions. NGIAB image can run in auto mode. Geopackage support added. Documentation available at CIROH DocuHub",
-			"link": " https://hub.ciroh.org/docs/products/ngiab-ecosystem/ngiab/distributions/ngiab-docker"
+			"link": "https://hub.ciroh.org/docs/products/ngiab-ecosystem/ngiab/distributions/ngiab-docker"
 		},
 		{
 			"type": "feature",

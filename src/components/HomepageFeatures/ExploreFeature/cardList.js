@@ -51,6 +51,6 @@ export default [
     title: "NRDS",
     image: "img/products/nrds/nrds.png",
     description: "An archive of daily NextGen-based hydrologic simulations living entirely in AWS. NRDS democratizes forcings, outputs, and configurations so the community can iterate, validate, and operationalize better streamflow predictions.",
-    link: "docs/products/ngiab-ecosystem/nrds/"
+    link: "/docs/products/ngiab-ecosystem/nrds/"
   }
 ];
