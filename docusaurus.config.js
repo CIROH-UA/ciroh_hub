@@ -210,6 +210,12 @@ const config = {
     [
       '@docusaurus/plugin-client-redirects',
       {
+        redirects: [
+          {
+            to: '/docs/product/data-management/fim-database',
+            from: '/docs/products/community-fim/fim-database',
+          },
+        ],
         createRedirects(existingPath) {
           if (existingPath.includes('/docs/products/ngiab-ecosystem/ngiab')) {
             return [
@@ -226,14 +232,16 @@ const config = {
               existingPath.replace('/docs/products/ngiab-ecosystem/nrds', '/docs/products/research-datastream'),
             ];
           }
-          else if (existingPath.includes('/docs/products/ngiab-ecosystem/dependencies/hydrofabric')) {
+          else if (existingPath.includes('/docs/products/ngiab-ecosystem/dependencies/hydrofabric')) {
             return [
-              existingPath.replace('/docs/products/ngiab-ecosystem/dependencies/hydrofabric', '/docs/products/Hydrofabric'),
+              existingPath.replace('/docs/products/ngiab-ecosystem/dependencies/hydrofabric', '/docs/products/Hydrofabric'),
+
             ];
           }
-          else if (existingPath.includes('/docs/products/ngiab-ecosystem/dependencies')) {
+          else if (existingPath.includes('/docs/products/ngiab-ecosystem/dependencies')) {
             return [
-              existingPath.replace('/docs/products/ngiab-ecosystem/dependencies', '/docs/products/ngiab/community-nextgen-repos'),
+              existingPath.replace('/docs/products/ngiab-ecosystem/dependencies', '/docs/products/ngiab/community-nextgen-repos'),
+
             ];
           }
           return undefined; // Return a falsy value: no redirect created

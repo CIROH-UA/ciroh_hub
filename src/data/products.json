@@ -20,11 +20,11 @@
     },
     {
       "id": "flood-mapping-publication",
-      "name": "Flood Inundation Mapping Ecosystem",
+      "name": "Community FIM Ecosystem",
       "description": "Comprehensive community-driven flood mapping methodologies for real-time inundation prediction and risk assessment.",
-      "category": "Flood Management",
+      "category": "Flood Mapping",
       "tags": [
-        "Flood Mapping",
+        "Flood Management",
         "Research",
         "Methodology"
       ],
