@@ -212,7 +212,7 @@ const config = {
       {
         redirects: [
           {
-            to: '/docs/product/data-management/fim-database',
+            to: '/docs/products/data-management/fim-database',
             from: '/docs/products/community-fim/fim-database',
           },
         ],
