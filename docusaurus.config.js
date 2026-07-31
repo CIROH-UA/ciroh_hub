@@ -226,9 +226,14 @@ const config = {
               existingPath.replace('/docs/products/ngiab-ecosystem/nrds', '/docs/products/research-datastream'),
             ];
           }
-          else if (existingPath.includes('/docs/products/ngiab-ecosystem/hydrofabric')) {
+          else if (existingPath.includes('/docs/products/ngiab-ecosystem/dependencies')) {
             return [
-              existingPath.replace('/docs/products/ngiab-ecosystem/hydrofabric', '/docs/products/Hydrofabric'),
+              existingPath.replace('/docs/products/ngiab-ecosystem/dependencies', '/docs/products/ngiab/community-nextgen-repos'),
+            ];
+          }
+          else if (existingPath.includes('/docs/products/ngiab-ecosystem/ngiab-ecosystem/dependencies/hydrofabric')) {
+            return [
+              existingPath.replace('/docs/products/ngiab-ecosystem/ngiab-ecosystem/dependencies/hydrofabric', '/docs/products/Hydrofabric'),
             ];
           }
           return undefined; // Return a falsy value: no redirect created
