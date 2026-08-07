@@ -1,4 +1,7 @@
-const { XMLParser } = require("fast-xml-parser");
+// Matches HydroShare resource ids contained in the relations, which can be in the form of:
+//   .../resource/<32-hex>
+//   https://doi.org/10.4211/hs.<32-hex>
+const RESOURCE_ID_REGEX = /(?:\/resource\/|10\.4211\/hs\.)([0-9a-f]{32})/i;
 
 /**
  * Sample endpoint: 
@@ -544,7 +547,7 @@ async function fetchRawCuratedResources(curated_parent_id) {
  */
 async function fetchResourcesFromCollection(collectionId) {
   // Fetch the collection metadata to extract its contained resource ids
-  const collectionMetadataUrl = `https://www.hydroshare.org/hsapi/resource/${collectionId}/scimeta/`;
+  const collectionMetadataUrl = `https://www.hydroshare.org/hsapi/resource/${collectionId}/scimeta/elements/`;
   const collectionMetadataResponse = await fetch(collectionMetadataUrl);
 
   // Error occurred
@@ -552,30 +555,36 @@ async function fetchResourcesFromCollection(collectionId) {
     throw new Error(`Error fetching collection metadata for ${collectionId} (status: ${collectionMetadataResponse.status})`);
   }
 
-  // Parse the XML metadata to extract resource ids
-  const collectionMetadataText = await collectionMetadataResponse.text();
-  const xmlParser = new XMLParser();
-  const collectionMetadata = xmlParser.parse(collectionMetadataText);
+  // Get the response data as JSON
+  const collectionMetadataJson = await collectionMetadataResponse.json();
 
-  // Get the relations as an array (handle both single relation and multiple relations cases)
-  const relations = collectionMetadata['rdf:RDF']['hsterms:CollectionResource']['dc:relation'];
-  const relationsList = Array.isArray(relations) ? relations : [relations];
+  // Get the relations of the collection (if available) to find the contained resources
+  const relations = collectionMetadataJson.relations || [];
 
   // Extract each resource id from the collection relations
-  const resourceIds = [];
-  for (const relation of relationsList)
+  const resourceIds = new Set();
+  for (const relation of relations)
   {
     // Extract resource id
-    const hasPartText = relation['rdf:Description']['dcterms:hasPart']
-    const url = hasPartText.split(' ').pop();
-    const resourceId = url.split('/').pop();
-    
-    // Add resource id to list
-    resourceIds.push(resourceId);
+    if (relation.type === 'hasPart' && relation.value)
+    {
+      // Extract the resource id from the relation
+      const match = relation.value.match(RESOURCE_ID_REGEX);
+
+      if (match)
+      {
+        // Add resource id to list
+        resourceIds.add(match[1].toLowerCase());
+      }
+      else
+      {
+        console.warn(`Unrecognized hasPart relation in collection ${collectionId}: ${relation.value}`);
+      }
+    }
   }
 
   // Fetch all resources in parallel
-  const resourcePromises = resourceIds.map(resourceId =>
+  const resourcePromises = Array.from(resourceIds).map(resourceId =>
     fetchResource(resourceId).catch(err => {
       console.error(`Error fetching resource ${resourceId} from collection ${collectionId}:`, err);
       return null;
