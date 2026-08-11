@@ -150,8 +150,27 @@ function getRawDiscoveryResources(data) {
 // }
 
 async function fetchResource(id) {
-  const url = `https://www.hydroshare.org/hsapi/resource/${encodeURIComponent(id)}/sysmeta`;
-  return fetchJson(url, "resources");
+  // Fetch the resource from HydroShare
+  const url = `https://www.hydroshare.org/hsapi/resource/${encodeURIComponent(id)}/scimeta/elements/`;
+  const response = await fetchJson(url, `scimeta elements for resource ${id}`);
+
+  // Extract identifiers and other relevant fields from the response
+  const identifiers = response.identifiers || [];
+  const hydroShareUrl = identifiers.find(i => i.name === 'hydroShareIdentifier')?.url;
+  const dates = response.dates || [];
+
+  return {
+    resource_id: id,
+    resource_title: response.title || "",
+    authors: (response.creators || []).map(c => c.name || c.organization || "").filter(Boolean),
+    resource_type: typeof response.type === 'string' ? response.type.replace(/^.*\//, "") : "", // Extract the last segment of the URI (http://www.hydroshare.org/terms/CollectionResource - > CollectionResource)
+    resource_url: hydroShareUrl || `https://www.hydroshare.org/resource/${id}/`,
+    doi: identifiers.find(i => i.name === 'doi')?.url || null,
+    abstract: response.description || "",
+    date_created: dates.find(d => d.type === 'created')?.start_date || "",
+    date_last_updated: dates.find(d => d.type === 'modified')?.start_date || "",
+    subjects: (response.subjects || []).map(s => s?.value).filter(Boolean),
+  };
 }
 
 // Helper function to fetch list of resources by group
