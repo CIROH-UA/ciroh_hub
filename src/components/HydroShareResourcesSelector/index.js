@@ -405,53 +405,73 @@ export default function HydroShareResourcesSelector({
             </div>
 
             <form
-              className="tw-flex tw-flex-col md:tw-flex-row md:tw-items-center tw-gap-3 tw-w-full lg:tw-w-auto"
+              className="tw-flex tw-flex-col md:tw-flex-row md:tw-items-end tw-gap-3 tw-w-full lg:tw-w-auto"
               onSubmit={e => { e.preventDefault(); commitSearch(searchInput); }}
             >
-              <div className="tw-relative tw-w-full md:tw-w-[28rem]">
-                <span className="tw-pointer-events-none tw-absolute tw-left-3 tw-inset-y-0 tw-flex tw-items-center tw-text-slate-400 dark:tw-text-slate-500">
-                  <HiOutlineSearch size={18} />
+              {/* Search Input */}
+              <label className="tw-flex tw-flex-col tw-w-full md:tw-w-[28rem]">
+                <span className="tw-mb-1 tw-text-sm tw-font-semibold tw-text-slate-600 dark:tw-text-slate-300">
+                  Search
                 </span>
-                <input
-                  type="text"
-                  placeholder="Search by Title, Author, Description..."
-                  className="tw-w-full tw-rounded-lg tw-border tw-border-slate-200/80 dark:tw-border-slate-700/80 tw-bg-white/80 dark:tw-bg-slate-900/50 tw-backdrop-blur tw-pl-10 tw-pr-3 tw-py-3 tw-text-sm tw-text-slate-900 dark:tw-text-white placeholder:tw-text-slate-400 dark:placeholder:tw-text-slate-500 focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-cyan-500/30"
-                  value={searchInput}
-                  onChange={e => setSearchInput(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter') {
-                      e.preventDefault();
-                      commitSearch(e.currentTarget.value);
-                    }
-                  }}
-                  onBlur={(e) => commitSearch(e.currentTarget.value)}
-                />
-              </div>
-
+                <div className="tw-relative">
+                  <span className="tw-pointer-events-none tw-absolute tw-left-3 tw-inset-y-0 tw-flex tw-items-center tw-text-slate-400 dark:tw-text-slate-500">
+                    <HiOutlineSearch size={18} />
+                  </span>
+                  <input
+                    type="text"
+                    placeholder="Search by Title, Author, Description..."
+                    className="tw-w-full tw-rounded-lg tw-border tw-border-slate-200/80 dark:tw-border-slate-700/80 tw-bg-white/80 dark:tw-bg-slate-900/50 tw-backdrop-blur tw-pl-10 tw-pr-3 tw-py-3 tw-text-sm tw-text-slate-900 dark:tw-text-white placeholder:tw-text-slate-400 dark:placeholder:tw-text-slate-500 focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-cyan-500/30"
+                    value={searchInput}
+                    onChange={e => setSearchInput(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') {
+                        e.preventDefault();
+                        commitSearch(e.currentTarget.value);
+                      }
+                    }}
+                    onBlur={(e) => commitSearch(e.currentTarget.value)}
+                  />
+                </div>
+              </label>
+              
+              {/* Group Selector */}
               <div className="tw-flex tw-flex-wrap tw-gap-2 tw-items-center">
-                <select
-                  value={ecosystem}
-                  onChange={e => setEcosystem(e.target.value)}
-                  className="tw-rounded-lg tw-border tw-border-slate-200/80 dark:tw-border-slate-700/80 tw-bg-white/80 dark:tw-bg-slate-900/50 tw-backdrop-blur tw-px-3 tw-py-3 tw-text-sm tw-text-slate-900 dark:tw-text-white focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-cyan-500/30"
-                >
-                  {ecosystems.map(({name, id}) => (
-                    <option key={id} value={id}>{name}</option>
-                  ))}
-                </select>
+                <label className="tw-flex tw-flex-col">
+                  <span className="tw-mb-1 tw-text-sm tw-font-semibold tw-text-slate-600 dark:tw-text-slate-300">
+                    Group
+                  </span>
+                  <select
+                    value={ecosystem}
+                    onChange={e => setEcosystem(e.target.value)}
+                    className="tw-rounded-lg tw-border tw-border-slate-200/80 dark:tw-border-slate-700/80 tw-bg-white/80 dark:tw-bg-slate-900/50 tw-backdrop-blur tw-px-3 tw-py-3 tw-text-sm tw-text-slate-900 dark:tw-text-white focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-cyan-500/30"
+                  >
+                    {ecosystems.map(({name, id}) => (
+                      <option key={id} value={id}>{name}</option>
+                    ))}
+                  </select>
+                </label>
               </div>
-
-              <div className="tw-flex tw-flex-wrap tw-gap-2 tw-items-center">
-                <select
-                  value={sortType}
-                  onChange={e => setSortType(e.target.value)}
-                  className="tw-rounded-lg tw-border tw-border-slate-200/80 dark:tw-border-slate-700/80 tw-bg-white/80 dark:tw-bg-slate-900/50 tw-backdrop-blur tw-px-3 tw-py-3 tw-text-sm tw-text-slate-900 dark:tw-text-white focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-cyan-500/30"
-                >
-                  <option value="lastModified">Last Updated</option>
-                  <option value="dateCreated">Date Created</option>
-                  <option value="name">Title</option>
-                  <option value="creatorName">Authors</option>
-                </select>
-
+              
+              {/* Sort Inputs */}
+              <div className="tw-flex tw-flex-wrap tw-gap-2 tw-items-end">
+                {/* Sort By Selector */}
+                <label className="tw-flex tw-flex-col">
+                  <span className="tw-mb-1 tw-text-sm tw-font-semibold tw-text-slate-600 dark:tw-text-slate-300">
+                    Sort by
+                  </span>
+                  <select
+                    value={sortType}
+                    onChange={e => setSortType(e.target.value)}
+                    className="tw-rounded-lg tw-border tw-border-slate-200/80 dark:tw-border-slate-700/80 tw-bg-white/80 dark:tw-bg-slate-900/50 tw-backdrop-blur tw-px-3 tw-py-3 tw-text-sm tw-text-slate-900 dark:tw-text-white focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-cyan-500/30"
+                  >
+                    <option value="lastModified">Last Updated</option>
+                    <option value="dateCreated">Date Created</option>
+                    <option value="name">Title</option>
+                    <option value="creatorName">Authors</option>
+                  </select>
+                </label>
+                
+                {/* Sort Direction Button */}
                 <button
                   type="button"
                   aria-label={`Sort direction ${sortDirection}`}
@@ -466,7 +486,8 @@ export default function HydroShareResourcesSelector({
                     ? <HiOutlineSortAscending size={20} />
                     : <HiOutlineSortDescending size={20} />}
                 </button>
-
+                
+                {/* View Toggle Buttons */}
                 <div className="tw-flex tw-gap-2">
                   {/* <button
                     type="button"
