@@ -281,7 +281,7 @@ export default function HydroShareResourcesSelector({
           if (!cancelled)
           {
             // Extract the titles from the ecosystem resources
-            let ecosystems = [{'name': 'Ecosystem', 'id': ''}];
+            let ecosystems = [{'name': 'All', 'id': ''}];
 
             for (let resource of ecosystemsResponse.resources) {
               if (resource?.resource_title && resource?.resource_id) {
