@@ -5,7 +5,7 @@ import styles from "./styles.module.css";
 import HydroShareResourcesTiles from "@site/src/components/HydroShareResourcesTiles";
 import HydroShareResourcesRows from "@site/src/components/HydroShareResourcesRows";
 import HydroShareResourcesCards from "@site/src/components/HydroShareResourcesCards";
-import { fetchResourcesBySearch, fetchResourceCustomMetadata, getCommunityResources, fetchResourcesFromCollection } from "@site/src/components/HydroShareImporter";
+import { fetchResourcesBySearch, fetchResourceCustomMetadata, getCommunityResources, fetchResourcesFromCollection, fetchResourceMetadata } from "@site/src/components/HydroShareImporter";
 import {
   HiOutlineSortDescending,
   HiOutlineSortAscending,
@@ -170,13 +170,14 @@ export default function HydroShareResourcesSelector({
           description: res.abstract || "No description available.",
           date_created: res.date_created,
           date_last_updated: res.date_last_updated,
+          keywords: res.subjects,
           thumbnail_url: "",
           page_url: "",
           docs_url: "",
           embed_url: "",
         }));
 
-        // Search locally when ecosystem is selected
+        // Search and filter locally when ecosystem is selected
         if (ecosystemSelected) {
           const searchTerm = filterSearch.trim().toLowerCase();
           if (searchTerm) {
@@ -186,6 +187,12 @@ export default function HydroShareResourcesSelector({
               resource.description?.toLowerCase().includes(searchTerm)
             );
           }
+
+          // Keep only resources tagged with one of the current page's keywords (e.g. "ciroh_hub_app")
+          const pageKeywords = new Set(keyword.split(',').map(k => k.trim().toLowerCase()).filter(Boolean));
+          mappedList = mappedList.filter(resource =>
+            resource.keywords?.some(k => pageKeywords.has(k.trim().toLowerCase()))
+          );
         }
 
         // Sort locally when fetching datasets (or an ecosystem) to account for curated resources being combined with searched resources
@@ -219,12 +226,24 @@ export default function HydroShareResourcesSelector({
             const customMetadata = await fetchResourceCustomMetadata(res.resource_id);
             let embedUrl = "";
             if (customMetadata?.pres_path) embedUrl = `https://www.hydroshare.org/resource/${res.resource_id}/data/contents/${customMetadata.pres_path}`;
+            // Extract keywords/subjects from metadata, unless the resource already has them
+            let keywords = res.keywords;
+            if (!keywords) {
+              const metadata = await fetchResourceMetadata(res.resource_id);
+              keywords = [];
+              if (metadata?.subjects) {
+                for (let subject of metadata.subjects) {
+                  if (subject?.value) keywords.push(subject.value);
+                }
+              }
+            }
             const updatedResource = {
               ...res,
               thumbnail_url: customMetadata?.thumbnail_url || "",
               page_url: customMetadata?.page_url || "",
               docs_url: customMetadata?.docs_url || "",
               embed_url: embedUrl,
+              keywords: keywords,
             };
 
             setResources((current) =>
@@ -486,7 +505,7 @@ export default function HydroShareResourcesSelector({
             <CardsComponent resources={resources} defaultImage={defaultImage} />
           )}
 
-          {!loading && nonPlaceholderResources.length === 0 && (
+          {!loading && !fetching.current && nonPlaceholderResources.length === 0 && (
             <p className="tw-mt-10 tw-text-center tw-text-sm tw-text-slate-600 dark:tw-text-slate-300">
               No {resultLabel} Found
             </p>
@@ -595,7 +614,7 @@ export default function HydroShareResourcesSelector({
         )}
 
         {/* empty */}
-        {!loading && nonPlaceholderResources.length === 0 && (
+        {!loading && !fetching.current && nonPlaceholderResources.length === 0 && (
           <p className={styles.emptyMessage}>No&nbsp;Resources&nbsp;Found</p>
         )}
       </div>
