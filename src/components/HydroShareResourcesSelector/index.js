@@ -275,7 +275,7 @@ export default function HydroShareResourcesSelector({
       (async () => {
         try {
           // Fetch ecosystem resources from HydroShare using the search API
-          const ecosystemsResponse = await fetchResourcesBySearch('ciroh_hub_ecosystem', '');
+          const ecosystemsResponse = await fetchResourcesBySearch('ciroh_hub_group', '');
 
           // Make sure the component has not been unmounted before updating state
           if (!cancelled)
