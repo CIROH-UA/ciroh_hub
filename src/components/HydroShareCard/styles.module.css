@@ -74,6 +74,11 @@
   color: var(--ifm-color-emphasis-700);
 }
 
+.card .subtitle {
+  margin: 0.35rem auto 0.8rem;
+  font-size: 0.98rem;
+}
+
 .card summary {
   margin: 0 0 0.5rem 0;
   font-size: 0.9rem;
@@ -177,6 +182,11 @@ html[data-theme='dark'] .tagNotebook { --tag-text: var(--ifm-color-success-light
   background: var(--ifm-pre-background);
   border: 1px solid var(--ifm-color-emphasis-200);
   font-size: 0.85rem;
+}
+
+/* Same top spacing as .actions, for the resource form card */
+.formSection {
+  margin-top: 1.25rem;
 }
 
 .actions {
