@@ -8,6 +8,7 @@ import {
   HiOutlineLink,
   HiOutlineTag,
 } from 'react-icons/hi';
+import HydroShareResourceForm from '@site/src/components/HydroShareResourceForm';
 
 export default function HydroShareCard() {
   const hydroshareUrl = 'https://www.hydroshare.org/oidc/authenticate/';
@@ -22,6 +23,7 @@ export default function HydroShareCard() {
 
   return (
     <section className={styles.section}>
+      {/* Title */}
       <div className={styles.header}>
         <img src={logo} alt="HydroShare" className={styles.logo} />
         <div className={styles.titleRow}>  
@@ -32,7 +34,9 @@ export default function HydroShareCard() {
         </p>
       </div>
 
-        <div className={styles.grid}>
+      {/* Cards */}
+      <div className={styles.grid}>
+        {/* Quick Steps Card */}
         <div className={styles.card}>
           <div className={styles.icon}><HiOutlineClipboardList size={28} /></div>
           <h4>Quick Steps</h4>
@@ -43,6 +47,8 @@ export default function HydroShareCard() {
             <li>Add one of the Tags shown here.</li>
           </ol>
         </div>
+
+        {/* Use Tags Card */}
         <div className={styles.card}>
           <div className={styles.icon}><HiOutlineTag size={28} /></div>
           <h4>Use Tags</h4>
@@ -65,6 +71,8 @@ export default function HydroShareCard() {
               </div>
             </details>
         </div>
+
+        {/* Optional Metadata Card */}
         <div className={styles.card}>
           <div className={styles.icon}><HiOutlineLink size={28} /></div>
           <h4>Optional metadata</h4>
@@ -82,12 +90,29 @@ export default function HydroShareCard() {
         </div>
       </div>
 
+      {/* Share on HydroShare Button */}
       <div className={styles.actions}>
         <a href={hydroshareUrl} target="_blank" rel="noopener noreferrer" className={styles.primaryButton}>
           Share on CIROH HydroShare
         </a>
       </div>
 
+      {/* Create a HydroShare Resource Section*/}
+      <div className={clsx(styles.header, styles.formSection)}>
+        <div className={styles.card}>
+          <div className={styles.header}>
+            <div className={styles.titleRow}>  
+              <h2 className={styles.title}>Create a HydroShare Resource</h2>
+            </div>
+            <p className={styles.subtitle}>
+              Use the form below to create a new HydroShare resource and add it to CIROH Hub.
+            </p>
+          </div>
+          <HydroShareResourceForm />
+        </div>
+      </div>
+
+      {/* Footer */}
       <div className={styles.footer}>
         <p className={styles.subtitle}>
           Featured resources are drawn from <a href="https://help.hydroshare.org/hydroshare-resources/collections/">HydroShare Resource Collections</a>.
