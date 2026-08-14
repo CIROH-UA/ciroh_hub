@@ -89,7 +89,7 @@ const config = {
     zotero_staging_group_id: process.env.ZOTERO_CIROH_STAGING_GROUP_ID || 999999999,
     recaptcha_site_key: process.env.RECAPTCHA_SITE_KEY || "dummy",
     zotero_import_request_api_url: process.env.ZOTERO_IMPORT_REQUEST_API_URL || "http://127.0.0.1:3000/zotero-import-request",
-    
+    hs_client_id: process.env.HS_CLIENT_ID || "dummy",
     hs_featured_apps_collection_id: process.env.HS_FEATURED_APPS_COLLECTION_ID || "dummy",
     hs_featured_datasets_collection_id: process.env.HS_FEATURED_DATASETS_COLLECTION_ID || "dummy",
     hs_featured_courses_collection_id: process.env.HS_FEATURED_COURSES_COLLECTION_ID || "dummy",
