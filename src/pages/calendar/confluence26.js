@@ -1,6 +1,5 @@
 import Layout from '@theme/Layout';
 import styles from './confluence26.module.css';
-import { submitApp } from '@site/src/components/CalendarSubPages/Confluence26';
 import clsx from 'clsx';
 
 import WJKrajewski from '@site/static/img/calendar/subpages/confluence/wfkrajewski.jpg';
@@ -12,6 +11,14 @@ import AWILogoLight from '@site/static/img/logos/awi.png';
   Adapted from a standalone HTML file,
   which is why this page has its own styling and some raw SVGs.
 */}
+
+export function submitApp() {
+  var v=function(id){var e=document.getElementById(id);return (e&&e.value)||'—';};
+  var d=document.querySelector('input[name="apply-date"]:checked');
+  var subject=encodeURIComponent('Confluence — Operational Hydrology Advances Webinar Series · PI Engagement Session');
+  var body=encodeURIComponent('Name: '+v('apply-name')+'\nAffiliation: '+v('apply-affiliation')+'\nPreferred session: '+((d&&d.value)||'—')+'\n\nProposed topic:\n'+v('apply-topic'));
+  window.location.href='mailto:ciroh@ua.edu?bcc=spaul5%40ua.edu&subject='+subject+'&body='+body;
+};
 
 export default function Confluence26() {
   return (
@@ -147,7 +154,7 @@ function ConfluenceContent() {
                 </div>
               </div>
               <textarea id="apply-topic" placeholder="Proposed topic" rows="3" className={styles.application_field_text} style={{ resize: "vertical" }}></textarea>
-              <a href="mailto:ciroh@ua.edu?bcc=spaul5%40ua.edu&subject=Confluence%20%E2%80%94%20Operational%20Hydrology%20Advances%20Webinar%20Series%20%C2%B7%20PI%20Engagement%20Session" onclick={submitApp(event)} className={styles.button_l}>Submit nomination</a>
+              <a href="mailto:ciroh@ua.edu?bcc=spaul5%40ua.edu&subject=Confluence%20%E2%80%94%20Operational%20Hydrology%20Advances%20Webinar%20Series%20%C2%B7%20PI%20Engagement%20Session" onclick={submitApp} className={styles.button_l}>Submit nomination</a>
               <div className={styles.application_disclaimer}>Opens your email client with the nomination addressed to ciroh@ua.edu.</div>
             </div>
           </div>
