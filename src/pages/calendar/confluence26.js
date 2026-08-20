@@ -177,7 +177,7 @@ function ConfluenceContent() {
           <div className={clsx(styles.m_card, styles.m_stack, styles.register_inner)}>
             <div style={{ flex: 1 }}>
               <div className={styles.section_title}>Join us for the upcoming session</div>
-              <p className={(styles.section_description, styles.margin_bs)}>One registration covers the whole season — register once and the Zoom link arrives by email.</p>
+              <p className={(styles.margin_bs, styles.section_description)}>One registration covers the whole season — register once and the Zoom link arrives by email.</p>
             </div>
             <div className={clsx(styles.m_full, styles.register_submit_outer)}>
               <a href="https://ua-edu.zoom.us/meeting/register/ajhLtchTQfSxIxqpIizpsg" className={styles.button_l}>Register for the series</a>
@@ -186,8 +186,9 @@ function ConfluenceContent() {
         </div>
 
         <div className={styles.pseudo_footer_outer}>
-          <div className={styles.m_pad, styles.pseudo_footer_row}>
-            <img className={styles.pseudo_footer_logo} alt="The University of Alabama — Alabama Water Institute" src={AWILogoDark}></img>
+          <div className={clsx(styles.m_pad, styles.pseudo_footer_row)}>
+            <img className={clsx(styles.pseudo_footer_logo, "dark-image")} alt="The University of Alabama — Alabama Water Institute" src={AWILogoDark}></img>
+            <img className={clsx(styles.pseudo_footer_logo, "light-image")} alt="The University of Alabama — Alabama Water Institute" src={AWILogoLight}></img>
             <a href="https://ciroh.ua.edu/" className={styles.pseudo_footer_link}>ciroh.ua.edu</a>
           </div>
         </div>
