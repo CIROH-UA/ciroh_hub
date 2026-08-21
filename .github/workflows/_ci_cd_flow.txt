@@ -1,0 +1,17 @@
+
+  [Trigger from main]           [Trigger from PR]
+           |                            L======> ci_pr_validation.yml
+           |                            |   L==> [PR is closed/tagged for cleanup] ==> cd_clean_up_pr.yml
+           |                            V
+           |                  [PR has staging label]
+           |                            |
+           V                            V
+ci_trigger_build_main.yml    ci_trigger_build_pr.yml
+           |          ↕       ↕         |
+           |         ci_build.yml       |
+           |                            V
+           |                 cd_deploy_composite.yml (<- security layer; fences away permissions from untrusted branch code)
+           |                            |
+           |============================#
+           V
+cd_deploy_composite.yml

@@ -30,10 +30,6 @@ on:
       metadata-id:
         description: 'ID for a GitHub artifact containing the metadata for this build.'
         value: ${{ jobs.build.outputs.metadata-id }}
-      
-concurrency:
-  group: "uploads-build-artifact"
-  cancel-in-progress: ${{ github.event.client_payload.deploy_env == 'production' }}
 
 jobs:
   build:
@@ -177,7 +173,7 @@ jobs:
           draft: false
           prerelease: false
 
-    # Get short SHA first
+    # Get short SHA
     - name: Get short SHA
       id: short-sha
       run: echo "SHORT_SHA=$(git rev-parse --short ${{ github.sha }})" >> $GITHUB_OUTPUT
@@ -187,6 +183,7 @@ jobs:
       id: define-metadata
       run: |
         {"deploy_env": "${{ env.DEPLOY_ENV }}", "version": "${{ env.VERSION }}", "target_repo": "${{ env.TARGET_REPO }}", "target_path": "${{ env.TARGET_PATH }}", "short_hash": "${{ steps.short-sha.outputs.SHORT_SHA }}", "commit_hash": "${{ github.sha }}", "commit_header": "${{ env.COMMIT_HEADER }}", "branch": "${{ github.ref_name }}", "pr_number": "${{ env.PR_NUMBER }}"} > exports/build_${{ env.DEPLOY_ENV }}${{ env.PR_NUMBER }}_metadata.json
+        echo exports/build_${{ env.DEPLOY_ENV }}${{ env.PR_NUMBER }}_metadata.json
     - name: Upload a Build Artifact
       id: upload-metadata
       uses: actions/upload-artifact@v8

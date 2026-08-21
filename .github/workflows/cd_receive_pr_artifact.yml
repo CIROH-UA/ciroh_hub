@@ -3,3 +3,43 @@
 # we minimize the potential attack surface to a known subset of pages.
 
 name: 'CD: Receive PR build artifact'
+run-name: 'CD: Confirm PR deployment safety'
+
+on:
+  workflow_run:
+    workflows: ['CI: Trigger deployment from PR']
+    types:
+      - completed
+
+jobs:
+  extract-config:
+    # TODO
+
+  call-deployment:
+    runs-on: ubuntu-latest
+    needs: build
+    # TODO: Permissions
+    steps:
+    - name: Call deployment workflow
+      uses: ./.github/workflows/cd_deploy_composite.yml
+      with:
+        build-id: ${{ needs.build.outputs.build-id }}
+        metadata-id: ${{ needs.build.outputs.metadata-id }}
+        title-source: main
+        title-header: ${{ needs.build.outputs.title-destination }}
+  
+  notify:
+    if: # TODO
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+    - name: Comment PR with staging link
+      uses: mshick/add-pr-comment@v2
+      with:
+        message: |
+          **Staging Preview:**
+          🚀 https://hub.ciroh.org/staging/${{ github.event.number }}
+          _Will be live within ~10 minutes of this message_
+            
+          _Built from commit ${{ github.sha }}_
+        # TODO: Replace these with content from payload

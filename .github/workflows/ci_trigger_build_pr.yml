@@ -21,11 +21,17 @@ jobs:
 #        echo "Is a labelling action: ${{ github.event.action == 'labeled' }}"
 #        echo "Is applying flag: ${{ github.event.label.name == 'preview on staging' }}"
 
-  trigger-build:
+  prepare-build:
     if: ${{ contains(github.event.pull_request.labels.*.name, 'preview on staging') && ( github.event.action != 'labeled' || github.event.label.name == 'preview on staging' ) }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
+    outputs:
+      params-id: ${{ steps.upload-params.outputs.artifact-id }}
+      title-header: ${{ steps.fetch-commit-header.header }}
+      title-destination: ${{ steps.set-destination.destination }}
+      should-notify: ${{ vars.SILENCE_COMPOSITE_PR_MESSAGE != 'true' && github.event.action == 'labeled' && github.event.label.name == 'preview on staging' }}
+
     steps:
     - name: Set deployment target
       run: |
@@ -53,31 +59,44 @@ jobs:
           echo "COMMIT_HEADER=${header}" >> $GITHUB_ENV
         fi
       # Credit to the solution at https://github.com/orgs/community/discussions/106392
+    
+    # Establish build params
+    - name: Output build parameters
+      run: |
+        {"deploy_env": "${{ env.DEPLOY_ENV }}", "source_ref": "${{ env.SOURCE_REF }}", "source_repo": "${{ env.SOURCE_REPO }}", "target_repo": "${{ env.TARGET_REPO }}", "target_path": "${{ env.TARGET_PATH }}", "commit_header": "${{ env.COMMIT_HEADER }}", "pr_number": "${{ github.event.number }}"} > exports/pr_${{ github.event.number }}_build.json
+        cat exports/pr_${{ github.event.number }}_build.json
 
-  send-dispatch:
+    - name: Upload build parameters
+      id: upload-params
+      uses: actions/upload-artifact@v7
+      with:
+        name: pr_${{ env.github.event.number }}_build
+        path: exports/pr_${{ github.event.number }}_build.json
+
+  build:
     runs-on: ubuntu-latest
-    needs: trigger-build
+    strategy:
+      matrix:
+        node-version: [22.x]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+    needs: prepare-build
     permissions:
-      contents: write # for repository dispatch
+      artifact_metadata: write
+      deployments: write
       metadata: read
+      secrets: read
+      variables: read
+    outputs:
+      build-id: ${{ steps.create-build.outputs.build-id }}
+      metadata-id: ${{ steps.create-build.outputs.metadata-id }}
+      title-destination: ${{ needs.prepare-build.outputs.title-destination }}
     steps:
-    - name: 'Send repository dispatch'
-      uses: peter-evans/repository-dispatch@v4
+    - name: Create build artifact
+      id: create-build
+      uses: ./.github/workflows/ci_build.yml
       with:
-        event-type: create-build
-        client-payload: '{"deploy_env": "${{ env.DEPLOY_ENV }}", "source_ref": "${{ env.SOURCE_REF }}", "source_repo": "${{ env.SOURCE_REPO }}", "target_repo": "${{ env.TARGET_REPO }}", "target_path": "${{ env.TARGET_PATH }}", "commit_header": "${{ env.COMMIT_HEADER }}", "pr_number": "${{ github.event.number }}", "type_description": "PR #${{ github.event.number }} staging"}'
+        config-id: ${{ needs.prepare-build.outputs.params-id }}
+        title-source: main
+        title-header: ${{ needs.prepare-build.outputs.title-header }}
 
-  notify:
-    if: ${{ vars.SILENCE_COMPOSITE_PR_MESSAGE != 'true' && github.event.action == 'labeled' && github.event.label.name == 'preview on staging' }}
-    runs-on: ubuntu-latest
-    needs: trigger-build
-    steps:
-    - name: Comment PR with staging link
-      uses: mshick/add-pr-comment@v2
-      with:
-        message: |
-          **Staging Preview:**
-          🚀 https://hub.ciroh.org/staging/${{ github.event.number }}
-          _Will be live within ~10 minutes of this message_
-            
-          _Built from commit ${{ github.sha }}_
+  # For permission-management reasons, the next steps are handled in cd_receive_pr_artifact.
