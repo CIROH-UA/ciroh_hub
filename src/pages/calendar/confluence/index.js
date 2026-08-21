@@ -20,6 +20,12 @@ export function submitApp() {
   window.location.href='mailto:ciroh@ua.edu?bcc=spaul5%40ua.edu&subject='+subject+'&body='+body;
 };
 
+{/*
+  Internal name reflects the seasonal nature of Confluence.
+  Make sure to archive this page at /calendar/confluence/26-27
+  when it's time to replace it with next year's version
+  (and update any historical links accordingly)!
+*/}
 export default function Confluence26() {
   return (
     <Layout
