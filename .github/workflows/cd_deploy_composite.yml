@@ -2,11 +2,24 @@
 # For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
 
 name: 'CD: Deploy build artifact to composite target'
-run-name: 'Deploy to composite target: "${{github.event.client_payload.commit_header}}" ➡️ ${{github.event.client_payload.target_description}}'
+run-name: 'Deploy to composite target: ${{ inputs.title-source }} ➡️ ${{ inputs.title-dest }}'
 
 on:
-  repository_dispatch:
-    types: [build-completed]
+  workflow-call:
+    build-id:
+      required: true
+      type: string
+    metadata-id:
+      required: true
+      type: string
+    title-source:
+      required: false
+      default: string
+      default: '?'
+    title-dest:
+      required: false
+      type: string
+      default: '?'
 
 jobs:
   deploy:
@@ -25,36 +38,49 @@ jobs:
         uses: actions/checkout@v7
         with:
           filter: 'blob:none' # only retrieve metadata
-
-      # Get environment, version, etc from dispatch payload
-      - name: Fetch inputs from dispatch
-        run: |
-          echo "DEPLOY_ENV=${{ github.event.client_payload.deploy_env }}" >> $GITHUB_ENV
-          echo "VERSION=${{ github.event.client_payload.version }}" >> $GITHUB_ENV
-
-          echo "TARGET_REPO=${{ github.event.client_payload.target_repo }}" >> $GITHUB_ENV
-          echo "TARGET_PATH=${{ github.event.client_payload.target_path }}" >> $GITHUB_ENV
-          echo "PR_NUMBER=${{ github.event.client_payload.pr_number }}" >> $GITHUB_ENV
-
-          echo "environment=${{ github.event.client_payload.deploy_env }}" >> $GITHUB_OUTPUT
-          echo "version=${{ github.event.client_payload.version }}" >> $GITHUB_OUTPUT
-
-      - name: Echo inputs from dispatch
-        run: |
-          echo "Deploying commit ${{ github.event.client_payload.commit_hash }}"
-          echo "Commit header: ${{ github.event.client_payload.commit_header }}"
-          echo "Branch: ${{ github.event.client_payload.branch }}"
-          echo "Deploying version: ${{ github.event.client_payload.version }}"
-          echo "Environment: ${{ github.event.client_payload.deploy_env }}"
-          echo "Deploy target: /${{ env.TARGET_PATH }} @ ${{ env.TARGET_REPO }}"
-          
-      # https://github.com/marketplace/actions/download-workflow-artifact
-      - name: Download a Build Artifact
-        uses: dawidd6/action-download-artifact@v2.26.1
+      
+      # Get config payload
+      - name: Download config payload
+        uses: actions/download-artifact@v8
         with:
-          workflow: ci_pipeline.yml
-          name: build-${{ env.DEPLOY_ENV }}${{ env.PR_NUMBER }}
-          path: ./build/
+          artifact-ids: ${{ inputs.metadata-id }}
+          path: payloads/build_metadata.json
+
+      # Get environment, version, etc from config payload
+      - name: Unpack payload
+        id: extract_json
+        run: |
+          payload='cat ./payloads/build_metadata.json'
+          echo "::set-output name=payloadJson::$payload"
+        run: |
+          echo "DEPLOY_ENV=${{ fromJson(steps.extract_json.outputs.payloadJson).deploy_env }}" >> $GITHUB_ENV
+          echo "VERSION=${{ fromJson(steps.extract_json.outputs.payloadJson).version }}" >> $GITHUB_ENV
+
+          echo "TARGET_REPO=${{ fromJson(steps.extract_json.outputs.payloadJson).target_repo }}" >> $GITHUB_ENV
+          echo "TARGET_PATH=${{ fromJson(steps.extract_json.outputs.payloadJson).target_path }}" >> $GITHUB_ENV
+          echo "PR_NUMBER=${{ fromJson(steps.extract_json.outputs.payloadJson).pr_number }}" >> $GITHUB_ENV
+
+          echo "COMMIT_HASH=${{ fromJson(steps.extract_json.outputs.payloadJson).commit_hash }}" >> $GITHUB_ENV
+          echo "COMMIT_HEADER=${{ fromJson(steps.extract_json.outputs.payloadJson).commit_header }}" >> $GITHUB_ENV
+          echo "BRANCH=${{ fromJson(steps.extract_json.outputs.payloadJson).branch }}" >> $GITHUB_ENV
+
+          echo "environment=${{ fromJson(steps.extract_json.outputs.payloadJson).deploy_env }}" >> $GITHUB_OUTPUT
+          echo "version=${{ fromJson(steps.extract_json.outputs.payloadJson).version }}" >> $GITHUB_OUTPUT
+
+      - name: Echo inputs from payload
+        run: |
+          echo "Deploying commit $COMMIT_HASH"
+          echo "Commit header: $COMMIT_HEADER"
+          echo "Branch: $BRANCH"
+          echo "Deploying version: $VERSION"
+          echo "Environment: $DEPLOY_ENV"
+          echo "Deploy target: /$TARGET_PATH @ $TARGET_REPO"
+          
+      - name: Download a Build Artifact
+        uses: actions/download-artifact@v8
+        with:
+          artifact-ids: ${{ inputs.build-id }}
+          path: build/
 
       - name: Deploy to composite repository
         uses: JamesIves/github-pages-deploy-action@v4

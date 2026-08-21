@@ -1,0 +1,5 @@
+# Security posture: supporting PRs in staging requires running and deploying untrusted code.
+# However, by limiting deployments to the `/staging/pr` subdirectory via this workflow,
+# we minimize the potential attack surface to a known subset of pages.
+
+name: 'CD: Receive PR build artifact'

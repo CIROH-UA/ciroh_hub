@@ -1,13 +1,35 @@
-# Deprecating for safety. Succeeded by ci_build.yml
+# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
 
 # Trigger logic has been spun out into the various 'ci_trigger_*.yml' workflows.
 
-name: 'CI: Create Build Artifact (legacy)'
-run-name: 'Create build artifact for ${{github.event.client_payload.type_description}}: "${{github.event.client_payload.commit_header}}"'
+name: 'CI: Create Build Artifact'
+run-name: 'Create build artifact for ${{inputs.title-source}}: "${{inputs.title-header}}"'
 
 on:
-  repository_dispatch:
-    types: [create-build]
+  workflow_call:
+    inputs:
+      config-id:
+        description: 'ID for a GitHub artifact containing a JSON configuration file.'
+        required: true
+        type: string
+      title-source:
+        description: 'Human-readable identifier for input source. Only used for run-name.'
+        required: false
+        default: '?'
+        type: string
+      title-header:
+        description: 'Human-readable commit header for input source. Only used for run-name.'
+        required: false
+        default: '?'
+        type: string
+    outputs:
+      build-id:
+        description: 'ID for the GitHub build artifact output by this file.'
+        value: ${{ jobs.build.outputs.build-id }}
+      metadata-id:
+        description: 'ID for a GitHub artifact containing the metadata for this build.'
+        value: ${{ jobs.build.outputs.metadata-id }}
       
 concurrency:
   group: "uploads-build-artifact"
@@ -21,20 +43,33 @@ jobs:
         node-version: [22.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
     permissions:
-      artifact_metadata: write
-      content: write # for repository dispatch
+      artifact-metadata: write
       deployments: write
       metadata: read
-      secrets: read
+      secrets: read # Note: implicitly will not be provided for foreign pull requests
       variables: read
+    outputs:
+      build-id: ${{ steps.upload-build.outputs.artifact-id }}
+      metadata-id: ${{ steps.upload-metadata.outputs.artifact-id }}
+
     steps:
+    - name: Download config payload
+      uses: actions/download-artifact@v8
+      with:
+        artifact-ids: ${{ inputs.config-id }}
+        path: payloads/build_config.json
+
     - name: Extract payload inputs
+      id: extract_json
       run: |
-        echo "DEPLOY_ENV=${{ github.event.client_payload.deploy_env }}" >> $GITHUB_ENV
-        echo "TARGET_REPO=${{ github.event.client_payload.target_repo }}" >> $GITHUB_ENV
-        echo "TARGET_PATH=${{ github.event.client_payload.target_path }}" >> $GITHUB_ENV
-        echo "COMMIT_HEADER=${{ github.event.client_payload.commit_header }}" >> $GITHUB_ENV
-        echo "PR_NUMBER=${{ github.event.client_payload.pr_number }}" >> $GITHUB_ENV
+        payload='cat ./payloads/build_config.json'
+        echo "::set-output name=payloadJson::$payload"
+      run: |
+        echo "DEPLOY_ENV=${{ fromJson(steps.extract_json.outputs.payloadJson).deploy_env }}" >> $GITHUB_ENV
+        echo "TARGET_REPO=${{ fromJson(steps.extract_json.outputs.payloadJson).target_repo }}" >> $GITHUB_ENV
+        echo "TARGET_PATH=${{ fromJson(steps.extract_json.outputs.payloadJson).target_path }}" >> $GITHUB_ENV
+        echo "COMMIT_HEADER=${{ fromJson(steps.extract_json.outputs.payloadJson).commit_header }}" >> $GITHUB_ENV
+        echo "PR_NUMBER=${{ fromJson(steps.extract_json.outputs.payloadJson).pr_number }}" >> $GITHUB_ENV
       # PR_NUMBER can and should be left empty for non-PR builds
       
     - name: Validate payload inputs
@@ -57,12 +92,9 @@ jobs:
       with:
         ref: ${{ github.event.client_payload.source_ref }}
         repository: ${{ github.event.client_payload.source_repo }}
-        allow-unsafe-pr-checkout: true
-        # The above flag doesn't technically get checked,
-        # but this can be an unsafe checkout when called from a PR.
-        # The 'preview on staging' label is protective, but we should consider hardening this further.
-        # See https://securitylab.github.com/resources/github-actions-preventing-pwn-requests/#preventing-pwn-requests
-       
+        # Note: allow-unsafe-pr-checkout left unset to ensure that
+        # any branch checkouts are only done on calls from pull_request.
+
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v5
       with:
@@ -107,11 +139,11 @@ jobs:
     - name: Build website
       run: npm run build
       env:
-          ZOTERO_API_KEY_READ_ONLY: ${{ secrets.ZOTERO_API_KEY_READ_ONLY }}
+          ZOTERO_API_KEY: ${{ secrets.ZOTERO_API_KEY }}
           ZOTERO_CIROH_GROUP_ID: ${{ secrets.ZOTERO_CIROH_GROUP_ID }}
+          ZOTERO_STAGING_API_KEY: ${{ secrets.ZOTERO_STAGING_API_KEY }}
           ZOTERO_CIROH_STAGING_GROUP_ID: ${{ secrets.ZOTERO_CIROH_STAGING_GROUP_ID }}
-          ZOTERO_IMPORT_REQUEST_API_URL: ${{ vars.ZOTERO_IMPORT_REQUEST_API_URL }}
-          RECAPTCHA_SITE_KEY: ${{ vars.RECAPTCHA_SITE_KEY }}
+          CAPTCHA_KEY: ${{ secrets.CAPTCHA_KEY }}
           S3_BUCKET_NAME: ${{ secrets.S3_BUCKET_NAME }}
           S3_ACCESS_KEY: ${{ secrets.S3_ACCESS_KEY }}
           S3_SECRET_KEY: ${{ secrets.S3_SECRET_KEY }}
@@ -125,7 +157,8 @@ jobs:
           GH_PROJECT_TOKEN: "deprecated"
         
     - name: Upload a Build Artifact
-      uses: actions/upload-artifact@v7
+      id: upload-build
+      uses: actions/upload-artifact@v8
       with:
         # Artifact name
         name: build-${{ env.DEPLOY_ENV }}${{ env.PR_NUMBER }}
@@ -149,10 +182,16 @@ jobs:
       id: short-sha
       run: echo "SHORT_SHA=$(git rev-parse --short ${{ github.sha }})" >> $GITHUB_OUTPUT
     
-    # Trigger CD workflow using repository dispatch          
-    - name: Trigger deployment
-      uses: peter-evans/repository-dispatch@v2
+    # Write build metadata to JSON file
+    - name: Output build metadata
+      id: define-metadata
+      run: |
+        {"deploy_env": "${{ env.DEPLOY_ENV }}", "version": "${{ env.VERSION }}", "target_repo": "${{ env.TARGET_REPO }}", "target_path": "${{ env.TARGET_PATH }}", "short_hash": "${{ steps.short-sha.outputs.SHORT_SHA }}", "commit_hash": "${{ github.sha }}", "commit_header": "${{ env.COMMIT_HEADER }}", "branch": "${{ github.ref_name }}", "pr_number": "${{ env.PR_NUMBER }}"} > exports/build_${{ env.DEPLOY_ENV }}${{ env.PR_NUMBER }}_metadata.json
+    - name: Upload a Build Artifact
+      id: upload-metadata
+      uses: actions/upload-artifact@v8
       with:
-        token: ${{ secrets.GITHUB_TOKEN }}
-        event-type: build-completed
-        client-payload: '{"deploy_env": "${{ env.DEPLOY_ENV }}", "version": "${{ env.VERSION }}", "target_repo": "${{ env.TARGET_REPO }}", "target_path": "${{ env.TARGET_PATH }}", "short_hash": "${{ steps.short-sha.outputs.SHORT_SHA }}", "commit_hash": "${{ github.sha }}", "commit_header": "${{ env.COMMIT_HEADER }}", "branch": "${{ github.ref_name }}", "pr_number": "${{ env.PR_NUMBER }}", "target_description": "/${{ env.TARGET_PATH }} @ ${{ env.TARGET_REPO }}"}'
+        # Artifact name
+        name: build-metadata-${{ env.DEPLOY_ENV }}${{ env.PR_NUMBER }}
+        # A file, directory or wildcard pattern that describes what to upload
+        path: metadata/metadata.json

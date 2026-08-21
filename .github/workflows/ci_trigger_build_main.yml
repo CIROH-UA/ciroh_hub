@@ -27,12 +27,17 @@ env:
   STAGING_MAIN_FOLDER: main/ # Since PRs will use an alternate path
 
 jobs:
-  trigger-build:
+  prepare-build:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-    steps:      
+    outputs:
+      params-id: ${{ steps.upload-params.outputs.artifact-id }}
+      title-header: ${{ steps.fetch-commit-header.header }}
+      title-destination: ${{ steps.set-destination.destination }}
+    steps:
     - name: Set deployment target
+      id: set-deployment-target
       run: |
         if ${{ github.event.inputs.type == 'production' }}; then
           echo "DEPLOY_ENV=production" >> $GITHUB_ENV
@@ -47,6 +52,8 @@ jobs:
         fi
         echo "SOURCE_REF=${{ github.ref }}" >> $GITHUB_ENV
         echo "SOURCE_REPO=${{ github.repository }}" >> $GITHUB_ENV
+      run: |
+        echo "::set-output name=destination::/$TARGET_PATH @ $TARGET_REPO"
 
     # Checkout to fetch commit header
     - name: Checkout
@@ -56,6 +63,7 @@ jobs:
         filter: 'blob:none' # only retrieve metadata
 
     - name: Fetch commit header
+      id: fetch-commit-header
       run: |
         header="$(git log -1 --pretty=%B | head -n 1)"
         if [[ $header == *"\""* ]]; then
@@ -63,10 +71,56 @@ jobs:
         else
           echo "COMMIT_HEADER=${header}" >> $GITHUB_ENV
         fi
+      run: |
+        echo "::set-output name=header::$COMMIT_HEADER"
       # Credit to the solution at https://github.com/orgs/community/discussions/106392
 
-    - name: 'Send repository dispatch'
-      uses: peter-evans/repository-dispatch@v4
+    # Establish build params
+    - name: Output build parameters
+      id: upload-params
+      run: |
+        {"deploy_env": "$DEPLOY_ENV", "source_ref": "$SOURCE_REF", "source_repo": "$SOURCE_REPO", "target_repo": "$TARGET_REPO", "target_path": "$TARGET_PATH", "commit_header": "$env.COMMIT_HEADER", "type_description": "$env.DEPLOY_ENV"} > exports/main_${{ env.DEPLOY_ENV }}_build.json
+    - name: Upload build parameters
+      uses: actions/upload-artifact@v7
       with:
-        event-type: create-build
-        client-payload: '{"deploy_env": "${{ env.DEPLOY_ENV }}", "source_ref": "${{ env.SOURCE_REF }}", "source_repo": "${{ env.SOURCE_REPO }}", "target_repo": "${{ env.TARGET_REPO }}", "target_path": "${{ env.TARGET_PATH }}", "commit_header": "${{ env.COMMIT_HEADER }}", "type_description": "${{ env.DEPLOY_ENV }}"}'
+        name: main_${{ env.DEPLOY_ENV }}_build
+        path: exports/main_${{ env.DEPLOY_ENV }}_build.json
+
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [22.x]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+    needs: prepare-build
+    permissions:
+      artifact_metadata: write
+      deployments: write
+      metadata: read
+      secrets: read
+      variables: read
+    outputs:
+      build-id: ${{ steps.create-build.outputs.build-id }}
+      metadata-id: ${{ steps.create-build.outputs.metadata-id }}
+      title-destination: ${{ needs.prepare-build.outputs.title-destination }}
+    steps:
+    - name: Create build artifact
+      id: create-build
+      uses: ./.github/workflows/ci_build.yml
+      with:
+        config-id: ${{ needs.prepare-build.outputs.params-id }}
+        title-source: main
+        title-header: ${{ needs.prepare-build.outputs.title-header }}
+
+  call_deployment:
+    runs-on: ubuntu-latest
+    needs: build
+    # TODO: Permissions
+    steps:
+    - name: Call deployment workflow
+      uses: ./.github/workflows/cd_deploy_composite.yml
+      with:
+        build-id: ${{ needs.build.outputs.build-id }}
+        metadata-id: ${{ needs.build.outputs.metadata-id }}
+        title-source: main
+        title-header: ${{ needs.build.outputs.title-destination }}
