@@ -1,5 +1,5 @@
 import Layout from '@theme/Layout';
-import styles from './confluence26.module.css';
+import styles from './confluence.module.css';
 import clsx from 'clsx';
 
 import WJKrajewski from '@site/static/img/calendar/subpages/confluence/wfkrajewski.jpg';
