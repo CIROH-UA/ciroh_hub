@@ -45,7 +45,7 @@
 		{
 			"type": "news",
 			"title": "NGIAB and CIROH Cyberinfrastructure Power Flash Flood Research at the 2026 Summer Institute",
-			"description": "Ten graduate students across three teams — **Don't Runoff!**, **FlashCast**, and **The Post-Processors** — spent seven weeks at the 2026 Water Prediction Innovators Summer Institute advancing quantitative precipitation inputs into the NextGen Framework, using [NextGen In A Box (NGIAB)](https://ngiab.ciroh.org/) and NSF ACCESS [Jetstream2](/docs/services/external-resources/nsf-access/jetstream) allocations provided through CIROH cyberinfrastructure."
+			"description": "Ten graduate students across three teams (**Don't Runoff!**, **FlashCast**, and **The Post-Processors**) spent seven weeks at the 2026 Water Prediction Innovators Summer Institute advancing quantitative precipitation inputs into the NextGen Framework, using [NextGen In A Box (NGIAB)](https://ngiab.ciroh.org/) and NSF ACCESS [Jetstream2](/docs/services/external-resources/nsf-access/jetstream) allocations provided through CIROH cyberinfrastructure."
 		},
 		{
 			"type": "news",
@@ -53,21 +53,6 @@
 			"link": "https://awi.ua.edu/2026/08/12/wading-through-water-wednesdays-an-experiential-approach-to-water-research-for-future-hydrologists/",
 			"description": "This summer's Research Experience for Undergraduates (REU) program put NSF ACCESS [Jetstream2](/docs/services/external-resources/nsf-access/jetstream) cyberinfrastructure to work, giving students hands-on experience. [Read more in AWI News.](https://awi.ua.edu/2026/08/12/wading-through-water-wednesdays-an-experiential-approach-to-water-research-for-future-hydrologists/)",
 			"release_date": "08/12/2026"
-		},
-		{
-			"type": "update",
-			"title": "communityhydrofabric.ciroh.org",
-			"description": "placeholder"
-		},
-		{
-			"type": "update",
-			"title": "Data Assimilation Update",
-			"description": "placeholder"
-		},
-		{
-			"type": "NRDS",
-			"title": "James's Summer Visit — Routing-Only Datastream",
-			"description": "James visited the Alabama Water Institute this summer to work on NRDS's routing-only datastream."
 		},
 		{
 			"type": "update",
@@ -79,7 +64,7 @@
 			"type": "pantarhei",
 			"title": "New Pantarhei System — Migration Requests Open",
 			"link": "https://github.com/CIROH-UA/NGIAB-CloudInfra/issues/new?template=new-onprem-request.yml",
-			"description": "CIROH is migrating to a new Pantarhei system! [Submit a request to migrate](https://github.com/CIROH-UA/NGIAB-CloudInfra/issues/new?template=new-onprem-request.yml) using the linked issue template."
+			"description": "CIROH is expanding Pantarhei cluster. For migration of data or to get access to new Pantarhei system, please [submit an IT ticket](https://github.com/CIROH-UA/NGIAB-CloudInfra/issues/new?template=new-onprem-request.yml) using the linked issue template."
 		}
 	],
 	"June 2026 Update": [
