@@ -24,23 +24,29 @@ jobs:
   prepare-build:
     if: ${{ contains(github.event.pull_request.labels.*.name, 'preview on staging') && ( github.event.action != 'labeled' || github.event.label.name == 'preview on staging' ) }}
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
     outputs:
       params-id: ${{ steps.upload-params.outputs.artifact-id }}
-      title-header: ${{ steps.fetch-commit-header.header }}
-      title-destination: ${{ steps.set-destination.destination }}
+      title-header: ${{ steps.fetch-commit-header.outputs.header }}
+      title-source: ${{ steps.set-deployment-target.outputs.source }}
+      title-dest: ${{ steps.set-deployment-target.outputs.destination }}
       should-notify: ${{ vars.SILENCE_COMPOSITE_PR_MESSAGE != 'true' && github.event.action == 'labeled' && github.event.label.name == 'preview on staging' }}
 
     steps:
     - name: Set deployment target
+      id: set-deployment-target
+      env: # Get untrusted values here for security
+        TEMP_NUM: ${{ github.event.number }}
+        TEMP_NAME: ${{ github.event.pull_request.head.repo.full_name }}
+        TEMP_REF: ${{ github.event.pull_request.head.ref }}
       run: |
         echo "DEPLOY_ENV=pr-staging" >> $GITHUB_ENV
         echo "TARGET_REPO=$STAGING_REPO" >> $GITHUB_ENV
-        echo "TARGET_PATH=${{ env.STAGING_PATH }}${{ github.event.number }}/" >> $GITHUB_ENV
-        echo "Deploying to $STAGING_REPO as STAGING at path $STAGING_PATH${{ github.event.number }}/"
-        echo "SOURCE_REPO=${{ github.event.pull_request.head.repo.full_name }}" >> $GITHUB_ENV
-        echo "SOURCE_REF=${{ github.event.pull_request.head.ref }}" >> $GITHUB_ENV
+        echo "TARGET_PATH=$STAGING_PATH/$TEMP_NUM" >> $GITHUB_ENV
+        echo "Deploying to $STAGING_REPO as STAGING at path $STAGING_PATH/$TEMP_NUM"
+        echo "SOURCE_REPO=$TEMP_NAME" >> $GITHUB_ENV
+        echo "SOURCE_REF=$TEMP_REF" >> $GITHUB_ENV
+        echo "source=PR #$TEMP_NUM" >> $GITHUB_OUTPUT
+        echo "destination=$STAGING_PATH/$TEMP_NUM @ $TARGET_REPO" >> $GITHUB_OUTPUT
 
     # Checkout to fetch commit header
     - name: Checkout
@@ -51,12 +57,15 @@ jobs:
         filter: 'blob:none' # only retrieve metadata
       
     - name: Fetch commit header
+      id: fetch-commit-header
       run: |
         header="$(git log -1 --pretty=%B | head -n 1)"
         if [[ $header == *"\""* ]]; then
           echo "COMMIT_HEADER="(Unsafe header)" >> $GITHUB_ENV
+          echo "header=${header}" >> $GITHUB_OUTPUT
         else
           echo "COMMIT_HEADER=${header}" >> $GITHUB_ENV
+          echo "header=${header}" >> $GITHUB_OUTPUT
         fi
       # Credit to the solution at https://github.com/orgs/community/discussions/106392
     
@@ -70,7 +79,7 @@ jobs:
       id: upload-params
       uses: actions/upload-artifact@v7
       with:
-        name: pr_${{ env.github.event.number }}_build
+        name: pr_${{ github.event.number }}_build
         path: exports/pr_${{ github.event.number }}_build.json
 
   build:
@@ -81,22 +90,19 @@ jobs:
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
     needs: prepare-build
     permissions:
-      artifact_metadata: write
-      deployments: write
-      metadata: read
-      secrets: read
-      variables: read
+      contents: read
     outputs:
       build-id: ${{ steps.create-build.outputs.build-id }}
       metadata-id: ${{ steps.create-build.outputs.metadata-id }}
-      title-destination: ${{ needs.prepare-build.outputs.title-destination }}
+      title-source: ${{ needs.prepare-build.outputs.title-source }}
+      title-dest: ${{ needs.prepare-build.outputs.title-dest }}
     steps:
     - name: Create build artifact
       id: create-build
       uses: ./.github/workflows/ci_build.yml
       with:
         config-id: ${{ needs.prepare-build.outputs.params-id }}
-        title-source: main
+        title-source: ${{ needs.prepare-build.outputs.title-source }}
         title-header: ${{ needs.prepare-build.outputs.title-header }}
 
   # For permission-management reasons, the next steps are handled in cd_receive_pr_artifact.

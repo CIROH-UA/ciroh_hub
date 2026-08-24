@@ -5,33 +5,33 @@ name: 'CD: Deploy build artifact to composite target'
 run-name: 'Deploy to composite target: ${{ inputs.title-source }} ➡️ ${{ inputs.title-dest }}'
 
 on:
-  workflow-call:
-    build-id:
-      required: true
-      type: string
-    metadata-id:
-      required: true
-      type: string
-    title-source:
-      required: false
-      default: string
-      default: '?'
-    title-dest:
-      required: false
-      type: string
-      default: '?'
+  workflow_call:
+    inputs:
+      build-id:
+        required: true
+        type: string
+      metadata-id:
+        required: true
+        type: string
+      title-source:
+        required: false
+        type: string
+        default: '?'
+      title-dest:
+        required: false
+        type: string
+        default: '?'
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     outputs:
-      environment: ${{ steps.set-outputs.outputs.environment }}
-      version: ${{ steps.set-outputs.outputs.version }}
+      payload: ${{ steps.extract_json.outputs.environment }}
+      version: ${{ steps.extract_json.outputs.version }}
     permissions:
-      content: read
-      artifact_metadata: read
-      actions_secrets: read
-    name: ${{ github.event.client_payload.deploy_env }} - Deploy ${{ github.event.client_payload.short_hash }} from ${{ github.event.client_payload.branch }}
+      contents: read
+      artifact-metadata: read
+    name: Deploy to remote
     steps:
       # Mostly for the sake of the deploy action, which assumes a git directory is present
       - name: Checkout
@@ -47,11 +47,13 @@ jobs:
           path: payloads/build_metadata.json
 
       # Get environment, version, etc from config payload
-      - name: Unpack payload
+      - name: Unpack payload inputs
         id: extract_json
         run: |
           payload='cat ./payloads/build_metadata.json'
-          echo "::set-output name=payloadJson::$payload"
+          echo "payload_json=$payload" >> $GITHUB_OUTPUT
+      
+      - name: Parse payload inputs
         run: |
           echo "DEPLOY_ENV=${{ fromJson(steps.extract_json.outputs.payloadJson).deploy_env }}" >> $GITHUB_ENV
           echo "VERSION=${{ fromJson(steps.extract_json.outputs.payloadJson).version }}" >> $GITHUB_ENV

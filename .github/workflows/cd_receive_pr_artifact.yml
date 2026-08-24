@@ -13,25 +13,41 @@ on:
 
 jobs:
   extract-config:
-    # TODO
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    outputs:
+      params-id: $PARAMS-ID
+      title-header: ${{ steps.fetch-commit-header.outputs.header }}
+      title-source: ${{ steps.set-deployment-target.outputs.source }}
+      title-dest: ${{ steps.set-deployment-target.outputs.destination }}
+    steps:
+    - name: Download config payload
+      uses: actions/download-artifact@v8
+      with:
+        artifact-ids: ${{ inputs.config-id }}
+        path: payloads/build_config.json
+
+    - name: TODO
+      run: echo TODO
 
   call-deployment:
     runs-on: ubuntu-latest
-    needs: build
+    needs: extract-config
     # TODO: Permissions
     steps:
     - name: Call deployment workflow
       uses: ./.github/workflows/cd_deploy_composite.yml
       with:
-        build-id: ${{ needs.build.outputs.build-id }}
-        metadata-id: ${{ needs.build.outputs.metadata-id }}
-        title-source: main
-        title-header: ${{ needs.build.outputs.title-destination }}
+        build-id: ${{ needs.extract-config.outputs.build-id }}
+        metadata-id: ${{ needs.extract-config.outputs.metadata-id }}
+        title-source: ${{ needs.extract-config.outputs.title-source }}
+        title-header: ${{ needs.extract-config.outputs.title-dest }}
   
   notify:
-    if: # TODO
+    # if: true # TODO
     runs-on: ubuntu-latest
-    needs: build
+    needs: extract-config
     steps:
     - name: Comment PR with staging link
       uses: mshick/add-pr-comment@v2

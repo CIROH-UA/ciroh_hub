@@ -39,11 +39,9 @@ jobs:
         node-version: [22.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
     permissions:
+      actions: write
       artifact-metadata: write
-      deployments: write
-      metadata: read
-      secrets: read # Note: implicitly will not be provided for foreign pull requests
-      variables: read
+      contents: read
     outputs:
       build-id: ${{ steps.upload-build.outputs.artifact-id }}
       metadata-id: ${{ steps.upload-metadata.outputs.artifact-id }}
@@ -55,11 +53,13 @@ jobs:
         artifact-ids: ${{ inputs.config-id }}
         path: payloads/build_config.json
 
-    - name: Extract payload inputs
+    - name: Unpack payload inputs
       id: extract_json
       run: |
         payload='cat ./payloads/build_config.json'
-        echo "::set-output name=payloadJson::$payload"
+        echo "payload_json=$payload" >> $GITHUB_OUTPUT
+    
+    - name: Parse payload inputs
       run: |
         echo "DEPLOY_ENV=${{ fromJson(steps.extract_json.outputs.payloadJson).deploy_env }}" >> $GITHUB_ENV
         echo "TARGET_REPO=${{ fromJson(steps.extract_json.outputs.payloadJson).target_repo }}" >> $GITHUB_ENV

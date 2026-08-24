@@ -19,7 +19,6 @@ jobs:
   pr-clean-up:
     permissions:
       contents: read
-      actions_secrets: read
     runs-on: ubuntu-latest
     if: ${{ github.event.action != 'labeled' || github.event.label.name == 'manual cleanup' }}
     steps:
