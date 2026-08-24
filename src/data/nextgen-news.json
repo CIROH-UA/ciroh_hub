@@ -1,4 +1,87 @@
 {
+	"August 2026 Update": [
+		{
+			"type": "update",
+			"title": "CIROH Community Resources featured in AWI News",
+			"link": "https://awi.ua.edu/2026/08/10/ciroh-community-resources-advance-water-modeling/",
+			"description": "The Alabama Water Institute published [a news article](https://awi.ua.edu/2026/08/10/ciroh-community-resources-advance-water-modeling/) highlighting how CIROH's community resources continue to advance open, collaborative water modeling.",
+			"release_date": "08/10/2026"
+		},
+		{
+			"type": "NGIAB",
+			"title": "Milestone: NGIAB surpasses 46,000 Docker pulls!",
+			"link": "https://hub.docker.com/r/awiciroh/ciroh-ngen-image",
+			"description": "The NGIAB-CloudInfra Docker image has surpassed 46,000 pulls!."
+		},
+		{
+			"type": "NRDS",
+			"title": "DataStreamCLI",
+			"link": "https://github.com/CIROH-UA/datastreamcli/releases/tag/v1.7.2",
+			"description": "This release resolves a backwards-compatibility issue to ensure DataStreamCLI works with any datastream or integrated container, and adds a new [Getting Started guide](https://github.com/CIROH-UA/datastreamcli/blob/main/docs/GETTING_STARTED.md) walking users through its options.",
+			"release_date": "08/24/2026",
+			"version": "v1.7.2",
+			"contributors": 4
+		},
+		{
+			"type": "NRDS",
+			"title": "ForcingProcessor",
+			"link": "https://github.com/CIROH-UA/forcingprocessor/releases/tag/v2.3.0",
+			"description": "This release adds enhanced metadata with per-variable forcing statistics, support for explicitly supplying a weights file in the configuration, and publishes the Docker container to GitHub Container Registry, alongside black formatting and bug fixes.",
+			"release_date": "08/21/2026",
+			"version": "v2.3.0",
+			"contributors": 5
+		},
+		{
+			"type": "update",
+			"title": "New features on CIROH Hub",
+			"description": "placeholder"
+		},
+		{
+			"type": "update",
+			"title": "R2O2R Webinar Series added to CIROH Hub",
+			"link": "/events",
+			"description": "A new Research-to-Operations-to-Research (R2O2R) webinar series has been added to the [CIROH Hub Events page](/events)."
+		},
+		{
+			"type": "news",
+			"title": "NGIAB and CIROH Cyberinfrastructure Power Flash Flood Research at the 2026 Summer Institute",
+			"description": "Ten graduate students across three teams — **Don't Runoff!**, **FlashCast**, and **The Post-Processors** — spent seven weeks at the 2026 Water Prediction Innovators Summer Institute advancing quantitative precipitation inputs into the NextGen Framework, using [NextGen In A Box (NGIAB)](https://ngiab.ciroh.org/) and NSF ACCESS [Jetstream2](/docs/services/external-resources/nsf-access/jetstream) allocations provided through CIROH cyberinfrastructure."
+		},
+		{
+			"type": "news",
+			"title": "REU 2026 Advances Water Research with NSF ACCESS Jetstream2",
+			"link": "https://awi.ua.edu/2026/08/12/wading-through-water-wednesdays-an-experiential-approach-to-water-research-for-future-hydrologists/",
+			"description": "This summer's Research Experience for Undergraduates (REU) program put NSF ACCESS [Jetstream2](/docs/services/external-resources/nsf-access/jetstream) cyberinfrastructure to work, giving students hands-on experience. [Read more in AWI News.](https://awi.ua.edu/2026/08/12/wading-through-water-wednesdays-an-experiential-approach-to-water-research-for-future-hydrologists/)",
+			"release_date": "08/12/2026"
+		},
+		{
+			"type": "update",
+			"title": "communityhydrofabric.ciroh.org",
+			"description": "placeholder"
+		},
+		{
+			"type": "update",
+			"title": "Data Assimilation Update",
+			"description": "placeholder"
+		},
+		{
+			"type": "NRDS",
+			"title": "James's Summer Visit — Routing-Only Datastream",
+			"description": "James visited the Alabama Water Institute this summer to work on NRDS's routing-only datastream."
+		},
+		{
+			"type": "update",
+			"title": "nwps.ciroh.org",
+			"link": "https://nwps.ciroh.org",
+			"description": "A new research testbed replicating the look of [water.noaa.gov](https://water.noaa.gov) is now live at [nwps.ciroh.org](https://nwps.ciroh.org), providing a sandbox for experimenting with the National Water Prediction Service (NWPS) interface."
+		},
+		{
+			"type": "pantarhei",
+			"title": "New Pantarhei System — Migration Requests Open",
+			"link": "https://github.com/CIROH-UA/NGIAB-CloudInfra/issues/new?template=new-onprem-request.yml",
+			"description": "CIROH is migrating to a new Pantarhei system! [Submit a request to migrate](https://github.com/CIROH-UA/NGIAB-CloudInfra/issues/new?template=new-onprem-request.yml) using the linked issue template."
+		}
+	],
 	"June 2026 Update": [
 		{
 			"type": "NGIAB",
