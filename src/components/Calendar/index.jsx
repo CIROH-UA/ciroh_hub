@@ -29,7 +29,7 @@ const Calendar = () => {
           month: parsed.month
         };
       })
-      .sort((a, b) => b.sortDate - a.sortDate);
+      //.sort((a, b) => b.sortDate - a.sortDate);
 
     const uniqueYears = [...new Set(parsed.map(s => s.year))].sort((a, b) => b - a);
     const monthsByYearMap = {};

@@ -7,12 +7,23 @@
         "August 2026": [
             {
                 "id": "confluence-aug",
-                "date": "2026-08-27",
+                "date": "August 27th",
                 "type": "Webinar",
                 "title": "Confluence Webinar Series launches August 27",
                 "description": "CIROH's monthly R2O2R webinar series is relaunching as Confluence, the Operational Hydrology Advances Webinar Series, held the fourth Thursday of each month. The first session, August 27 at 2:00 PM CT, features Witek Krajewski (University of Iowa) and Jim Smith (Princeton) on improving the NEXRAD network for flood prediction. Free and open to all; one registration covers the full season!",
                 "link": "/calendar/confluence",
                 "linkText": "Learn more..."
+            }
+        ],
+        "September 2026": [
+            {
+                "id": "scimeet",
+                "date": "September 14th-17th",
+                "type": "Conference",
+                "title": "CIROH Annual Science Meeting",
+                "description": "This year’s gathering brings together an extraordinary community of researchers, practitioners, students, and partners committed to advancing water science in service of society. Together, we will continue to build a collaborative, open-science community that transforms research into real-world impact.",
+                "link": "https://cirohsciencemeeting.my.canva.site/",
+                "linkText": "Event Website"
             }
         ]
     }
