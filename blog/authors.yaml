@@ -404,3 +404,81 @@ sagy-cohen:
   title2: The University of Alabama
   url: https://www.linkedin.com/in/sagy-cohen-975b045a/
   image_url: /img/profiles/Sagy_Cohen.jpg
+
+# 2026 Water Prediction Innovators Summer Institute participants.
+alex-lastner:
+  name: Alex Lastner
+  title: Graduate Student
+  title2: University of Maryland, College Park
+  url: 'https://www.geol.umd.edu/alexanderlastner'
+  image_url: /img/blog/authors/alex-lastner.jpg
+
+danna-villarreal:
+  name: Danna Villarreal
+  title: PhD Student
+  title2: University of Arkansas
+  url: 'https://muenichlab.uark.edu/team/'
+  image_url: /img/blog/authors/danna-villarreal.jpg
+
+bikas-gupta:
+  name: Bikas Gupta
+  title: PhD Student
+  title2: University of Texas at Arlington
+  url: 'https://www.linkedin.com/in/bikas-chandra-gupta-48881b153'
+  image_url: /img/blog/authors/bikas-gupta.jpg
+
+jessica-keiser:
+  name: Jessica Keiser
+  title: Master's Student
+  title2: San Diego State University
+  url: 'https://geography.sdsu.edu/people/students'
+  image_url: /img/blog/authors/jessica-keiser.jpg
+
+# No public professional profile found; ask him directly for a link if one becomes available.
+azizur-rahman:
+  name: Azizur Rahman
+  title: PhD Student
+  title2: University of Texas at Arlington
+  image_url: /img/blog/authors/azizur-rahman.jpg
+
+aldo-tapia-araya:
+  name: Aldo Andres Tapia Araya
+  title: PhD Student, Hydrology
+  title2: The University of Arizona
+  url: 'https://has.arizona.edu/person/aldo-andres-tapia-araya'
+  image_url: /img/blog/authors/aldo-tapia-araya.jpg
+
+amirhossein-montazeri:
+  name: Amirhossein Montazeri
+  title: PhD Student, Computing (Data Science emphasis)
+  title2: Boise State University
+  url: 'https://www.boisestate.edu/computing/about-us/computingdirectory/current-students-directory/amirhossein-montazeri/'
+  image_url: /img/blog/authors/amirhossein-montazeri.jpg
+
+niloufar-soheili:
+  name: Niloufar Soheili
+  title: PhD Student, Water Resources and Environmental Engineering
+  title2: The City College of New York (CUNY)
+  url: 'https://www.ccny.cuny.edu/profiles/niloufar-soheili'
+  image_url: /img/blog/authors/niloufar-soheili.jpg
+
+mohammad-mosavat:
+  name: Mohammad Mosavat
+  title: PhD Student
+  title2: The University of Alabama
+  url: 'https://moradkhani.ua.edu/people'
+  image_url: /img/blog/authors/mohammad-mosavat.jpg
+
+mohamed-abdelkader:
+  name: Mohamed Abdelkader
+  title: Assistant Research Scientist
+  title2: University of Iowa
+  url: 'https://iihr.uiowa.edu/people/mohamed-abdelkader'
+  image_url: /img/blog/authors/mohamed-abdelkader.jpg
+
+humberto-vergara:
+  name: Humberto Vergara
+  title: 'Assistant Professor, Civil and Environmental Engineering; Associate Director, Iowa Flood Center'
+  title2: University of Iowa
+  url: 'https://engineering.uiowa.edu/directory/humberto-vergara'
+  image_url: /img/blog/authors/humberto-vergara.jpg

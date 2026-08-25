@@ -1,6 +1,8 @@
 import React from 'react';
+import useBrokenLinks from '@docusaurus/useBrokenLinks';
 
 const SectionWrapper = ({ id, children }) => {
+  useBrokenLinks().collectAnchor(id);
   return (
     <section 
       id={id} 
