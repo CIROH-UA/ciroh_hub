@@ -11,7 +11,16 @@
 			"type": "NGIAB",
 			"title": "Milestone: NGIAB surpasses 46,000 Docker pulls!",
 			"link": "https://hub.docker.com/r/awiciroh/ciroh-ngen-image",
-			"description": "The NGIAB-CloudInfra Docker image has surpassed 46,000 pulls!."
+			"description": "The NGIAB-CloudInfra Docker image has surpassed 46,000 pulls! Learn more at [ngiab.ciroh.org](https://ngiab.ciroh.org/)."
+		},
+		{
+			"type": "NGIAB",
+			"title": "NGIAB-CloudInfra",
+			"link": "https://github.com/CIROH-UA/NGIAB-CloudInfra/releases/tag/v2.0.0",
+			"description": "This release updates the model and build documentation, improves the model integration form, upgrades dHBV2.0 packages with corrected weights/config paths, and moves CASAM's van Genuchten parameters into shared static datasets. It also adds a new on-premise IT request issue template (replacing the previous On-Premise Request Form) and automates a monthly OWP master image build. Pinned to ngen commit `61c1400` and t-route commit `f39b8d4`.",
+			"release_date": "08/25/2026",
+			"version": "v2.0.0",
+			"contributors": 4
 		},
 		{
 			"type": "NRDS",
@@ -33,11 +42,6 @@
 		},
 		{
 			"type": "update",
-			"title": "New features on CIROH Hub",
-			"description": "placeholder"
-		},
-		{
-			"type": "update",
 			"title": "R2O2R Webinar Series added to CIROH Hub",
 			"link": "/events",
 			"description": "A new Research-to-Operations-to-Research (R2O2R) webinar series has been added to the [CIROH Hub Events page](/events)."
@@ -45,6 +49,7 @@
 		{
 			"type": "news",
 			"title": "NGIAB and CIROH Cyberinfrastructure Power Flash Flood Research at the 2026 Summer Institute",
+			"link": "https://github.com/CIROH-UA/ciroh_hub/pull/170",
 			"description": "Ten graduate students across three teams (**Don't Runoff!**, **FlashCast**, and **The Post-Processors**) spent seven weeks at the 2026 Water Prediction Innovators Summer Institute advancing quantitative precipitation inputs into the NextGen Framework, using [NextGen In A Box (NGIAB)](https://ngiab.ciroh.org/) and NSF ACCESS [Jetstream2](/docs/services/external-resources/nsf-access/jetstream) allocations provided through CIROH cyberinfrastructure."
 		},
 		{
@@ -62,7 +67,7 @@
 		},
 		{
 			"type": "pantarhei",
-			"title": "New Pantarhei System — Migration Requests Open",
+			"title": "New Pantarhei System: Migration Requests Open",
 			"link": "https://github.com/CIROH-UA/NGIAB-CloudInfra/issues/new?template=new-onprem-request.yml",
 			"description": "CIROH is expanding Pantarhei cluster. For migration of data or to get access to new Pantarhei system, please [submit an IT ticket](https://github.com/CIROH-UA/NGIAB-CloudInfra/issues/new?template=new-onprem-request.yml) using the linked issue template."
 		}
