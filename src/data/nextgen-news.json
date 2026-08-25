@@ -8,16 +8,53 @@
 			"release_date": "08/10/2026"
 		},
 		{
-			"type": "NGIAB",
-			"title": "Milestone: NGIAB surpasses 46,000 Docker pulls!",
-			"link": "https://hub.docker.com/r/awiciroh/ciroh-ngen-image",
-			"description": "The NGIAB-CloudInfra Docker image has surpassed 46,000 pulls! Learn more at [ngiab.ciroh.org](https://ngiab.ciroh.org/)."
+			"type": "update",
+			"title": "R2O2R Webinar Series added to CIROH Hub",
+			"link": "/events",
+			"description": "A new Research-to-Operations-to-Research (R2O2R) webinar series has been added to the [CIROH Hub Events page](/events)."
+		},
+		{
+			"type": "blog",
+			"title": "NGIAB and CIROH Cyberinfrastructure Power Flash Flood Research at the 2026 Summer Institute",
+			"link": "",
+			"description": "Ten graduate students across three teams (**Don't Runoff!**, **FlashCast**, and **The Post-Processors**) spent seven weeks at the 2026 Water Prediction Innovators Summer Institute advancing quantitative precipitation inputs into the NextGen Framework, using [NextGen In A Box (NGIAB)](https://ngiab.ciroh.org/) and NSF ACCESS [Jetstream2](/docs/services/external-resources/nsf-access/jetstream) allocations provided through CIROH cyberinfrastructure. [Read more in the blog post.](/blog/2026-08-24-Summer-Institute-Flash-Flood)"
+		},
+		{
+			"type": "blog",
+			"title": "CIROH Flood Inundation Mapping (FIM) Community Ecosystem: A Large-Scale Operational Flood Modeling-to-Evaluation Framework",
+			"link": "https://sdml.ua.edu/fim-ecosystem/",
+			"description": "The University of Alabama's Surface Dynamics Modeling Lab (SDML), with CIROH support, has built the [CIROH FIM Community Ecosystem](https://sdml.ua.edu/fim-ecosystem/): an interconnected, open-source, cloud-native suite of Python tools spanning flood inundation modeling, simulation, benchmarking, and evaluation at national scale. [Read more in the blog post.](/blog/2026-08-20-FIM-Ecosystem)"
+		},
+		{
+			"type": "news",
+			"title": "REU 2026 Advances Water Research with NSF ACCESS Jetstream2",
+			"link": "https://awi.ua.edu/2026/08/12/wading-through-water-wednesdays-an-experiential-approach-to-water-research-for-future-hydrologists/",
+			"description": "This summer's Research Experience for Undergraduates (REU) program put NSF ACCESS [Jetstream2](/docs/services/external-resources/nsf-access/jetstream) cyberinfrastructure to work, giving students hands-on experience. [Read more in AWI News.](https://awi.ua.edu/2026/08/12/wading-through-water-wednesdays-an-experiential-approach-to-water-research-for-future-hydrologists/)",
+			"release_date": "08/12/2026"
+		},
+		{
+			"type": "FIM",
+			"title": "nwps.ciroh.org",
+			"link": "https://nwps.ciroh.org",
+			"description": "A new research testbed replicating the look of [water.noaa.gov](https://water.noaa.gov) is now live at [nwps.ciroh.org](https://nwps.ciroh.org), providing a sandbox for experimenting with the National Water Prediction Service (NWPS) interface."
+		},
+		{
+			"type": "Hydrofabric",
+			"title": "Community Hydrofabric Viewer",
+			"link": "https://communityhydrofabric.ciroh.org/",
+			"description": "The [Community Hydrofabric Viewer](https://communityhydrofabric.ciroh.org/) is now live, providing an interactive way to explore the CIROH Community Hydrofabric."
+		},
+		{
+			"type": "pantarhei 2.0",
+			"title": "Pantarhei 2.0: Migration Requests Open",
+			"link": "https://github.com/CIROH-UA/NGIAB-CloudInfra/issues/new?template=new-onprem-request.yml",
+			"description": "CIROH is expanding Pantarhei cluster. For migration of data or to get access to new Pantarhei 2.0 system, please [submit an IT ticket](https://github.com/CIROH-UA/NGIAB-CloudInfra/issues/new?template=new-onprem-request.yml) using the linked issue template."
 		},
 		{
 			"type": "NGIAB",
-			"title": "NGIAB-CloudInfra",
+			"title": "NGIAB-CloudInfra: 46,000 Docker Pulls!",
 			"link": "https://github.com/CIROH-UA/NGIAB-CloudInfra/releases/tag/v2.0.0",
-			"description": "This release updates the model and build documentation, improves the model integration form, upgrades dHBV2.0 packages with corrected weights/config paths, and moves CASAM's van Genuchten parameters into shared static datasets. It also adds a new on-premise IT request issue template (replacing the previous On-Premise Request Form) and automates a monthly OWP master image build. Pinned to ngen commit `61c1400` and t-route commit `f39b8d4`.",
+			"description": "The awiciroh/ciroh-ngen-image Docker image has surpassed 46,000 pulls! Learn more at [ngiab.ciroh.org](https://ngiab.ciroh.org/). \n\n This release updates the model and build documentation, improves the model integration form, upgrades dHBV2.0 packages with corrected weights/config paths, and moves CASAM's van Genuchten parameters into shared static datasets. It also adds a new on-premise IT request issue template (replacing the previous On-Premise Request Form) and automates a monthly OWP master image build. Pinned to ngen commit `61c1400` and t-route commit `f39b8d4`.",
 			"release_date": "08/25/2026",
 			"version": "v2.0.0",
 			"contributors": 4
@@ -41,35 +78,12 @@
 			"contributors": 5
 		},
 		{
-			"type": "update",
-			"title": "R2O2R Webinar Series added to CIROH Hub",
-			"link": "/events",
-			"description": "A new Research-to-Operations-to-Research (R2O2R) webinar series has been added to the [CIROH Hub Events page](/events)."
-		},
-		{
-			"type": "news",
-			"title": "NGIAB and CIROH Cyberinfrastructure Power Flash Flood Research at the 2026 Summer Institute",
-			"link": "https://github.com/CIROH-UA/ciroh_hub/pull/170",
-			"description": "Ten graduate students across three teams (**Don't Runoff!**, **FlashCast**, and **The Post-Processors**) spent seven weeks at the 2026 Water Prediction Innovators Summer Institute advancing quantitative precipitation inputs into the NextGen Framework, using [NextGen In A Box (NGIAB)](https://ngiab.ciroh.org/) and NSF ACCESS [Jetstream2](/docs/services/external-resources/nsf-access/jetstream) allocations provided through CIROH cyberinfrastructure."
-		},
-		{
-			"type": "news",
-			"title": "REU 2026 Advances Water Research with NSF ACCESS Jetstream2",
-			"link": "https://awi.ua.edu/2026/08/12/wading-through-water-wednesdays-an-experiential-approach-to-water-research-for-future-hydrologists/",
-			"description": "This summer's Research Experience for Undergraduates (REU) program put NSF ACCESS [Jetstream2](/docs/services/external-resources/nsf-access/jetstream) cyberinfrastructure to work, giving students hands-on experience. [Read more in AWI News.](https://awi.ua.edu/2026/08/12/wading-through-water-wednesdays-an-experiential-approach-to-water-research-for-future-hydrologists/)",
-			"release_date": "08/12/2026"
-		},
-		{
-			"type": "update",
-			"title": "nwps.ciroh.org",
-			"link": "https://nwps.ciroh.org",
-			"description": "A new research testbed replicating the look of [water.noaa.gov](https://water.noaa.gov) is now live at [nwps.ciroh.org](https://nwps.ciroh.org), providing a sandbox for experimenting with the National Water Prediction Service (NWPS) interface."
-		},
-		{
-			"type": "pantarhei",
-			"title": "New Pantarhei System: Migration Requests Open",
-			"link": "https://github.com/CIROH-UA/NGIAB-CloudInfra/issues/new?template=new-onprem-request.yml",
-			"description": "CIROH is expanding Pantarhei cluster. For migration of data or to get access to new Pantarhei system, please [submit an IT ticket](https://github.com/CIROH-UA/NGIAB-CloudInfra/issues/new?template=new-onprem-request.yml) using the linked issue template."
+			"type": "NRDS",
+			"title": "NRDS Visualizer",
+			"link": "https://github.com/CIROH-UA/nrds-client/pull/12",
+			"description": "The [NRDS Visualizer](https://nrds.ciroh.org/) has been reworked with event-driven DataStream loading, archived flowpath geometry with tiles below zoom 7, a single-file OPFS cache, retry paths, accessible names, AA-contrast tokens, a unified spinner, and 232 new tests.",
+			"release_date": "08/24/2026",
+			"contributors": 1
 		}
 	],
 	"June 2026 Update": [
