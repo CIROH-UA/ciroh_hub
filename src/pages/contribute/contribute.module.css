@@ -5,7 +5,7 @@
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 1rem;
-  z-index: 99999;
+  z-index: 100;
   background-color: #fff;
   position: relative;
 }
@@ -140,6 +140,15 @@
 }
 
 .zoteroSubtitle {
+  margin: 0.35rem auto 0.8rem;
+  max-width: 820px;
+  font-size: 0.98rem;
+  color: var(--ifm-color-emphasis-700);
+}
+
+.zoteroSubtitleRequestForm {
+  padding-top: 2rem;
+  text-align: center;
   margin: 0.35rem auto 0.8rem;
   max-width: 820px;
   font-size: 0.98rem;

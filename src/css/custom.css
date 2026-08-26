@@ -6,8 +6,12 @@
 
 @import "react-responsive-carousel/lib/styles/carousel.min.css";
 
-:root {
+[data-reduce-motion="true"] * {
+  transition: none !important;
+  animation-duration: 0s !important;
+}
 
+:root {
   /* Font size adjustments (note: these need to have the font tag recalculate for scoping reasons) */
 
   /* Increase text size for markdown components (see Issue #107) */
@@ -288,6 +292,10 @@
 a.button {
   border-radius: 10px;
   font-weight: 700;
+}
+
+[data-reduce-motion="false"] .button,
+[data-reduce-motion="false"] a.button {
   transition: all 0.2s ease;
 }
 
@@ -301,6 +309,10 @@ a.button.button--primary {
 .button.button--primary:hover,
 a.button.button--primary:hover {
   filter: brightness(1.05);
+}
+
+[data-reduce-motion="false"] .button.button--primary:hover,
+[data-reduce-motion="false"] a.button.button--primary:hover {
   transform: translateY(-1px);
 }
 
@@ -467,6 +479,18 @@ a.button.button--secondary:hover {
 
 [data-theme="dark"] .dark-mode-white-bg {
   background-color: whitesmoke; /* Hide dark image in light mode */
+}
+
+[data-reduce-motion="true"] .base-motion {
+  display: none;
+}
+
+.reduced-motion {
+  --foo: "bar"; /* Override TailwindCSS cleanup */
+}
+
+[data-reduce-motion="false"] .reduced-motion {
+  display: none;
 }
 
 /* Quick fix for KaTeX double-rendering */
