@@ -77,15 +77,15 @@ jobs:
     # Establish build params
     - name: Output build parameters
       run: |
-        {"deploy_env": "$DEPLOY_ENV", "source_ref": "$SOURCE_REF", "source_repo": "$SOURCE_REPO", "target_repo": "$TARGET_REPO", "target_path": "$TARGET_PATH", "commit_header": "$env.COMMIT_HEADER", "type_description": "$env.DEPLOY_ENV"} > exports/main_${{ env.DEPLOY_ENV }}_build.json
-        cat exports/main_${{ env.DEPLOY_ENV }}_build.json
+        echo {"deploy_env": "{$DEPLOY_ENV}", "source_ref": "${SOURCE_REF}", "source_repo": "${SOURCE_REPO}", "target_repo": "${TARGET_REPO}", "target_path": "${TARGET_PATH}", "commit_header": "${COMMIT_HEADER}", "type_description": "${DEPLOY_ENV}"} > ${{ runner.temp }}/main_${DEPLOY_ENV}_build.json
+        cat ${{ runner.temp }}/main_${DEPLOY_ENV}_build.json
         
     - name: Upload build parameters
       id: upload-params
       uses: actions/upload-artifact@v7
       with:
         name: main_${{ env.DEPLOY_ENV }}_build
-        path: exports/main_${{ env.DEPLOY_ENV }}_build.json
+        path: ${{ runner.temp }}/main_${{ env.DEPLOY_ENV }}_build.json
 
   build:
     runs-on: ubuntu-latest
@@ -101,7 +101,7 @@ jobs:
     steps:
     - name: Create build artifact
       id: create-build
-      uses: ./.github/workflows/ci_build.yml
+      uses: $/.github/workflows/ci_build.yml
       with:
         config-id: ${{ needs.prepare-build.outputs.params-id }}
         title-source: main
@@ -113,7 +113,7 @@ jobs:
     # TODO: Permissions
     steps:
     - name: Call deployment workflow
-      uses: ./.github/workflows/cd_deploy_composite.yml
+      uses: $/.github/workflows/cd_deploy_composite.yml
       with:
         build-id: ${{ needs.build.outputs.build-id }}
         metadata-id: ${{ needs.build.outputs.metadata-id }}
