@@ -100,7 +100,7 @@ jobs:
     steps:
     - name: Create build artifact
       id: create-build
-      uses: $/.github/workflows/ci_build.yml
+      uses: $/.github/workflows/ci_build
       with:
         config-id: ${{ needs.prepare-build.outputs.params-id }}
         title-source: ${{ needs.prepare-build.outputs.title-source }}

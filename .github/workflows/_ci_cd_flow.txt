@@ -1,3 +1,5 @@
+Note: Some of these actions are contained in subfolders.
+This is because composite actions must be called from an action.yml file.
 
   [Trigger from main]           [Trigger from PR]
            |                            L======> ci_pr_validation.yml
@@ -8,10 +10,10 @@
            V                            V
 ci_trigger_build_main.yml    ci_trigger_build_pr.yml
            |          ↕       ↕         |
-           |         ci_build.yml       |
+           |     ci_build/action.yml    |
            |                            V
            |                 cd_deploy_composite.yml (<- security layer; fences away permissions from untrusted branch code)
            |                            |
            |============================#
            V
-cd_deploy_composite.yml
+cd_deploy_composite/action.yml

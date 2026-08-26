@@ -101,7 +101,7 @@ jobs:
     steps:
     - name: Create build artifact
       id: create-build
-      uses: $/.github/workflows/ci_build.yml
+      uses: $/.github/workflows/ci_build
       with:
         config-id: ${{ needs.prepare-build.outputs.params-id }}
         title-source: main
@@ -113,7 +113,7 @@ jobs:
     # TODO: Permissions
     steps:
     - name: Call deployment workflow
-      uses: $/.github/workflows/cd_deploy_composite.yml
+      uses: $/.github/workflows/cd_deploy_composite
       with:
         build-id: ${{ needs.build.outputs.build-id }}
         metadata-id: ${{ needs.build.outputs.metadata-id }}

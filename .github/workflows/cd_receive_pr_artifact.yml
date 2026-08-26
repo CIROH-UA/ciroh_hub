@@ -102,7 +102,7 @@ jobs:
     # TODO: Permissions
     steps:
     - name: Call deployment workflow
-      uses: $/.github/workflows/cd_deploy_composite.yml
+      uses: $/.github/workflows/cd_deploy_composite
       with:
         build-id: ${{ needs.extract-config.outputs.build-id }}
         metadata-id: ${{ needs.extract-config.outputs.metadata-id }}
