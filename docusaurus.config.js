@@ -336,6 +336,10 @@ const config = {
               position: "left",
               items: [
                 {
+                  href: "/calendar",
+                  label: "Calendar"
+                },
+                {
                   type: "doc",
                   docId: "policies/intro",
                   label: "Policies",
