@@ -207,6 +207,7 @@ const config = {
         //authorsMapPath: "authors.yaml", // Path to the authors' mapping file (unneeded in this case)
       }
     ],
+
     [
       '@docusaurus/plugin-client-redirects',
       {
@@ -340,19 +341,20 @@ const config = {
                 // The sidebar loader is weirdly brittle. If a page is instantiated in "index.js", that must be specified explicitly.
                 {
                   type: "doc",
-                  docId: "products/ngiab-ecosystem/index",
-                  label: "Community NextGen Ecosystem",
+                  docId: "products/ngiab/index",
+                  label: "NGIAB Ecosystem",
                 },
                 {
                   type: "doc",
                   docId: "products/community-fim/index",
-                  label: "Community FIM Ecosystem",
+                  label: "FIM Ecosystem",
                 },
                 {
                   type: "doc",
                   docId: "products/evaluation/rtiteehr/index",
                   label: "TEEHR",
                 },
+                
                 {
                   type: "doc",
                   docId: "products/data-management/bigquery-api/index",
@@ -375,6 +377,10 @@ const config = {
               label: "Community",
               position: "left",
               items: [
+                {
+                  href: "/calendar",
+                  label: "Calendar"
+                },
                 {
                   type: "doc",
                   docId: "policies/intro",
@@ -520,3 +526,5 @@ const config = {
 };
 
 module.exports = config;
+
+

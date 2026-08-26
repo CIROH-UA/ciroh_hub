@@ -478,7 +478,7 @@ a.button.button--secondary:hover {
 }
 
 [data-theme="dark"] .dark-mode-white-bg {
-  background-color: whitesmoke; /* Hide dark image in light mode */
+  background-color: whitesmoke;
 }
 
 [data-reduce-motion="true"] .base-motion {
