@@ -2,27 +2,27 @@
 // Are they just arbitrary values? If so, that's... extremely not ideal.
 export const communityImpactData = {
     aws: {
-        projects: 24,
+        projects: 56,
         projectsBar: "38%",
-        users: 69,
+        users: 76,
         usersBar: "17%",
     },
     gcp: {
-        projects: 63,
+        projects: 19,
         projectsBar: "100%",
-        users: 183,
+        users: 234,
         usersBar: "45%",
     },
     hpc: {
-        projects: 57,
+        projects: 45,
         projectsBar: "75%",
-        users: 78,
+        users: 71,
         usersBar: "30%",
     },
     nsf: {
-        projects: 7,
+        projects: 34,
         projectsBar: "50%",
-        users: 75,
+        users: 141,
         usersBar: "60%",
     },
 }

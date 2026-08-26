@@ -193,7 +193,7 @@ export default function CloudInfraDashboard({ cards = [] }) {
                 tw-text-black dark:tw-text-white">
                 Research to Operations Hybrid Cloud (R2OHC)
             </h1>
-                    <p className="tw-text-gray-700 dark:tw-text-white">Last updated: September 2025</p>
+                    <p className="tw-text-gray-700 dark:tw-text-white">Last updated: August 2026</p>
                 </div>
 
                 <div className="cards-grid">
