@@ -341,7 +341,7 @@ const config = {
                 // The sidebar loader is weirdly brittle. If a page is instantiated in "index.js", that must be specified explicitly.
                 {
                   type: "doc",
-                  docId: "products/ngiab/index",
+                  docId: "products/ngiab-ecosystem/index",
                   label: "NGIAB Ecosystem",
                 },
                 {
