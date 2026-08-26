@@ -40,9 +40,9 @@
   }
   
   /* Hover effects */
-  .imagewrapper:hover,
-  .sponsorwrapper:hover,
-  .longwrapper:hover {
+  [data-reduce-motion="false"] .imagewrapper:hover,
+  [data-reduce-motion="false"] .sponsorwrapper:hover,
+  [data-reduce-motion="false"] .longwrapper:hover {
     transform: translateY(-4px);
     box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
   }
@@ -217,6 +217,7 @@
     text-align: center;
   }
   
+  [data-reduce-motion="false"]
   .impactItem:hover {
     transform: translateY(-5px);
   }
@@ -415,6 +416,7 @@
   100% { transform: translateY(0px); }
 }
 
+[data-reduce-motion="false"]
 .tw-animate-float-slow {
   animation: float-slow 6s ease-in-out infinite;
 }
@@ -424,6 +426,7 @@
   50% { opacity: 0.9; }
 }
 
+[data-reduce-motion="false"]
 .tw-animate-glow {
   animation: glow 5s ease-in-out infinite;
 }

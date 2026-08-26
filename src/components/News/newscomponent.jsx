@@ -310,7 +310,7 @@ function categorizeLinks(links) {
   const prLinks = [];
 
   links.forEach((link) => {
-    console.log(link);
+    //console.log(link);
     if (isPRLink(link)) {
       prLinks.push({
         link,
@@ -321,7 +321,7 @@ function categorizeLinks(links) {
     }
   });
 
-  console.log({ releaseLinks, prLinks });
+  //console.log({ releaseLinks, prLinks });
   return { releaseLinks, prLinks };
 }
 

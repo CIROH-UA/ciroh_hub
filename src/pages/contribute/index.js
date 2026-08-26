@@ -4,6 +4,7 @@ import useBaseUrl from '@docusaurus/useBaseUrl';
 import styles from './contribute.module.css';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import HydroShareCard from '@site/src/components/HydroShareCard';
+import PublicationsSubmissionForm from '@site/src/components/PublicationsSubmissionForm';
 import clsx from 'clsx';
 import Header from '@site/src/components/Header';
 import { ConstellationCanvas } from '@site/src/components/ConstellationCanvas';
@@ -25,11 +26,14 @@ function ContributeContent() {
   const isDarkTheme = colorMode === 'dark';
   const contactUrl = useBaseUrl('/contact');
   const zoteroLogin = siteConfig?.customFields?.externalLinks?.zoteroLogin || 'https://www.zotero.org/user/login';
+  const zoteroGroupId = siteConfig?.customFields?.zotero_staging_group_id;
+  const zoteroApiKey = siteConfig?.customFields?.zotero_api_key_read_only;
+
   const tethysDevelopUrl = useBaseUrl('/contribute/develop');
   const feedbackUrl = siteConfig?.customFields?.externalLinks?.feedbackForm || 'https://forms.cloud.microsoft/r/NzA2sLrzeJ';
   const addProductUrl = "https://github.com/CIROH-UA/ciroh_hub/issues/new?assignees=&labels=on-prem&projects=&template=product-request.md";
   const blogIdeaUrl = siteConfig?.customFields?.blogIdeaUrl || 'https://github.com/CIROH-UA/ciroh_hub/issues/new?template=docuhub-blog-post.md';
-  const wgIntakeFormUrl = siteConfig?.customFields?.externalLinks?.wgIntakeForm || 'https://app.smartsheet.com/b/form/07569d6285f643c1a57fd18daab98f7e';
+  const wgIntakeFormUrl = siteConfig?.customFields?.externalLinks?.wgIntakeForm || 'https://app.smartsheet.com/b/form/019f1f425a1d717180af65a76b9fa26f';
   
   useEffect(() => {
     const hash = window.location.hash;
@@ -134,7 +138,7 @@ function ContributeContent() {
           <hr id="zotero" />
 
           {/* Contribute to Zotero Publications */}
-          <section className={clsx(styles.zoteroSection, "margin-vert--xl")}>
+          <section className={clsx(styles.zoteroSection)}>
             <div className={styles.zoteroHeader}>
               <h2 className={styles.zoteroTitle}>Contribute your publications to Zotero</h2>
               <p className={styles.zoteroSubtitle}>
@@ -176,6 +180,18 @@ function ContributeContent() {
                 <p>Drag-and-drop PDFs or add by DOI to share your work with the CIROH community.</p>
               </div>
             </div>
+
+            <p className={styles.zoteroSubtitleRequestForm}>
+              Alternatively, request a publication be added using the form below.<br />
+              <i>Submissions via this form are subject to approval by the CIROH Hub team.</i>
+            </p>
+
+            {/* Publications Submission Form */}
+            <PublicationsSubmissionForm
+              groupId={zoteroGroupId}
+              zoteroApiKey={zoteroApiKey}
+            />
+
           </section>
 
           <hr />
