@@ -4,7 +4,8 @@
 # Trigger logic has been spun out into the various 'ci_trigger_*.yml' workflows.
 
 name: 'CI: Create Build Artifact'
-run-name: 'Create build artifact for ${{inputs.title-source}}: "${{inputs.title-header}}"'
+run-name: 'CI: Create Build Artifact'
+# run-name: 'Create build artifact for ${{github.event.inputs.title-source}}: "${{github.event.inputs.title-header}}"'
 
 on:
   workflow_call:
@@ -51,24 +52,26 @@ jobs:
       uses: actions/download-artifact@v8
       with:
         artifact-ids: ${{ inputs.config-id }}
-        path: payloads/build_config.json
+        path: ${{ runner.temp }}/payload/build_params.json
         github-token: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Unpack payload inputs
-      id: extract_json
+      id: extract-json
       run: |
-        payload='cat ./payloads/build_config.json'
-        echo "payload_json=$payload" >> $GITHUB_OUTPUT
+        payload=cat ${{ runner.temp }}/payload/build_params.json
+        echo "payload-json=$payload" >> $GITHUB_OUTPUT
+        echo $payload
     
     - name: Parse payload inputs
+      id: parse-json
       run: |
-        echo "SOURCE_REF=${{ fromJson(steps.extract_json.outputs.payloadJson).source_ref }}" >> $GITHUB_ENV
-        echo "SOURCE_REPO=${{ fromJson(steps.extract_json.outputs.payloadJson).source_repo }}" >> $GITHUB_ENV
-        echo "DEPLOY_ENV=${{ fromJson(steps.extract_json.outputs.payloadJson).deploy_env }}" >> $GITHUB_ENV
-        echo "TARGET_REPO=${{ fromJson(steps.extract_json.outputs.payloadJson).target_repo }}" >> $GITHUB_ENV
-        echo "TARGET_PATH=${{ fromJson(steps.extract_json.outputs.payloadJson).target_path }}" >> $GITHUB_ENV
-        echo "COMMIT_HEADER=${{ fromJson(steps.extract_json.outputs.payloadJson).commit_header }}" >> $GITHUB_ENV
-        echo "PR_NUMBER=${{ fromJson(steps.extract_json.outputs.payloadJson).pr_number }}" >> $GITHUB_ENV
+        echo "source-ref=${{ fromJson(steps.extract-json.outputs.payload-json).source_ref }}" >> $GITHUB_OUTPUT
+        echo "source-repo=${{ fromJson(steps.extract-json.outputs.payload-json).source_repo }}" >> $GITHUB_OUTPUT
+        echo "DEPLOY_ENV=${{ fromJson(steps.extract-json.outputs.payload-json).deploy_env }}" >> $GITHUB_ENV
+        echo "TARGET_REPO=${{ fromJson(steps.extract-json.outputs.payload-json).target_repo }}" >> $GITHUB_ENV
+        echo "TARGET_PATH=${{ fromJson(steps.extract-json.outputs.payload-json).target_path }}" >> $GITHUB_ENV
+        echo "COMMIT_HEADER=${{ fromJson(steps.extract-json.outputs.payload-json).commit_header }}" >> $GITHUB_ENV
+        echo "PR_NUMBER=${{ fromJson(steps.extract-json.outputs.payload-json).pr_number }}" >> $GITHUB_ENV
       # PR_NUMBER can and should be left empty for non-PR builds
       
     - name: Validate payload inputs
@@ -89,8 +92,8 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v7
       with:
-        ref: ${{ env.SOURCE_REF }}
-        repository: ${{ env.SOURCE_REPO }}
+        ref: ${{ steps.parse-json.outputs.SOURCE_REF }}
+        repository: ${{ steps.parse-json.outputs.SOURCE_REPO }}
         # Note: allow-unsafe-pr-checkout left unset to ensure that
         # any branch checkouts are only done on calls from pull_request.
 
@@ -157,11 +160,9 @@ jobs:
         
     - name: Upload a Build Artifact
       id: upload-build
-      uses: actions/upload-artifact@v8
+      uses: actions/upload-artifact@v7
       with:
-        # Artifact name
         name: build-${{ env.DEPLOY_ENV }}${{ env.PR_NUMBER }}
-        # A file, directory or wildcard pattern that describes what to upload
         path: build/
 
     - name: Create release
@@ -169,30 +170,35 @@ jobs:
       uses: actions/create-release@v1
       id: create_release
       env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-          tag_name: v${{env.VERSION}}
-          release_name: Release v${{env.VERSION}}
-          draft: false
-          prerelease: false
+        tag_name: v${{env.VERSION}}
+        release_name: Release v${{env.VERSION}}
+        draft: false
+        prerelease: false
 
     # Get short SHA
     - name: Get short SHA
       id: short-sha
       run: echo "SHORT_SHA=$(git rev-parse --short ${{ github.sha }})" >> $GITHUB_OUTPUT
     
+    - name: Set payload path
+      run: |
+        echo "PAYLOAD_DIR=${{ runner.temp }}/payloads" >> $GITHUB_ENV
+        echo "PAYLOAD_NAME=build_metadata.json" >> $GITHUB_ENV
+
     # Write build metadata to JSON file
     - name: Write build metadata to JSON
       id: define-metadata
       run: |
-        echo {"deploy_env": "${DEPLOY_ENV}", "version": "${VERSION}", "target_repo": "${TARGET_REPO}", "target_path": "${TARGET_PATH}", "short_hash": "${{ steps.short-sha.outputs.SHORT_SHA }}", "commit_hash": "${{ github.sha }}", "commit_header": "${COMMIT_HEADER}", "branch": "${{ github.ref_name }}", "pr_number": "${PR_NUMBER}"} > ${{ runner.temp }}/build_${DEPLOY_ENV}${PR_NUMBER}_metadata.json
-        echo ${{ runner.temp }}/build_${DEPLOY_ENV}${PR_NUMBER}_metadata.json
+        mkdir $PAYLOAD_DIR
+        echo {"deploy_env": "${DEPLOY_ENV}", "version": "${VERSION}", "target_repo": "${TARGET_REPO}", "target_path": "${TARGET_PATH}", "short_hash": "${{ steps.short-sha.outputs.SHORT_SHA }}", "commit_hash": "${{ github.sha }}", "commit_header": "${COMMIT_HEADER}", "branch": "${{ github.ref_name }}", "pr_number": "${PR_NUMBER}"} > $PAYLOAD_DIR/$PAYLOAD_NAME
+        cat $PAYLOAD_DIR/$PAYLOAD_NAME
 
     - name: Upload build metadata artifact
       id: upload-metadata
-      uses: actions/upload-artifact@v8
+      uses: actions/upload-artifact@v7
       with:
-        # Artifact name
-        name: build-metadata-${{ env.DEPLOY_ENV }}${{ env.PR_NUMBER }}
-        # A file, directory or wildcard pattern that describes what to upload
-        path: ${{ runner.temp }}/build_${{ env.DEPLOY_ENV }}${{ env.PR_NUMBER }}_metadata.json
+        name: ${{ env.PAYLOAD_NAME }}
+        path: ${{ env.PAYLOAD_DIR }}/${{ env.PAYLOAD_NAME }}
+        archive: false

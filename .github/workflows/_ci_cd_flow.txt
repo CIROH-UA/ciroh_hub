@@ -10,10 +10,10 @@ This is because composite actions must be called from an action.yml file.
            V                            V
 ci_trigger_build_main.yml    ci_trigger_build_pr.yml
            |          ↕       ↕         |
-           |     ci_build/action.yml    |
+           |        ci_build.yml        |
            |                            V
            |                 cd_deploy_composite.yml (<- security layer; fences away permissions from untrusted branch code)
            |                            |
            |============================#
            V
-cd_deploy_composite/action.yml
+cd_deploy_composite.yml

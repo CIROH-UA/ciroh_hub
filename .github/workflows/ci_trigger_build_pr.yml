@@ -70,51 +70,42 @@ jobs:
       # Credit to the solution at https://github.com/orgs/community/discussions/106392
     
     # Establish build params
+    - name: Set payload path
+      run: |
+        echo "PAYLOAD_DIR=${{ runner.temp }}/payloads" >> $GITHUB_ENV
+        echo "PAYLOAD_NAME=build_params.json" >> $GITHUB_ENV
+
     - name: Output build parameters
       run: |
-        echo {"deploy_env": "${DEPLOY_ENV}", "source_ref": "${SOURCE_REF}", "source_repo": "${SOURCE_REPO}", "target_repo": "${TARGET_REPO}", "target_path": "${TARGET_PATH}", "commit_header": "${COMMIT_HEADER}", "pr_number": "${{ github.event.number }}"} > ${{ runner.temp }}/pr_${{ github.event.number }}_build.json
-        cat ${{ runner.temp }}/pr_${{ github.event.number }}_build.json
+        mkdir $PAYLOAD_DIR
+        echo {"deploy_env": "${DEPLOY_ENV}", "source_ref": "${SOURCE_REF}", "source_repo": "${SOURCE_REPO}", "target_repo": "${TARGET_REPO}", "target_path": "${TARGET_PATH}", "commit_header": "${COMMIT_HEADER}", "pr_number": "${{ github.event.number }}"} > $PAYLOAD_DIR/$PAYLOAD_NAME
 
     - name: Upload build parameters
       id: upload-params
       uses: actions/upload-artifact@v7
       with:
-        name: pr_${{ github.event.number }}_build
-        path: ${{ runner.temp }}/pr_${{ github.event.number }}_build.json
+        name: ${{ env.PAYLOAD_NAME }}
+        path: ${{ env.PAYLOAD_DIR }}/${{ env.PAYLOAD_NAME }}
+        archive: false
 
   build:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [22.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+    uses: $/.github/workflows/ci_build.yml
     needs: prepare-build
     permissions:
       contents: read
-    outputs:
-      build-id: ${{ steps.create-build.outputs.build-id }}
-      metadata-id: ${{ steps.create-build.outputs.metadata-id }}
+    with:
+      config-id: ${{ needs.prepare-build.outputs.params-id }}
       title-source: ${{ needs.prepare-build.outputs.title-source }}
-      title-dest: ${{ needs.prepare-build.outputs.title-dest }}
-
-    steps:
-    - name: Create build artifact
-      id: create-build
-      uses: $/.github/workflows/ci_build
-      with:
-        config-id: ${{ needs.prepare-build.outputs.params-id }}
-        title-source: ${{ needs.prepare-build.outputs.title-source }}
-        title-header: ${{ needs.prepare-build.outputs.title-header }}
+      title-header: ${{ needs.prepare-build.outputs.title-header }}
+    secrets: inherit
 
   upload-cd-params:
     runs-on: ubuntu-latest
     needs: build
-    permissions:
-      contents: read
     env:
       BUILD_ID: ${{ needs.build.outputs.build-id }}
-      TITLE_SOURCE: ${{ needs.build.outputs.title-source }}
-      TITLE_DEST: ${{ needs.build.outputs.title-dest }}
+      TITLE_SOURCE: TODO # ${{ needs.build.outputs.title-source }}
+      TITLE_DEST: TODO # ${{ needs.build.outputs.title-dest }}
 
     steps:
     # Get config payload
@@ -122,29 +113,31 @@ jobs:
       uses: actions/download-artifact@v8
       with:
         artifact-ids: ${{ needs.build.outputs.metadata-id }}
-        path: payloads/build_metadata.json
+        path: ${{ runner.temp }}/payloads/build_metadata.json
         github-token: ${{ secrets.GITHUB_TOKEN }}
 
     # Get environment, version, etc from config payload
     - name: Unpack payload inputs
-      id: extract_json
+      id: extract-json
       run: |
-        payload='cat ./payloads/build_metadata.json'
-        echo "payload_json=$payload" >> $GITHUB_OUTPUT
+        payload=cat ${{ runner.temp }}/payloads/build_metadata.json
+        echo "PAYLOAD_JSON=$payload" >> $GITHUB_ENV
+        echo "PAYLOAD_DIR=${{ runner.temp }}/payloads" >> $GITHUB_ENV
+        echo "PAYLOAD_NAME=pr_cd_payload.json" >> $GITHUB_ENV
 
     - name: Write deployment params to JSON
       id: output-params
       run: |
-        echo {"build_id": "${BUILD_ID}", "metadata": ${payload}, "title_source": "${TITLE_SOURCE}", "title_dest": "${TITLE_DEST}", "should_notify": ${SHOULD_NOTIFY}} > ${{ runner.temp }}/pr_cd_payload.json
-        cat ${{ runner.temp }}/pr_cd_payload.json
+        mkdir $PAYLOAD_DIR
+        echo {"build_id": "${BUILD_ID}", "metadata": ${PAYLOAD_JSON}, "title_source": "${TITLE_SOURCE}", "title_dest": "${TITLE_DEST}", "should_notify": ${SHOULD_NOTIFY}} > $PAYLOAD_DIR/$PAYLOAD_NAME
+        cat $PAYLOAD_DIR/$PAYLOAD_NAME
 
     - name: Upload build metadata artifact
       id: upload-metadata
-      uses: actions/upload-artifact@v8
+      uses: actions/upload-artifact@v7
       with:
-        # Note: due to limitations with workflow_run, this payload's name must be static
-        name: pr-cd-payload
-        # A file, directory or wildcard pattern that describes what to upload
-        path: ${{ runner.temp }}/pr_cd_payload.json
+        name: ${{ env.PAYLOAD_NAME }}
+        path: ${{ env.PAYLOAD_DIR }}/${{ env.PAYLOAD_NAME }}
+        archive: false
 
   # For permission-management reasons, the next steps are handled in cd_receive_pr_artifact.

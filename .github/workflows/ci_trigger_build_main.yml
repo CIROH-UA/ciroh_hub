@@ -75,47 +75,42 @@ jobs:
       # Credit to the solution at https://github.com/orgs/community/discussions/106392
 
     # Establish build params
+    - name: Set payload path
+      run: |
+        echo "PAYLOAD_DIR=${{ runner.temp }}/payloads" >> $GITHUB_ENV
+        echo "PAYLOAD_NAME=build_params.json" >> $GITHUB_ENV
+
     - name: Output build parameters
       run: |
-        echo {"deploy_env": "{$DEPLOY_ENV}", "source_ref": "${SOURCE_REF}", "source_repo": "${SOURCE_REPO}", "target_repo": "${TARGET_REPO}", "target_path": "${TARGET_PATH}", "commit_header": "${COMMIT_HEADER}", "type_description": "${DEPLOY_ENV}"} > ${{ runner.temp }}/main_${DEPLOY_ENV}_build.json
-        cat ${{ runner.temp }}/main_${DEPLOY_ENV}_build.json
+        mkdir $PAYLOAD_DIR
+        echo {"deploy_env": "{$DEPLOY_ENV}", "source_ref": "${SOURCE_REF}", "source_repo": "${SOURCE_REPO}", "target_repo": "${TARGET_REPO}", "target_path": "${TARGET_PATH}", "commit_header": "${COMMIT_HEADER}", "type_description": "${DEPLOY_ENV}"} > $PAYLOAD_DIR/$PAYLOAD_NAME
+        cat $PAYLOAD_DIR/$PAYLOAD_NAME
         
     - name: Upload build parameters
       id: upload-params
       uses: actions/upload-artifact@v7
       with:
-        name: main_${{ env.DEPLOY_ENV }}_build
-        path: ${{ runner.temp }}/main_${{ env.DEPLOY_ENV }}_build.json
+        name: ${{ env.PAYLOAD_NAME }}
+        path: ${{ env.PAYLOAD_DIR }}/${{ env.PAYLOAD_NAME }}
+        archive: false
 
   build:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [22.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+    uses: $/.github/workflows/ci_build.yml
     needs: prepare-build
-    outputs:
-      build-id: ${{ steps.create-build.outputs.build-id }}
-      metadata-id: ${{ steps.create-build.outputs.metadata-id }}
-      title-dest: ${{ needs.prepare-build.outputs.title-dest }}
-    steps:
-    - name: Create build artifact
-      id: create-build
-      uses: $/.github/workflows/ci_build
-      with:
-        config-id: ${{ needs.prepare-build.outputs.params-id }}
-        title-source: main
-        title-header: ${{ needs.prepare-build.outputs.title-header }}
+    # outputs:
+    #  title-dest: ${{ needs.prepare-build.outputs.title-dest }}
+    with:
+      config-id: ${{ needs.prepare-build.outputs.params-id }}
+      title-source: main
+      title-header: ${{ needs.prepare-build.outputs.title-header }}
+    secrets: inherit
 
   call_deployment:
-    runs-on: ubuntu-latest
+    uses: $/.github/workflows/cd_deploy_composite.yml
     needs: build
-    # TODO: Permissions
-    steps:
-    - name: Call deployment workflow
-      uses: $/.github/workflows/cd_deploy_composite
-      with:
-        build-id: ${{ needs.build.outputs.build-id }}
-        metadata-id: ${{ needs.build.outputs.metadata-id }}
-        title-source: main
-        title-dest: ${{ needs.build.outputs.title-dest }}
+    with:
+      build-id: ${{ needs.build.outputs.build-id }}
+      metadata-id: ${{ needs.build.outputs.metadata-id }}
+      title-source: main
+      title-dest: TODO # ${{ needs.build.outputs.title-dest }}
+    secrets: inherit

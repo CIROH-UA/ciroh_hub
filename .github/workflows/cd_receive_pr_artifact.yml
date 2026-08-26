@@ -28,24 +28,27 @@ jobs:
     - name: Download PR CD payload
       uses: actions/download-artifact@v8
       with:
-        name: pr-cd-payload
-        path: ${{ runner.temp }}/pr_cd_payload.json
+        name: pr-cd-payload.json
+        path: ${{ runner.temp }}/payloads/pr_cd_payload.json
         run-id: ${{ github.event.workflow_run.id }}
         github-token: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Unpack payload inputs
-      id: extract_json
+      id: extract-json
       run: |
-        payload='${{ runner.temp }}/pr_cd_payload.json'
+        payload=cat ${{ runner.temp }}/payloads/pr_cd_payload.json
         echo "payload_json=$payload" >> $GITHUB_OUTPUT
     
     - name: Parse payload inputs
       run: |
-        echo "BUILD_ID=${{ fromJson(steps.extract_json.outputs.payload_json).deploy_env }}" >> $GITHUB_ENV
-        echo "METADATA_JSON=${{ fromJson(steps.extract_json.outputs.payload_json) }}" >> $GITHUB_ENV
-        echo "TITLE_SOURCE=${{ fromJson(steps.extract_json.outputs.payload_json).title_source }}" >> $GITHUB_ENV
-        echo "TITLE_DEST=${{ fromJson(steps.extract_json.outputs.payload_json).title_dest }}" >> $GITHUB_ENV
-        echo "SHOULD_NOTIFY=${{ fromJson(steps.extract_json.outputs.payload_json).should_notify }}" >> $GITHUB_ENV
+        echo "BUILD_ID=${{ fromJson(steps.extract-json.outputs.payload_json).build_id }}" >> $GITHUB_ENV
+        echo "METADATA_JSON=${{ fromJson(steps.extract-json.outputs.payload_json) }}" >> $GITHUB_ENV
+        echo "TITLE_SOURCE=${{ fromJson(steps.extract-json.outputs.payload_json).title_source }}" >> $GITHUB_ENV
+        echo "TITLE_DEST=${{ fromJson(steps.extract-json.outputs.payload_json).title_dest }}" >> $GITHUB_ENV
+        echo "SHOULD_NOTIFY=${{ fromJson(steps.extract-json.outputs.payload_json).should_notify }}" >> $GITHUB_ENV
+
+        echo "PAYLOAD_DIR=${{ runner.temp }}/payloads" >> $GITHUB_ENV
+        echo "PAYLOAD_NAME=build_metadata.json" >> $GITHUB_ENV
       
     - name: Validate and save payload metadata
       env:
@@ -80,34 +83,29 @@ jobs:
 
         echo "TARGET_PATH=$TARGET_PATH" >> $GITHUB_ENV
 
-        echo $METADATA_JSON > ${{ runner.temp }}/build_${DEPLOY_ENV}${PR_NUMBER}_metadata.json
-        echo ${{ runner.temp }}/build_${DEPLOY_ENV}${PR_NUMBER}_metadata.json
+        mkdir $PAYLOAD_DIR
+        echo $METADATA_JSON > $PAYLOAD_DIR/$PAYLOAD_NAME
+        cat $PAYLOAD_DIR/$PAYLOAD_NAME
 
     # Artifacts can't be reused once downloaded, so we need to upload this again.
     - name: Upload build metadata artifact
       id: upload-metadata
-      uses: actions/upload-artifact@v8
-      env:
-        DEPLOY_ENV: ${{ fromJson(env.METADATA_JSON).deploy_env }}
-        PR_NUMBER: ${{ fromJson(env.METADATA_JSON).pr_number }}
+      uses: actions/upload-artifact@v7
       with:
-        # Artifact name
-        name: build-metadata-${{ env.DEPLOY_ENV }}${{ env.PR_NUMBER }}
-        # A file, directory or wildcard pattern that describes what to upload
-        path: ${{ runner.temp }}/build_${{ env.DEPLOY_ENV }}${{ env.PR_NUMBER }}_metadata.json
+        name: ${{ env.PAYLOAD_NAME }}
+        path: ${{ env.PAYLOAD_DIR }}/${{ env.PAYLOAD_NAME }}
+        archive: false
 
   call-deployment:
-    runs-on: ubuntu-latest
+    uses: $/.github/workflows/cd_deploy_composite.yml
     needs: extract-config
     # TODO: Permissions
-    steps:
-    - name: Call deployment workflow
-      uses: $/.github/workflows/cd_deploy_composite
-      with:
-        build-id: ${{ needs.extract-config.outputs.build-id }}
-        metadata-id: ${{ needs.extract-config.outputs.metadata-id }}
-        title-source: ${{ needs.extract-config.outputs.title-source }}
-        title-dest: ${{ needs.extract-config.outputs.title-dest }}
+    with:
+      build-id: ${{ needs.extract-config.outputs.build-id }}
+      metadata-id: ${{ needs.extract-config.outputs.metadata-id }}
+      title-source: ${{ needs.extract-config.outputs.title-source }}
+      title-dest: ${{ needs.extract-config.outputs.title-dest }}
+    secrets: inherit
   
   notify:
     if: ${{ needs.extract-config.outputs.should-notify }}
