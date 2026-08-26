@@ -3,9 +3,8 @@
 
 # Trigger logic has been spun out into the various 'ci_trigger_*.yml' workflows.
 
-name: 'CI: Create Build Artifact'
-run-name: 'CI: Create Build Artifact'
-# run-name: 'Create build artifact for ${{github.event.inputs.title-source}}: "${{github.event.inputs.title-header}}"'
+name: 'Callable: Create build artifact'
+run-name: 'Create build artifact for ${{github.event.inputs.title-source}}: "${{github.event.inputs.title-header}}"'
 
 on:
   workflow_call:
@@ -40,8 +39,6 @@ jobs:
         node-version: [22.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
     permissions:
-      actions: write
-      artifact-metadata: write
       contents: read
     outputs:
       build-id: ${{ steps.upload-build.outputs.artifact-id }}
@@ -52,13 +49,13 @@ jobs:
       uses: actions/download-artifact@v8
       with:
         artifact-ids: ${{ inputs.config-id }}
-        path: ${{ runner.temp }}/payload/build_params.json
+        path: ${{ runner.temp }}/
         github-token: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Unpack payload inputs
       id: extract-json
       run: |
-        payload=cat ${{ runner.temp }}/payload/build_params.json
+        payload=`cat ${{ runner.temp }}/build_params.json`
         echo "payload-json=$payload" >> $GITHUB_OUTPUT
         echo $payload
     
@@ -76,8 +73,8 @@ jobs:
       
     - name: Validate payload inputs
       run: |
-        if ![["$DEPLOY_ENV" = "production"] || ["$DEPLOY_ENV" = "staging"] || ["$DEPLOY_ENV" = "pr-staging"]]; then
-          echo "Invalid DEPLOY_ENV value '$DEPLOY_ENV'. Expected 'production', 'staging', or 'pr-staging'."
+        if ![["$DEPLOY_ENV" = "production"] || ["$DEPLOY_ENV" = "staging"] || ["$DEPLOY_ENV" = "staging-pr"]]; then
+          echo "Invalid DEPLOY_ENV value '$DEPLOY_ENV'. Expected 'production', 'staging', or 'staging-pr'."
           exit 1
         fi
     
@@ -184,7 +181,7 @@ jobs:
     
     - name: Set payload path
       run: |
-        echo "PAYLOAD_DIR=${{ runner.temp }}/payloads" >> $GITHUB_ENV
+        echo "PAYLOAD_DIR=./payloads" >> $GITHUB_ENV
         echo "PAYLOAD_NAME=build_metadata.json" >> $GITHUB_ENV
 
     # Write build metadata to JSON file
@@ -192,7 +189,7 @@ jobs:
       id: define-metadata
       run: |
         mkdir $PAYLOAD_DIR
-        echo {"deploy_env": "${DEPLOY_ENV}", "version": "${VERSION}", "target_repo": "${TARGET_REPO}", "target_path": "${TARGET_PATH}", "short_hash": "${{ steps.short-sha.outputs.SHORT_SHA }}", "commit_hash": "${{ github.sha }}", "commit_header": "${COMMIT_HEADER}", "branch": "${{ github.ref_name }}", "pr_number": "${PR_NUMBER}"} > $PAYLOAD_DIR/$PAYLOAD_NAME
+        echo {\"deploy_env\": \"${DEPLOY_ENV}\", \"version\": \"${VERSION}\", \"target_repo\": \"${TARGET_REPO}\", \"target_path\": \"${TARGET_PATH}\", \"short_hash\": \"${{ steps.short-sha.outputs.SHORT_SHA }}\", \"commit_hash\": \"${{ github.sha }}\", \"commit_header\": \"${COMMIT_HEADER}\", \"branch\": \"${{ github.ref_name }}\", \"pr_number\": \"${PR_NUMBER}\"} > $PAYLOAD_DIR/$PAYLOAD_NAME
         cat $PAYLOAD_DIR/$PAYLOAD_NAME
 
     - name: Upload build metadata artifact
@@ -201,4 +198,3 @@ jobs:
       with:
         name: ${{ env.PAYLOAD_NAME }}
         path: ${{ env.PAYLOAD_DIR }}/${{ env.PAYLOAD_NAME }}
-        archive: false

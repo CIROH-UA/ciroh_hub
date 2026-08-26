@@ -1,7 +1,7 @@
 # Triggers a CI/CD deployment from the main branch to staging.
 
-name: 'CI: Trigger deployment from PR'
-run-name: 'Trigger PR deployment from PR #${{ github.event.number }}'
+name: 'CI: Build and trigger deployment from PR'
+run-name: 'Build and trigger deployment from PR #${{ github.event.number }}'
 
 on:
   pull_request:
@@ -29,7 +29,7 @@ jobs:
       title-header: ${{ steps.fetch-commit-header.outputs.header }}
       title-source: ${{ steps.set-deployment-target.outputs.source }}
       title-dest: ${{ steps.set-deployment-target.outputs.destination }}
-      should-notify: ${{ vars.SILENCE_COMPOSITE_PR_MESSAGE != 'true' && github.event.action == 'labeled' && github.event.label.name == 'preview on staging' }}
+      should-notify: ${{ toJson(vars.SILENCE_COMPOSITE_PR_MESSAGE != 'true' && github.event.action == 'labeled' && github.event.label.name == 'preview on staging') }}
 
     steps:
     - name: Set deployment target
@@ -39,14 +39,14 @@ jobs:
         TEMP_NAME: ${{ github.event.pull_request.head.repo.full_name }}
         TEMP_REF: ${{ github.event.pull_request.head.ref }}
       run: |
-        echo "DEPLOY_ENV=pr-staging" >> $GITHUB_ENV
+        echo "DEPLOY_ENV=staging-pr" >> $GITHUB_ENV
         echo "TARGET_REPO=$STAGING_REPO" >> $GITHUB_ENV
-        echo "TARGET_PATH=$STAGING_PATH/$TEMP_NUM" >> $GITHUB_ENV
+        echo "TARGET_PATH=$STAGING_PATH$TEMP_NUM" >> $GITHUB_ENV
         echo "Deploying to $STAGING_REPO as STAGING at path $STAGING_PATH/$TEMP_NUM"
         echo "SOURCE_REPO=$TEMP_NAME" >> $GITHUB_ENV
         echo "SOURCE_REF=$TEMP_REF" >> $GITHUB_ENV
         echo "source=PR #$TEMP_NUM" >> $GITHUB_OUTPUT
-        echo "destination=$STAGING_PATH/$TEMP_NUM @ $TARGET_REPO" >> $GITHUB_OUTPUT
+        echo "destination=$STAGING_PATH$TEMP_NUM @ $STAGING_REPO" >> $GITHUB_OUTPUT
 
     # Checkout to fetch commit header
     - name: Checkout
@@ -61,24 +61,24 @@ jobs:
       run: |
         header="$(git log -1 --pretty=%B | head -n 1)"
         if [[ $header == *"\""* ]]; then
-          echo "COMMIT_HEADER="(Unsafe header)" >> $GITHUB_ENV
-          echo "header=${header}" >> $GITHUB_OUTPUT
+          echo "COMMIT_HEADER=(Unsafe header)" >> $GITHUB_ENV
+          echo "header=(Unsafe header)" >> $GITHUB_OUTPUT
         else
-          echo "COMMIT_HEADER=${header}" >> $GITHUB_ENV
-          echo "header=${header}" >> $GITHUB_OUTPUT
+          echo "COMMIT_HEADER=$header" >> $GITHUB_ENV
+          echo "header=$header" >> $GITHUB_OUTPUT
         fi
       # Credit to the solution at https://github.com/orgs/community/discussions/106392
     
     # Establish build params
     - name: Set payload path
       run: |
-        echo "PAYLOAD_DIR=${{ runner.temp }}/payloads" >> $GITHUB_ENV
+        echo "PAYLOAD_DIR=./payloads" >> $GITHUB_ENV
         echo "PAYLOAD_NAME=build_params.json" >> $GITHUB_ENV
 
     - name: Output build parameters
       run: |
         mkdir $PAYLOAD_DIR
-        echo {"deploy_env": "${DEPLOY_ENV}", "source_ref": "${SOURCE_REF}", "source_repo": "${SOURCE_REPO}", "target_repo": "${TARGET_REPO}", "target_path": "${TARGET_PATH}", "commit_header": "${COMMIT_HEADER}", "pr_number": "${{ github.event.number }}"} > $PAYLOAD_DIR/$PAYLOAD_NAME
+        echo {\"deploy_env\": \"${DEPLOY_ENV}\", \"source_ref\": \"${SOURCE_REF}\", \"source_repo\": \"${SOURCE_REPO}\", \"target_repo\": \"${TARGET_REPO}\", \"target_path\": \"${TARGET_PATH}\", \"pr_number\": \"${{ github.event.number }}\"} > $PAYLOAD_DIR/$PAYLOAD_NAME
 
     - name: Upload build parameters
       id: upload-params
@@ -86,7 +86,6 @@ jobs:
       with:
         name: ${{ env.PAYLOAD_NAME }}
         path: ${{ env.PAYLOAD_DIR }}/${{ env.PAYLOAD_NAME }}
-        archive: false
 
   build:
     uses: $/.github/workflows/ci_build.yml
@@ -101,11 +100,11 @@ jobs:
 
   upload-cd-params:
     runs-on: ubuntu-latest
-    needs: build
+    needs: [prepare-build, build]
     env:
       BUILD_ID: ${{ needs.build.outputs.build-id }}
-      TITLE_SOURCE: TODO # ${{ needs.build.outputs.title-source }}
-      TITLE_DEST: TODO # ${{ needs.build.outputs.title-dest }}
+      TITLE_SOURCE: ${{ needs.prepare-build.outputs.title-source }}
+      TITLE_DEST: ${{ needs.prepare-build.outputs.title-dest }}
 
     steps:
     # Get config payload
@@ -113,23 +112,23 @@ jobs:
       uses: actions/download-artifact@v8
       with:
         artifact-ids: ${{ needs.build.outputs.metadata-id }}
-        path: ${{ runner.temp }}/payloads/build_metadata.json
+        path: ${{ runner.temp }}/
         github-token: ${{ secrets.GITHUB_TOKEN }}
 
     # Get environment, version, etc from config payload
     - name: Unpack payload inputs
       id: extract-json
       run: |
-        payload=cat ${{ runner.temp }}/payloads/build_metadata.json
+        payload=`cat ${{ runner.temp }}/build_metadata.json`
         echo "PAYLOAD_JSON=$payload" >> $GITHUB_ENV
-        echo "PAYLOAD_DIR=${{ runner.temp }}/payloads" >> $GITHUB_ENV
+        echo "PAYLOAD_DIR=./payloads" >> $GITHUB_ENV
         echo "PAYLOAD_NAME=pr_cd_payload.json" >> $GITHUB_ENV
 
     - name: Write deployment params to JSON
       id: output-params
       run: |
         mkdir $PAYLOAD_DIR
-        echo {"build_id": "${BUILD_ID}", "metadata": ${PAYLOAD_JSON}, "title_source": "${TITLE_SOURCE}", "title_dest": "${TITLE_DEST}", "should_notify": ${SHOULD_NOTIFY}} > $PAYLOAD_DIR/$PAYLOAD_NAME
+        echo {\"build_id\": \"${BUILD_ID}\", \"metadata\": ${PAYLOAD_JSON}, \"title_source\": \"${TITLE_SOURCE}\", \"title_dest\": \"${TITLE_DEST}\", \"should_notify\": \"${{ needs.prepare-build.outputs.should-notify }}\"} > $PAYLOAD_DIR/$PAYLOAD_NAME
         cat $PAYLOAD_DIR/$PAYLOAD_NAME
 
     - name: Upload build metadata artifact
@@ -138,6 +137,5 @@ jobs:
       with:
         name: ${{ env.PAYLOAD_NAME }}
         path: ${{ env.PAYLOAD_DIR }}/${{ env.PAYLOAD_NAME }}
-        archive: false
 
   # For permission-management reasons, the next steps are handled in cd_receive_pr_artifact.

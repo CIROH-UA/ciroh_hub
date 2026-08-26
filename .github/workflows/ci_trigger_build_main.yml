@@ -1,7 +1,7 @@
 # Triggers a CI/CD deployment from the main branch to staging.
 
-name: 'CI: Trigger deployment from main'
-run-name: 'Trigger deployment on ref "${{github.ref}}"'
+name: 'CI/CD: Trigger build and deployment from main'
+run-name: 'Trigger build and deployment from main'
 
 on:
   push:
@@ -69,21 +69,21 @@ jobs:
           echo "COMMIT_HEADER=(Unsafe header)" >> $GITHUB_ENV
           echo "header=(Unsafe header)" >> $GITHUB_OUTPUT
         else
-          echo "COMMIT_HEADER=${header}" >> $GITHUB_ENV
-          echo "header=${header}" >> $GITHUB_OUTPUT
+          echo "COMMIT_HEADER=$header" >> $GITHUB_ENV
+          echo "header=$header" >> $GITHUB_OUTPUT
         fi
       # Credit to the solution at https://github.com/orgs/community/discussions/106392
 
     # Establish build params
     - name: Set payload path
       run: |
-        echo "PAYLOAD_DIR=${{ runner.temp }}/payloads" >> $GITHUB_ENV
+        echo "PAYLOAD_DIR=./payloads" >> $GITHUB_ENV
         echo "PAYLOAD_NAME=build_params.json" >> $GITHUB_ENV
 
     - name: Output build parameters
       run: |
         mkdir $PAYLOAD_DIR
-        echo {"deploy_env": "{$DEPLOY_ENV}", "source_ref": "${SOURCE_REF}", "source_repo": "${SOURCE_REPO}", "target_repo": "${TARGET_REPO}", "target_path": "${TARGET_PATH}", "commit_header": "${COMMIT_HEADER}", "type_description": "${DEPLOY_ENV}"} > $PAYLOAD_DIR/$PAYLOAD_NAME
+        echo {\"deploy_env\": \"${DEPLOY_ENV}\", \"source_ref\": \"${SOURCE_REF}\", \"source_repo\": \"${SOURCE_REPO}\", \"target_repo\": \"${TARGET_REPO}\", \"target_path\": \"${TARGET_PATH}\"} > $PAYLOAD_DIR/$PAYLOAD_NAME
         cat $PAYLOAD_DIR/$PAYLOAD_NAME
         
     - name: Upload build parameters
@@ -92,13 +92,10 @@ jobs:
       with:
         name: ${{ env.PAYLOAD_NAME }}
         path: ${{ env.PAYLOAD_DIR }}/${{ env.PAYLOAD_NAME }}
-        archive: false
 
   build:
     uses: $/.github/workflows/ci_build.yml
     needs: prepare-build
-    # outputs:
-    #  title-dest: ${{ needs.prepare-build.outputs.title-dest }}
     with:
       config-id: ${{ needs.prepare-build.outputs.params-id }}
       title-source: main
@@ -107,10 +104,11 @@ jobs:
 
   call_deployment:
     uses: $/.github/workflows/cd_deploy_composite.yml
-    needs: build
+    needs: [prepare-build, build]
     with:
       build-id: ${{ needs.build.outputs.build-id }}
+      build-run-id: ${{ github.run_id }}
       metadata-id: ${{ needs.build.outputs.metadata-id }}
       title-source: main
-      title-dest: TODO # ${{ needs.build.outputs.title-dest }}
+      title-dest: ${{ needs.prepare-build.outputs.title-dest }}
     secrets: inherit
