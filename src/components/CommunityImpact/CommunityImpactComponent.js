@@ -31,8 +31,8 @@ export default function CommunityImpactComponent() {
     color: "#FF9900",
     svg: <img src={useBaseUrl("/img/logos/corp/aws-black.svg")} alt="AWS Logo" />,
     stats: [
-      { value: communityImpactData.aws.projects, bar: communityImpactData.aws.projectsBar, label: "IT Tickets" },
-      { value: communityImpactData.aws.users, bar: communityImpactData.aws.usersBar, label: "Active Users" },
+      { value: communityImpactData.aws.projects, bar: communityImpactData.aws.projectsBar, label: "IT Requests" },
+      { value: communityImpactData.aws.users, bar: communityImpactData.aws.usersBar, label: "Users" },
     ],
   },
   {
@@ -41,8 +41,8 @@ export default function CommunityImpactComponent() {
     color: "#4285F4",
     svg: <img src={useBaseUrl("/img/logos/corp/google-cloud.jpg")} alt="GCP Logo" />,
     stats: [
-      { value: communityImpactData.gcp.projects, bar: communityImpactData.gcp.projectsBar, label: "IT Tickets" },
-      { value: communityImpactData.gcp.users, bar: communityImpactData.gcp.usersBar, label: "Active Users" },
+      { value: communityImpactData.gcp.projects, bar: communityImpactData.gcp.projectsBar, label: "IT Requests" },
+      { value: communityImpactData.gcp.users, bar: communityImpactData.gcp.usersBar, label: "Users" },
     ],
   },
   {
@@ -51,8 +51,8 @@ export default function CommunityImpactComponent() {
     color: "#10B981",
     svg: <img src={useBaseUrl("/img/logos/pantarhei.jpg")} alt="HPC Logo" />,
     stats: [
-      { value: communityImpactData.hpc.projects, bar: communityImpactData.hpc.projectsBar, label: "IT Tickets" },
-      { value: communityImpactData.hpc.users, bar: communityImpactData.hpc.usersBar, label: "Active Users" },
+      { value: communityImpactData.hpc.projects, bar: communityImpactData.hpc.projectsBar, label: "IT Requests" },
+      { value: communityImpactData.hpc.users, bar: communityImpactData.hpc.usersBar, label: "Users" },
     ],
   },
   {
@@ -61,8 +61,8 @@ export default function CommunityImpactComponent() {
     color: "#8B5CF6",
     svg: <img src={useBaseUrl("/img/logos/nsf-logo.png")} alt="NSF Logo" />,
     stats: [
-      { value: communityImpactData.nsf.projects, bar: communityImpactData.nsf.projectsBar, label: "IT Tickets" },
-      { value: communityImpactData.nsf.users, bar: communityImpactData.nsf.usersBar, label: "Active Users" },
+      { value: communityImpactData.nsf.projects, bar: communityImpactData.nsf.projectsBar, label: "IT Requests" },
+      { value: communityImpactData.nsf.users, bar: communityImpactData.nsf.usersBar, label: "Users" },
     ],
   },
 ];

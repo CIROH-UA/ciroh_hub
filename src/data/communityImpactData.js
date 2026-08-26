@@ -10,7 +10,7 @@ export const communityImpactData = {
     gcp: {
         projects: 19,
         projectsBar: "100%",
-        users: 234,
+        users: 95,
         usersBar: "45%",
     },
     hpc: {
