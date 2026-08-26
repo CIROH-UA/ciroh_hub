@@ -5,7 +5,7 @@ import styles from "./styles.module.css";
 import HydroShareResourcesTiles from "@site/src/components/HydroShareResourcesTiles";
 import HydroShareResourcesRows from "@site/src/components/HydroShareResourcesRows";
 import HydroShareResourcesCards from "@site/src/components/HydroShareResourcesCards";
-import { fetchResourcesBySearch, fetchResourceCustomMetadata, getCommunityResources, fetchResourcesFromCollection, fetchResourceMetadata } from "@site/src/components/HydroShareImporter";
+import { fetchResourcesBySearch, fetchResourceCustomMetadata, getCommunityResources, fetchResourcesFromCollection } from "@site/src/components/HydroShareImporter";
 import {
   HiOutlineSortDescending,
   HiOutlineSortAscending,
@@ -226,24 +226,12 @@ export default function HydroShareResourcesSelector({
             const customMetadata = await fetchResourceCustomMetadata(res.resource_id);
             let embedUrl = "";
             if (customMetadata?.pres_path) embedUrl = `https://www.hydroshare.org/resource/${res.resource_id}/data/contents/${customMetadata.pres_path}`;
-            // Extract keywords/subjects from metadata, unless the resource already has them
-            let keywords = res.keywords;
-            if (!keywords) {
-              const metadata = await fetchResourceMetadata(res.resource_id);
-              keywords = [];
-              if (metadata?.subjects) {
-                for (let subject of metadata.subjects) {
-                  if (subject?.value) keywords.push(subject.value);
-                }
-              }
-            }
             const updatedResource = {
               ...res,
               thumbnail_url: customMetadata?.thumbnail_url || "",
               page_url: customMetadata?.page_url || "",
               docs_url: customMetadata?.docs_url || "",
               embed_url: embedUrl,
-              keywords: keywords,
             };
 
             setResources((current) =>
