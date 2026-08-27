@@ -212,13 +212,16 @@ async function fetchResourcesByGroup(groupid, fullTextSearch=undefined, pageNumb
 }
   
 function extractRelatedResourceIds(metadata) {
-  return metadata.relations
+  const ids = metadata.relations
     .filter(item => item.type === 'hasPart')
     .map(item => {
-      const match = item.value.match(/http:\/\/www\.hydroshare\.org\/resource\/([a-f0-9]{32})/);
-      return match ? match[1] : null;
+      const match = item.value.match(RESOURCE_ID_REGEX);
+      return match ? match[1].toLowerCase() : null;
     })
     .filter(id => id !== null); // Remove non-matching entries
+
+  // Deduplicate members cited in both URL and DOI form
+  return [...new Set(ids)];
 }
 
 async function getCuratedIds(resourceId) {
