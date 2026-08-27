@@ -269,16 +269,16 @@ export default function HydroShareResourcesSelector({
           if (!cancelled)
           {
             // Extract the titles from the ecosystem resources
-            let ecosystems = [{'name': 'All', 'id': ''}];
+            let newEcosystems = [{'name': 'All', 'id': ''}];
 
             for (let resource of ecosystemsResponse.resources) {
               if (resource?.resource_title && resource?.resource_id) {
-                ecosystems.push({name: resource.resource_title, id: resource.resource_id});
+                newEcosystems.push({name: resource.resource_title, id: resource.resource_id});
               }
             }
 
             // Update the state with the extracted ecosystem titles
-            setEcosystems(ecosystems);
+            setEcosystems(newEcosystems);
           }
         } catch (error) {
           if (!cancelled) console.error(error.message);
