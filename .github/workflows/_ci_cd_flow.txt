@@ -8,11 +8,11 @@ This is because composite actions must be called from an action.yml file.
            |                  [PR has staging label]
            |                            |
            V                            V
-ci_trigger_build_main.yml    ci_trigger_build_pr.yml
+ci_trigger_build_main.yml    ci_trigger_build_pr.yml (<- reduced permissions for remote branches)
            |          ↕       ↕         |
            |        ci_build.yml        |
            |                            V
-           |                 cd_deploy_composite.yml (<- security layer; fences away permissions from untrusted branch code)
+           |               cd_receive_pr_artifact.yml (<- re-elevates permissions for deployment)
            |                            |
            |============================#
            V
