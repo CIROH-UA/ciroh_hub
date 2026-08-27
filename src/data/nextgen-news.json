@@ -60,6 +60,17 @@
 			"contributors": 4
 		},
 		{
+			"type": "NGIAB",
+			"title": "NGIAB_data_preprocess",
+			"links": [
+				"https://github.com/CIROH-UA/NGIAB_data_preprocess/releases/tag/v4.9.2",
+				"https://github.com/CIROH-UA/NGIAB_data_preprocess/pull/256"
+			],
+			"description": "This month's release fixes the elevation unit conversion in the Snow-17 module ([#252](https://github.com/CIROH-UA/NGIAB_data_preprocess/pull/252)). A new subset CLI has also been merged, adding a standalone entry point that subsets a user-provided geopackage by user-defined catchment ID.",
+			"release_date": "2026-08-12",
+			"contributors": 2
+		},
+		{
 			"type": "NRDS",
 			"title": "DataStreamCLI",
 			"link": "https://github.com/CIROH-UA/datastreamcli/releases/tag/v1.7.2",
