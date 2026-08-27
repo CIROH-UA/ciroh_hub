@@ -142,13 +142,13 @@ function ConfluenceContent() {
             </div>
           <div className={styles.schedule_disclaimer}>No December session — AGU Fall Meeting and holidays.&nbsp;</div>
 
-          <div id="apply" className={styles.m_card, styles.m_stack, styles.application_outer}>
+          <div id="apply" className={clsx(styles.m_card, styles.m_stack, styles.application_outer)}>
             <div style={{ flex: 1 }}>
               <div className={styles.section_subtitle}>CIROH PI Engagement Sessions</div>
-              <div className={styles.section_title}>Nominate a presenter</div>
+              <div className={styles.section_title} style={{ textWrap: "pretty" }}>Nominate a presenter</div>
               <p className={styles.section_description}>The Oct 22 and Mar 25 sessions are open to CIROH principal investigators. Nominate yourself or a CIROH colleague you think should present — tell us about the project and what it would bring to the operational community, and we'll follow up.</p>
             </div>
-            <div className={styles.m_full, styles.application_form_outer}>
+            <div className={clsx(styles.m_full, styles.application_form_outer)}>
               <input id="apply-name" placeholder="Name" className={styles.application_field_text} />
               <input id="apply-affiliation" placeholder="Affiliation" className={styles.application_field_text} />
               <div className={styles.application_column}>
