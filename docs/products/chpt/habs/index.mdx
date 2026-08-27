@@ -4,76 +4,47 @@ title: "Harmful Algal Blooms"
 description: "Testbed Protocols for Predicting Harmful Algal Blooms"
 tags: [Education, NOAA, CHPT, HABS]
 ---
-import React, { useState, useEffect } from 'react';
-import * as XLSX from 'xlsx';
-import { HotTable } from '@handsontable/react-wrapper';
-import 'handsontable/styles/ht-theme-classic.min.css';
-import { registerAllModules } from 'handsontable/registry';
-import useBaseUrl from "@docusaurus/useBaseUrl"
+import React from 'react';
 
-{registerAllModules()}
+export default function CsvViewer({ csvData }) {
+  // Split CSV into rows and cells
+  const rows = csvData
+    .trim()
+    .split('\n')
+    .map((row) => row.split(','));
 
-export function ExcelMdxViewer() {
-  const [workbookData, setWorkbookData] = useState(null);
-  const [sheetNames, setSheetNames] = useState([]);
-  const [activeSheet, setActiveSheet] = useState('');
-  const [gridData, setGridData] = useState([]);
-  const xlsxfile = useBaseUrl("/files/WQData_sites_with_Lake_info_filtered.xlsx")
-  // Load and parse local or remote .xlsx file on mount
-  useEffect(() => {
-      fetch(xlsxfile)
-      .then((res) => {
-        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
-        return res.arrayBuffer();
-      })
-	  // .then((res) => res.arrayBuffer())
-      .then((buffer) => {
-        const wb = XLSX.read(buffer, { type: 'array' });
-        setWorkbookData(wb);
-        setSheetNames(wb.SheetNames);
-        setActiveSheet(wb.SheetNames[0]);
-        
-        // Convert first sheet to an array of arrays
-        const ws = wb.Sheets[wb.SheetNames[0]];
-        setGridData(XLSX.utils.sheet_to_json(ws, { header: 1 }));
-      })
-	  .catch((err) => {
-        setStatus(`Failed: ${err.message}`);
-      });
-  }, []);
-
-  // Handle switching sheets via dropdown
-  const handleSheetChange = (e) => {
-    const newSheet = e.target.value;
-    setActiveSheet(newSheet);
-    if (workbookData) {
-      const ws = workbookData.Sheets[newSheet];
-      setGridData(XLSX.utils.sheet_to_json(ws, { header: 1 }));
-    }
-  };
+  const headers = rows[0] || [];
+  const bodyRows = rows.slice(1);
 
   return (
-    <div style={{ margin: '20px 0' }}>
-      <div style={{ marginBottom: '10px' }}>
-        <label htmlFor="sheet-select" style={{ marginRight: '8px', fontWeight: 'bold' }}>Active Sheet:</label>
-        <select id="sheet-select" value={activeSheet} onChange={handleSheetChange}>
-          {sheetNames.map((name) => (
-            <option key={name} value={name}>{name}</option>
+    // Max height controls vertical scroll; overflow-x controls horizontal scroll
+    <div className="w-full max-h-96 overflow-auto border border-gray-200 rounded-lg my-4">
+      <table className="w-full border-collapse text-left text-sm text-gray-500">
+        <thead className="sticky top-0 bg-gray-100 text-gray-700 uppercase text-xs font-semibold">
+          <tr>
+            {headers.map((header, index) => (
+              <th key={index} className="px-6 py-3 border-b border-gray-200 whitespace-nowrap">
+                {header.trim()}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody className="divide-y divide-gray-200 bg-white">
+          {bodyRows.map((row, rowIndex) => (
+            <tr key={rowIndex} className="hover:bg-gray-50">
+              {row.map((cell, cellIndex) => (
+                <td key={cellIndex} className="px-6 py-4 whitespace-nowrap">
+                  {cell.trim()}
+                </td>
+              ))}
+            </tr>
           ))}
-        </select>
-      </div>
-
-      <HotTable
-	  	theme="ht-theme-classic"
-        data={gridData}
-        rowHeaders={true}
-        colHeaders={true}
-        height="400px"
-        licenseKey="non-commercial-and-evaluation"
-      />
+        </tbody>
+      </table>
     </div>
   );
 }
+
 
 # Harmful Algal Bloom Predictions: An Introduction
 
@@ -130,12 +101,16 @@ resulting in a final dataset of 20 major lakes, including 5 transboundary ones.
 
 ### Water Bodies Data Filtered Spreadsheet
 
-<a href={useBaseUrl('/files/WQData_sites_with_Lake_info_filtered.xlsx')} 
-  download="WQData_sites_with_Lake_info_filtered.xlsx">
-  Download Water Body Filtered Data Spreadsheet
+<a href={useBaseUrl('/files/WQData_selected_lake_sites.csv')} 
+  download="WQData_selected_lake_sites.csv">
+  Download Water Body Filtered Data CSV File
 </a>
 
-<ExcelMdxViewer />
+# CSV Data Report
+
+Below is the dynamic, scrollable data table imported straight from a CSV file.
+
+<ScrollableCSVViewer csvUrl="/files/WQData_selected_lake_sites.csv" />
 
 ## Getting Started with HABS Prediction
 
