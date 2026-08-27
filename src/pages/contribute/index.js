@@ -9,6 +9,7 @@ import clsx from 'clsx';
 import Header from '@site/src/components/Header';
 import { ConstellationCanvas } from '@site/src/components/ConstellationCanvas';
 import { useColorMode } from '@docusaurus/theme-common';
+import useBrokenLinks from '@docusaurus/useBrokenLinks';
 
 export default function Contribute() {
   return (
@@ -34,7 +35,12 @@ function ContributeContent() {
   const addProductUrl = "https://github.com/CIROH-UA/ciroh_hub/issues/new?assignees=&labels=on-prem&projects=&template=product-request.md";
   const blogIdeaUrl = siteConfig?.customFields?.blogIdeaUrl || 'https://github.com/CIROH-UA/ciroh_hub/issues/new?template=docuhub-blog-post.md';
   const wgIntakeFormUrl = siteConfig?.customFields?.externalLinks?.wgIntakeForm || 'https://app.smartsheet.com/b/form/019f1f425a1d717180af65a76b9fa26f';
-  
+
+  const brokenLinks = useBrokenLinks();
+  ['hydroshare', 'resources-documentation', 'zotero', 'community-working-group'].forEach(
+    (id) => brokenLinks.collectAnchor(id)
+  );
+
   useEffect(() => {
     const hash = window.location.hash;
     if (hash) {
