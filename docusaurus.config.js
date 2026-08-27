@@ -342,7 +342,7 @@ const config = {
                 {
                   type: "doc",
                   docId: "products/ngiab-ecosystem/index",
-                  label: "NGIAB Ecosystem",
+                  label: "Community NextGen Ecosystem",
                 },
                 {
                   type: "doc",
