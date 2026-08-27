@@ -4,37 +4,56 @@ title: "Harmful Algal Blooms"
 description: "Testbed Protocols for Predicting Harmful Algal Blooms"
 tags: [Education, NOAA, CHPT, HABS]
 ---
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import Papa from 'papaparse';
+import useBaseUrl from "@docusaurus/useBaseUrl"
 
-export default function CsvViewer({ csvData }) {
-  // Split CSV into rows and cells
-  const rows = csvData
-    .trim()
-    .split('\n')
-    .map((row) => row.split(','));
+export const ScrollableCSVViewer = ({ csvUrl }) => {
+  const [data, setData] = useState([]);
+  const [headers, setHeaders] = useState([]);
 
-  const headers = rows[0] || [];
-  const bodyRows = rows.slice(1);
+  useEffect(() => {
+    fetch(csvUrl)
+      .then(response => response.text())
+      .then(csvText => {
+        Papa.parse(csvText, {
+          header: true,
+          skipEmptyLines: true,
+          complete: (results) => {
+            if (results.data.length > 0) {
+              setHeaders(Object.keys(results.data[0]));
+              setData(results.data);
+            }
+          },
+        });
+      });
+  }, [csvUrl]);
 
   return (
-    // Max height controls vertical scroll; overflow-x controls horizontal scroll
-    <div className="w-full max-h-96 overflow-auto border border-gray-200 rounded-lg my-4">
-      <table className="w-full border-collapse text-left text-sm text-gray-500">
-        <thead className="sticky top-0 bg-gray-100 text-gray-700 uppercase text-xs font-semibold">
+    <div style={{ 
+      maxHeight: '400px', 
+      overflowY: 'auto', 
+      overflowX: 'auto',
+      border: '1px solid #ccc', 
+      borderRadius: '8px',
+      margin: '20px 0'
+    }}>
+      <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: '600px' }}>
+        <thead style={{ position: 'sticky', top: 0, background: '#f5f5f5', zIndex: 1 }}>
           <tr>
-            {headers.map((header, index) => (
-              <th key={index} className="px-6 py-3 border-b border-gray-200 whitespace-nowrap">
-                {header.trim()}
+            {headers.map((header, idx) => (
+              <th key={idx} style={{ padding: '12px', borderBottom: '2px solid #ddd', textAlign: 'left' }}>
+                {header}
               </th>
             ))}
           </tr>
         </thead>
-        <tbody className="divide-y divide-gray-200 bg-white">
-          {bodyRows.map((row, rowIndex) => (
-            <tr key={rowIndex} className="hover:bg-gray-50">
-              {row.map((cell, cellIndex) => (
-                <td key={cellIndex} className="px-6 py-4 whitespace-nowrap">
-                  {cell.trim()}
+        <tbody>
+          {data.map((row, rowIdx) => (
+            <tr key={rowIdx} style={{ backgroundColor: rowIdx % 2 === 0 ? '#fff' : '#fafafa' }}>
+              {headers.map((header, colIdx) => (
+                <td key={colIdx} style={{ padding: '12px', borderBottom: '1px solid #ddd' }}>
+                  {row[header]}
                 </td>
               ))}
             </tr>
@@ -43,7 +62,7 @@ export default function CsvViewer({ csvData }) {
       </table>
     </div>
   );
-}
+};
 
 
 # Harmful Algal Bloom Predictions: An Introduction
