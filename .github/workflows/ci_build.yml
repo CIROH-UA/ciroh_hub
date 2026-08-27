@@ -73,14 +73,14 @@ jobs:
       
     - name: Validate payload inputs
       run: |
-        if ![["$DEPLOY_ENV" = "production"] || ["$DEPLOY_ENV" = "staging"] || ["$DEPLOY_ENV" = "staging-pr"]]; then
+        if ![[ "$DEPLOY_ENV" = "production" || "$DEPLOY_ENV" = "staging"]|| "$DEPLOY_ENV" = "staging-pr" ]]; then
           echo "Invalid DEPLOY_ENV value '$DEPLOY_ENV'. Expected 'production', 'staging', or 'staging-pr'."
           exit 1
         fi
     
     - name: Generate base URL
       run: |
-        if ["$TARGET_PATH" != "."]; then
+        if [[ "$TARGET_PATH" != "." ]]; then
           echo "BASE_URL=/$TARGET_PATH" >> $GITHUB_ENV
         else
           echo "BASE_URL=/" >> $GITHUB_ENV

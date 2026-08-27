@@ -72,17 +72,17 @@ jobs:
         echo "*If this step fails, it may indicate tampering or an attack!*" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
         INT_REGEX='^[0-9]+$'
-        if ![["$DEPLOY_ENV" = "staging-pr"]]; then
+        if ![[ "$DEPLOY_ENV" = "staging-pr" ]]; then
           echo "Invalid DEPLOY_ENV value '${DEPLOY_ENV}'. Expected 'staging-pr'. Aborting." >> $GITHUB_STEP_SUMMARY
           exit 1
-        elif ![["$TARGET_REPO" = "${{ vars.COMPOSITE_TARGET_REPO }}"]]; then
+        elif ![[ "$TARGET_REPO" = "${{ vars.COMPOSITE_TARGET_REPO }}" ]]; then
           echo "Invalid target repo '${DEPLOY_ENV}'. Expected ${{ vars.COMPOSITE_TARGET_REPO }}. Aborting." >> $GITHUB_STEP_SUMMARY
           exit 1
-        elif ![["$PR_NUMBER" =~ "$INT_REGEX"]]; then
+        elif ![[ "$PR_NUMBER" =~ "$INT_REGEX" ]]; then
           echo "Provided PR number '${PR_NUMBER}' is not a valid integer. Aborting." >> $GITHUB_STEP_SUMMARY
           exit 1
-        elif ![["$STAGING_PATH$PR_NUMBER" = "$TARGET_PATH"]]; then
-          echo "Provided target path '${TARGET_PATH}' does not match expected target path '${$STAGING_PATH}{$PR_NUMBER}' Aborting." >> $GITHUB_STEP_SUMMARY
+        elif ![[ "$STAGING_PATH$PR_NUMBER" = "$TARGET_PATH" ]]; then
+          echo "Provided target path '${TARGET_PATH}' does not match expected target path '${STAGING_PATH}${PR_NUMBER}' Aborting." >> $GITHUB_STEP_SUMMARY
         fi
 
         echo "✅ **All checks passed!** The provided payload is well-formed and being pushed to a valid destination." >> $GITHUB_STEP_SUMMARY
