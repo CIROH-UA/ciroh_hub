@@ -27,10 +27,10 @@ export default function HydroShareCard() {
       <div className={styles.header}>
         <img src={logo} alt="HydroShare" className={styles.logo} />
         <div className={styles.titleRow}>  
-          <h2 className={styles.title}>Contribute to HydroShare Resources</h2>
+          <h2 className={styles.title}>Contribute to CIROH HydroShare Resources</h2>
         </div>
         <p className={styles.subtitle}>
-          Publish your apps, datasets, notebooks, courses, and presentations on HydroShare
+          Publish your apps, datasets, notebooks, courses, and presentations on HydroShare to make them discoverable on CIROH Hub
         </p>
       </div>
 
@@ -102,10 +102,10 @@ export default function HydroShareCard() {
         <div className={styles.card}>
           <div className={styles.header}>
             <div className={styles.titleRow}>  
-              <h2 className={styles.title}>Create a HydroShare Resource</h2>
+              <h2 className={styles.title}>Create a CIROH HydroShare Resource</h2>
             </div>
             <p className={styles.subtitle}>
-              Use the form below to create a new HydroShare resource and add it to CIROH Hub.
+              Use the form below to create a new CIROH HydroShare resource.
             </p>
           </div>
           <HydroShareResourceForm />
