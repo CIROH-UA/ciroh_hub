@@ -156,7 +156,7 @@ function ResourceForm() {
         if (loading) return 'Processing…';
         if (verifying) return 'Verifying HydroShare session…';
         if (loginInProgress) return 'Redirecting…';
-        if (!authenticated) return 'Authenticate with HydroShare';
+        if (!authenticated) return 'Authenticate with HydroShare to Create a Resource';
         return 'Create Resource';
     };
 
