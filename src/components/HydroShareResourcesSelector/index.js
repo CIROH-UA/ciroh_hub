@@ -5,7 +5,7 @@ import styles from "./styles.module.css";
 import HydroShareResourcesTiles from "@site/src/components/HydroShareResourcesTiles";
 import HydroShareResourcesRows from "@site/src/components/HydroShareResourcesRows";
 import HydroShareResourcesCards from "@site/src/components/HydroShareResourcesCards";
-import { fetchResourcesBySearch, fetchResourceCustomMetadata, getCommunityResources } from "@site/src/components/HydroShareImporter";
+import { fetchResourcesBySearch, fetchResourceCustomMetadata, getCommunityResources, fetchResourcesFromCollection } from "@site/src/components/HydroShareImporter";
 import {
   HiOutlineSortDescending,
   HiOutlineSortAscending,
@@ -90,7 +90,8 @@ export default function HydroShareResourcesSelector({
   const [filterSearch,   setFilterSearch]   = useState('');
   const [sortType,       setSortType]       = useState('lastModified');
   const [sortDirection,  setSortDirection]  = useState('desc');
-
+  const [ecosystems, setEcosystems] = useState([]);
+  const [ecosystem, setEcosystem] = useState('');
 
 
   const fetchResources = useCallback(
@@ -134,6 +135,15 @@ export default function HydroShareResourcesSelector({
         // For datasets, use getCommunityResources which combines group and keyword resources
         let communityResponse = null;
         let searchResponse = null;
+        const ecosystemSelected = Boolean(ecosystem);
+
+        if (ecosystemSelected) {
+          // Fetch resources from the selected ecosystem collection
+          searchResponse = await fetchResourcesFromCollection(ecosystem) || [];
+          resourceList = searchResponse;
+          searchTokenRef.current = searchResponse?.nextPaginationToken;
+        }
+        else
         if (keyword.includes('data')) {
           // Fetch resources using the community endpoint which handles both group and keyword resources, along with pagination tokens
           communityResponse = await getCommunityResources(keyword, "4", filterSearch, ascending, sortType, undefined, groupPageNumberRef.current, communityTokenRef.current, PAGE_SIZE);
@@ -149,7 +159,7 @@ export default function HydroShareResourcesSelector({
           searchTokenRef.current = searchResponse?.nextPaginationToken;
         }
 
-        const mappedList = resourceList.map((res) => ({
+        let mappedList = resourceList.map((res) => ({
           resource_id: res.resource_id,
           title: res.resource_title,
           authors: res.authors.map(
@@ -160,15 +170,34 @@ export default function HydroShareResourcesSelector({
           description: res.abstract || "No description available.",
           date_created: res.date_created,
           date_last_updated: res.date_last_updated,
+          keywords: res.subjects,
           thumbnail_url: "",
           page_url: "",
           docs_url: "",
           embed_url: "",
         }));
 
-        // Sort locally when fetching datasets to account for curated resources being combined with searched resources
-        if (keyword.includes('data')) {
-          sortResources(mappedList, sortType, sortDirection);
+        // Search and filter locally when ecosystem is selected
+        if (ecosystemSelected) {
+          const searchTerm = filterSearch.trim().toLowerCase();
+          if (searchTerm) {
+            mappedList = mappedList.filter(resource =>
+              resource.title?.toLowerCase().includes(searchTerm) ||
+              resource.authors?.toLowerCase().includes(searchTerm) ||
+              resource.description?.toLowerCase().includes(searchTerm)
+            );
+          }
+
+          // Keep only resources tagged with one of the current page's keywords (e.g. "ciroh_hub_app")
+          const pageKeywords = new Set(keyword.split(',').map(k => k.trim().toLowerCase()).filter(Boolean));
+          mappedList = mappedList.filter(resource =>
+            resource.keywords?.some(k => pageKeywords.has(k.trim().toLowerCase()))
+          );
+        }
+
+        // Sort locally when fetching datasets (or an ecosystem) to account for curated resources being combined with searched resources
+        if (keyword.includes('data') || ecosystemSelected) {
+          mappedList = sortResources(mappedList, sortType, sortDirection);
         }
 
         // Handle first page vs pagination
@@ -222,10 +251,47 @@ export default function HydroShareResourcesSelector({
         fetching.current = false;
       }
     },
-    [keyword, filterSearch, sortDirection, sortType]
+    [keyword, filterSearch, sortDirection, sortType, ecosystem]
   );
 
+  // Fetch ecosystem resources and extract their titles for the ecosystem selector
+  useEffect(() => {
+    try {
+      let cancelled = false;
 
+      // Fetch ecosystem resources asynchronously
+      (async () => {
+        try {
+          // Fetch ecosystem resources from HydroShare using the search API
+          const ecosystemsResponse = await fetchResourcesBySearch('ciroh_hub_group', '');
+
+          // Make sure the component has not been unmounted before updating state
+          if (!cancelled)
+          {
+            // Extract the titles from the ecosystem resources
+            let newEcosystems = [{'name': 'All', 'id': ''}];
+
+            for (let resource of ecosystemsResponse.resources) {
+              if (resource?.resource_title && resource?.resource_id) {
+                newEcosystems.push({name: resource.resource_title, id: resource.resource_id});
+              }
+            }
+
+            // Update the state with the extracted ecosystem titles
+            setEcosystems(newEcosystems);
+          }
+        } catch (error) {
+          if (!cancelled) console.error(error.message);
+        }
+      })();
+
+      // Cleanup function to mark the fetch as cancelled if the component unmounts
+      return () => { cancelled = true; };
+    } 
+    catch (error) {
+      console.error(`Error fetching ecosystem resources: ${error.message}`);
+    }
+  }, []);
 
   // Reset and load first page when filters change
   useEffect(() => {
@@ -254,6 +320,7 @@ export default function HydroShareResourcesSelector({
       filterSearch,
       sortType,
       sortDirection,
+      ecosystem,
       view,
     });
   }, [
@@ -264,6 +331,7 @@ export default function HydroShareResourcesSelector({
     filterSearch,
     sortType,
     sortDirection,
+    ecosystem,
     view,
     onResultsChange,
   ]);
@@ -325,41 +393,73 @@ export default function HydroShareResourcesSelector({
             </div>
 
             <form
-              className="tw-flex tw-flex-col md:tw-flex-row md:tw-items-center tw-gap-3 tw-w-full lg:tw-w-auto"
+              className="tw-flex tw-flex-col md:tw-flex-row md:tw-items-end tw-gap-3 tw-w-full lg:tw-w-auto"
               onSubmit={e => { e.preventDefault(); commitSearch(searchInput); }}
             >
-              <div className="tw-relative tw-w-full md:tw-w-[28rem]">
-                <span className="tw-pointer-events-none tw-absolute tw-left-3 tw-inset-y-0 tw-flex tw-items-center tw-text-slate-400 dark:tw-text-slate-500">
-                  <HiOutlineSearch size={18} />
+              {/* Search Input */}
+              <label className="tw-flex tw-flex-col tw-w-full md:tw-w-[28rem]">
+                <span className="tw-mb-1 tw-text-sm tw-font-semibold tw-text-slate-600 dark:tw-text-slate-300">
+                  Search
                 </span>
-                <input
-                  type="text"
-                  placeholder="Search by Title, Author, Description..."
-                  className="tw-w-full tw-rounded-lg tw-border tw-border-slate-200/80 dark:tw-border-slate-700/80 tw-bg-white/80 dark:tw-bg-slate-900/50 tw-backdrop-blur tw-pl-10 tw-pr-3 tw-py-3 tw-text-sm tw-text-slate-900 dark:tw-text-white placeholder:tw-text-slate-400 dark:placeholder:tw-text-slate-500 focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-cyan-500/30"
-                  value={searchInput}
-                  onChange={e => setSearchInput(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter') {
-                      e.preventDefault();
-                      commitSearch(e.currentTarget.value);
-                    }
-                  }}
-                  onBlur={(e) => commitSearch(e.currentTarget.value)}
-                />
-              </div>
-
+                <div className="tw-relative">
+                  <span className="tw-pointer-events-none tw-absolute tw-left-3 tw-inset-y-0 tw-flex tw-items-center tw-text-slate-400 dark:tw-text-slate-500">
+                    <HiOutlineSearch size={18} />
+                  </span>
+                  <input
+                    type="text"
+                    placeholder="Search by Title, Author, Description..."
+                    className="tw-w-full tw-rounded-lg tw-border tw-border-slate-200/80 dark:tw-border-slate-700/80 tw-bg-white/80 dark:tw-bg-slate-900/50 tw-backdrop-blur tw-pl-10 tw-pr-3 tw-py-3 tw-text-sm tw-text-slate-900 dark:tw-text-white placeholder:tw-text-slate-400 dark:placeholder:tw-text-slate-500 focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-cyan-500/30"
+                    value={searchInput}
+                    onChange={e => setSearchInput(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') {
+                        e.preventDefault();
+                        commitSearch(e.currentTarget.value);
+                      }
+                    }}
+                    onBlur={(e) => commitSearch(e.currentTarget.value)}
+                  />
+                </div>
+              </label>
+              
+              {/* Group Selector */}
               <div className="tw-flex tw-flex-wrap tw-gap-2 tw-items-center">
-                <select
-                  value={sortType}
-                  onChange={e => setSortType(e.target.value)}
-                  className="tw-rounded-lg tw-border tw-border-slate-200/80 dark:tw-border-slate-700/80 tw-bg-white/80 dark:tw-bg-slate-900/50 tw-backdrop-blur tw-px-3 tw-py-3 tw-text-sm tw-text-slate-900 dark:tw-text-white focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-cyan-500/30"
-                >
-                  <option value="lastModified">Last Updated</option>
-                  <option value="dateCreated">Date Created</option>
-                  <option value="name">Title</option>
-                  <option value="creatorName">Authors</option>
-                </select>
-
+                <label className="tw-flex tw-flex-col">
+                  <span className="tw-mb-1 tw-text-sm tw-font-semibold tw-text-slate-600 dark:tw-text-slate-300">
+                    Group
+                  </span>
+                  <select
+                    value={ecosystem}
+                    onChange={e => setEcosystem(e.target.value)}
+                    className="tw-rounded-lg tw-border tw-border-slate-200/80 dark:tw-border-slate-700/80 tw-bg-white/80 dark:tw-bg-slate-900/50 tw-backdrop-blur tw-px-3 tw-py-3 tw-text-sm tw-text-slate-900 dark:tw-text-white focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-cyan-500/30"
+                  >
+                    {ecosystems.map(({name, id}) => (
+                      <option key={id} value={id}>{name}</option>
+                    ))}
+                  </select>
+                </label>
+              </div>
+              
+              {/* Sort Inputs */}
+              <div className="tw-flex tw-flex-wrap tw-gap-2 tw-items-end">
+                {/* Sort By Selector */}
+                <label className="tw-flex tw-flex-col">
+                  <span className="tw-mb-1 tw-text-sm tw-font-semibold tw-text-slate-600 dark:tw-text-slate-300">
+                    Sort by
+                  </span>
+                  <select
+                    value={sortType}
+                    onChange={e => setSortType(e.target.value)}
+                    className="tw-rounded-lg tw-border tw-border-slate-200/80 dark:tw-border-slate-700/80 tw-bg-white/80 dark:tw-bg-slate-900/50 tw-backdrop-blur tw-px-3 tw-py-3 tw-text-sm tw-text-slate-900 dark:tw-text-white focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-cyan-500/30"
+                  >
+                    <option value="lastModified">Last Updated</option>
+                    <option value="dateCreated">Date Created</option>
+                    <option value="name">Title</option>
+                    <option value="creatorName">Authors</option>
+                  </select>
+                </label>
+                
+                {/* Sort Direction Button */}
                 <button
                   type="button"
                   aria-label={`Sort direction ${sortDirection}`}
@@ -374,7 +474,8 @@ export default function HydroShareResourcesSelector({
                     ? <HiOutlineSortAscending size={20} />
                     : <HiOutlineSortDescending size={20} />}
                 </button>
-
+                
+                {/* View Toggle Buttons */}
                 <div className="tw-flex tw-gap-2">
                   {/* <button
                     type="button"
@@ -413,7 +514,7 @@ export default function HydroShareResourcesSelector({
             <CardsComponent resources={resources} defaultImage={defaultImage} />
           )}
 
-          {!loading && nonPlaceholderResources.length === 0 && (
+          {!loading && !fetching.current && nonPlaceholderResources.length === 0 && (
             <p className="tw-mt-10 tw-text-center tw-text-sm tw-text-slate-600 dark:tw-text-slate-300">
               No {resultLabel} Found
             </p>
@@ -522,7 +623,7 @@ export default function HydroShareResourcesSelector({
         )}
 
         {/* empty */}
-        {!loading && nonPlaceholderResources.length === 0 && (
+        {!loading && !fetching.current && nonPlaceholderResources.length === 0 && (
           <p className={styles.emptyMessage}>No&nbsp;Resources&nbsp;Found</p>
         )}
       </div>
