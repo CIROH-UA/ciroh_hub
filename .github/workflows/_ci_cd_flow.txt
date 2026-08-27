@@ -1,6 +1,3 @@
-Note: Some of these actions are contained in subfolders.
-This is because composite actions must be called from an action.yml file.
-
   [Trigger from main]           [Trigger from PR]
            |                            L======> ci_pr_validation.yml
            |                            |   L==> [PR is closed/tagged for cleanup] ==> cd_clean_up_pr.yml
