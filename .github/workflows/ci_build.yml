@@ -1,0 +1,200 @@
+# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
+
+# Trigger logic has been spun out into the various 'ci_trigger_*.yml' workflows.
+
+name: 'Callable: Create build artifact'
+run-name: 'Create build artifact for ${{github.event.inputs.title-source}}: "${{github.event.inputs.title-header}}"'
+
+on:
+  workflow_call:
+    inputs:
+      config-id:
+        description: 'ID for a GitHub artifact containing a JSON configuration file.'
+        required: true
+        type: string
+      title-source:
+        description: 'Human-readable identifier for input source. Only used for run-name.'
+        required: false
+        default: '?'
+        type: string
+      title-header:
+        description: 'Human-readable commit header for input source. Only used for run-name.'
+        required: false
+        default: '?'
+        type: string
+    outputs:
+      build-id:
+        description: 'ID for the GitHub build artifact output by this file.'
+        value: ${{ jobs.build.outputs.build-id }}
+      metadata-id:
+        description: 'ID for a GitHub artifact containing the metadata for this build.'
+        value: ${{ jobs.build.outputs.metadata-id }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [22.x]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+    permissions:
+      contents: read
+    outputs:
+      build-id: ${{ steps.upload-build.outputs.artifact-id }}
+      metadata-id: ${{ steps.upload-metadata.outputs.artifact-id }}
+
+    steps:
+    - name: Download config payload
+      uses: actions/download-artifact@v8
+      with:
+        artifact-ids: ${{ inputs.config-id }}
+        path: ${{ runner.temp }}/
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Unpack payload inputs
+      id: extract-json
+      run: |
+        payload=`cat ${{ runner.temp }}/build_params.json`
+        echo "payload-json=$payload" >> $GITHUB_OUTPUT
+        echo $payload
+    
+    - name: Parse payload inputs
+      id: parse-json
+      run: |
+        echo "source-ref=${{ fromJson(steps.extract-json.outputs.payload-json).source_ref }}" >> $GITHUB_OUTPUT
+        echo "source-repo=${{ fromJson(steps.extract-json.outputs.payload-json).source_repo }}" >> $GITHUB_OUTPUT
+        echo "DEPLOY_ENV=${{ fromJson(steps.extract-json.outputs.payload-json).deploy_env }}" >> $GITHUB_ENV
+        echo "TARGET_REPO=${{ fromJson(steps.extract-json.outputs.payload-json).target_repo }}" >> $GITHUB_ENV
+        echo "TARGET_PATH=${{ fromJson(steps.extract-json.outputs.payload-json).target_path }}" >> $GITHUB_ENV
+        echo "COMMIT_HEADER=${{ fromJson(steps.extract-json.outputs.payload-json).commit_header }}" >> $GITHUB_ENV
+        echo "PR_NUMBER=${{ fromJson(steps.extract-json.outputs.payload-json).pr_number }}" >> $GITHUB_ENV
+      # PR_NUMBER can and should be left empty for non-PR builds
+      
+    - name: Validate payload inputs
+      run: |
+        if ![[ "$DEPLOY_ENV" = "production" || "$DEPLOY_ENV" = "staging"]|| "$DEPLOY_ENV" = "staging-pr" ]]; then
+          echo "Invalid DEPLOY_ENV value '$DEPLOY_ENV'. Expected 'production', 'staging', or 'staging-pr'."
+          exit 1
+        fi
+    
+    - name: Generate base URL
+      run: |
+        if [[ "$TARGET_PATH" != "." ]]; then
+          echo "BASE_URL=/$TARGET_PATH" >> $GITHUB_ENV
+        else
+          echo "BASE_URL=/" >> $GITHUB_ENV
+        fi
+
+    - name: Checkout
+      uses: actions/checkout@v7
+      with:
+        ref: ${{ steps.parse-json.outputs.SOURCE_REF }}
+        repository: ${{ steps.parse-json.outputs.SOURCE_REPO }}
+        # Note: allow-unsafe-pr-checkout left unset to ensure that
+        # any branch checkouts are only done on calls from pull_request.
+
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v5
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+        
+    - name: Generate version
+      id: version
+      run: |
+        version=$(date +'%Y%m%d-%H%M%S')
+        echo "VERSION=${version}" >> $GITHUB_OUTPUT
+        echo "VERSION=${version}" >> $GITHUB_ENV
+
+    - name: Install dependencies
+      run: |
+        npm ci
+    # If you're here because of an error about dependencies:
+    # that issue is most likely because of the `package-lock.json`.
+    # Delete `node_modules` and `package-lock.json` on your
+    # development environment, then run `npm i` to generate
+    # a fresh lock file.
+    # See also: https://github.com/npm/cli/issues/4828
+
+    - name: Configure baseUrl
+      run: |
+        # Create a backup of the original config
+        cp docusaurus.config.js docusaurus.config.js.bak
+        
+        # Use sed to replace the baseUrl value
+        echo "Setting baseUrl to path '$BASE_URL'"
+        sed -i 's|baseUrl: '\''\/local\/'\''|baseUrl: '\''${{ env.BASE_URL }}'\''|g' docusaurus.config.js
+        sed -i 's|baseUrl: "\/local\/"|baseUrl: '\''${{ env.BASE_URL }}'\''|g' docusaurus.config.js
+        sed -i 's|baseUrl = '\''\/local\/'\''|baseUrl = '\''${{ env.BASE_URL }}'\''|g' docusaurus.config.js
+        sed -i 's|baseUrl = "\/local\/"|baseUrl = '\''${{ env.BASE_URL }}'\''|g' docusaurus.config.js
+        
+        # Show the changed config
+        config_out="$(cat docusaurus.config.js | head -n 10)"
+        echo "Modified docusaurus.config.js (first 10 lines):"
+        echo "${config_out}"
+
+    # Build the site
+    - name: Build website
+      run: npm run build
+      env:
+          ZOTERO_API_KEY: ${{ secrets.ZOTERO_API_KEY }}
+          ZOTERO_CIROH_GROUP_ID: ${{ secrets.ZOTERO_CIROH_GROUP_ID }}
+          ZOTERO_STAGING_API_KEY: ${{ secrets.ZOTERO_STAGING_API_KEY }}
+          ZOTERO_CIROH_STAGING_GROUP_ID: ${{ secrets.ZOTERO_CIROH_STAGING_GROUP_ID }}
+          CAPTCHA_KEY: ${{ secrets.CAPTCHA_KEY }}
+          S3_BUCKET_NAME: ${{ secrets.S3_BUCKET_NAME }}
+          S3_ACCESS_KEY: ${{ secrets.S3_ACCESS_KEY }}
+          S3_SECRET_KEY: ${{ secrets.S3_SECRET_KEY }}
+          S3_REGION: ${{ secrets.S3_REGION }}
+          HS_CLIENT_ID: ${{ secrets.HS_CLIENT_ID }}
+          HS_FEATURED_APPS_COLLECTION_ID: ${{ vars.HS_FEATURED_APPS_COLLECTION_ID }}
+          HS_FEATURED_DATASETS_COLLECTION_ID: ${{ vars.HS_FEATURED_DATASETS_COLLECTION_ID }}
+          HS_FEATURED_COURSES_COLLECTION_ID: ${{ vars.HS_FEATURED_COURSES_COLLECTION_ID }}
+          HS_FEATURED_PRESENTATIONS_COLLECTION_ID: ${{ vars.HS_FEATURED_PRESENTATIONS_COLLECTION_ID }}
+          HS_FEATURED_NOTEBOOKS_COLLECTION_ID: ${{ vars.HS_FEATURED_NOTEBOOKS_COLLECTION_ID }}
+          GH_PROJECT_TOKEN: "deprecated"
+        
+    - name: Upload a Build Artifact
+      id: upload-build
+      uses: actions/upload-artifact@v7
+      with:
+        name: build-${{ env.DEPLOY_ENV }}${{ env.PR_NUMBER }}
+        path: build/
+
+    - name: Create release
+      if: ${{ env.DEPLOY_ENV == 'production' }}
+      uses: actions/create-release@v1
+      id: create_release
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: v${{env.VERSION}}
+        release_name: Release v${{env.VERSION}}
+        draft: false
+        prerelease: false
+
+    # Get short SHA
+    - name: Get short SHA
+      id: short-sha
+      run: echo "SHORT_SHA=$(git rev-parse --short ${{ github.sha }})" >> $GITHUB_OUTPUT
+    
+    - name: Set payload path
+      run: |
+        echo "PAYLOAD_DIR=./payloads" >> $GITHUB_ENV
+        echo "PAYLOAD_NAME=build_metadata.json" >> $GITHUB_ENV
+
+    # Write build metadata to JSON file
+    - name: Write build metadata to JSON
+      id: define-metadata
+      run: |
+        mkdir $PAYLOAD_DIR
+        echo {\"deploy_env\": \"${DEPLOY_ENV}\", \"version\": \"${VERSION}\", \"target_repo\": \"${TARGET_REPO}\", \"target_path\": \"${TARGET_PATH}\", \"short_hash\": \"${{ steps.short-sha.outputs.SHORT_SHA }}\", \"commit_hash\": \"${{ github.sha }}\", \"commit_header\": \"${COMMIT_HEADER}\", \"branch\": \"${{ github.ref_name }}\", \"pr_number\": \"${PR_NUMBER}\"} > $PAYLOAD_DIR/$PAYLOAD_NAME
+        cat $PAYLOAD_DIR/$PAYLOAD_NAME
+
+    - name: Upload build metadata artifact
+      id: upload-metadata
+      uses: actions/upload-artifact@v7
+      with:
+        name: ${{ env.PAYLOAD_NAME }}
+        path: ${{ env.PAYLOAD_DIR }}/${{ env.PAYLOAD_NAME }}
