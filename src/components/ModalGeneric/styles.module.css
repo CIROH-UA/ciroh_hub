@@ -1,0 +1,8 @@
+.modalBelowNavbar {
+  top: var(--ifm-navbar-height);
+  height: calc(100vh - var(--ifm-navbar-height));
+}
+
+.title {
+  font-size: clamp(1.35rem, 2.6vw, 1.75rem);
+}
