@@ -36,7 +36,7 @@ jobs:
       payload: ${{ steps.extract-json.outputs.environment }}
       version: ${{ steps.extract-json.outputs.version }}
     permissions:
-      contents: read
+      contents: write # To tag and create a new release
       actions: write
     name: Deploy to remote
     steps:
@@ -94,6 +94,18 @@ jobs:
           echo "Deploying version: $VERSION"
           echo "Environment: $DEPLOY_ENV"
           echo "Deploy target: /$TARGET_PATH @ $TARGET_REPO"
+
+      - name: Create release
+        if: ${{ env.DEPLOY_ENV == 'production' }}
+        uses: actions/create-release@v1
+        id: create_release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: v${{env.VERSION}}
+          release_name: Release v${{env.VERSION}}
+          draft: false
+          prerelease: false
           
       - name: Download a Build Artifact
         uses: actions/download-artifact@v8

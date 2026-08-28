@@ -162,18 +162,6 @@ jobs:
         name: build-${{ env.DEPLOY_ENV }}${{ env.PR_NUMBER }}
         path: build/
 
-    - name: Create release
-      if: ${{ env.DEPLOY_ENV == 'production' }}
-      uses: actions/create-release@v1
-      id: create_release
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        tag_name: v${{env.VERSION}}
-        release_name: Release v${{env.VERSION}}
-        draft: false
-        prerelease: false
-
     # Get short SHA
     - name: Get short SHA
       id: short-sha
