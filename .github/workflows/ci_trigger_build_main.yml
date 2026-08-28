@@ -1,7 +1,7 @@
 # Triggers a CI/CD deployment from the main branch to staging.
 
-name: 'CI/CD: Trigger build and deployment from main'
-run-name: 'Trigger build and deployment from main'
+name: 'CI/CD: Build and deploy from main'
+run-name: 'Build and deploy from main'
 
 on:
   push:
