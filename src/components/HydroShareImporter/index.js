@@ -1,4 +1,7 @@
-const { XMLParser } = require("fast-xml-parser");
+// Matches HydroShare resource ids contained in the relations, which can be in the form of:
+//   .../resource/<32-hex>
+//   https://doi.org/10.4211/hs.<32-hex>
+const RESOURCE_ID_REGEX = /(?:\/resource\/|10\.4211\/hs\.)([0-9a-f]{32})/i;
 
 /**
  * Sample endpoint: 
@@ -147,8 +150,27 @@ function getRawDiscoveryResources(data) {
 // }
 
 async function fetchResource(id) {
-  const url = `https://www.hydroshare.org/hsapi/resource/${encodeURIComponent(id)}/sysmeta`;
-  return fetchJson(url, "resources");
+  // Fetch the resource from HydroShare
+  const url = `https://www.hydroshare.org/hsapi/resource/${encodeURIComponent(id)}/scimeta/elements/`;
+  const response = await fetchJson(url, `scimeta elements for resource ${id}`);
+
+  // Extract identifiers and other relevant fields from the response
+  const identifiers = response.identifiers || [];
+  const hydroShareUrl = identifiers.find(i => i.name === 'hydroShareIdentifier')?.url;
+  const dates = response.dates || [];
+
+  return {
+    resource_id: id,
+    resource_title: response.title || "",
+    authors: (response.creators || []).map(c => c.name || c.organization || "").filter(Boolean),
+    resource_type: typeof response.type === 'string' ? response.type.replace(/^.*\//, "") : "", // Extract the last segment of the URI (http://www.hydroshare.org/terms/CollectionResource - > CollectionResource)
+    resource_url: hydroShareUrl || `https://www.hydroshare.org/resource/${id}/`,
+    doi: identifiers.find(i => i.name === 'doi')?.url || null,
+    abstract: response.description || "",
+    date_created: dates.find(d => d.type === 'created')?.start_date || "",
+    date_last_updated: dates.find(d => d.type === 'modified')?.start_date || "",
+    subjects: (response.subjects || []).map(s => s?.value).filter(Boolean),
+  };
 }
 
 // Helper function to fetch list of resources by group
@@ -190,13 +212,16 @@ async function fetchResourcesByGroup(groupid, fullTextSearch=undefined, pageNumb
 }
   
 function extractRelatedResourceIds(metadata) {
-  return metadata.relations
+  const ids = metadata.relations
     .filter(item => item.type === 'hasPart')
     .map(item => {
-      const match = item.value.match(/http:\/\/www\.hydroshare\.org\/resource\/([a-f0-9]{32})/);
-      return match ? match[1] : null;
+      const match = item.value.match(RESOURCE_ID_REGEX);
+      return match ? match[1].toLowerCase() : null;
     })
     .filter(id => id !== null); // Remove non-matching entries
+
+  // Deduplicate members cited in both URL and DOI form
+  return [...new Set(ids)];
 }
 
 async function getCuratedIds(resourceId) {
@@ -544,7 +569,7 @@ async function fetchRawCuratedResources(curated_parent_id) {
  */
 async function fetchResourcesFromCollection(collectionId) {
   // Fetch the collection metadata to extract its contained resource ids
-  const collectionMetadataUrl = `https://www.hydroshare.org/hsapi/resource/${collectionId}/scimeta/`;
+  const collectionMetadataUrl = `https://www.hydroshare.org/hsapi/resource/${collectionId}/scimeta/elements/`;
   const collectionMetadataResponse = await fetch(collectionMetadataUrl);
 
   // Error occurred
@@ -552,30 +577,36 @@ async function fetchResourcesFromCollection(collectionId) {
     throw new Error(`Error fetching collection metadata for ${collectionId} (status: ${collectionMetadataResponse.status})`);
   }
 
-  // Parse the XML metadata to extract resource ids
-  const collectionMetadataText = await collectionMetadataResponse.text();
-  const xmlParser = new XMLParser();
-  const collectionMetadata = xmlParser.parse(collectionMetadataText);
+  // Get the response data as JSON
+  const collectionMetadataJson = await collectionMetadataResponse.json();
 
-  // Get the relations as an array (handle both single relation and multiple relations cases)
-  const relations = collectionMetadata['rdf:RDF']['hsterms:CollectionResource']['dc:relation'];
-  const relationsList = Array.isArray(relations) ? relations : [relations];
+  // Get the relations of the collection (if available) to find the contained resources
+  const relations = collectionMetadataJson.relations || [];
 
   // Extract each resource id from the collection relations
-  const resourceIds = [];
-  for (const relation of relationsList)
+  const resourceIds = new Set();
+  for (const relation of relations)
   {
     // Extract resource id
-    const hasPartText = relation['rdf:Description']['dcterms:hasPart']
-    const url = hasPartText.split(' ').pop();
-    const resourceId = url.split('/').pop();
-    
-    // Add resource id to list
-    resourceIds.push(resourceId);
+    if (relation.type === 'hasPart' && relation.value)
+    {
+      // Extract the resource id from the relation
+      const match = relation.value.match(RESOURCE_ID_REGEX);
+
+      if (match)
+      {
+        // Add resource id to list
+        resourceIds.add(match[1].toLowerCase());
+      }
+      else
+      {
+        console.warn(`Unrecognized hasPart relation in collection ${collectionId}: ${relation.value}`);
+      }
+    }
   }
 
   // Fetch all resources in parallel
-  const resourcePromises = resourceIds.map(resourceId =>
+  const resourcePromises = Array.from(resourceIds).map(resourceId =>
     fetchResource(resourceId).catch(err => {
       console.error(`Error fetching resource ${resourceId} from collection ${collectionId}:`, err);
       return null;
