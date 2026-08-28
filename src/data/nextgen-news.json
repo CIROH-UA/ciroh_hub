@@ -48,7 +48,7 @@
             "type": "FIM",
             "title": "Community FIM Ecosystem",
             "link": "https://nwps.ciroh.org",
-            "description": "Community FIM Ecosystem documentation has been newly added to the [CIROH Hub](/docs/products/fim-ecosystem/). It offers a flood modeling-to-evaluation framework for flood inundation modeling, simulation, benchmarking, and evaluation. \n\n Additonally, a new research testbed replicating the look of [water.noaa.gov](https://water.noaa.gov) is now live at [nwps.ciroh.org](https://nwps.ciroh.org), providing a sandbox for experimenting with the National Water Prediction Service (NWPS) interface."
+            "description": "Community FIM Ecosystem documentation has been newly added to the [CIROH Hub](/docs/products/community-fim/). It offers a flood modeling-to-evaluation framework for flood inundation modeling, simulation, benchmarking, and evaluation. \n\n Additonally, a new research testbed replicating the look of [water.noaa.gov](https://water.noaa.gov) is now live at [nwps.ciroh.org](https://nwps.ciroh.org), providing a sandbox for experimenting with the National Water Prediction Service (NWPS) interface."
         },
 		{
 			"type": "hydrofabric",
@@ -1328,7 +1328,8 @@
 			"type": "news",
 			"title": "NextGen In A Box (NGIAB)",
 			"description": "We have made some improvements to NGIAB: 10 PRs merged. Sample input data updated to use AWI_003(with new data provider names). Boost upgraded to v1.79. Self-hosted Runner can start and stop automatically with GitHub Actions. NGIAB image can run in auto mode. Geopackage support added. Documentation available at CIROH DocuHub",
-			"link": "https://hub.ciroh.org/docs/products/ngiab-ecosystem/ngiab/distributions/ngiab-docker"
+			"link": "https://hub.ciroh.org/docs/products/ngiab-ecosystem/ngiab/distributions/ngiab-docker"
+
 		},
 		{
 			"type": "feature",
