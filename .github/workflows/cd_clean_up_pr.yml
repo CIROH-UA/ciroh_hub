@@ -12,7 +12,7 @@ env:
   TARGET_PATH: staging/${{ github.event.pull_request.number }}
 
 concurrency:
-  group: ci-ngiab-website-pr-#{{ github.event.pull_request.number }}
+  group: ci-ngiab-website-pr-${{ github.event.pull_request.number }}
   cancel-in-progress: true
 
 jobs:
