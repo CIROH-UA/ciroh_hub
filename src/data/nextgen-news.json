@@ -23,13 +23,13 @@
 			"type": "blog",
 			"title": "NGIAB and CIROH Cyberinfrastructure Power Flash Flood Research at the 2026 Summer Institute",
 			"link": "",
-			"description": "Ten graduate students across three teams (**Don't Runoff!**, **FlashCast**, and **The Post-Processors**) spent seven weeks at the 2026 Water Prediction Innovators Summer Institute advancing quantitative precipitation inputs into the NextGen Framework, using [NextGen In A Box (NGIAB)](https://ngiab.ciroh.org/) and NSF ACCESS [Jetstream2](/docs/services/external-resources/nsf-access/jetstream) allocations provided through CIROH cyberinfrastructure. [Read more in the blog post.](/blog/2026-08-24-Summer-Institute-Flash-Flood)"
+			"description": "Ten graduate students across three teams (**Don't Runoff!**, **FlashCast**, and **The Post-Processors**) spent seven weeks at the 2026 Water Prediction Innovators Summer Institute advancing quantitative precipitation inputs into the NextGen Framework, using [NextGen In A Box (NGIAB)](https://ngiab.ciroh.org/) and NSF ACCESS [Jetstream2](/docs/services/external-resources/nsf-access/jetstream) allocations provided through CIROH cyberinfrastructure. [Read more in the blog post.](/blog/summer-institute-flash-flood)"
 		},
 		{
 			"type": "blog",
 			"title": "CIROH Flood Inundation Mapping (FIM) Community Ecosystem: A Large-Scale Operational Flood Modeling-to-Evaluation Framework",
 			"link": "https://sdml.ua.edu/fim-ecosystem/",
-			"description": "The University of Alabama's Surface Dynamics Modeling Lab (SDML), with CIROH support, has built the [CIROH FIM Community Ecosystem](https://sdml.ua.edu/fim-ecosystem/): an interconnected, open-source, cloud-native suite of Python tools spanning flood inundation modeling, simulation, benchmarking, and evaluation at national scale. [Read more in the blog post.](/blog/2026-08-20-FIM-Ecosystem)"
+			"description": "The University of Alabama's Surface Dynamics Modeling Lab (SDML), with CIROH support, has built the [CIROH FIM Community Ecosystem](https://sdml.ua.edu/fim-ecosystem/): an interconnected, open-source, cloud-native suite of Python tools spanning flood inundation modeling, simulation, benchmarking, and evaluation at national scale. [Read more in the blog post.](/blog/fim-community-ecosystem)"
 		},
 		{
 			"type": "news",
@@ -48,7 +48,7 @@
             "type": "FIM",
             "title": "Community FIM Ecosystem",
             "link": "https://nwps.ciroh.org",
-            "description": "Community FIM Ecosystem documentation has been newly added to the [CIROH Hub](/docs/products/community-fim/). It offers a flood modeling-to-evaluation framework for flood inundation modeling, simulation, benchmarking, and evaluation. \n\n Additonally, a new research testbed replicating the look of [water.noaa.gov](https://water.noaa.gov) is now live at [nwps.ciroh.org](https://nwps.ciroh.org), providing a sandbox for experimenting with the National Water Prediction Service (NWPS) interface."
+            "description": "[Community FIM Ecosystem documentation](/docs/products/community-fim/) has been newly added to the CIROH Hub. It offers a flood modeling-to-evaluation framework for flood inundation modeling, simulation, benchmarking, and evaluation. \n\n Additonally, a new research testbed replicating the look of [water.noaa.gov](https://water.noaa.gov) is now live at [nwps.ciroh.org](https://nwps.ciroh.org), providing a sandbox for experimenting with the National Water Prediction Service (NWPS) interface."
         },
 		{
 			"type": "hydrofabric",
