@@ -162,6 +162,9 @@ function ResourceForm() {
 
     return (
         <div className={styles.container}>
+            {/* Subtitle */}
+            <p className={styles.subtitle}>Use the form below to create a new CIROH HydroShare resource.</p>
+
             {/* Logout Button */}
             {authenticated && (
                 <div className={styles.authRow}>
