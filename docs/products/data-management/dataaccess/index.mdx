@@ -185,12 +185,33 @@ Google hosts the most complete operational data archive of inputs and outputs fr
 Some of the datasets from the NWM operational and retrospective simulations are available on BigQuery for ultra-high-bandwidth access. For more information, visit the [NWM BigQuery API page](/docs/products/data-management/bigquery-api).
 
 
-#### Azure/Planetary Computer
+### Microsoft Azure Blob Storage 
 
-Microsoft hosts the NWM input and output datasets in Azure Blob Storage, associated with the Microsoft Planetary Computer.
-[Microsoft Planetary Computer](https://planetarycomputer.microsoft.com/dataset/storage/noaa-nwm)
-Tom Augspurger of Microsoft has a series of notebooks providing examples of how to use this data from his workshop at the first CIROH developers conference.
-[Tom Augspurger's Notebooks](https://github.com/TomAugspurger/noaa-nwm)
+Microsoft hosts the NWM input and output datasets in Azure Blob Storage. The dataset is not yet avalible through Microsoft Planetary Computer API. All data files are in NetCDF4 format. Documentation details and file name syntax can be found [here](https://planetarycomputer.microsoft.com/dataset/storage/noaa-nwm).
+
+There are 5 main categories of data stored in Azure Blob Storage, listed below. 
+
+***NWM Analysis and Assimilation***
+
+This section has 5 subcategories of data: Analysis and Assimilation, Analysis and Assimilation Long, Analysis and Assimilation Forcing, Analysis and Assimilation (No DA), Analysis and Assimilation Long (No DA). For the Analysis and Assimilation, Analysis and Assimilation Forcing, and Analysis and Assimilation (No DA), data is available for the Continential United States, Hawaii, and Puerto Rico. For the two "Long" data sets, only data avaliable is for the Continetial United States. The "No DA" stands for "No Data Assimilation." 
+
+***NWM Short Range***
+
+Both the short range forecast and the short range forcing data are included in this section. Data is avaliable for the Continetial United States, Hawaii, and Puerto Rico for both data sets. 
+
+***NWM Medium Range***
+
+Medium range forecast data and medium range forcing data are only avaliable for the Continential United States. 
+
+***NWM Long Range***
+
+Long range forecasts are avaliable for the Continental United States only. There is no associated forcing data avaliable. 
+
+***USGS Observations***
+
+This data set has USGS Timeslices, which are 15-minute observation data for the Continental United States. 
+
+Tom Augspurger of Microsoft has a series of notebooks providing examples of how to use this data from his workshop at the first CIROH Developers Conference. View them [here](https://github.com/TomAugspurger/noaa-nwm). 
 
 ### CIROH Resources
 More detailed information and example usage will be available soon.
