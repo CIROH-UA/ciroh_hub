@@ -1,0 +1,284 @@
+---
+sidebar_position: 2
+title: "NGIAB at a Glance"
+description: "A tour of the capabilities of the NGIAB ecosystem."
+tags: [Products, NGIAB, CIROH, National Water Model, Education]
+---
+
+import Link from '@docusaurus/Link'
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+{/* TODO: Rework to reflect "5 Ways to Run NGIAB". */}
+
+Explore the NextGen In A Box (NGIAB) ecosystem through the interactive tabs below.
+
+Click on Key Features, Capabilities, or Access Methods to learn more.
+
+---
+
+<Tabs>
+  <TabItem value="features" label="Key Features" default>
+    <table>
+      <thead>
+        <tr>
+          <th>NGIAB and Extensions</th>
+          <th>Key features</th>
+          <th>NOAA-OWP Tools/Libraries Utilized</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+        <th><Link to="/docs/products/ngiab-ecosystem/ngiab/components/ngiab-preprocessor/">Data Preprocess</Link></th>
+        <td>
+          - Specializes in initial data preparation
+          - Handles subsetting and forcing processing
+          - Supports basic data processing tasks
+          - Helps with running NGIAB
+        </td>
+        <td>
+          - t-route
+          - hydrotools
+          - hydrofabric tools
+        </td>
+        </tr>
+        <tr>
+          <th>
+            <p style={{'margin':'0'}}>NGIAB Implementation</p>
+            <p style={{'margin':'0'}}>(<Link to="/docs/products/ngiab-ecosystem/ngiab/distributions/ngiab-docker/">Cloud</Link>, <Link to="/docs/products/ngiab-ecosystem/ngiab/distributions/ngiab-singularity/">HPC</Link>)</p>
+          </th>
+          <td>
+            - Focused specifically on model execution
+            - Core engine for running simulations
+            - Does not handle pre/post-processing tasks
+          </td>
+          <td> </td>
+        </tr>
+        <tr>
+          <th><Link to="/docs/products/ngiab-ecosystem/ngiab/components/ngiab-teehr/">TEEHR Evaluation</Link></th>
+          <td>
+            - Handles both input and output processing
+            - Supports full workflow, from data preparation to cloud deployment
+          </td>
+          <td>
+            Built to evaluate OWP model outputs
+          </td>
+        </tr>
+        <tr>
+          <th><Link to="/docs/products/ngiab-ecosystem/ngiab/components/ngiab-visualizer/">Data Visualizer</Link></th>
+          <td>
+            - Focused on analysis and validation
+            - Supports data processing and output analysis
+          </td>
+          <td>
+            Designed for OWP hydrofabric visualization
+          </td>
+        </tr>
+        <tr>
+          <th><Link to="/docs/products/ngiab-ecosystem/nrds/">DataStreamCLI</Link></th>
+          <td>
+            - Complete workflow for creating inputs for and executing NGIAB and managing outputs
+            - Backend of the NextGen Research DataStream
+            - Discrete tooling for tasks like forcing processing and BMI file generation
+          </td>
+          <td>
+            - ngen-cal
+            - t-route
+            - hydrofabric tools
+          </td>
+        </tr>
+        <tr>
+          <th><Link to="/docs/products/ngiab-ecosystem/ngiab/components/ngiab-calibration/">NGIAB-Cal</Link></th>
+          <td>
+            - Simplifies hydrologic model calibration for NGIAB workflows
+            - Creates calibration directory and configurations within the NGIAB folder structure
+            - Runs calibration process using Docker
+            - Copies calibrated parameters to model configurations
+          </td>
+          <td>
+            - ngen-cal
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </TabItem>
+
+  <TabItem value="capabilities" label="Capabilities">
+    <table>
+      <thead>
+        <tr>
+          <th>Capability</th>
+          <th><Link to="/docs/products/ngiab-ecosystem/ngiab/components/ngiab-preprocessor/">Data Preprocess</Link></th>
+          <th><Link to="/docs/products/ngiab-ecosystem/ngiab/components/ngiab-teehr/">TEEHR Evaluation</Link></th>
+          <th><Link to="/docs/products/ngiab-ecosystem/ngiab/components/ngiab-visualizer/">Data Visualizer</Link></th>
+          <th><Link to="/docs/products/ngiab-ecosystem/nrds/">DataStreamCLI</Link></th>
+          <th><Link to="/docs/products/ngiab-ecosystem/ngiab/components/ngiab-calibration/">NGIAB-Cal</Link></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>GUI</td>
+          <td>✅</td>
+          <td>-</td>
+          <td>✅</td>
+          <td>-</td>
+          <td>-</td>
+        </tr>
+        <tr>
+          <td>Hydrofabric Subsetting</td>
+          <td>✅</td>
+          <td>-</td>
+          <td>✅ (view only)</td>
+          <td>✅🔨</td>
+          <td>-</td>
+        </tr>
+        <tr>
+          <td>NetCDF Forcing Processing</td>
+          <td>-</td>
+          <td>✅</td>
+          <td>-</td>
+          <td>✅🔨</td>
+          <td>-</td>
+        </tr>
+        <tr>
+          <td>Zarr Forcing Processing</td>
+          <td>✅</td>
+          <td>✅</td>
+          <td>-</td>
+          <td>-</td>
+          <td>-</td>
+        </tr>
+        <tr>
+          <td>Forcing Metadata Generation</td>
+          <td>✅</td>
+          <td>-</td>
+          <td>-</td>
+          <td>✅🔨</td>
+          <td>-</td>
+        </tr>
+        <tr>
+          <td>NextGen BMI Configuration File Generation</td>
+          <td>✅</td>
+          <td>-</td>
+          <td>-</td>
+          <td>✅🔨</td>
+          <td>-</td>
+        </tr>
+        <tr>
+          <td>Directory and File Format Validation</td>
+          <td>🔨</td>
+          <td>-</td>
+          <td>-</td>
+          <td>✅🔨</td>
+          <td>-</td>
+        </tr>
+        <tr>
+          <td>NextGen Execution via NGIAB</td>
+          <td>✅</td>
+          <td>-</td>
+          <td>-</td>
+          <td>✅</td>
+          <td>-</td>
+        </tr>
+        <tr>
+          <td>Execution Metadata Generation</td>
+          <td>🔨</td>
+          <td>-</td>
+          <td>-</td>
+          <td>✅🔨</td>
+          <td>-</td>
+        </tr>
+        <tr>
+          <td>Calibration</td>
+          <td>-</td>
+          <td>-</td>
+          <td>-</td>
+          <td>-</td>
+          <td>✅</td>
+        </tr>
+        <tr>
+          <td>Evaluation</td>
+          <td>-</td>
+          <td>✅🔨</td>
+          <td>🔨 (displays TEEHR results)</td>
+          <td>✅</td>
+          <td>-</td>
+        </tr>
+        <tr>
+          <td>Visualization</td>
+          <td>-</td>
+          <td>🔨 (metrics visualization)</td>
+          <td>✅</td>
+          <td>-</td>
+          <td>-</td>
+        </tr>
+      </tbody>
+    </table>
+  </TabItem>
+
+  <TabItem value="access" label="Access Methods">
+    <table>
+      <thead>
+        <tr>
+          <th>Access method</th>
+          <th><Link to="/docs/products/ngiab-ecosystem/ngiab/components/ngiab-preprocessor/">Data Preprocess</Link></th>
+          <th>
+            <p style={{'margin':'0'}}>NGIAB Implementation</p>
+            <p style={{'margin':'0'}}>(<Link to="/docs/products/ngiab-ecosystem/ngiab/distributions/ngiab-docker/">Cloud</Link>, <Link to="/docs/products/ngiab-ecosystem/ngiab/distributions/ngiab-docker/">HPC</Link>)</p>
+          </th>
+          <th><Link to="/docs/products/ngiab-ecosystem/ngiab/components/ngiab-teehr/">TEEHR Evaluation</Link></th>
+          <th><Link to="/docs/products/ngiab-ecosystem/ngiab/components/ngiab-visualizer/">Data Visualizer</Link></th>
+          <th><Link to="/docs/products/ngiab-ecosystem/nrds/">DataStreamCLI</Link></th>
+          <th><Link to="/docs/products/ngiab-ecosystem/ngiab/components/ngiab-calibration/">NGIAB-Cal</Link></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Docker</td>
+          <td>-</td>
+          <td>✅</td>
+          <td>✅</td>
+          <td>✅</td>
+          <td>✅</td>
+          <td>✅</td>
+        </tr>
+        <tr>
+          <td>Python Package (pip/uv)</td>
+          <td>✅</td>
+          <td>✅</td>
+          <td>✅</td>
+          <td>-</td>
+          <td>-</td>
+          <td>✅</td>
+        </tr>
+        <tr>
+          <td>Web Interface</td>
+          <td>✅</td>
+          <td>-</td>
+          <td>-</td>
+          <td>✅</td>
+          <td>-</td>
+          <td>-</td>
+        </tr>
+        <tr>
+          <td>Notebook (ipynb)</td>
+          <td>-</td>
+          <td>-</td>
+          <td>✅</td>
+          <td>-</td>
+          <td>-</td>
+          <td>-</td>
+        </tr>
+        <tr>
+          <td>Singularity (HPC)</td>
+          <td>-</td>
+          <td>✅</td>
+          <td>-</td>
+          <td>-</td>
+          <td>-</td>
+          <td>-</td>
+        </tr>
+      </tbody>
+    </table>
+  </TabItem>
+</Tabs>
