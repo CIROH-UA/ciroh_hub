@@ -207,6 +207,48 @@ const config = {
         //authorsMapPath: "authors.yaml", // Path to the authors' mapping file (unneeded in this case)
       }
     ],
+
+    [
+      '@docusaurus/plugin-client-redirects',
+      {
+        redirects: [
+          {
+            to: '/docs/products/data-management/fim-database',
+            from: '/docs/products/community-fim/fim-database',
+          },
+        ],
+        createRedirects(existingPath) {
+          if (existingPath.includes('/docs/products/ngiab-ecosystem/ngiab')) {
+            return [
+              existingPath.replace('/docs/products/ngiab-ecosystem/ngiab', '/docs/products/ngiab'),
+            ];
+          }
+          else if (existingPath.includes('/docs/products/ngiab-ecosystem/about-nwm')) {
+            return [
+              existingPath.replace('/docs/products/ngiab-ecosystem/about-nwm', '/docs/products/national-water-model'),
+            ];
+          }
+          else if (existingPath.includes('/docs/products/ngiab-ecosystem/nrds')) {
+            return [
+              existingPath.replace('/docs/products/ngiab-ecosystem/nrds', '/docs/products/research-datastream'),
+            ];
+          }
+          else if (existingPath.includes('/docs/products/ngiab-ecosystem/dependencies/hydrofabric')) {
+            return [
+              existingPath.replace('/docs/products/ngiab-ecosystem/dependencies/hydrofabric', '/docs/products/Hydrofabric'),
+
+            ];
+          }
+          else if (existingPath.includes('/docs/products/ngiab-ecosystem/dependencies')) {
+            return [
+              existingPath.replace('/docs/products/ngiab-ecosystem/dependencies', '/docs/products/ngiab/community-nextgen-repos'),
+
+            ];
+          }
+          return undefined; // Return a falsy value: no redirect created
+        },
+      },
+    ],
   ],
 
   themeConfig:
@@ -299,8 +341,8 @@ const config = {
                 // The sidebar loader is weirdly brittle. If a page is instantiated in "index.js", that must be specified explicitly.
                 {
                   type: "doc",
-                  docId: "products/ngiab/index",
-                  label: "NGIAB Ecosystem",
+                  docId: "products/ngiab-ecosystem/index",
+                  label: "Community NextGen Ecosystem",
                 },
                 {
                   type: "doc",
