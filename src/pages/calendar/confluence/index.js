@@ -120,8 +120,8 @@ function ConfluenceSchedule() {
         </div>
         <div className={clsx(styles.m_row, styles.schedule_entry)}>
           <span className={styles.schedule_entry_date}>Sep 24</span>
-          <span className={styles.schedule_entry_title}>Operational Partner Session — Topic to Be Announced</span>
-          <span className={styles.schedule_entry_speaker}>Speaker to be announced</span>
+          <span className={styles.schedule_entry_title}>The Weather Prediction Center: Research to Operations</span>
+          <span className={styles.schedule_entry_speaker}>David Novak &amp; Jim Nelson</span>
         </div>
         <div className={clsx(styles.m_row, styles.schedule_entry)}>
           <span className={styles.schedule_entry_date}>Oct 22</span>
@@ -140,8 +140,8 @@ function ConfluenceSchedule() {
         </div>
         <div className={clsx(styles.m_row, styles.schedule_entry)}>
           <span className={styles.schedule_entry_date}>Feb 25</span>
-          <span className={styles.schedule_entry_title}>Operational Partner Session — Topic to Be Announced</span>
-          <span className={styles.schedule_entry_speaker}>Speaker to be announced</span>
+          <span className={styles.schedule_entry_title}>Flood Mapping Development and Operational Utility</span>
+          <span className={styles.schedule_entry_speaker}>Derek Giardino</span>
         </div>
         <div className={clsx(styles.m_row, styles.schedule_entry)}>
           <span className={styles.schedule_entry_date}>Mar 25</span>
