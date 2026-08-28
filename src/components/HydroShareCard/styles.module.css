@@ -200,11 +200,15 @@ html[data-theme='dark'] .tagNotebook { --tag-text: var(--ifm-color-success-light
 .primaryButton {
   display: inline-block;
   padding: 0.65rem 1.1rem;
+  border: none;
   border-radius: 10px;
   color: #fff;
   background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+  font-family: inherit;
+  font-size: 1rem;
   font-weight: 700;
   text-decoration: none;
+  cursor: pointer;
   box-shadow: 0 4px 12px rgba(14, 165, 233, 0.22);
 }
 
@@ -217,11 +221,15 @@ html[data-theme='dark'] .tagNotebook { --tag-text: var(--ifm-color-success-light
 .secondaryButton {
   display: inline-block;
   padding: 0.65rem 1.1rem;
+  border: none;
   border-radius: 10px;
   color: #fff;
   background: #6c757d;
+  font-family: inherit;
+  font-size: 1rem;
   font-weight: 700;
   text-decoration: none;
+  cursor: pointer;
 }
 
 .secondaryButton:hover {

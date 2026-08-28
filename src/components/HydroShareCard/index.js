@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import useBaseUrl from '@docusaurus/useBaseUrl';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import styles from './styles.module.css';
@@ -9,6 +9,7 @@ import {
   HiOutlineTag,
 } from 'react-icons/hi';
 import HydroShareResourceForm from '@site/src/components/HydroShareResourceForm';
+import ModalGeneric from '@site/src/components/ModalGeneric';
 
 export default function HydroShareCard() {
   const hydroshareUrl = 'https://www.hydroshare.org/oidc/authenticate/';
@@ -20,6 +21,13 @@ export default function HydroShareCard() {
   const featuredCoursesCollectionId = siteConfig.customFields.hs_featured_courses_collection_id || '';
   const featuredPresentationsCollectionId = siteConfig.customFields.hs_featured_presentations_collection_id || '';
   const featuredNotebooksCollectionId = siteConfig.customFields.hs_featured_notebooks_collection_id || '';
+
+  // State to control the visibility of the HydroShareResourceForm modal
+  const [formOpen, setFormOpen] = useState(false);
+  useEffect(() => {
+    // Reopen after returning from the HydroShare OAuth redirect
+    if (localStorage.getItem('hydroshare-resource-form-auth-pending')) setFormOpen(true);
+  }, []);
 
   return (
     <section className={styles.section}>
@@ -90,26 +98,14 @@ export default function HydroShareCard() {
         </div>
       </div>
 
-      {/* Share on HydroShare Button */}
+      {/* Create a CIROH HydroShare Resource Button */}
       <div className={styles.actions}>
-        <a href={hydroshareUrl} target="_blank" rel="noopener noreferrer" className={styles.primaryButton}>
-          Share on CIROH HydroShare
-        </a>
-      </div>
-
-      {/* Create a HydroShare Resource Section*/}
-      <div className={clsx(styles.header, styles.formSection)}>
-        <div className={styles.card}>
-          <div className={styles.header}>
-            <div className={styles.titleRow}>  
-              <h2 className={styles.title}>Create a CIROH HydroShare Resource</h2>
-            </div>
-            <p className={styles.subtitle}>
-              Use the form below to create a new CIROH HydroShare resource.
-            </p>
-          </div>
+        <button onClick={() => setFormOpen(true)} className={styles.primaryButton}>
+          Create a CIROH HydroShare Resource
+        </button>
+        <ModalGeneric open={formOpen} onClose={() => setFormOpen(false)} title="Create a CIROH HydroShare Resource">
           <HydroShareResourceForm />
-        </div>
+        </ModalGeneric>
       </div>
 
       {/* Footer */}
