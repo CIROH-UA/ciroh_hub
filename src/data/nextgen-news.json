@@ -1,4 +1,108 @@
 {
+	"August 2026 Update": [
+		{
+			"type": "news",
+			"title": "CIROH Community Resources featured in AWI News",
+			"link": "https://awi.ua.edu/2026/08/10/ciroh-community-resources-advance-water-modeling/",
+			"description": "The Alabama Water Institute published [a news article](https://awi.ua.edu/2026/08/10/ciroh-community-resources-advance-water-modeling/) highlighting how CIROH's community resources continue to advance open, collaborative water modeling.",
+			"release_date": "08/10/2026"
+		},
+		{
+			"type": "pantarhei 2.0",
+			"title": "Pantarhei 2.0: Migration Requests Open",
+			"link": "https://github.com/CIROH-UA/NGIAB-CloudInfra/issues/new?template=new-onprem-request.yml",
+			"description": "CIROH is expanding the Pantarhei cluster. For migration of data or to get access to new Pantarhei 2.0 system, please [submit an IT ticket](https://github.com/CIROH-UA/NGIAB-CloudInfra/issues/new?template=new-onprem-request.yml) using the linked issue template."
+		},
+		{
+			"type": "news",
+			"title": "Confluence: Operational Hydrology Advances Webinar Series",
+			"link": "/calendar/confluence",
+			"description": "The Confluence Webinar Series is underway! Learn more via the new [CIROH Hub Calendar](/calendar)."
+		},
+		{
+			"type": "blog",
+			"title": "NGIAB and CIROH Cyberinfrastructure Power Flash Flood Research at the 2026 Summer Institute",
+			"link": "",
+			"description": "Ten graduate students across three teams (**Don't Runoff!**, **FlashCast**, and **The Post-Processors**) spent seven weeks at the 2026 Water Prediction Innovators Summer Institute advancing quantitative precipitation inputs into the NextGen Framework, using [NextGen In A Box (NGIAB)](https://ngiab.ciroh.org/) and NSF ACCESS [Jetstream2](/docs/services/external-resources/nsf-access/jetstream) allocations provided through CIROH cyberinfrastructure. [Read more in the blog post.](/blog/summer-institute-flash-flood)"
+		},
+		{
+			"type": "blog",
+			"title": "CIROH Flood Inundation Mapping (FIM) Community Ecosystem: A Large-Scale Operational Flood Modeling-to-Evaluation Framework",
+			"link": "https://sdml.ua.edu/fim-ecosystem/",
+			"description": "The University of Alabama's Surface Dynamics Modeling Lab (SDML), with CIROH support, has built the [CIROH FIM Community Ecosystem](https://sdml.ua.edu/fim-ecosystem/): an interconnected, open-source, cloud-native suite of Python tools spanning flood inundation modeling, simulation, benchmarking, and evaluation at national scale. [Read more in the blog post.](/blog/fim-community-ecosystem)"
+		},
+		{
+			"type": "news",
+			"title": "REU 2026 Advances Water Research with NSF ACCESS Jetstream2",
+			"link": "https://awi.ua.edu/2026/08/12/wading-through-water-wednesdays-an-experiential-approach-to-water-research-for-future-hydrologists/",
+			"description": "This summer's Research Experience for Undergraduates (REU) program put NSF ACCESS [Jetstream2](/docs/services/external-resources/nsf-access/jetstream) cyberinfrastructure to work, giving students hands-on experience. [Read more in AWI News.](https://awi.ua.edu/2026/08/12/wading-through-water-wednesdays-an-experiential-approach-to-water-research-for-future-hydrologists/)",
+			"release_date": "08/12/2026"
+		},
+		{
+			"type": "NGIAB",
+			"title": "Community NextGen Ecosystem",
+			"link": "/docs/products/ngiab-ecosystem",
+			"description": "NGIAB, NRDS, and CCNH documentation has been unified under the [Community NextGen Ecosystem](/docs/products/ngiab-ecosystem) documentation section! CIROH Hub will continue to surface the latest documentation for NGIAB and related tools, such as newly-added documentation for [rs_route](/docs/products/ngiab-ecosystem/dependencies/rs_route)."
+		},
+		{
+            "type": "FIM",
+            "title": "Community FIM Ecosystem",
+            "link": "https://nwps.ciroh.org",
+            "description": "[Community FIM Ecosystem documentation](/docs/products/community-fim/) has been newly added to the CIROH Hub. It offers a flood modeling-to-evaluation framework for flood inundation modeling, simulation, benchmarking, and evaluation. \n\n Additonally, a new research testbed replicating the look of [water.noaa.gov](https://water.noaa.gov) is now live at [nwps.ciroh.org](https://nwps.ciroh.org), providing a sandbox for experimenting with the National Water Prediction Service (NWPS) interface."
+        },
+		{
+			"type": "hydrofabric",
+			"title": "Community Hydrofabric Viewer",
+			"link": "https://communityhydrofabric.ciroh.org/",
+			"description": "The [Community Hydrofabric Viewer](https://communityhydrofabric.ciroh.org/) is now live, providing an interactive way to explore the CIROH Community Hydrofabric."
+		},
+		{
+			"type": "NGIAB",
+			"title": "NGIAB-CloudInfra: 46,000 Docker Pulls!",
+			"link": "https://github.com/CIROH-UA/NGIAB-CloudInfra/releases/tag/v2.0.0",
+			"description": "The awiciroh/ciroh-ngen-image Docker image has surpassed 46,000 pulls! Learn more at [ngiab.ciroh.org](https://ngiab.ciroh.org/). \n\n This release updates the model and build documentation, improves the model integration form, upgrades dHBV2.0 packages with corrected weights/config paths, and moves CASAM's van Genuchten parameters into shared static datasets. It also adds a new on-premise IT request issue template (replacing the previous On-Premise Request Form) and automates a monthly OWP master image build. Pinned to ngen commit `61c1400` and t-route commit `f39b8d4`.",
+			"release_date": "08/25/2026",
+			"version": "v2.0.0",
+			"contributors": 4
+		},
+		{
+			"type": "NGIAB",
+			"title": "NGIAB_data_preprocess",
+			"links": [
+				"https://github.com/CIROH-UA/NGIAB_data_preprocess/releases/tag/v4.9.2",
+				"https://github.com/CIROH-UA/NGIAB_data_preprocess/pull/256"
+			],
+			"description": "This month's release fixes the elevation unit conversion in the Snow-17 module ([#252](https://github.com/CIROH-UA/NGIAB_data_preprocess/pull/252)). A new subset CLI has also been merged, adding a standalone entry point that subsets a user-provided geopackage by user-defined catchment ID.",
+			"release_date": "2026-08-12",
+			"contributors": 2
+		},
+		{
+			"type": "NRDS",
+			"title": "DataStreamCLI",
+			"link": "https://github.com/CIROH-UA/datastreamcli/releases/tag/v1.7.2",
+			"description": "This release resolves a backwards-compatibility issue to ensure DataStreamCLI works with any datastream or integrated container, and adds a new [Getting Started guide](https://github.com/CIROH-UA/datastreamcli/blob/main/docs/GETTING_STARTED.md) walking users through its options.",
+			"release_date": "08/24/2026",
+			"version": "v1.7.2",
+			"contributors": 4
+		},
+		{
+			"type": "NRDS",
+			"title": "ForcingProcessor",
+			"link": "https://github.com/CIROH-UA/forcingprocessor/releases/tag/v2.3.0",
+			"description": "This release adds enhanced metadata with per-variable forcing statistics, support for explicitly supplying a weights file in the configuration, and publishes the Docker container to GitHub Container Registry, alongside black formatting and bug fixes.",
+			"release_date": "08/21/2026",
+			"version": "v2.3.0",
+			"contributors": 5
+		},
+		{
+			"type": "NRDS",
+			"title": "NRDS Visualizer",
+			"link": "https://github.com/CIROH-UA/nrds-client/pull/12",
+			"description": "The [NRDS Visualizer](https://nrds.ciroh.org/) has been reworked with event-driven DataStream loading, archived flowpath geometry with tiles below zoom 7, a single-file OPFS cache, retry paths, accessible names, AA-contrast tokens, a unified spinner, and 232 new tests.",
+			"release_date": "08/24/2026",
+			"contributors": 1
+		}
+	],
 	"June 2026 Update": [
 		{
 			"type": "NGIAB",
@@ -1224,7 +1328,8 @@
 			"type": "news",
 			"title": "NextGen In A Box (NGIAB)",
 			"description": "We have made some improvements to NGIAB: 10 PRs merged. Sample input data updated to use AWI_003(with new data provider names). Boost upgraded to v1.79. Self-hosted Runner can start and stop automatically with GitHub Actions. NGIAB image can run in auto mode. Geopackage support added. Documentation available at CIROH DocuHub",
-			"link": "https://hub.ciroh.org/docs/products/ngiab-ecosystem/ngiab/distributions/ngiab-docker"
+			"link": "https://hub.ciroh.org/docs/products/ngiab-ecosystem/ngiab/distributions/ngiab-docker"
+
 		},
 		{
 			"type": "feature",
