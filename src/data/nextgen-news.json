@@ -1,17 +1,23 @@
 {
 	"August 2026 Update": [
 		{
-			"type": "update",
+			"type": "news",
 			"title": "CIROH Community Resources featured in AWI News",
 			"link": "https://awi.ua.edu/2026/08/10/ciroh-community-resources-advance-water-modeling/",
 			"description": "The Alabama Water Institute published [a news article](https://awi.ua.edu/2026/08/10/ciroh-community-resources-advance-water-modeling/) highlighting how CIROH's community resources continue to advance open, collaborative water modeling.",
 			"release_date": "08/10/2026"
 		},
 		{
-			"type": "update",
-			"title": "R2O2R Webinar Series added to CIROH Hub",
-			"link": "/events",
-			"description": "A new Research-to-Operations-to-Research (R2O2R) webinar series has been added to the [CIROH Hub Events page](/events)."
+			"type": "pantarhei 2.0",
+			"title": "Pantarhei 2.0: Migration Requests Open",
+			"link": "https://github.com/CIROH-UA/NGIAB-CloudInfra/issues/new?template=new-onprem-request.yml",
+			"description": "CIROH is expanding the Pantarhei cluster. For migration of data or to get access to new Pantarhei 2.0 system, please [submit an IT ticket](https://github.com/CIROH-UA/NGIAB-CloudInfra/issues/new?template=new-onprem-request.yml) using the linked issue template."
+		},
+		{
+			"type": "news",
+			"title": "Confluence: Operational Hydrology Advances Webinar Series",
+			"link": "/calendar/confluence",
+			"description": "The Confluence Webinar Series is underway! Learn more via the new [CIROH Hub Calendar](/calendar)."
 		},
 		{
 			"type": "blog",
@@ -33,22 +39,22 @@
 			"release_date": "08/12/2026"
 		},
 		{
-			"type": "FIM",
-			"title": "nwps.ciroh.org",
-			"link": "https://nwps.ciroh.org",
-			"description": "A new research testbed replicating the look of [water.noaa.gov](https://water.noaa.gov) is now live at [nwps.ciroh.org](https://nwps.ciroh.org), providing a sandbox for experimenting with the National Water Prediction Service (NWPS) interface."
+			"type": "NGIAB",
+			"title": "Community NextGen Ecosystem",
+			"link": "/docs/products/ngiab-ecosystem",
+			"description": "NGIAB, NRDS, and CCNH documentation has been unified under the [Community NextGen Ecosystem](/docs/products/ngiab-ecosystem) documentation section! CIROH Hub will continue to surface the latest documentation for NGIAB and related tools, such as newly-added documentation for [rs_route](/docs/products/ngiab-ecosystem/dependencies/rs_route)."
 		},
 		{
-			"type": "Hydrofabric",
+            "type": "FIM",
+            "title": "Community FIM Ecosystem",
+            "link": "https://nwps.ciroh.org",
+            "description": "Community FIM Ecosystem documentation has been newly added to the [CIROH Hub](/docs/products/fim-ecosystem/). It offers a flood modeling-to-evaluation framework for flood inundation modeling, simulation, benchmarking, and evaluation. \n\n Additonally, a new research testbed replicating the look of [water.noaa.gov](https://water.noaa.gov) is now live at [nwps.ciroh.org](https://nwps.ciroh.org), providing a sandbox for experimenting with the National Water Prediction Service (NWPS) interface."
+        },
+		{
+			"type": "hydrofabric",
 			"title": "Community Hydrofabric Viewer",
 			"link": "https://communityhydrofabric.ciroh.org/",
 			"description": "The [Community Hydrofabric Viewer](https://communityhydrofabric.ciroh.org/) is now live, providing an interactive way to explore the CIROH Community Hydrofabric."
-		},
-		{
-			"type": "pantarhei 2.0",
-			"title": "Pantarhei 2.0: Migration Requests Open",
-			"link": "https://github.com/CIROH-UA/NGIAB-CloudInfra/issues/new?template=new-onprem-request.yml",
-			"description": "CIROH is expanding Pantarhei cluster. For migration of data or to get access to new Pantarhei 2.0 system, please [submit an IT ticket](https://github.com/CIROH-UA/NGIAB-CloudInfra/issues/new?template=new-onprem-request.yml) using the linked issue template."
 		},
 		{
 			"type": "NGIAB",

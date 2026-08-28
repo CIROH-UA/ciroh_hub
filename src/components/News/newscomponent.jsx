@@ -267,7 +267,8 @@ function getBadgeClass(type) {
     R20: "success",
     cyberinfrastructure: "success",
     pantarhei: "success",
-    "2i2c": "success"
+    "2i2c": "success",
+    hydrofabric: "cyan"
   };
   return badgeMap[type] || "danger";
 }
