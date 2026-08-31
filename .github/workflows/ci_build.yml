@@ -62,13 +62,13 @@ jobs:
     - name: Parse payload inputs
       id: parse-json
       env:
-        TEMP_REF: fromJson(steps.extract-json.outputs.payload-json).source_ref
-        TEMP_SOURCE_REPO: fromJson(steps.extract-json.outputs.payload-json).source_repo
-        TEMP_ENV: fromJson(steps.extract-json.outputs.payload-json).deploy_env
-        TEMP_TARGET_REPO: fromJson(steps.extract-json.outputs.payload-json).target_repo
-        TEMP_TARGET_PATH: fromJson(steps.extract-json.outputs.payload-json).target_path
-        TEMP_HEADER: fromJson(steps.extract-json.outputs.payload-json).commit_header
-        TEMP_NUM: fromJson(steps.extract-json.outputs.payload-json).pr_number
+        TEMP_REF: ${{ fromJson(steps.extract-json.outputs.payload-json).source_ref }}
+        TEMP_SOURCE_REPO: ${{ fromJson(steps.extract-json.outputs.payload-json).source_repo }}
+        TEMP_ENV: ${{ fromJson(steps.extract-json.outputs.payload-json).deploy_env }}
+        TEMP_TARGET_REPO: ${{ fromJson(steps.extract-json.outputs.payload-json).target_repo }}
+        TEMP_TARGET_PATH: ${{ fromJson(steps.extract-json.outputs.payload-json).target_path }}
+        TEMP_HEADER: ${{ fromJson(steps.extract-json.outputs.payload-json).commit_header }}
+        TEMP_NUM: ${{ fromJson(steps.extract-json.outputs.payload-json).pr_number }}
       run: |
         echo "source-ref=$TEMP_REF" >> $GITHUB_OUTPUT
         echo "source-repo=$TEMP_SOURCE_REPO" >> $GITHUB_OUTPUT
