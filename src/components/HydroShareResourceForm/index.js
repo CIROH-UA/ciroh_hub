@@ -15,6 +15,23 @@ const resourceTypeOptions = [
     { value: 'ciroh_hub_notebook', label: 'Notebook' }
 ];
 
+// Descriptions for each optional metadata key
+const METADATA_DESCRIPTIONS = {
+    docs_url: 'a link to any documentation for your resource',
+    page_url: 'a link to the page where your resource is hosted',
+    pres_path: 'the name of the presentation file uploaded as content',
+    thumbnail_url: 'a link to an image to use as a thumbnail for your resource',
+};
+
+// The optional metadata keys to create for each resource type. Used to add them to a new resource created on HydroShare
+const METADATA_KEYS_BY_TYPE = {
+    ciroh_hub_app: ['docs_url', 'page_url', 'thumbnail_url'],
+    ciroh_hub_data: ['docs_url', 'page_url', 'thumbnail_url'],
+    ciroh_hub_module: ['page_url', 'thumbnail_url'],
+    ciroh_hub_presentation: ['page_url', 'pres_path', 'thumbnail_url'],
+    ciroh_hub_notebook: ['page_url', 'thumbnail_url'],
+};
+
 const urlBase = 'https://www.hydroshare.org/hsapi';
 
 /* Keys used to persist form state across the OAuth redirect */
@@ -115,15 +132,10 @@ function ResourceForm() {
         formData.append('keywords[0]', resourceType);
         // Pre-create the optional metadata keys (empty) so users can see
         // what to fill in on HydroShare; empty values are treated the same
-        // as missing keys when CIROH Hub renders the resource. Only seed
-        // the keys that make sense for the selected resource type.
-        const extraMetadata = { page_url: '', thumbnail_url: '' };
-        if (resourceType === 'ciroh_hub_app' || resourceType === 'ciroh_hub_data') {
-            extraMetadata.docs_url = '';
-        }
-        if (resourceType === 'ciroh_hub_presentation') {
-            extraMetadata.pres_path = '';
-        }
+        // as missing keys when CIROH Hub renders the resource. Only the
+        // keys that make sense for the selected resource type are added.
+        const metadataKeys = METADATA_KEYS_BY_TYPE[resourceType] || [];
+        const extraMetadata = Object.fromEntries(metadataKeys.map((key) => [key, '']));
         formData.append('extra_metadata', JSON.stringify(extraMetadata));
 
         setLoading(true);
@@ -163,7 +175,7 @@ function ResourceForm() {
     return (
         <div className={styles.container}>
             {/* Subtitle */}
-            <p className={styles.subtitle}>Use the form below to create a new CIROH HydroShare resource.</p>
+            <p className={styles.subtitle}>Use the form below to create a new CIROH HydroShare resource</p>
 
             {/* Logout Button */}
             {authenticated && (
@@ -206,6 +218,27 @@ function ResourceForm() {
                         ))}
                     </select>
                 </label>
+
+                {/* Post-creation checklist */}
+                <details className={styles.checklistDetails}>
+                    <summary>What to fill in on HydroShare after your resource is created</summary>
+                    <ul className={styles.checklist}>
+                        <li><strong>Sharing status</strong> — set to public in the "Manage who has access" menu</li>
+                        <li><strong>Abstract</strong> — add a description of your resource</li>
+                        <li><strong>Content</strong> — upload any files related to your resource</li>
+                        <li><strong>Subject keywords</strong> — the necessary CIROH subject is added for you, but add any additional subjects related to your resource</li>
+                        {(METADATA_KEYS_BY_TYPE[resourceType] || []).length > 0 && (
+                            <li>
+                                <strong>Additional metadata</strong> — fill in the entries created for you:
+                                <ul>
+                                    {METADATA_KEYS_BY_TYPE[resourceType].map((key) => (
+                                        <li key={key}><code>{key}</code> — {METADATA_DESCRIPTIONS[key]}</li>
+                                    ))}
+                                </ul>
+                            </li>
+                        )}
+                    </ul>
+                </details>
 
                 {/* Submit / Authenticate */}
                 <button
