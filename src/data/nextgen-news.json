@@ -8,10 +8,27 @@
 			"release_date": "08/10/2026"
 		},
 		{
-			"type": "pantarhei 2.0",
+			"type": "NGIAB",
+			"title": "Community NextGen Ecosystem",
+			"link": "/docs/products/ngiab-ecosystem",
+			"description": "**Introducing the Community NextGen Ecosystem!** NGIAB, NRDS, and CCNH have been unified under the [Community NextGen Ecosystem](/docs/products/ngiab-ecosystem) documentation section. CIROH Hub will continue to surface the latest documentation for NGIAB and related tools, such as newly-added documentation for [rs_route](/docs/products/ngiab-ecosystem/dependencies/rs_route)."
+		},
+		{
+            "type": "FIM",
+            "title": "Community FIM Ecosystem",
+            "link": "https://nwps.ciroh.org",
+            "description": "[Community FIM Ecosystem documentation](/docs/products/community-fim/) has been newly added to the CIROH Hub. It offers a flood modeling-to-evaluation framework for flood inundation modeling, simulation, benchmarking, and evaluation. \n\n Additonally, a new research testbed replicating the look of [water.noaa.gov](https://water.noaa.gov) is now live at [nwps.ciroh.org](https://nwps.ciroh.org), providing a sandbox for experimenting with the National Water Prediction Service (NWPS) interface."
+        },
+		{
+			"type": "pantarhei",
 			"title": "Pantarhei 2.0: Migration Requests Open",
 			"link": "https://github.com/CIROH-UA/NGIAB-CloudInfra/issues/new?template=new-onprem-request.yml",
 			"description": "CIROH is expanding the Pantarhei cluster. For migration of data or to get access to new Pantarhei 2.0 system, please [submit an IT ticket](https://github.com/CIROH-UA/NGIAB-CloudInfra/issues/new?template=new-onprem-request.yml) using the linked issue template."
+		},
+		{
+			"type": "cyberinfrastructure",
+			"title": "HPC Cluster Maintenance Alert",
+			"description": "The Pantarhei and Wukong clusters are slated for a temporary full outage targeted for mid-October to migrate hardware to a new UA HPC datacenter and execute critical software updates. Final dates will be announced once confirmed, but users should begin planning job submissions now and prepare to save all work and terminate active processes prior to the shutdown."
 		},
 		{
 			"type": "news",
@@ -38,18 +55,6 @@
 			"description": "This summer's Research Experience for Undergraduates (REU) program put NSF ACCESS [Jetstream2](/docs/services/external-resources/nsf-access/jetstream) cyberinfrastructure to work, giving students hands-on experience. [Read more in AWI News.](https://awi.ua.edu/2026/08/12/wading-through-water-wednesdays-an-experiential-approach-to-water-research-for-future-hydrologists/)",
 			"release_date": "08/12/2026"
 		},
-		{
-			"type": "NGIAB",
-			"title": "Community NextGen Ecosystem",
-			"link": "/docs/products/ngiab-ecosystem",
-			"description": "NGIAB, NRDS, and CCNH documentation has been unified under the [Community NextGen Ecosystem](/docs/products/ngiab-ecosystem) documentation section! CIROH Hub will continue to surface the latest documentation for NGIAB and related tools, such as newly-added documentation for [rs_route](/docs/products/ngiab-ecosystem/dependencies/rs_route)."
-		},
-		{
-            "type": "FIM",
-            "title": "Community FIM Ecosystem",
-            "link": "https://nwps.ciroh.org",
-            "description": "[Community FIM Ecosystem documentation](/docs/products/community-fim/) has been newly added to the CIROH Hub. It offers a flood modeling-to-evaluation framework for flood inundation modeling, simulation, benchmarking, and evaluation. \n\n Additonally, a new research testbed replicating the look of [water.noaa.gov](https://water.noaa.gov) is now live at [nwps.ciroh.org](https://nwps.ciroh.org), providing a sandbox for experimenting with the National Water Prediction Service (NWPS) interface."
-        },
 		{
 			"type": "hydrofabric",
 			"title": "Community Hydrofabric Viewer",
@@ -84,6 +89,15 @@
 			"release_date": "08/24/2026",
 			"version": "v1.7.2",
 			"contributors": 4
+		},
+		{
+			"type": "NRDS",
+			"title": "ngen-datastream",
+			"link": "https://github.com/CIROH-UA/ngen-datastream/releases/tag/v.3.2.0",
+			"description": "This release adds a new NRDS datastream for USGS streamflow kriging (qkrig). The qkrig datastream produces NextGen-compatible kriged streamflow fields from USGS observations, expanding the set of operationally available observation products. Other key changes include a comprehensive [datastream catalog](https://github.com/CIROH-UA/ngen-datastream/blob/main/docs/nrds/DATASTREAMS.md) document and several reliability improvements.",
+			"release_date": "08/28/2026",
+			"version": "v3.2.0",
+			"contributors": 3
 		},
 		{
 			"type": "NRDS",
