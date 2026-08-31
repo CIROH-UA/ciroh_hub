@@ -61,14 +61,22 @@ jobs:
     
     - name: Parse payload inputs
       id: parse-json
+      env:
+        TEMP_REF: fromJson(steps.extract-json.outputs.payload-json).source_ref
+        TEMP_SOURCE_REPO: fromJson(steps.extract-json.outputs.payload-json).source_repo
+        TEMP_ENV: fromJson(steps.extract-json.outputs.payload-json).deploy_env
+        TEMP_TARGET_REPO: fromJson(steps.extract-json.outputs.payload-json).target_repo
+        TEMP_TARGET_PATH: fromJson(steps.extract-json.outputs.payload-json).target_path
+        TEMP_HEADER: fromJson(steps.extract-json.outputs.payload-json).commit_header
+        TEMP_NUM: fromJson(steps.extract-json.outputs.payload-json).pr_number
       run: |
-        echo "source-ref=${{ fromJson(steps.extract-json.outputs.payload-json).source_ref }}" >> $GITHUB_OUTPUT
-        echo "source-repo=${{ fromJson(steps.extract-json.outputs.payload-json).source_repo }}" >> $GITHUB_OUTPUT
-        echo "DEPLOY_ENV=${{ fromJson(steps.extract-json.outputs.payload-json).deploy_env }}" >> $GITHUB_ENV
-        echo "TARGET_REPO=${{ fromJson(steps.extract-json.outputs.payload-json).target_repo }}" >> $GITHUB_ENV
-        echo "TARGET_PATH=${{ fromJson(steps.extract-json.outputs.payload-json).target_path }}" >> $GITHUB_ENV
-        echo "COMMIT_HEADER=${{ fromJson(steps.extract-json.outputs.payload-json).commit_header }}" >> $GITHUB_ENV
-        echo "PR_NUMBER=${{ fromJson(steps.extract-json.outputs.payload-json).pr_number }}" >> $GITHUB_ENV
+        echo "source-ref=$TEMP_REF" >> $GITHUB_OUTPUT
+        echo "source-repo=$TEMP_SOURCE_REPO" >> $GITHUB_OUTPUT
+        echo "DEPLOY_ENV=$TEMP_ENV" >> $GITHUB_ENV
+        echo "TARGET_REPO=$TEMP_TARGET_REPO" >> $GITHUB_ENV
+        echo "TARGET_PATH=$TEMP_TARGET_PATH" >> $GITHUB_ENV
+        echo "COMMIT_HEADER=$TEMP_HEADER" >> $GITHUB_ENV
+        echo "PR_NUMBER=$TEMP_NUM" >> $GITHUB_ENV
       # PR_NUMBER can and should be left empty for non-PR builds
       
     - name: Validate payload inputs
