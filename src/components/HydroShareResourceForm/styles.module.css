@@ -123,3 +123,27 @@
   to { transform: rotate(360deg); }
 }
 
+/* Collapsible checklist of what to fill in on HydroShare after creation */
+.checklistDetails {
+  font-size: 0.9rem;
+  color: var(--ifm-color-emphasis-700);
+}
+
+.checklistDetails summary {
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.checklist {
+  margin: 0.5rem 0 0;
+  padding-left: 1.2rem;
+}
+
+.checklist li {
+  margin-bottom: 0.35rem;
+}
+
+.checklist ul {
+  margin-top: 0.35rem;
+  padding-left: 1.2rem;
+}
