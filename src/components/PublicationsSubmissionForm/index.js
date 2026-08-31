@@ -10,6 +10,7 @@ import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import SelectCollection from './SelectCollection';
 import {zoteroSelectStyles, zoteroSelectTheme} from './selectStyles';
 import Select from 'react-select';
+import useBaseUrl from 'docusaurus';
 
 const codeLocationOptions = [
   { value: 'N/A', label: 'N/A' },
@@ -181,6 +182,16 @@ export default function PublicationsSubmissionForm({ groupId, zoteroApiKey }) {
         setProgressMessage('Importing Citation...');
       }
 
+      // Check for unavailable API url
+      if (customFields.zotero_import_request_api_url == "http://127.0.0.1:3000/zotero-import-request" && !(useBaseUrl('/') === '/local')) {
+        let errorMessage = 'Site administrator: Please configure the import request URL in this website\'s environment file.';
+        throw new Error(errorMessage);
+      }
+      else if (customFields.zotero_import_request_url == "forbidden") {
+        let errorMessage = 'Access forbidden by CI/CD. (This may be built from a remote branch that cannot access secrets.)';
+        throw new Error(errorMessage);
+      }
+
       // Make request to the backend API to verify reCAPTCHA and import the citation data into Zotero
       const response = await fetch(customFields.zotero_import_request_api_url, {method: 'POST', headers: requestHeaders, body: requestBody});
 
@@ -193,7 +204,7 @@ export default function PublicationsSubmissionForm({ groupId, zoteroApiKey }) {
             errorMessage = errorData.message;
           }
         } catch {
-          // Body wasn't valid JSON — fall back to the default message above
+          // Body wasn't valid JSON — fall back to the default message above 
         }
         throw new Error(errorMessage);
       }
