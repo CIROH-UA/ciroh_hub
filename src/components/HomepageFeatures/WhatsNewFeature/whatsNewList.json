@@ -1,0 +1,29 @@
+[
+  {
+    "tag": "Latest Blog",
+    "image": "img/graphics/whatsnew-blog.svg",
+    "title": "NGIAB & CIROH Cyberinfrastructure Power Flash Flood Research at the 2026 Summer Institute",
+    "description": "Ten graduate students had seven weeks to bring sub-hourly radar rainfall, precipitation uncertainty, and ensemble forecasting into the NextGen framework. Here's how NGIAB and CIROH cyberinfrastructure carried the load.",
+    "date": "August 24, 2026",
+    "link": "/blog/summer-institute-flash-flood",
+    "cta": "Read the post"
+  },
+  {
+    "tag": "Community News",
+    "image": "img/graphics/whatsnew-news.svg",
+    "title": "Community Updates from across the CIROH network",
+    "description": "Stay connected with the latest developments in CIROH community water modeling — breakthroughs, releases, and opportunities curated from across our community of practice.",
+    "date": "Updated monthly",
+    "link": "/news",
+    "cta": "See the news hub"
+  },
+  {
+    "tag": "New Documentation",
+    "image": "img/graphics/whatsnew-docs.svg",
+    "title": "August 2026 Release Notes",
+    "description": "The newest CIROH Hub release rounds up fresh documentation, new tutorials, product updates, and infrastructure changes shipped this month.",
+    "date": "August 28, 2026",
+    "link": "/release-notes/v20260828",
+    "cta": "View release notes"
+  }
+]

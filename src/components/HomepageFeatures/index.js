@@ -1,6 +1,7 @@
 import "./bootstrap.min.css";
 import styles from "./styles.module.css";
 
+import WhatsNewFeature from './WhatsNewFeature';
 import ExploreFeature from './ExploreFeature';
 import FeedbackFeature from './FeedbackFeature';
 import ResearchFeature from './ResearchFeature';
@@ -16,6 +17,7 @@ export default function HomepageFeatures() {
     <>
       <section className={styles.homepageContainer}>
         
+        <WhatsNewFeature />
         <ExploreFeature />
         <ResearchFeature />
         <br /> {/* Protects against these panels melding together */}

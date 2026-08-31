@@ -137,13 +137,13 @@ const CardCarousel = ({ cards, header }) => {
                                             style={{ height: `${maxContentHeight + 224}px` }}
                                         >
                                             {/* Card Image Container */}
-                                            <div className="tw-relative tw-overflow-hidden tw-h-56 tw-flex tw-items-center tw-justify-center tw-bg-blue-100 dark:tw-bg-slate-500">
+                                            <div className="tw-relative tw-overflow-hidden tw-h-56 tw-flex tw-items-center tw-justify-center tw-bg-blue-100 dark:tw-bg-slate-200">
                                                 <img
                                                     src={card.image}
                                                     alt={card.title}
                                                     className="tw-w-3/4 tw-h-3/4 tw-object-contain tw-transition-transform tw-duration-500 group-hover:tw-scale-110"
                                                 />
-                                                <div className="tw-absolute tw-inset-0 tw-bg-gradient-to-t tw-from-black/10 tw-to-transparent dark:tw-from-black/30" />
+                                                <div className="tw-absolute tw-inset-0 tw-bg-gradient-to-t tw-from-black/10 tw-to-transparent dark:tw-from-black/10" />
                                             </div>
 
                                             {/* Card Content */}

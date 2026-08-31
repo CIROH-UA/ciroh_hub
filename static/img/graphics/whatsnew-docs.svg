@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 280" role="img" aria-label="New documentation illustration">
+  <defs>
+    <linearGradient id="wnDocsBg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#eff6ff"/>
+      <stop offset="1" stop-color="#dbeafe"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="480" height="280" fill="url(#wnDocsBg)"/>
+  <circle cx="70" cy="58" r="34" fill="#bfdbfe" opacity="0.7"/>
+  <circle cx="424" cy="222" r="44" fill="#93c5fd" opacity="0.45"/>
+
+  <!-- stacked books -->
+  <g>
+    <rect x="150" y="208" width="196" height="24" rx="6" fill="#1d4ed8"/>
+    <rect x="162" y="184" width="196" height="24" rx="6" fill="#60a5fa"/>
+    <rect x="144" y="160" width="196" height="24" rx="6" fill="#19a7ce"/>
+  </g>
+
+  <!-- doc page -->
+  <g transform="rotate(-4 244 118)">
+    <rect x="180" y="44" width="146" height="146" rx="12" fill="#ffffff" stroke="#1e40af" stroke-width="3"/>
+    <rect x="200" y="68" width="82" height="12" rx="6" fill="#1d4ed8"/>
+    <rect x="200" y="92" width="106" height="8" rx="4" fill="#cbd5e1"/>
+    <rect x="200" y="110" width="106" height="8" rx="4" fill="#cbd5e1"/>
+    <rect x="200" y="128" width="74" height="8" rx="4" fill="#cbd5e1"/>
+    <rect x="200" y="152" width="106" height="8" rx="4" fill="#cbd5e1"/>
+  </g>
+
+  <!-- check badge -->
+  <g>
+    <circle cx="330" cy="180" r="28" fill="#22c55e"/>
+    <path d="M317 180 l9 9 l19 -20" fill="none" stroke="#ffffff" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+
+  <!-- gear -->
+  <g transform="translate(348 62)">
+    <path d="M0 -19 l6 4 l7 -2 l2 7 l6 4 l-3 7 l3 7 l-6 4 l-2 7 l-7 -2 l-6 4 l-6 -4 l-7 2 l-2 -7 l-6 -4 l3 -7 l-3 -7 l6 -4 l2 -7 l7 2 z" fill="#f59e0b"/>
+    <circle cx="0" cy="0" r="6.5" fill="#eff6ff"/>
+  </g>
+
+  <!-- sparkle -->
+  <path d="M124 132 l5 13 l13 5 l-13 5 l-5 13 l-5 -13 l-13 -5 l13 -5 z" fill="#1d4ed8" opacity="0.8"/>
+</svg>

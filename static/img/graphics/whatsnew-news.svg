@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 280" role="img" aria-label="Community news illustration">
+  <defs>
+    <linearGradient id="wnNewsBg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#eff6ff"/>
+      <stop offset="1" stop-color="#dbeafe"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="480" height="280" fill="url(#wnNewsBg)"/>
+  <circle cx="410" cy="56" r="34" fill="#bfdbfe" opacity="0.7"/>
+  <circle cx="66" cy="224" r="44" fill="#93c5fd" opacity="0.45"/>
+
+  <!-- broadcast waves -->
+  <g fill="none" stroke="#19a7ce" stroke-width="6" stroke-linecap="round">
+    <path d="M330 96 a32 32 0 0 1 0 56" opacity="0.9"/>
+    <path d="M348 82 a54 54 0 0 1 0 84" opacity="0.55"/>
+    <path d="M366 68 a76 76 0 0 1 0 112" opacity="0.3"/>
+  </g>
+
+  <!-- megaphone -->
+  <g transform="rotate(-8 210 128)">
+    <path d="M120 96 l150 -40 v100 l-150 -40 z" fill="#1d4ed8"/>
+    <rect x="96" y="92" width="28" height="48" rx="8" fill="#1e40af"/>
+    <path d="M132 140 l13 40 a11 11 0 0 1 -20 7 l-15 -40 z" fill="#f59e0b"/>
+    <path d="M270 56 l24 -10 v116 l-24 -10 z" fill="#60a5fa"/>
+  </g>
+
+  <!-- newspaper -->
+  <g transform="rotate(7 322 196)">
+    <rect x="250" y="140" width="150" height="112" rx="10" fill="#ffffff" stroke="#1e40af" stroke-width="3"/>
+    <rect x="266" y="156" width="62" height="44" rx="5" fill="#bfdbfe"/>
+    <rect x="338" y="156" width="46" height="9" rx="4.5" fill="#1d4ed8"/>
+    <rect x="338" y="172" width="46" height="7" rx="3.5" fill="#cbd5e1"/>
+    <rect x="338" y="186" width="40" height="7" rx="3.5" fill="#cbd5e1"/>
+    <rect x="266" y="212" width="118" height="7" rx="3.5" fill="#cbd5e1"/>
+    <rect x="266" y="226" width="118" height="7" rx="3.5" fill="#cbd5e1"/>
+    <rect x="266" y="240" width="78" height="7" rx="3.5" fill="#cbd5e1"/>
+  </g>
+
+  <!-- spark -->
+  <path d="M392 128 l6 15 l15 6 l-15 6 l-6 15 l-6 -15 l-15 -6 l15 -6 z" fill="#f59e0b"/>
+</svg>
