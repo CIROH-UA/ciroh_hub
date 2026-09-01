@@ -151,15 +151,15 @@ jobs:
         # the current build was created from a foreign PR branch.
         # GitHub Actions prohibits such build runs from accessing secrets and vars.
         ZOTERO_API_KEY_READ_ONLY: ${{ secrets.ZOTERO_API_KEY_READ_ONLY || 'forbidden' }}
-        ZOTERO_CIROH_GROUP_ID: ${{ secrets.ZOTERO_CIROH_GROUP_ID || 'forbidden' }}
-        ZOTERO_CIROH_STAGING_GROUP_ID: ${{ secrets.ZOTERO_CIROH_STAGING_GROUP_ID || 'forbidden' }}
+        ZOTERO_CIROH_GROUP_ID: ${{ secrets.ZOTERO_CIROH_GROUP_ID }}
+        ZOTERO_CIROH_STAGING_GROUP_ID: ${{ secrets.ZOTERO_CIROH_STAGING_GROUP_ID }}
         ZOTERO_IMPORT_REQUEST_API_URL: ${{ vars.ZOTERO_IMPORT_REQUEST_API_URL  || 'forbidden' }}
         RECAPTCHA_SITE_KEY: ${{ vars.RECAPTCHA_SITE_KEY || 'forbidden' }}
-        HS_FEATURED_APPS_COLLECTION_ID: ${{ vars.HS_FEATURED_APPS_COLLECTION_ID || 'forbidden' }}
-        HS_FEATURED_DATASETS_COLLECTION_ID: ${{ vars.HS_FEATURED_DATASETS_COLLECTION_ID || 'forbidden' }} }}
-        HS_FEATURED_COURSES_COLLECTION_ID: ${{ vars.HS_FEATURED_COURSES_COLLECTION_ID || 'forbidden' }}
-        HS_FEATURED_PRESENTATIONS_COLLECTION_ID: ${{ vars.HS_FEATURED_PRESENTATIONS_COLLECTION_ID || 'forbidden' }}
-        HS_FEATURED_NOTEBOOKS_COLLECTION_ID: ${{ vars.HS_FEATURED_NOTEBOOKS_COLLECTION_ID || 'forbidden' }}
+        HS_FEATURED_APPS_COLLECTION_ID: ${{ vars.HS_FEATURED_APPS_COLLECTION_ID }}
+        HS_FEATURED_DATASETS_COLLECTION_ID: ${{ vars.HS_FEATURED_DATASETS_COLLECTION_ID }} }}
+        HS_FEATURED_COURSES_COLLECTION_ID: ${{ vars.HS_FEATURED_COURSES_COLLECTION_ID }}
+        HS_FEATURED_PRESENTATIONS_COLLECTION_ID: ${{ vars.HS_FEATURED_PRESENTATIONS_COLLECTION_ID }}
+        HS_FEATURED_NOTEBOOKS_COLLECTION_ID: ${{ vars.HS_FEATURED_NOTEBOOKS_COLLECTION_ID }}
         GH_PROJECT_TOKEN: "deprecated"
         
     - name: Upload a Build Artifact

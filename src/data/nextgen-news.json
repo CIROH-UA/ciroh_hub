@@ -63,9 +63,8 @@
 		},
 		{
 			"type": "NGIAB",
-			"title": "NGIAB-CloudInfra: 46,000 Docker Pulls!",
-			"link": "https://github.com/CIROH-UA/NGIAB-CloudInfra/releases/tag/v2.0.0",
-			"description": "The awiciroh/ciroh-ngen-image Docker image has surpassed 46,000 pulls! Learn more at [ngiab.ciroh.org](https://ngiab.ciroh.org/). \n\n This release updates the model and build documentation, improves the model integration form, upgrades dHBV2.0 packages with corrected weights/config paths, and moves CASAM's van Genuchten parameters into shared static datasets. It also adds a new on-premise IT request issue template (replacing the previous On-Premise Request Form) and automates a monthly OWP master image build. Pinned to ngen commit `61c1400` and t-route commit `f39b8d4`.",
+			"title": "NGIAB-CloudInfra: v2.0.0 and 50,000 Docker Pulls!",
+			"description": "The awiciroh/ciroh-ngen-image Docker image has surpassed 50,000 pulls! Learn more at [ngiab.ciroh.org](https://ngiab.ciroh.org/). \n\n This release adds support for the new `owp-master` image, which allows for easy head-to-head testing between the `master` and `CIROH-UA` branches of `ngen`. Other changes include enhancements to the model and build documentation, improving to the model integration form, upgrading dHBV2.0 packages with corrected weights/config paths, and moving CASAM's van Genuchten parameters into shared static datasets. Pinned to `CIROH-UA/ngen` commit `61c1400` and `CIROH-UA/t-route` commit `f39b8d4`.",
 			"release_date": "08/25/2026",
 			"version": "v2.0.0",
 			"contributors": 4
