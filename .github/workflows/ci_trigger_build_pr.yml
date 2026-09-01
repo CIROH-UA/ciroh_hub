@@ -8,7 +8,9 @@ on:
     types: [labeled, reopened, synchronize]
 
 env:
-  STAGING_REPO: ${{ vars.COMPOSITE_TARGET_REPO }}
+  # Note: due to a GitHub limitation, the default target repo will be used for remote branches.
+  # See https://github.com/orgs/community/discussions/44322
+  STAGING_REPO: ${{ vars.COMPOSITE_TARGET_REPO || 'CIROH-UA/subdomain_hub' }}
   STAGING_PATH: staging/
 
 jobs:
