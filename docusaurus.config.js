@@ -86,7 +86,7 @@ const config = {
     ],
     zotero_api_key_read_only: process.env.ZOTERO_API_KEY_READ_ONLY || "dummy",
     zotero_group_id: process.env.ZOTERO_CIROH_GROUP_ID || 999999999,
-    zotero_staging_group_id: process.env.ZOTERO_CIROH_STAGING_GROUP_ID,
+    zotero_staging_group_id: process.env.ZOTERO_CIROH_STAGING_GROUP_ID || 999999999,
     recaptcha_site_key: process.env.RECAPTCHA_SITE_KEY || "dummy",
     zotero_import_request_api_url: process.env.ZOTERO_IMPORT_REQUEST_API_URL || "http://127.0.0.1:3000/zotero-import-request",
     

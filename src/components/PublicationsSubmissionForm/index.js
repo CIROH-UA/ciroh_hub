@@ -10,7 +10,7 @@ import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import SelectCollection from './SelectCollection';
 import {zoteroSelectStyles, zoteroSelectTheme} from './selectStyles';
 import Select from 'react-select';
-import useBaseUrl from 'docusaurus';
+import useBaseUrl from '@docusaurus/useBaseUrl';
 
 const codeLocationOptions = [
   { value: 'N/A', label: 'N/A' },
