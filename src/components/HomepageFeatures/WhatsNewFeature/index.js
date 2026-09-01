@@ -40,7 +40,7 @@ function renderWhatsNewCard(card, index, cardProperties) {
       style={cardProperties.style}
     >
       {/* Image */}
-      <div className="tw-relative tw-overflow-hidden tw-h-48 tw-flex tw-items-center tw-justify-center tw-bg-blue-100 dark:tw-bg-slate-500">
+      <div className="tw-relative tw-overflow-hidden tw-h-56 tw-flex tw-items-center tw-justify-center tw-bg-blue-100 dark:tw-bg-slate-500">
         <img
           src={card.image}
           alt={card.title}
