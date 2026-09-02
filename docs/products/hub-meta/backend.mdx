@@ -1,0 +1,14 @@
+---
+sidebar_position: 11
+title: "Backend"
+description: "Technical information regarding how CIROH Hub's backend works."
+tags: [Products, CIROH Hub]
+---
+
+# CIROH Hub Backend
+
+CIROH Hub is, for the most part, designed to function as a static site. The majority of page functionality runs on the client, pulls from external APIs, and is self-sufficient with minimum infrastructural overhead.
+
+With that being said, at times, it's necessary to mask calls involving sensitive secret keys behind a backend server. The CIROH Hub backend is deployed on AWS S3 to serve this purpose.
+
+At the time of writing, the CIROH Hub backend solely services the [Contribute page's ]
