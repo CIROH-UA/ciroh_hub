@@ -12,7 +12,7 @@ import HydroShareLogo from '@site/static/img/logos/hydroshare-white.png';
 import useBaseUrl from '@docusaurus/useBaseUrl';
 import { useColorMode } from '@docusaurus/theme-common';
 import CardCarouselHydroshareFeatured from "@site/src/components/CardCarouselHydroshareFeatured";
-import { featuredApps } from "@site/src/data/featuredApps";
+import { featuredApps } from "@site/src/data/featuredResources";
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 
 const items = [

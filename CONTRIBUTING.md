@@ -1,9 +1,9 @@
 # Guidance on how to contribute
 
-> All contributions to this project will be released to the public domain.
+> All contributions to this project will be released to the public domain under the MIT License.
 > By submitting a pull request or filing a bug, issue, or
 > feature request, you are agreeing to comply with this waiver of copyright interest.
-> Details can be found in our [TERMS](TERMS.md) and [LICENSE](LICENSE).
+> Details can be found in our [LICENSE](LICENSE).
 
 
 There are two primary ways to help:

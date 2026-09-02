@@ -13,7 +13,7 @@ import LMDarkIcon from '@site/static/img/cards/modules_dark.png';
 import StatsBar from "@site/src/components/StatsBar";
 import { getResourceStats } from "@site/src/utils/resourceStats";
 import CardCarouselHydroshareFeatured from "@site/src/components/CardCarouselHydroshareFeatured";
-import { featuredCourses } from "@site/src/data/featuredCourses";
+import { featuredCourses } from "@site/src/data/featuredResources";
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 
 

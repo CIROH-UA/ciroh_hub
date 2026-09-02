@@ -11,7 +11,7 @@ import Header from "@site/src/components/Header";
 import { useColorMode } from '@docusaurus/theme-common';
 import StatsBar from "@site/src/components/StatsBar";
 import { getResourceStats } from "@site/src/utils/resourceStats";
-import { featuredDatasets } from "@site/src/data/featuredDatasets";
+import { featuredDatasets } from "@site/src/data/featuredResources";
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import CardCarouselHydroshareFeatured from "@site/src/components/CardCarouselHydroshareFeatured";
 

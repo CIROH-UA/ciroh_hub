@@ -10,7 +10,7 @@ import { useColorMode } from '@docusaurus/theme-common';
 import StatsBar from "@site/src/components/StatsBar";
 import { getResourceStats } from "@site/src/utils/resourceStats";
 import CardCarouselHydroshareFeatured from "@site/src/components/CardCarouselHydroshareFeatured";
-import { featuredPresentations } from "@site/src/data/featuredPresentations";
+import { featuredPresentations } from "@site/src/data/featuredResources";
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 
 const items = [
