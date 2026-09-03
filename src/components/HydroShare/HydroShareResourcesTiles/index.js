@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from 'react';
+import { useEffect, useCallback } from 'react';
 import clsx from 'clsx';
 import { useLocation } from '@docusaurus/router';
 

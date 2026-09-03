@@ -1,17 +1,17 @@
 import React, { useCallback, useMemo, useState } from "react";
 import Header from "@site/src/components/Header";
-import HydroShareResourcesSelector from "@site/src/components/HydroShareResourcesSelector";
+import HydroShareResourcesSelector from "@site/src/components/HydroShare/HydroShareResourcesSelector";
 import { ConstellationCanvas } from '@site/src/components/ConstellationCanvas';
 import Layout from '@theme/Layout';
-import TechBox from "@site/src/components/TechBox";
-import StatsBar from "@site/src/components/StatsBar";
+import TechBox from "@site/src/components/HydroShare/TechBox";
+import StatsBar from "@site/src/components/HydroShare/StatsBar";
 import { getResourceStats } from "@site/src/utils/resourceStats";
 import TethysLogoDark from '@site/static/img/logos/tethys-platform-dark.png';
 import TethysLogWhite from '@site/static/img/logos/tethys-platform-white.png';
 import HydroShareLogo from '@site/static/img/logos/hydroshare-white.png';
 import useBaseUrl from '@docusaurus/useBaseUrl';
 import { useColorMode } from '@docusaurus/theme-common';
-import CardCarouselHydroshareFeatured from "@site/src/components/CardCarouselHydroshareFeatured";
+import CardCarouselHydroshareFeatured from "@site/src/components/HydroShare/CardCarouselHydroshareFeatured";
 import { featuredApps } from "@site/src/data/featuredResources";
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 

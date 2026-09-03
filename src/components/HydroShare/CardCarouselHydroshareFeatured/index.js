@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import CardCarouselGeneric from "@site/src/components/CardCarouselGeneric";
-import ResourceCardCurated from "@site/src/components/HydroShareResourceCardsCurated";
-import { fetchResourcesFromCollection, fetchResourceCustomMetadata, fetchResourceImageUrls } from "@site/src/components/HydroShareImporter";
+import ResourceCardCurated from "@site/src/components/HydroShare/HydroShareResourceCardsCurated";
+import { fetchResourcesFromCollection, fetchResourceCustomMetadata, fetchResourceImageUrls } from "@site/src/components/HydroShare/HydroShareImporter";
 
 /**
  * CardCarouselHydroshareFeatured component

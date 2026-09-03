@@ -1,4 +1,3 @@
-import React from 'react';
 import { MdDriveFileMove } from 'react-icons/md';
 import { LiaExternalLinkSquareAltSolid } from 'react-icons/lia';
 import { LuLayers3 } from 'react-icons/lu';

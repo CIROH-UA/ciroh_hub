@@ -2,9 +2,9 @@ import React, { useEffect, useState, startTransition, useCallback, useRef } from
 import clsx from "clsx";
 import { FaThLarge, FaBars, FaListUl } from "react-icons/fa";
 import styles from "./styles.module.css";
-import HydroShareResourcesTiles from "@site/src/components/HydroShareResourcesTiles";
-import HydroShareResourcesRows from "@site/src/components/HydroShareResourcesRows";
-import { getCommunityResources, getCuratedIds,fetchResourceCustomMetadata } from "@site/src/components/HydroShareImporter";
+import HydroShareResourcesTiles from "@site/src/components/HydroShare/HydroShareResourcesTiles";
+import HydroShareResourcesRows from "@site/src/components/HydroShare/HydroShareResourcesRows";
+import { getCommunityResources, getCuratedIds,fetchResourceCustomMetadata } from "@site/src/components/HydroShare/HydroShareImporter";
 import { useColorMode } from "@docusaurus/theme-common"; // Hook to detect theme
 import DatasetLightIcon from '@site/static/img/cards/datasets_logo_light.png';
 import DatasetDarkIcon from '@site/static/img/cards/datasets_logo_dark.png';

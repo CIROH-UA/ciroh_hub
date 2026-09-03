@@ -13,7 +13,7 @@ import {
   zoteroFetchCollections,
   zoteroFetchAttachments,
   zoteroFetchAttachmentFileUrl,
-} from '@site/src/components/ZoteroImporter';
+} from '@site/src/components/Publications/ZoteroImporter';
 import SelectCollection from './SelectCollection';
 import PublicationCard  from './PublicationCard';
 import SkeletonCard     from './SkeletonCard';

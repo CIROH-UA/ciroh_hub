@@ -4,7 +4,7 @@ import clsx from 'clsx';
 import { HiOutlineSortDescending, HiOutlineSortAscending } from 'react-icons/hi';
 import ResourceList from './ResourceList';
 import styles from './styles.module.css';
-import { fetchResourcesBySearch, fetchResourceCustomMetadata } from '@site/src/components/HydroShareImporter';
+import { fetchResourcesBySearch, fetchResourceCustomMetadata } from '@site/src/components/HydroShare/HydroShareImporter';
 
 const PAGE_SIZE = 40;            // discovery-atlas pageSize request parameter
 const SCROLL_THRESHOLD = 800;    // px from bottom before we load more (default)

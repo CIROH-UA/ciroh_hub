@@ -1,7 +1,6 @@
-import React, { useEffect, useMemo, useRef, useState, startTransition } from 'react';
-import { useTheme } from '@docusaurus/theme-common';
+import { useEffect, useMemo, useRef, useState, startTransition } from 'react';
 import ReactDOM from 'react-dom';
-import HydroShareResourcesCards from "@site/src/components/HydroShareResourcesCards";
+import HydroShareResourcesCards from "@site/src/components/HydroShare/HydroShareResourcesCards";
 import { FaWindowClose } from 'react-icons/fa';
 import { HiOutlineSortDescending, HiOutlineSortAscending, HiOutlineSearch } from 'react-icons/hi';
 import styles from './styles.module.css';

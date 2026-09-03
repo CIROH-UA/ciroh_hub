@@ -1,6 +1,6 @@
 import useBaseUrl from "@docusaurus/useBaseUrl";
-import { fetchResourcesBySearch, getCommunityResources } from "@site/src/components/HydroShareImporter";
-import { zoteroApiCreate, zoteroFetchTopItems } from "@site/src/components/ZoteroImporter";
+import { fetchResourcesBySearch, getCommunityResources } from "@site/src/components/HydroShare/HydroShareImporter";
+import { zoteroApiCreate, zoteroFetchTopItems } from "@site/src/components/Publications/ZoteroImporter";
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import React, { useState, useRef, useEffect } from 'react';
 

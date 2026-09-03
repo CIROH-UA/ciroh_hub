@@ -1,11 +1,11 @@
-import React, { useEffect, useState, startTransition, useRef, useCallback, useMemo } from "react";
+import { useEffect, useState, startTransition, useRef, useCallback, useMemo } from "react";
 import clsx from "clsx";
 import { FaThLarge, FaBars } from "react-icons/fa";
 import styles from "./styles.module.css";
-import HydroShareResourcesTiles from "@site/src/components/HydroShareResourcesTiles";
-import HydroShareResourcesRows from "@site/src/components/HydroShareResourcesRows";
-import HydroShareResourcesCards from "@site/src/components/HydroShareResourcesCards";
-import { fetchResourcesBySearch, fetchResourceCustomMetadata, getCommunityResources, fetchResourcesFromCollection } from "@site/src/components/HydroShareImporter";
+import HydroShareResourcesTiles from "@site/src/components/HydroShare/HydroShareResourcesTiles";
+import HydroShareResourcesRows from "@site/src/components/HydroShare/HydroShareResourcesRows";
+import HydroShareResourcesCards from "@site/src/components/HydroShare/HydroShareResourcesCards";
+import { fetchResourcesBySearch, fetchResourceCustomMetadata, getCommunityResources, fetchResourcesFromCollection } from "@site/src/components/HydroShare/HydroShareImporter";
 import {
   HiOutlineSortDescending,
   HiOutlineSortAscending,

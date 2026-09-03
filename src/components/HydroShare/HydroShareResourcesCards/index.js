@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { LiaExternalLinkSquareAltSolid } from 'react-icons/lia';
 import { FaGraduationCap } from 'react-icons/fa';
 import { IoTvOutline } from 'react-icons/io5';

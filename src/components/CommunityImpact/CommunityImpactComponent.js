@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './CommunityImpact.module.css';
-import BlogFilter from '../BlogFilter';
+import BlogFilter from '@site/src/components/Blog/BlogFilter';
 import clsx from 'clsx';
 import Layout from '@theme/Layout';
 import useBaseUrl from '@docusaurus/useBaseUrl';

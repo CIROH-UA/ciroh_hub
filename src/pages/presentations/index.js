@@ -1,15 +1,15 @@
 import React, { useCallback, useMemo, useState } from "react";
 import { ConstellationCanvas } from '@site/src/components/ConstellationCanvas';
 import Layout from '@theme/Layout';
-import TechBox from "@site/src/components/TechBox";
-import HydroShareResourcesSelector from "@site/src/components/HydroShareResourcesSelector";
+import TechBox from "@site/src/components/HydroShare/TechBox";
+import HydroShareResourcesSelector from "@site/src/components/HydroShare/HydroShareResourcesSelector";
 import HydroShareLogo from '@site/static/img/logos/hydroshare-white.png';
 import useBaseUrl from '@docusaurus/useBaseUrl';
 import Header from "@site/src/components/Header";
 import { useColorMode } from '@docusaurus/theme-common';
-import StatsBar from "@site/src/components/StatsBar";
+import StatsBar from "@site/src/components/HydroShare/StatsBar";
 import { getResourceStats } from "@site/src/utils/resourceStats";
-import CardCarouselHydroshareFeatured from "@site/src/components/CardCarouselHydroshareFeatured";
+import CardCarouselHydroshareFeatured from "@site/src/components/HydroShare/CardCarouselHydroshareFeatured";
 import { featuredPresentations } from "@site/src/data/featuredResources";
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 

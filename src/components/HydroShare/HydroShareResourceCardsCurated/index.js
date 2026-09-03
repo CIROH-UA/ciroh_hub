@@ -1,10 +1,10 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { LiaExternalLinkSquareAltSolid } from 'react-icons/lia';
 import { FaGraduationCap, FaRegImage } from 'react-icons/fa';
 import { IoTvOutline } from 'react-icons/io5';
 import { HiOutlineGlobeAlt, HiOutlineUserGroup } from 'react-icons/hi';
 import styles from './styles.module.css';
-import { isPlaceholder, splitAuthors, StatTag, ActionLink, ActionButton } from '@site/src/components/HydroShareResourcesCards/shared';
+import { isPlaceholder, splitAuthors, StatTag, ActionLink, ActionButton } from '@site/src/components/HydroShare/HydroShareResourcesCards/shared';
 import ModalImageViewer from '@site/src/components/ModalImageViewer';
 
 
