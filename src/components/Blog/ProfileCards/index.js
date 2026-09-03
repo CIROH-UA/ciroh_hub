@@ -1,4 +1,4 @@
-import React from 'react';
+import Link from "@docusaurus/Link";
 import useBaseUrl from '@docusaurus/useBaseUrl';
 import styles from './styles.module.css';
 
@@ -20,9 +20,9 @@ function ProfileCard({ profile }) {
         {profile.title ? <p className={styles.title}>{profile.title}</p> : null}
         {profile.organization ? <p className={styles.organization}>{profile.organization}</p> : null}
         {profile.email ? (
-          <a className={styles.email} href={`mailto:${profile.email}`}>
+          <Link className={styles.email} to={`mailto:${profile.email}`}>
             {profile.email}
-          </a>
+          </Link>
         ) : null}
       </div>
     </article>

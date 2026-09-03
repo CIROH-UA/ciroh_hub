@@ -1,13 +1,10 @@
-import React from 'react';
 import styles from './CommunityImpact.module.css';
-import BlogFilter from '@site/src/components/Blog/BlogFilter';
+import BlogFilter from '@site/src/components/CommunityImpact/BlogFilter';
 import clsx from 'clsx';
-import Layout from '@theme/Layout';
 import useBaseUrl from '@docusaurus/useBaseUrl';
 import CardSwap, { Card } from './cardSwap';
 import CardSwapAccessible from './cardSwapAccessible';
 import cardSwapEntries from './cardSwapEntries';
-import Particles from './particleBG';
 import CloudInfraDashboard from "./cloudInfraDashboard";
 import Link from '@docusaurus/Link';
 import { communityImpactData } from '@site/src/data/communityImpactData';
