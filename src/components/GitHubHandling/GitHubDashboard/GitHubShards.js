@@ -21,9 +21,9 @@ import React, { useEffect, useState } from 'react';
 const help = null; // help keyword in the code can be moused over to see the above explanation
 
 import { tryGetCachedRepository, tryGetCachedOrganization, tryGetCachedRepositoryWorkflows } from './AccessUtils';
-import { RateLimitError } from './RateLimitError';
+import { RateLimitError } from '../Archived/Login/RateLimitError';
 import { AccessConfig } from './AccessConfig';
-import { useObserveFraction, visibleOnce } from './VisibilityUtil';
+import { useObserveFraction, visibleOnce } from '../Archived/Login/VisibilityUtil';
 import Link from '@docusaurus/Link';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';

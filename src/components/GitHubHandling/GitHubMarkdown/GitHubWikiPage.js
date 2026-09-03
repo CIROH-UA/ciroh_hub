@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import GitHubMarkdown from './GitHubMarkdown'
+import GitHubMarkdown from '.'
 import MarkdownHooks from 'react-markdown'
 
 // Unfortunately, the GitHub API doesn't support wiki pages.

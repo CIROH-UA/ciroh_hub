@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import GitHubMarkdown from './GitHubMarkdown'
+import GitHubMarkdown from '.'
 
 function GitHubReadme({ repo, username, subfolder = '', readmeFileName = '', trimTitle = 'false' }) {
     // Construct the GitHub API URL to fetch the README as HTML
