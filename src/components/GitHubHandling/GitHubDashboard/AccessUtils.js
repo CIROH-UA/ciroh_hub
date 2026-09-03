@@ -10,11 +10,11 @@
  */
 
 /**
- * @import { RateLimitData } from './RateLimitError.js';
+ * @import { RateLimitData } from '../Archived/Login/RateLimitError.js';
  */
 
-import { RateLimitError } from './RateLimitError.js';
-import { getLinkHeaderData } from './LinkHeaders.js';
+import { RateLimitError } from '../Archived/Login/RateLimitError.js';
+import { getLinkHeaderData } from '../Archived/Login/LinkHeaders.js';
 import { useState } from 'react';
 
 const base_url = "https://api.github.com";
