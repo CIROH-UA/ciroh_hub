@@ -1,10 +1,15 @@
 # Guidance on how to contribute
 
-> All contributions to this project will be released to the public domain.
+> All contributions to this project will be released to the public domain under the MIT License.
 > By submitting a pull request or filing a bug, issue, or
 > feature request, you are agreeing to comply with this waiver of copyright interest.
-> Details can be found in our [TERMS](TERMS.md) and [LICENSE](LICENSE).
+> Details can be found in our [LICENSE](LICENSE).
 
+> If you'd like to submit content for inclusion in the website, please see the contribute page:
+> https://hub.ciroh.org/contribute
+
+> For technical information on the repository and its structure, please see the meta documentation: 
+> https://hub.ciroh.org/docs/hub-meta/
 
 There are two primary ways to help:
  - Using the issue tracker, and

@@ -1,0 +1,96 @@
+---
+sidebar_position: 2
+title: "General Info"
+description: "Implementation details that are relevant site-wide."
+tags: [Products, CIROH Hub]
+---
+
+import Link from "@docusaurus/Link";
+
+# General Technical Info for CIROH Hub
+
+This page details general specifications, best practices, and utilities that apply site-wide.
+
+## Base URL handling
+
+When you launch a local build of CIROH Hub, you may notice that it is hosted on subpaths of `/local`. This is intentional: CIROH Hub is hosted on a variety of base URLs for staging purposes, so your pages need to be ready to handle those varied subpaths.
+
+When creating links that pass through Docusaurus code paths, like `[Markdown links](/docs/example)` or the [`<Link>` component](https://docusaurus.io/docs/docusaurus-core/#link), Docusaurus will automatically handle the base URL for you. (For this reason, it is best practice to prefer `<Link>` over `<href>` in most cases.)
+
+However, when providing raw links to non-Docusaurus tags (frequently `<img>`), you need to explicitly handle the base URL translation yourself. This can be done in one of two ways.
+
+### Require a resource
+
+For static assets, a `require()` call is the simplest and most efficient way to retrieve them:
+
+```jsx
+<img src={require('@site/static/img/logos/ciroh-bgsafe.png').default} />
+```
+
+### `useBaseUrl()`
+
+If you need to load link content dynamically, the function [`useBaseUrl()`](https://docusaurus.io/docs/docusaurus-core/#useBaseUrl) can be used to append the base URL on the fly.
+
+## Light and Dark Mode
+
+Docusaurus comes with a native light/dark mode toggle. When creating new content, it is important to test your work in both light and dark modes, as both are actively used by community members.
+
+In HTML, the `.darkImage` and `.lightImage` CSS tags can be used to only display an element in dark or light mode, respectively. This is typically used to provide alternate image colorations in-line in HTML. (For non-image elements, conditional styling in CSS tends to be more appropriate.)
+
+In CSS, the `[data-theme="{light/dark}"]` condition can be used to filter styles for a tag based on the current setting. Additionally, several Infima color variables are automatically updated in light and dark mode; see `/src/css/custom.css` for a full list.
+
+In React, the current color mode can be checked by importing the [`useColorMode()`](https://docusaurus.io/docs/api/themes/configuration/#use-color-mode) hook.
+
+## Reduced Motion Mode
+
+Reduced motion mode (the accessibility icon on the navbar) was added to support users who find moving website elements distracting. As a courtesy to these users, please be sure to account for the reduced motion setting when defining movement for your components.
+
+In HTML, the `.base-motion` and `.reduced-motion` CSS tags can be used to hide or show an element when reduced motion is enabled, respectively.
+
+In CSS, the `[data-reduce-motion="{true/false}"]` condition can be used to filter styles for a tag based on the current setting. Make sure that your tag has at least one property when `[data-reduce-motion="false"]`, though, as Tailwind CSS doesn't account for HTML conditionals when stripping out unused tags during the website build.
+
+In React, the current reduced-motion mode can be checked by importing the context as a hook:
+
+```js
+import ReducedMotionContext from "@theme/Contexts"
+const { reducedMotionMode } = useContext(ReducedMotionContext);
+```
+
+### Implementation
+
+The reduced-motion setting is added to the Docusaurus context in `/src/theme/Contexts`, while the logic for the reduced-motion toggle itself is located in `/src/themes/ReducedMotionModeToggle`. The implementation is heavily based off of the existing ColorModeToggle.
+
+The `ReducedMotionToggle` is grafted onto the color mode toggle in `/src/themes/Navbar/ColorModeToggle` via a helper component defined in `/src/theme/Navbar/ReducedMotionModeToggle`. While not ideal, this is the least invasive injection point available at the time of writing.
+
+## Dependency Resources
+
+Links to relevant resources for some of the infrastructure that underpins CIROH Hub is provided below.
+
+### Docusaurus
+Docusaurus is a modern static website generator specially tuned to make it easier to maintain and update documentation. Docusaurus forms the core of CIROH Hub, and is responsible for handling most of the site's content.
+
+<Link class="button button--active button--primary" to="https://docusaurus.io/">Docusaurus Homepage</Link>
+<Link class="button button--active button--primary" to="https://docusaurus.io/docs/">Docusaurus Documentation</Link>
+
+### React
+React is the engine that Docusaurus is built on. As such, the website is written using React's syntax and design conventions.
+
+Note that for CIROH Hub's purposes, `.js` files will be read using React's `.jsx` standard, allowing for mixed use of HTML and JavaScript syntax.
+
+<Link class="button button--active button--primary" to="https://react.dev/">React Homepage</Link>
+
+### Markdown
+Markdown is used by Docusaurus for interpreting plain-text documentation. If you need extra help with markdown, check out the cheatsheet below.
+
+<Link class="button button--active button--primary" to="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet">Markdown Cheatsheet</Link>
+
+### Infima
+Infima is an open-source UI styling framework that makes it easier to develop websites using minimal CSS and JS knowledge. All Infima classes are freely available to style and shape your work on CIROH Hub.
+
+<Link class="button button--active button--primary" to="https://docusaurus.io/docs/styling-layout#styling-your-site-with-infima">Infima Documentation</Link>
+
+### Tailwind CSS
+Tailwind CSS is a tag-based styling framework that lets you lean less on CSS when scripting page content.
+Pages on CIROH Hub have variously been designed using Tailwind CSS or dedicated CSS files based on developer preference. There isn't a site-wide standard for this, but try to remain consistent within a given file when possible.
+
+<Link class="button button--active button--primary" to="https://v3.tailwindcss.com/docs">Tailwind CSS Documentation</Link>

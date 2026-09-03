@@ -1,0 +1,100 @@
+---
+sidebar_position: 10
+title: "CI/CD"
+description: "Technical information regarding how CIROH Hub's deployment works."
+tags: [Products, CIROH Hub]
+---
+
+# CI/CD on CIROH Hub
+
+CIROH Hub uses GitHub Actions to power its CI/CD (continuous integration) processes.
+
+## Deployment strategy
+
+Builds of CIROH Hub are automatically deployed to [`CIROH-UA/subdomain-hub`](https://github.com/CIROH-UA/subdomain-hub) by the CI/CD scripts. The contents of this repository are automatically published to hub.ciroh.org by a standard GitHub Pages configuration.
+
+Deploying to a remote target in this way allows for the subdomain to host content from multiple builds or repositories, as GitHub enforces a one-to-one mapping between repositories and repository-level custom domains. 
+
+CIROH Hub is currently the only producer for `subdomain-hub`, but it takes advantage of this structure by hosting multiple environments on its subdomain:
+
+- [hub.ciroh.org](https://hub.ciroh.org): The live, or "production", build. This is the primary version of CIROH Hub accessed by the community. It is only updated when a new production is triggered via a workflow call.
+- [hub.ciroh.org/staging/main](https://hub.ciroh.org/staging/main): A nightly build of CIROH Hub's main branch. This environment is updated every time new changes are merged to main, and it's used to test and verify that new changes work when deployed.
+- hub.ciroh.org/staging/##: Staging builds for individual PRs. These builds are manually triggered by the "preview on staging" PR tag, and they are hosted with a base URL corresponding to the PR number. Once the PR is merged or closed, the staging environment is automatically closed.
+
+## Build and deployment scripts
+
+The majority of CIROH Hub's workflows are dedicated to handling build and deployment. A rough diagram of this process is provided below.
+
+```
+  [Trigger from main]           [Trigger from PR]
+           │                            ├───> [PR is closed/tagged for cleanup] ──> cd_clean_up_pr.yml
+           │                            V
+           │                  [PR has staging label]
+           │                            │
+           V                            V
+ci_trigger_build_main.yml    ci_trigger_build_pr.yml (<- reduced permissions for remote branches)
+           │          ↕       ↕         │
+           │        ci_build.yml        │
+           │                            V
+           │               cd_receive_pr_artifact.yml (<- re-elevates permissions for deployment)
+           │                            │
+           ├────────────────────────────┘
+           V
+cd_deploy_composite.yml
+```
+
+### Callable workflows
+
+To facilitate multiple deployment processes, the primary CI and CD processes are self-contained in callable workflows for reusability.
+
+- `ci_build.yml` handles the build processes, including base URL configuration, metadata collection, and the actual build.
+    - Expects a JSON parameter file to be uploaded as an artifact and provided via artifact ID.
+    - Uploads a JSON metadata file and the finished build as two artifacts, returning their IDs.
+- `cd_deploy_composite.yml` handles deployment, as well as applying tags and releases for new production builds.
+    - Expects a JSON metadata file to be uploaded as an artifact and provided via artifact ID.
+    - Expects the build artifact to be provided via its unique ID and the run ID of the script that called it. (The run ID is necessary to allow for artifact-passing between the two halfs of the PR CI/CD process.)
+
+Note that these scripts run with the permission level of their parent workflow. In practice, this means that `ci_build` can be run with reduced permissions if access to secrets is non-essential, but `cd_build` *must* be run with elevated permissions so that it can retrieve the keys used for deployment.
+
+### Main-branch CI/CD
+
+The CI/CD process for the main branch is run entirely from `ci-trigger-build-main.yml`. This process is straightforward, calling the CI and CD workflows in sequence and coordinating the passing of inputs and outputs. Each time that the main branch is updated, this script rebuilds the site and pushes it to `/main/staging`.
+
+New releases are created by manually dispatching this workflow with the "production" option. To do so, enter the Actions tab on GitHub, click on "CI/CD: Build and deploy from main", and select "Run workflow" to open the workflow dispatch options.
+
+### PR staging CI/CD
+
+:::tip
+If you're not familiar with "pwn requests" in the context of GitHub Actions, please read [this GitHub blog post](https://securitylab.github.com/resources/github-actions-preventing-pwn-requests/) before continuing.
+:::
+
+CIROH Hub hosts a robust staging environment for PRs that is designed to minimize the associated security risks of doing so. PRs are only pushed to the staging environment when they are explicitly tagged by a maintainer. Pull requests from foreign branches are built in a context with reduced privileges to mitigate associated risks, and the resulting build is elevated to a script that handles deployment without running untrusted code. 
+
+The `ci_trigger_build_pr.yml` workflow handles the CI of the workflow. It builds the site, packages a JSON bundle containing relevant metadata and configurations, and then uploads it for use by the next workflow. This workflow runs from the `pull_request` scope, so code from remote branche will be built without access to repository secrets or variables.
+
+The `cd_receive_pr_artifact.yml` workflow triggers when a `workflow_run` of the previous script completes successfully, re-elevating the permission level. It first downloads the JSON bundle and verifies that its contents appear valid, ensuring that PR staging builds can only be deployed to expected subpaths. It then downloads and deploys the build to the target repository and sends a notification in the PR thread if the staging label was newly-added.
+
+This combination of processes generally minimizes the risks associated with PR hijacking, however, it does not eliminate them. A hijacked PR branch could still be used to upload arbitrary unwanted content to the various PR staging subpaths, and the flag denoting whether the branch was newly-labeled could be tampered with to spam staging notifications on a PR thread. These risks are mostly contained to being nuisances, since they're sandboxed to developer-facing contexts, but they're still important to remember. *Only add the preview on staging tag to PRs from contributors you trust, and always review the PR content before doing so.*
+
+### PR staging cleanup
+
+Once a PR is closed, its staging build is no longer useful. When this happens, the `cd_clean_up_pr.yml` workflow automatically deletes the associated folder.
+
+This process is generally reliable. Still, things can occasionally go wrong, so checking on the [staging subdirectory in `subdomain-hub`](https://github.com/CIROH-UA/subdomain-hub/tree/gh-pages/staging) every so often is a good idea.
+
+If you need to trigger this script manually, add the "manual cleanup" tag to the offending PR. The tag will be detected regardless of whether the PR is still open. To avoid confusion, it may be best to remove the tag once you're done using it.
+
+:::warning
+
+Be careful of adding too many PRs to the staging environment, as a single Hub build takes up over half a gigabyte. GitHub Pages ostensibly has a 1 GB deployment limit, and while this doesn't seem to be enforced in practice, other projects have reported reliability issues when reaching greater build sizes.
+:::
+
+## PR validation
+
+The workflow `ci_pr_validation.yml` checks whether a submitted PR's content is valid. The script simply runs the build process, throws an error if something goes wrong, and succeeds if things look okay.
+
+Given that this workflow is self-contained within the `pull_request`context, associated security risks are effectively minimal. Still, note that this script is only a surface-layer check. It's good at catching minor errors from unpushed commits or typos, but it won't do anything more than that, and a malicious PR could easily spoof a passing result for this test.
+
+## Backend deployment
+
+The script `cd_deploy_backend.yml` is responsible for deploying CIROH Hub's backend. For more information, see the [CIROH Hub backend documentation](/docs/products/hub-meta/backend).

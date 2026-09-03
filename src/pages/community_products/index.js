@@ -4,7 +4,7 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import { useColorMode } from '@docusaurus/theme-common';
 import styles from './resources.module.css';
-import ResourceBrowser from '@site/src/components/ResourceBrowser';
+import ResourceBrowser from '@site/src/components/HydroShare/ResourceBrowser';
 import { MdApps } from 'react-icons/md';
 import { HiDatabase } from 'react-icons/hi';
 import { FaBookmark } from 'react-icons/fa';

@@ -1,7 +1,7 @@
 import Header from "@site/src/components/Header";
 import { ConstellationCanvas } from '@site/src/components/ConstellationCanvas';
 import Layout from '@theme/Layout';
-import TethysSection from "@site/src/components/TethysSection";
+import TethysSection from "@site/src/components/Contribute/TethysSection";
 import { useColorMode } from '@docusaurus/theme-common';
 import styles from './develop.module.css';
 

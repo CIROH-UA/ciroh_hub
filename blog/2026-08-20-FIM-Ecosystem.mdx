@@ -7,8 +7,8 @@ authors: [supath-dhital, dipsikha-devi, anupal-baruah, dinuke-munasinghe, parvan
 image: /img/blog/2026-08-fim-ecosystem/ecosystem-overview.png
 ---
 
-import useBaseUrl from "@docusaurus/useBaseUrl"
-import ProfileCards from '/src/components/ProfileCards';
+import Link from "@docusaurus/Link"
+import ProfileCards from '/src/components/Blog/ProfileCards';
 
 export const fimProfiles = [
   {
@@ -78,7 +78,7 @@ Our answer is an interconnected, interoperable system of open-source components 
 <figure style={{ textAlign: "center" }}>
   <img
    class="dark-mode-white-bg"
-   src={useBaseUrl('/img/blog/2026-08-fim-ecosystem/ecosystem-overview.png')}
+   src={require('@site/static/img/blog/2026-08-fim-ecosystem/ecosystem-overview.png').default}
    width='100%'
    alt="The CIROH FIM ecosystem at a glance: FIMserv and FIMsim for generation and simulation, FIMbench for benchmarking, FIMeval for evaluation, FIMbox as a sandbox, and FIMsens for observation, all sharing one CIROH cloud backbone."
    />
@@ -102,11 +102,11 @@ Trusting a model-predicted flood extent requires real-world evidence, precisely 
 <figure style={{ textAlign: "center" }}>
   <img
    class="dark-mode-white-bg"
-   src={useBaseUrl('/img/blog/2026-08-fim-ecosystem/fimbench-webapp.png')}
+   src={require('@site/static/img/blog/2026-08-fim-ecosystem/fimbench-webapp.png').default}
    width='100%'
    alt="Homepage snapshot of the extensive Flood Inundation Mapping Benchmark data web portal."
    />
-  <figcaption><em>Homepage snapshot of the extensive Flood Inundation Mapping Benchmark data web portal (Web portal: <a href="https://tethys.ciroh.org/apps/fimbench-gui/">https://tethys.ciroh.org/apps/fimbench-gui/</a>)</em></figcaption>
+  <figcaption><em>Homepage snapshot of the extensive Flood Inundation Mapping Benchmark data web portal (Web portal: [https://tethys.ciroh.org/apps/fimbench-gui/](ttps://tethys.ciroh.org/apps/fimbench-gui/))</em></figcaption>
 </figure>
 
 ### (d) FIMsens: flood extent and depth from satellite observations
@@ -130,7 +130,7 @@ What sets FIMbox apart is that a single experiment carries seamlessly from model
 <figure style={{ textAlign: "center" }}>
   <img
    class="dark-mode-white-bg"
-   src={useBaseUrl('/img/blog/2026-08-fim-ecosystem/fimbox-workflow.jpg')}
+   src={require('@site/static/img/blog/2026-08-fim-ecosystem/fimbox-workflow.jpg').default}
    width='100%'
    alt="The FIMbox modular workflow: shared inputs feed swappable stages, from model initialization and preprocessing to FIM generation and evaluation."
    />
@@ -158,7 +158,7 @@ Technically, the ecosystem is a modular, cloud-native suite of open-source Pytho
 <figure style={{ textAlign: "center" }}>
   <img
    class="dark-mode-white-bg"
-   src={useBaseUrl('/img/blog/2026-08-fim-ecosystem/technical-architecture.jpg')}
+   src={require('@site/static/img/blog/2026-08-fim-ecosystem/technical-architecture.jpg').default}
    width='100%'
    alt="Technical architecture components of the ecosystem: FIMserv assembles HAND-based flood maps from cloud-hosted terrain and streamflow data sources; FIMeval retrieves benchmarks and evaluation layers from cloud-hosted endpoints; and FIMbench disseminates its curated database via the web portal and the Python API."
    />

@@ -1,17 +1,17 @@
 import React, { useCallback, useMemo, useState } from "react";
 import Header from "@site/src/components/Header";
-import HydroShareResourcesSelector from "@site/src/components/HydroShareResourcesSelector";
+import HydroShareResourcesSelector from "@site/src/components/HydroShare/HydroShareResourcesSelector";
 import { ConstellationCanvas } from '@site/src/components/ConstellationCanvas';
 import Layout from '@theme/Layout';
-import TechBox from "@site/src/components/TechBox";
+import TechBox from "@site/src/components/HydroShare/TechBox";
 import HydroShareLogo from '@site/static/img/logos/hydroshare-white.png';
 import JupyterLogo from '@site/static/img/logos/jupyter-logo.svg';
 import useBaseUrl from '@docusaurus/useBaseUrl';
 import { useColorMode } from '@docusaurus/theme-common';
-import StatsBar from "@site/src/components/StatsBar";
+import StatsBar from "@site/src/components/HydroShare/StatsBar";
 import { getResourceStats } from "@site/src/utils/resourceStats";
-import CardCarouselHydroshareFeatured from "@site/src/components/CardCarouselHydroshareFeatured";
-import { featuredNotebooks } from "@site/src/data/featuredNotebooks";
+import CardCarouselHydroshareFeatured from "@site/src/components/HydroShare/CardCarouselHydroshareFeatured";
+import { featuredNotebooks } from "@site/src/data/featuredResources";
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 
 
