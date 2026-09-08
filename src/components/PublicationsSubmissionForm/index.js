@@ -45,6 +45,8 @@ export default function PublicationsSubmissionForm({ groupId, zoteroApiKey }) {
   const [thumbnailFile, setThumbnailFile] = useState(null);
   const [thumbnailWarning, setThumbnailWarning] = useState('');
 
+  const baseUrl = useBaseUrl('/');
+
   const zoteroClient = React.useMemo(
     () => api(zoteroApiKey).library('group', groupId),
     [zoteroApiKey, groupId],
@@ -183,13 +185,11 @@ export default function PublicationsSubmissionForm({ groupId, zoteroApiKey }) {
       }
 
       // Check for unavailable API url
-      if (customFields.zotero_import_request_api_url == "http://127.0.0.1:3000/zotero-import-request" && !(useBaseUrl('/') === '/local')) {
-        let errorMessage = 'Site administrator: Please configure the import request URL in this website\'s environment file.';
-        throw new Error(errorMessage);
+      if (customFields.zotero_import_request_api_url === "http://127.0.0.1:3000/zotero-import-request" && baseUrl !== '/local/') {
+        throw new Error('Site administrator: Please configure the import request URL in this website\'s environment file.');
       }
-      else if (customFields.zotero_import_request_url == "forbidden") {
-        let errorMessage = 'Access forbidden by CI/CD. (This may be built from a remote branch that cannot access secrets.)';
-        throw new Error(errorMessage);
+      else if (customFields.zotero_import_request_api_url === "forbidden") {
+        throw new Error('Access forbidden by CI/CD. (This may be built from a remote branch that cannot access secrets.)');
       }
 
       // Make request to the backend API to verify reCAPTCHA and import the citation data into Zotero
