@@ -47,7 +47,6 @@ function ResourceForm() {
 
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
-    const [progressMessage, setProgressMessage] = useState('');
     const [resourceUrl, setResourceUrl] = useState('');
 
     /* The library trusts whatever token is in localStorage, so verify it
@@ -118,7 +117,6 @@ function ResourceForm() {
     async function handleSubmit(event) {
         event.preventDefault();
         setError('');
-        setProgressMessage('');
         setResourceUrl('');
 
         // Validate form state before sending to HydroShare
@@ -152,7 +150,6 @@ function ResourceForm() {
             if (!resourceId) throw new Error('No resource ID returned');
 
             setResourceUrl(`https://www.hydroshare.org/resource/${resourceId}`);
-            setProgressMessage('Resource created successfully! View it ');
         } catch (err) {
             setError(err.message);
         } finally {
@@ -165,7 +162,7 @@ function ResourceForm() {
     const verifying = Boolean(token) && !tokenValid;
 
     const getButtonText = () => {
-        if (loading) return 'Processing…';
+        if (loading) return 'Processing… ';
         if (verifying) return 'Verifying HydroShare session…';
         if (loginInProgress) return 'Redirecting…';
         if (!authenticated) return 'Authenticate with HydroShare to Create a Resource';
@@ -241,31 +238,32 @@ function ResourceForm() {
                 </details>
 
                 {/* Submit / Authenticate */}
-                <button
-                    type={authenticated ? 'submit' : 'button'}
-                    className={clsx(styles.button, styles.buttonPrimary)}
-                    disabled={loading || loginInProgress || verifying}
-                    onClick={!authenticated ? handleAuthenticate : undefined}
-                    title={!authenticated ? 'Click to authenticate with HydroShare' : undefined}
-                >
-                    {getButtonText()}
-                </button>
+                {!resourceUrl && (
+                    <button
+                        type={authenticated ? 'submit' : 'button'}
+                        className={clsx(styles.button, styles.buttonPrimary)}
+                        disabled={loading || loginInProgress || verifying}
+                        onClick={!authenticated ? handleAuthenticate : undefined}
+                        title={!authenticated ? 'Click to authenticate with HydroShare' : undefined}
+                    >
+                        {getButtonText()}
+                        {loading && <FaSpinner className={styles.spinner} />}
+                    </button>
+                )}
+
+                {/* View Resource */}
+                {resourceUrl && (
+                    <button
+                        type='button'
+                        className={clsx(styles.button, styles.buttonVisitResource)}
+                        disabled={!resourceUrl}
+                        onClick={() => window.open(resourceUrl, '_blank', 'noopener,noreferrer')}
+                        title='View Resource'
+                    >
+                        Resource created successfully, finish editing it here
+                    </button>
+                )}
             </form>
-            
-            {/* Progress Message */}
-            {progressMessage && (
-                <div className={styles.progressMessage}>
-                    {loading && <FaSpinner className={styles.spinner} />}
-                    <span>
-                        {progressMessage}
-                        {!loading && resourceUrl && (
-                            <a href={resourceUrl} target="_blank" rel="noopener noreferrer">
-                                here
-                            </a>
-                        )}
-                    </span>
-                </div>
-            )}
 
             {/* Error Message */}
             {error && <div className={styles.errorMessage}>{error}</div>}
