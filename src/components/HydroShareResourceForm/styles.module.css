@@ -85,6 +85,13 @@
   cursor: not-allowed;
 }
 
+.buttonVisitResource {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: #fff;
+  font-weight: 700;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.22);
+}
+
 .authRow {
   display: flex;
   justify-content: flex-end;
@@ -106,15 +113,7 @@
   margin-bottom: 1rem;
 }
   
-.progressMessage {
-  display: flex;
-  align-items: center;
-  margin-top: 1rem;
-  font-size: 1rem;
-}
-  
 .spinner {
-  margin-right: 0.5rem;
   animation: spin 1s linear infinite;
 }
   
