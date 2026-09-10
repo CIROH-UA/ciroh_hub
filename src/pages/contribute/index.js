@@ -27,8 +27,10 @@ function ContributeContent() {
   const isDarkTheme = colorMode === 'dark';
   const contactUrl = useBaseUrl('/contact');
   const zoteroLogin = siteConfig?.customFields?.externalLinks?.zoteroLogin || 'https://www.zotero.org/user/login';
-  const zoteroGroupId = siteConfig?.customFields?.zotero_staging_group_id;
+  const zoteroStagingGroupId = siteConfig?.customFields?.zotero_staging_group_id;
+  const zoteroGroupId = siteConfig?.customFields?.zotero_group_id;
   const zoteroApiKey = siteConfig?.customFields?.zotero_api_key_read_only;
+  const zoteroLibraryUrl = `https://www.zotero.org/groups/${zoteroGroupId}/ciroh/library`;
 
   const tethysDevelopUrl = useBaseUrl('/contribute/develop');
   const feedbackUrl = siteConfig?.customFields?.externalLinks?.feedbackForm || 'https://forms.cloud.microsoft/r/NzA2sLrzeJ';
@@ -148,53 +150,21 @@ function ContributeContent() {
             <div className={styles.zoteroHeader}>
               <h2 className={styles.zoteroTitle}>Contribute your publications to Zotero</h2>
               <p className={styles.zoteroSubtitle}>
-                Help us keep CIROH's publication library up to date. Sign in to Zotero, request access to the CIROH
-                group library, and add your papers, presentations, and reports.
+                Help us keep CIROH's publication library up to date. Use the form below to submit a publication
+                to the CIROH Zotero library. <strong>Submissions via this form are subject to approval by the CIROH Hub team.</strong>
               </p>
-              <div className={styles.zoteroActions}>
-                <a href={zoteroLogin} target="_blank" rel="noreferrer noopener" className={styles.zoteroButton}>
-                  Sign in to Zotero
-                </a>
-              </div>
+              <a
+                href={zoteroLibraryUrl}
+                target="_blank"
+                rel="noreferrer noopener"
+                className={clsx(styles.zoteroButton, styles.zoteroButtonSecondary)}>
+                View CIROH Zotero Library
+              </a>
             </div>
-
-            {/* Steps grid */}
-            <div className={styles.zoteroGrid}>
-              <div className={styles.zoteroCard}>
-                <img src={useBaseUrl('/img/contribute/zotero/install-zotero.png')} alt="Install Zotero" />
-                <h4>1. Install Zotero</h4>
-                <p>Download the Zotero desktop app or use the web library to manage citations.</p>
-              </div>
-              <div className={styles.zoteroCard}>
-                <img src={useBaseUrl('/img/contribute/zotero/register-zotero.png')} alt="Register with Zotero" />
-                <h4>2. Register with Zotero</h4>
-                <p>Create a free Zotero account so you can join the CIROH group library.</p>
-              </div>
-              <div className={styles.zoteroCard}>
-                <img src={useBaseUrl('/img/contribute/zotero/join-zotero.png')} alt="Request group access" />
-                <h4>3. Request CIROH group access</h4>
-                <p>Ask to join the CIROH Zotero group to contribute citations to the shared library.</p>
-              </div>
-              <div className={styles.zoteroCard}>
-                <img src={useBaseUrl('/img/contribute/zotero/sync-zotero.png')} alt="Sync your account" />
-                <h4>4. Sync your account</h4>
-                <p>Enable syncing so your additions appear in the group folder automatically.</p>
-              </div>
-              <div className={styles.zoteroCard}>
-                <img src={useBaseUrl('/img/contribute/zotero/add-publications-zotero.png')} alt="Add your publications" />
-                <h4>5. Add your publications</h4>
-                <p>Drag-and-drop PDFs or add by DOI to share your work with the CIROH community.</p>
-              </div>
-            </div>
-
-            <p className={styles.zoteroSubtitleRequestForm}>
-              Alternatively, request a publication be added using the form below.<br />
-              <i>Submissions via this form are subject to approval by the CIROH Hub team.</i>
-            </p>
 
             {/* Publications Submission Form */}
             <PublicationsSubmissionForm
-              groupId={zoteroGroupId}
+              groupId={zoteroStagingGroupId}
               zoteroApiKey={zoteroApiKey}
             />
 
