@@ -9,8 +9,6 @@ import Link from '@docusaurus/Link'
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-{/* TODO: Rework to reflect "5 Ways to Run NGIAB". */}
-
 Explore the NextGen In A Box (NGIAB) ecosystem through the interactive tabs below.
 
 Click on Key Features, Capabilities, or Access Methods to learn more.
@@ -77,15 +75,24 @@ Click on Key Features, Capabilities, or Access Methods to learn more.
         <tr>
           <th><Link to="/docs/products/ngiab-ecosystem/nrds/">DataStreamCLI</Link></th>
           <td>
-            - Complete workflow for creating inputs for and executing NGIAB and managing outputs
-            - Backend of the NextGen Research DataStream
-            - Discrete tooling for tasks like forcing processing and BMI file generation
+            - Complete workflow for scalable and reproducible NextGen simulations using NGIAB
+            - Serves as the on-server workflow for NextGen Research DataStream executions
+            - Integrated and built-in tooling for forcing processing, subsetting, BMI config file generation and more
           </td>
           <td>
             - ngen-cal
             - t-route
             - hydrofabric tools
           </td>
+        </tr>
+        <tr>
+          <th><Link to="/docs/products/ngiab-ecosystem/nrds/forcingprocessor/">Forcing Processor</Link></th>
+          <td>
+            - General tool for scalable and efficient processing of NWM gridded data into NextGen compatible catchment-averaged data
+            - Works for forcings and channel routing data
+            - Deployed as a modular datastream in the NextGen Research DataStream to provide timely NextGen forcings data
+          </td>
+          <td> </td>
         </tr>
         <tr>
           <th><Link to="/docs/products/ngiab-ecosystem/ngiab/components/ngiab-calibration/">NGIAB-Cal</Link></th>
@@ -112,6 +119,7 @@ Click on Key Features, Capabilities, or Access Methods to learn more.
           <th><Link to="/docs/products/ngiab-ecosystem/ngiab/components/ngiab-teehr/">TEEHR Evaluation</Link></th>
           <th><Link to="/docs/products/ngiab-ecosystem/ngiab/components/ngiab-visualizer/">Data Visualizer</Link></th>
           <th><Link to="/docs/products/ngiab-ecosystem/nrds/">DataStreamCLI</Link></th>
+          <th><Link to="/docs/products/ngiab-ecosystem/nrds/forcingprocessor/">Forcing Processor</Link></th>
           <th><Link to="/docs/products/ngiab-ecosystem/ngiab/components/ngiab-calibration/">NGIAB-Cal</Link></th>
         </tr>
       </thead>
@@ -123,6 +131,7 @@ Click on Key Features, Capabilities, or Access Methods to learn more.
           <td>✅</td>
           <td>-</td>
           <td>-</td>
+          <td>-</td>
         </tr>
         <tr>
           <td>Hydrofabric Subsetting</td>
@@ -131,6 +140,7 @@ Click on Key Features, Capabilities, or Access Methods to learn more.
           <td>✅ (view only)</td>
           <td>✅🔨</td>
           <td>-</td>
+          <td>-</td>
         </tr>
         <tr>
           <td>NetCDF Forcing Processing</td>
@@ -138,12 +148,14 @@ Click on Key Features, Capabilities, or Access Methods to learn more.
           <td>✅</td>
           <td>-</td>
           <td>✅🔨</td>
+          <td>✅</td>
           <td>-</td>
         </tr>
         <tr>
           <td>Zarr Forcing Processing</td>
           <td>✅</td>
           <td>✅</td>
+          <td>-</td>
           <td>-</td>
           <td>-</td>
           <td>-</td>
@@ -154,6 +166,7 @@ Click on Key Features, Capabilities, or Access Methods to learn more.
           <td>-</td>
           <td>-</td>
           <td>✅🔨</td>
+          <td>✅</td>
           <td>-</td>
         </tr>
         <tr>
@@ -163,6 +176,7 @@ Click on Key Features, Capabilities, or Access Methods to learn more.
           <td>-</td>
           <td>✅🔨</td>
           <td>-</td>
+          <td>-</td>
         </tr>
         <tr>
           <td>Directory and File Format Validation</td>
@@ -170,6 +184,7 @@ Click on Key Features, Capabilities, or Access Methods to learn more.
           <td>-</td>
           <td>-</td>
           <td>✅🔨</td>
+          <td>-</td>
           <td>-</td>
         </tr>
         <tr>
@@ -179,6 +194,7 @@ Click on Key Features, Capabilities, or Access Methods to learn more.
           <td>-</td>
           <td>✅</td>
           <td>-</td>
+          <td>-</td>
         </tr>
         <tr>
           <td>Execution Metadata Generation</td>
@@ -187,9 +203,11 @@ Click on Key Features, Capabilities, or Access Methods to learn more.
           <td>-</td>
           <td>✅🔨</td>
           <td>-</td>
+          <td>-</td>
         </tr>
         <tr>
           <td>Calibration</td>
+          <td>-</td>
           <td>-</td>
           <td>-</td>
           <td>-</td>
@@ -203,12 +221,14 @@ Click on Key Features, Capabilities, or Access Methods to learn more.
           <td>🔨 (displays TEEHR results)</td>
           <td>✅</td>
           <td>-</td>
+          <td>-</td>
         </tr>
         <tr>
           <td>Visualization</td>
           <td>-</td>
           <td>🔨 (metrics visualization)</td>
           <td>✅</td>
+          <td>-</td>
           <td>-</td>
           <td>-</td>
         </tr>
@@ -229,6 +249,7 @@ Click on Key Features, Capabilities, or Access Methods to learn more.
           <th><Link to="/docs/products/ngiab-ecosystem/ngiab/components/ngiab-teehr/">TEEHR Evaluation</Link></th>
           <th><Link to="/docs/products/ngiab-ecosystem/ngiab/components/ngiab-visualizer/">Data Visualizer</Link></th>
           <th><Link to="/docs/products/ngiab-ecosystem/nrds/">DataStreamCLI</Link></th>
+          <th><Link to="/docs/products/ngiab-ecosystem/nrds/forcingprocessor/">Forcing Processor</Link></th>
           <th><Link to="/docs/products/ngiab-ecosystem/ngiab/components/ngiab-calibration/">NGIAB-Cal</Link></th>
         </tr>
       </thead>
@@ -236,6 +257,7 @@ Click on Key Features, Capabilities, or Access Methods to learn more.
         <tr>
           <td>Docker</td>
           <td>-</td>
+          <td>✅</td>
           <td>✅</td>
           <td>✅</td>
           <td>✅</td>
@@ -249,6 +271,7 @@ Click on Key Features, Capabilities, or Access Methods to learn more.
           <td>✅</td>
           <td>-</td>
           <td>-</td>
+          <td>-</td>
           <td>✅</td>
         </tr>
         <tr>
@@ -257,6 +280,7 @@ Click on Key Features, Capabilities, or Access Methods to learn more.
           <td>-</td>
           <td>-</td>
           <td>✅</td>
+          <td>-</td>
           <td>-</td>
           <td>-</td>
         </tr>
@@ -268,11 +292,13 @@ Click on Key Features, Capabilities, or Access Methods to learn more.
           <td>-</td>
           <td>-</td>
           <td>-</td>
+          <td>-</td>
         </tr>
         <tr>
           <td>Singularity (HPC)</td>
           <td>-</td>
           <td>✅</td>
+          <td>-</td>
           <td>-</td>
           <td>-</td>
           <td>-</td>
