@@ -1,0 +1,148 @@
+.container {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 0.25rem 1rem 1rem;
+    border-radius: 8px;
+  }
+
+.subtitle {
+  margin: 0 auto 1.1rem;
+  max-width: 820px;
+  font-size: 0.98rem;
+  color: var(--ifm-color-emphasis-700);
+  text-align: center;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+  
+.label {
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+  
+.input {
+  padding: 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+  width: 100%;
+  background-color: #FFFFFF;
+}
+
+:root[data-theme='dark'] .input {
+  appearance: none;
+  -webkit-appearance: none;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  cursor: pointer;
+  position: relative;
+  background-color: #060010;
+}
+
+.input:focus {
+  border-color: var(--ifm-color-primary);
+  box-shadow: 0 0 0 1px var(--ifm-color-primary);
+  outline: none;
+}
+
+:root[data-theme='dark'] .input:focus {
+  border-color: var(--ifm-color-primary);
+  box-shadow: 0 0 0 1px var(--ifm-color-primary);
+  outline: none;
+}
+
+.button {
+  padding: 0.65rem 1.1rem;
+  font-family: inherit;
+  font-size: 1rem;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.button:hover {
+  filter: brightness(0.98);
+}
+
+.buttonPrimary {
+  background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+  color: #fff;
+  font-weight: 700;
+  box-shadow: 0 4px 12px rgba(14, 165, 233, 0.22);
+}
+  
+  
+.button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.buttonVisitResource {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: #fff;
+  font-weight: 700;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.22);
+}
+
+.authRow {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 0.5rem;
+}
+
+.logoutButton {
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: 0.9rem;
+  color: var(--ifm-color-primary);
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.errorMessage {
+  color: #e00;
+  margin-bottom: 1rem;
+}
+  
+.spinner {
+  animation: spin 1s linear infinite;
+}
+  
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Collapsible checklist of what to fill in on HydroShare after creation */
+.checklistDetails {
+  font-size: 0.9rem;
+  color: var(--ifm-color-emphasis-700);
+}
+
+.checklistDetails summary {
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.checklist {
+  margin: 0.5rem 0 0;
+  padding-left: 1.2rem;
+}
+
+.checklist li {
+  margin-bottom: 0.35rem;
+}
+
+.checklist ul {
+  margin-top: 0.35rem;
+  padding-left: 1.2rem;
+}
