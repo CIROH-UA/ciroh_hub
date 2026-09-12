@@ -1,10 +1,7 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FaSpinner } from 'react-icons/fa';
 import clsx from 'clsx';
-import BrowserOnly from '@docusaurus/BrowserOnly';
-import useBaseUrl from '@docusaurus/useBaseUrl';
-import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
-import { AuthContext, AuthProvider } from 'react-oauth2-code-pkce';
+import useHydroShareAuth from '@site/src/components/HydroShareAuth/useHydroShareAuth';
 import styles from './styles.module.css';
 
 const resourceTypeOptions = [
@@ -34,83 +31,42 @@ const METADATA_KEYS_BY_TYPE = {
 
 const urlBase = 'https://www.hydroshare.org/hsapi';
 
-/* Keys used to persist form state across the OAuth redirect */
+/* Key used to persist form input across the OAuth redirect */
 const FORM_STATE_KEY = 'hydroshare-resource-form';
-const AUTH_PENDING_KEY = 'hydroshare-resource-form-auth-pending';
+const FORM_STATE_MAX_AGE_MS = 30 * 60 * 1000;
 
-function ResourceForm() {
-    const { token, logIn, logOut, loginInProgress } = useContext(AuthContext);
+export default function HydroShareResourceForm() {
+    const { token, authenticated, verifying, loginInProgress, logIn, logOut } = useHydroShareAuth();
 
     const [title, setTitle] = useState('');
     const [resourceType, setResourceType] = useState('');
-    const [tokenValid, setTokenValid] = useState(false);
 
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const [resourceUrl, setResourceUrl] = useState('');
 
-    /* The library trusts whatever token is in localStorage, so verify it
-       against HydroShare and discard it if it's stale or foreign */
+    /* Restore form input saved before the HydroShare login redirect. The saved
+       state only exists if the user clicked authenticate with the form filled */
     useEffect(() => {
-        if (!token) { setTokenValid(false); return; }
-        let cancelled = false;
-        fetch(`${urlBase}/userInfo/`, {
-            headers: { Authorization: `Bearer ${token}` },
-        })
-            .then((resp) => {
-                if (cancelled) return;
-                if (resp.ok) setTokenValid(true);
-                else logOut();
-            })
-            .catch(() => { if (!cancelled) logOut(); });
-        return () => { cancelled = true; };
-    }, [token]);
-
-    /* Restore form state when returning from HydroShare authentication */
-    useEffect(() => {
-        if (!token) return;
-        const pendingSince = parseInt(localStorage.getItem(AUTH_PENDING_KEY), 10);
-        if (!pendingSince || Date.now() - pendingSince > 10 * 60 * 1000) return;
-
         try {
             const saved = JSON.parse(localStorage.getItem(FORM_STATE_KEY));
-            if (saved && Date.now() - saved.timestamp < 30 * 60 * 1000) {
+            if (saved && Date.now() - saved.timestamp < FORM_STATE_MAX_AGE_MS) {
                 setTitle(saved.title || '');
                 setResourceType(saved.resourceType || '');
             }
+            localStorage.removeItem(FORM_STATE_KEY);
         } catch (err) {
             console.warn('Failed to restore form state:', err);
         }
-        localStorage.removeItem(AUTH_PENDING_KEY);
-        localStorage.removeItem(FORM_STATE_KEY);
-    }, [token]);
-
-    const handleLogout = () => {
-        logOut();
-        // End the hydroshare.org session in a short-lived popup: the logout
-        // request must be a top-level navigation for the browser to send
-        // HydroShare's session cookie, but this way the user stays on this page.
-        const logoutUrl = 'https://www.hydroshare.org/accounts/logout/';
-        const win = window.open(logoutUrl, '_blank', 'width=500,height=550');
-        if (!win) {
-            // Popup blocked — fall back to navigating this page there
-            window.location.assign(logoutUrl);
-            return;
-        }
-        // Don't null win.opener: closing a cross-origin popup requires the
-        // intact opener relationship, or win.close() silently no-ops
-        setTimeout(() => {
-            if (!win.closed) win.close();
-        }, 2500);
-    };
+    }, []);
 
     const handleAuthenticate = () => {
+        // Save the form input so it survives the redirect to HydroShare
         localStorage.setItem(FORM_STATE_KEY, JSON.stringify({
             title,
             resourceType,
             timestamp: Date.now(),
         }));
-        localStorage.setItem(AUTH_PENDING_KEY, Date.now().toString());
         logIn();
     };
 
@@ -120,7 +76,7 @@ function ResourceForm() {
         setResourceUrl('');
 
         // Validate form state before sending to HydroShare
-        if (!token || !tokenValid) { handleAuthenticate(); return; }
+        if (!authenticated) { handleAuthenticate(); return; }
         if (!title.trim()) { setError('Title is required.'); return; }
         if (!resourceType) { setError('Resource type is required.'); return; }
 
@@ -157,10 +113,6 @@ function ResourceForm() {
         }
     }
 
-    /* Authenticated means having a token that HydroShare accepted */
-    const authenticated = Boolean(token) && tokenValid;
-    const verifying = Boolean(token) && !tokenValid;
-
     const getButtonText = () => {
         if (loading) return 'Processing… ';
         if (verifying) return 'Verifying HydroShare session…';
@@ -180,7 +132,7 @@ function ResourceForm() {
                     <button
                         type="button"
                         className={styles.logoutButton}
-                        onClick={handleLogout}
+                        onClick={logOut}
                     >
                         Log out of HydroShare
                     </button>
@@ -268,36 +220,5 @@ function ResourceForm() {
             {/* Error Message */}
             {error && <div className={styles.errorMessage}>{error}</div>}
         </div>
-    );
-}
-
-function ResourceFormWithAuth() {
-    const { siteConfig: { customFields } } = useDocusaurusContext();
-    const contributePath = useBaseUrl('/contribute');
-
-    const authConfig = {
-        clientId: customFields.hs_client_id,
-        authorizationEndpoint: 'https://www.hydroshare.org/o/authorize/',
-        tokenEndpoint: 'https://www.hydroshare.org/o/token/',
-        redirectUri: `${window.location.origin}${contributePath}`,
-        scope: 'read write',
-        autoLogin: false,
-        decodeToken: false, // HydroShare tokens are opaque, not JWTs
-        clearURL: true,
-    };
-
-    return (
-        <AuthProvider authConfig={authConfig}>
-            <ResourceForm />
-        </AuthProvider>
-    );
-}
-
-/* AuthProvider touches window/localStorage, so it can only render client-side */
-export default function HydroShareResourceForm() {
-    return (
-        <BrowserOnly fallback={<div />}>
-            {() => <ResourceFormWithAuth />}
-        </BrowserOnly>
     );
 }
