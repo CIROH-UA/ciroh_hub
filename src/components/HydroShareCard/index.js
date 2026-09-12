@@ -10,9 +10,9 @@ import {
 } from 'react-icons/hi';
 import HydroShareResourceForm from '@site/src/components/HydroShareResourceForm';
 import ModalGeneric from '@site/src/components/ModalGeneric';
+import useHydroShareAuth from '@site/src/components/HydroShareAuth/useHydroShareAuth';
 
 export default function HydroShareCard() {
-  const hydroshareUrl = 'https://www.hydroshare.org/oidc/authenticate/';
   const logo = useBaseUrl('/img/logos/HydroShareLogo.png');
 
   const { siteConfig } = useDocusaurusContext();
@@ -24,10 +24,14 @@ export default function HydroShareCard() {
 
   // State to control the visibility of the HydroShareResourceForm modal
   const [formOpen, setFormOpen] = useState(false);
+  const { returnedFromLogin, clearReturnedFromLogin } = useHydroShareAuth();
   useEffect(() => {
     // Reopen after returning from the HydroShare OAuth redirect
-    if (localStorage.getItem('hydroshare-resource-form-auth-pending')) setFormOpen(true);
-  }, []);
+    if (returnedFromLogin) {
+      setFormOpen(true);
+      clearReturnedFromLogin();
+    }
+  }, [returnedFromLogin, clearReturnedFromLogin]);
 
   return (
     <section className={styles.section}>
