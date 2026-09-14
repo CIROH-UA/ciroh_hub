@@ -129,7 +129,6 @@
 
 .zoteroHeader {
   text-align: center;
-  margin-bottom: 1rem;
 }
 
 .zoteroTitle {
@@ -168,6 +167,7 @@
   text-decoration: none;
   box-shadow: 0 4px 12px rgba(25, 167, 206, 0.22);
   transition: all 0.2s ease;
+  margin-top: 1rem;
 }
 
 .zoteroButton:hover { color: #060010; text-decoration: none; filter: brightness(1.05); transform: translateY(-1px); }
