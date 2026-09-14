@@ -1,19 +1,19 @@
 export default [
   {
     title: "Documentation",
-    image: "img/graphics/documentation.png",
+    image: "img/graphics/explore-documentation.svg",
     description: "Dive into our comprehensive documentation to access in-depth information about various CIROH products, including but not limited to NextGen, Snow model, Tethys, and more.",
     link: "/docs/products/intro"
   },
   {
     title: "Cloud Services",
-    image: "img/graphics/cloud.png",
+    image: "img/graphics/explore-cloud.svg",
     description: "Explore our array of cloud services and offerings, where you can delve into the specifics of CIROH-AWS cloud. Learn how to gain access to this cloud infrastructure and uncover insights into working seamlessly with the 2i2c cloud services.",
     link: "/docs/services/intro"
   },
   {
     title: "Policies",
-    image: "img/graphics/tutorial.png",
+    image: "img/graphics/explore-policies.svg",
     description: "Discover recommendations and best practices for CIROH's research, projects, and infrastructure.",
     link: "/docs/policies/intro"
   },

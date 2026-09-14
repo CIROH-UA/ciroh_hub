@@ -52,7 +52,6 @@ const CardCarouselGeneric = ({ cards = [], cardsPerView = 3, header, renderCard 
         });
     };
 
-
     const goToSlide = (page) => {
         const index = page * cardsPerView;
         setCurrentIndex(Math.max(0, Math.min(index, maxIndex)));
@@ -93,24 +92,26 @@ const CardCarouselGeneric = ({ cards = [], cardsPerView = 3, header, renderCard 
                 <div className="tw-flex tw-items-center tw-relative">
                     
                     {/* Navigation Arrow Left */}
-                    <button
-                        onClick={() => {
-                            prevSlide();
-                            resetAutoScroll();
-                        }}
-                        className={clsx(
-                            'tw-p-3 tw-rounded-full tw-transition-all tw-duration-300',
-                            'tw-bg-slate-200 dark:tw-bg-slate-700 tw-text-slate-900 dark:tw-text-white',
-                            'hover:tw-scale-110 hover:tw-bg-blue-500 hover:tw-text-white dark:hover:tw-bg-blue-500',
-                            'tw-shadow-lg dark:tw-shadow-xl tw-z-10',
-                            'base-motion-transition'
-                        )}
-                        aria-label="Previous slide"
-                    >
-                        <svg className="tw-w-6 tw-h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                        </svg>
-                    </button>
+                    { cards.length <= cardsPerView || (
+                        <button
+                            onClick={() => {
+                                prevSlide();
+                                resetAutoScroll();
+                            }}
+                            className={clsx(
+                                'tw-p-3 tw-rounded-full tw-transition-all tw-duration-300',
+                                'tw-bg-slate-200 dark:tw-bg-slate-700 tw-text-slate-900 dark:tw-text-white',
+                                'hover:tw-scale-110 hover:tw-bg-blue-500 hover:tw-text-white dark:hover:tw-bg-blue-500',
+                                'tw-shadow-lg dark:tw-shadow-xl tw-z-10',
+                                'base-motion-transition'
+                            )}
+                            aria-label="Previous slide"
+                        >
+                            <svg className="tw-w-6 tw-h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                            </svg>
+                        </button>
+                    )}
 
                     {/* Carousel Wrapper */}
                     <div
@@ -161,47 +162,51 @@ const CardCarouselGeneric = ({ cards = [], cardsPerView = 3, header, renderCard 
                     </div>
                     
                     {/* Navigation Arrow Right */}
-                    <button
-                        onClick={() => {
-                            nextSlide();
-                            resetAutoScroll();
-                        }}
-                        className={clsx(
-                            'tw-p-3 tw-rounded-full tw-transition-all tw-duration-300',
-                            'tw-bg-slate-200 dark:tw-bg-slate-700 tw-text-slate-900 dark:tw-text-white',
-                            'hover:tw-scale-110 hover:tw-bg-blue-500 hover:tw-text-white dark:hover:tw-bg-blue-500',
-                            'tw-shadow-lg dark:tw-shadow-xl tw-z-10',
-                            'base-motion-transition'
-                        )}
-                        aria-label="Next slide"
-                    >
-                        <svg className="tw-w-6 tw-h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                        </svg>
-                    </button>
-                </div>
-
-                {/* Navigation Dots */}
-                <div className="tw-flex tw-justify-center tw-gap-3 tw-mt-8">
-                    {Array.from({ length: Math.ceil(cards.length / cardsPerView) }).map((_, i) => (
+                    { cards.length <= cardsPerView || (
                         <button
-                            key={i}
                             onClick={() => {
-                                goToSlide(i);
+                                nextSlide();
                                 resetAutoScroll();
                             }}
                             className={clsx(
-                                'tw-w-3 tw-h-3 tw-rounded-full tw-transition-all tw-duration-300',
-                                i === Math.floor(currentIndex / cardsPerView)
-                                    ? 'tw-bg-blue-500 tw-shadow-lg tw-scale-125'
-                                    : 'tw-bg-slate-400 dark:tw-bg-slate-600 hover:tw-bg-slate-500',
+                                'tw-p-3 tw-rounded-full tw-transition-all tw-duration-300',
+                                'tw-bg-slate-200 dark:tw-bg-slate-700 tw-text-slate-900 dark:tw-text-white',
+                                'hover:tw-scale-110 hover:tw-bg-blue-500 hover:tw-text-white dark:hover:tw-bg-blue-500',
+                                'tw-shadow-lg dark:tw-shadow-xl tw-z-10',
                                 'base-motion-transition'
                             )}
-                            aria-label={`Go to slide ${i + 1}`}
-                            aria-current={i === Math.floor(currentIndex / cardsPerView)}
-                        />
-                    ))}
+                            aria-label="Next slide"
+                        >
+                            <svg className="tw-w-6 tw-h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                            </svg>
+                        </button>
+                    )}
                 </div>
+
+                {/* Navigation Dots */}
+                { cards.length <= cardsPerView || (
+                    <div className="tw-flex tw-justify-center tw-gap-3 tw-mt-8">
+                        {Array.from({ length: Math.ceil(cards.length / cardsPerView) }).map((_, i) => (
+                            <button
+                                key={i}
+                                onClick={() => {
+                                    goToSlide(i);
+                                    resetAutoScroll();
+                                }}
+                                className={clsx(
+                                    'tw-w-3 tw-h-3 tw-rounded-full tw-transition-all tw-duration-300',
+                                    i === Math.floor(currentIndex / cardsPerView)
+                                        ? 'tw-bg-blue-500 tw-shadow-lg tw-scale-125'
+                                        : 'tw-bg-slate-400 dark:tw-bg-slate-600 hover:tw-bg-slate-500',
+                                    'base-motion-transition'
+                                )}
+                                aria-label={`Go to slide ${i + 1}`}
+                                aria-current={i === Math.floor(currentIndex / cardsPerView)}
+                            />
+                        ))}
+                    </div>
+                )}
             </div>
         </div>
     );

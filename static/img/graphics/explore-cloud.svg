@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 320" role="img" aria-label="Cloud services illustration">
+  <defs>
+    <linearGradient id="exCloudFront" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#60a5fa"/>
+      <stop offset="1" stop-color="#2563eb"/>
+    </linearGradient>
+  </defs>
+
+  <!-- soft backdrop -->
+  <circle cx="200" cy="165" r="134" fill="#bfdbfe" opacity="0.35"/>
+
+  <!-- network nodes -->
+  <g stroke="#19a7ce" stroke-width="4" opacity="0.85">
+    <line x1="70" y1="235" x2="140" y2="185"/>
+    <line x1="330" y1="235" x2="262" y2="185"/>
+    <line x1="200" y1="250" x2="200" y2="205"/>
+  </g>
+  <g fill="#19a7ce">
+    <circle cx="70" cy="238" r="12"/>
+    <circle cx="330" cy="238" r="12"/>
+    <circle cx="200" cy="256" r="12"/>
+  </g>
+
+  <!-- back cloud -->
+  <path d="M120 150 a44 44 0 0 1 84 -18 a36 36 0 0 1 60 20 a34 34 0 0 1 -6 68 H132 a40 40 0 0 1 -12 -70 z" fill="#93c5fd" transform="translate(28 -24)"/>
+
+  <!-- front cloud -->
+  <path d="M96 176 a46 46 0 0 1 88 -20 a38 38 0 0 1 64 22 a36 36 0 0 1 -8 70 H108 a42 42 0 0 1 -12 -72 z" fill="url(#exCloudFront)"/>
+
+  <!-- monitor card in front -->
+  <g>
+    <rect x="132" y="150" width="136" height="96" rx="12" fill="#ffffff" stroke="#1e40af" stroke-width="4"/>
+    <path d="M182 246 h36 v14 h-36 z" fill="#1e40af"/>
+    <rect x="168" y="258" width="64" height="8" rx="4" fill="#1e40af"/>
+    <!-- wifi arcs -->
+    <g fill="none" stroke="#3b82f6" stroke-width="5" stroke-linecap="round">
+      <path d="M176 196 a28 28 0 0 1 48 0"/>
+      <path d="M188 208 a14 14 0 0 1 24 0"/>
+    </g>
+    <circle cx="200" cy="220" r="5" fill="#3b82f6"/>
+  </g>
+
+  <!-- upload arrow badge -->
+  <g transform="translate(276 138)">
+    <circle cx="0" cy="0" r="24" fill="#f59e0b"/>
+    <path d="M0 -11 l12 13 h-7 v10 h-10 v-10 h-7 z" fill="#ffffff"/>
+  </g>
+
+  <!-- dots -->
+  <circle cx="96" cy="96" r="7" fill="#60a5fa" opacity="0.8"/>
+  <circle cx="320" cy="80" r="6" fill="#19a7ce" opacity="0.8"/>
+</svg>
