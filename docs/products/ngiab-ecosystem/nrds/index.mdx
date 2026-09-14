@@ -1,0 +1,32 @@
+---
+sidebar_position: 2
+title: "NextGen Research Datastream"
+description: "Research Datastream"
+tags: [Products, CIROH, NGIAB, NextGen, NextGen Datastream, AWS, National Water Model]
+---
+
+:::info
+The underlying forcing files and associated metadata the NextGen Research DataStream (NRDS) are also available through AWS S3 Explorer. You can browse and access these regularly updated resources at [datastream.ciroh.org/index.html](http://datastream.ciroh.org/index.html). In addition to NextGen forcings, daily NextGen simulation outputs via Datastream will soon be available.
+:::
+
+:::info
+Daily outputs from the NextGen Research DataStream (NRDS) are now available for browsing online! Visit http://nrds.ciroh.org/ to see them.
+
+The underlying forcing files and associated metadata for NRDS are also available through our AWS S3 Explorer. You can browse and access these regularly updated resources at [datastream.ciroh.org/index.html](http://datastream.ciroh.org/index.html).
+:::
+
+# NextGen Research DataStream
+The NextGen Research DataStream is an array of daily [NextGen](https://github.com/NOAA-OWP/ngen)-based hydrolgic simulations in the AWS cloud. An exciting aspect of the Research DataStream is the NextGen configuration is [open-sourced](https://github.com/CIROH-UA/ngen-datastream/tree/main/configs/ngen) and [community editable](https://github.com/CIROH-UA/ngen-datastream/blob/main/docs/nrds/CONTRIBUTE.md), which allows any member of the hydrologic community to contribute to improving streamflow predictions. By making the NextGen forcings, outputs, and configuration publicly available, it is now possible to leverage regional expertise and incrementally improve streamflow predictions configured with the NextGen Framework. 
+See the Research DataStream related documentation:
+* **Find daily output data at:** https://datastream.ciroh.org/index.html
+* **Make improvements to NextGen configuration:**
+Find out how you can contribute [here](https://github.com/CIROH-UA/ngen-datastream/blob/main/docs/nrds/CONTRIBUTE.md)!
+* **Current status and configuration:** Read [here](https://github.com/CIROH-UA/ngen-datastream/blob/main/docs/nrds/STATUS_AND_METADATA.md)!
+* **Infrastructure as Code:** See the template AWS architecture [here](https://github.com/CIROH-UA/ngen-datastream/blob/main/infra/aws/terraform/docs/ARCHITECTURE.md), which users can deploy within their own AWS account to issue and manage AWS server-based jobs. 
+  * The actual research datastream deployment, which builds upon the template AWS infra, exists [here](https://github.com/CIROH-UA/ngen-datastream/blob/main/infra/aws/terraform/README.md) and is available for reference only.
+
+---
+
+import DocCardList from '@theme/DocCardList';
+
+<DocCardList />

@@ -1,0 +1,133 @@
+# Security posture: supporting PRs in staging requires running and deploying untrusted code.
+# However, by limiting deployments to the `/staging/pr` subdirectory via this workflow,
+# we minimize the potential attack surface to a known subset of pages.
+
+name: 'CD: Validate and deploy PR build artifact'
+run-name: 'Validate and deploy PR build artifact'
+
+on:
+  workflow_run:
+    workflows: ['CI: Build and trigger deployment from PR']
+    types:
+      - completed
+
+jobs:
+  extract-config:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    permissions:
+      contents: read
+    outputs:
+      build-id: ${{ env.BUILD_ID }}
+      metadata-id: ${{ steps.upload-metadata.outputs.artifact-id }}
+      title-source: ${{ env.TITLE_SOURCE }}
+      title-dest: ${{ env.TITLE_DEST }}
+      should-notify: ${{ env.SHOULD_NOTIFY }}
+      target-path: ${{ env.TARGET_PATH }}
+      pr-number: ${{ steps.validate-and-save.outputs.pr-number }}
+
+    steps:
+    - name: Download PR CD payload
+      uses: actions/download-artifact@v8
+      with:
+        name: pr_cd_payload.json
+        path: ${{ runner.temp }}/
+        run-id: ${{ github.event.workflow_run.id }}
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Unpack payload inputs
+      id: extract-json
+      run: |
+        payload=`cat ${{ runner.temp }}/pr_cd_payload.json`
+        echo "payload_json=$payload" >> $GITHUB_OUTPUT
+    
+    - name: Parse payload inputs
+      env:
+        TEMP_BUILD_ID: ${{ fromJson(steps.extract-json.outputs.payload_json).build_id }}
+        TEMP_METADATA: ${{ toJson(fromJson(steps.extract-json.outputs.payload_json).metadata) }}
+        TEMP_SOURCE: ${{ fromJson(steps.extract-json.outputs.payload_json).title_source }}
+        TEMP_DEST: ${{ fromJson(steps.extract-json.outputs.payload_json).title_dest }}
+        TEMP_SN: ${{ fromJson(steps.extract-json.outputs.payload_json).should_notify }}
+      run: |
+        echo BUILD_ID=$TEMP_BUILD_ID >> $GITHUB_ENV
+        echo METADATA_JSON=$TEMP_METADATA >> $GITHUB_ENV
+        echo TITLE_SOURCE=$TEMP_SOURCE >> $GITHUB_ENV
+        echo TITLE_DEST=$TEMP_DEST >> $GITHUB_ENV
+        echo SHOULD_NOTIFY=$TEMP_SN >> $GITHUB_ENV
+
+        echo "PAYLOAD_DIR=./payloads" >> $GITHUB_ENV
+        echo "PAYLOAD_NAME=build_metadata.json" >> $GITHUB_ENV
+      
+    - name: Validate and save payload metadata
+      id: validate-and-save
+      env:
+        STAGING_PATH: staging/
+        DEPLOY_ENV: ${{ fromJson(env.METADATA_JSON).deploy_env }}
+        TARGET_REPO: ${{ fromJson(env.METADATA_JSON).target_repo }}
+        TARGET_PATH: ${{ fromJson(env.METADATA_JSON).target_path }}
+        PR_NUMBER: ${{ fromJson(env.METADATA_JSON).pr_number }}
+      # Adjust this workflow run as needed to whitelist permissible conditions
+      run: |
+        echo "Checking payload validity." >> $GITHUB_STEP_SUMMARY
+        echo "*If this step fails, it may indicate tampering or an attack!*" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        INT_REGEX='^[0-9]+$'
+        if ![[ "$DEPLOY_ENV" = "staging-pr" ]]; then
+          echo "Invalid DEPLOY_ENV value '${DEPLOY_ENV}'. Expected 'staging-pr'. Aborting." >> $GITHUB_STEP_SUMMARY
+          exit 1
+        elif ![[ "$TARGET_REPO" = "${{ vars.COMPOSITE_TARGET_REPO }}" ]]; then
+          echo "Invalid target repo '${DEPLOY_ENV}'. Expected ${{ vars.COMPOSITE_TARGET_REPO }}. Aborting." >> $GITHUB_STEP_SUMMARY
+          exit 1
+        elif ![[ "$PR_NUMBER" =~ "$INT_REGEX" ]]; then
+          echo "Provided PR number '${PR_NUMBER}' is not a valid integer. Aborting." >> $GITHUB_STEP_SUMMARY
+          exit 1
+        elif ![[ "$STAGING_PATH$PR_NUMBER" = "$TARGET_PATH" ]]; then
+          echo "Provided target path '${TARGET_PATH}' does not match expected target path '${STAGING_PATH}${PR_NUMBER}' Aborting." >> $GITHUB_STEP_SUMMARY
+        fi
+
+        echo "✅ **All checks passed!** The provided payload is well-formed and being pushed to a valid destination." >> $GITHUB_STEP_SUMMARY
+        echo "**Deploy environment**: $DEPLOY_ENV" >> $GITHUB_STEP_SUMMARY
+        echo "**Target repository**: $TARGET_REPO" >> $GITHUB_STEP_SUMMARY
+        echo "**Target path**: $TARGET_PATH" >> $GITHUB_STEP_SUMMARY
+
+        echo "TARGET_PATH=$TARGET_PATH" >> $GITHUB_ENV
+        echo "pr-number=$PR_NUMBER" >> $GITHUB_OUTPUT
+
+        mkdir $PAYLOAD_DIR
+        echo $METADATA_JSON > $PAYLOAD_DIR/$PAYLOAD_NAME
+        cat $PAYLOAD_DIR/$PAYLOAD_NAME
+
+    # Artifacts can't be reused once downloaded, so we need to upload this again.
+    - name: Upload build metadata artifact
+      id: upload-metadata
+      uses: actions/upload-artifact@v7
+      with:
+        name: ${{ env.PAYLOAD_NAME }}
+        path: ${{ env.PAYLOAD_DIR }}/${{ env.PAYLOAD_NAME }}
+
+  call-deployment:
+    uses: $/.github/workflows/cd_deploy_composite.yml
+    needs: extract-config
+    with:
+      build-id: ${{ needs.extract-config.outputs.build-id }}
+      build-run-id: ${{ github.event.workflow_run.id }}
+      metadata-id: ${{ needs.extract-config.outputs.metadata-id }}
+      title-source: ${{ needs.extract-config.outputs.title-source }}
+      title-dest: ${{ needs.extract-config.outputs.title-dest }}
+    secrets: inherit
+  
+  notify:
+    if: ${{ needs.extract-config.outputs.should-notify }}
+    runs-on: ubuntu-latest
+    needs: [extract-config, call-deployment]
+    steps:
+    - name: Comment PR with staging link
+      uses: mshick/add-pr-comment@v2
+      with:
+        message: |
+          **Staging Preview:**
+          🚀 https://hub.ciroh.org/${{ needs.extract-config.outputs.target-path }}
+          _Will be live within ~5 minutes of this message_
+            
+          _Built from commit ${{ github.sha }}_
+        issue: ${{ needs.extract-config.outputs.pr-number }}

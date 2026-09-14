@@ -1,6 +1,7 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useContext } from 'react';
 import * as THREE from 'three';
 import { BloomEffect, EffectComposer, EffectPass, RenderPass, SMAAEffect, SMAAPreset } from 'postprocessing';
+import { ReducedMotionContext } from '@theme/Contexts'
 
 import './hyperSpeed.css';
 
@@ -43,6 +44,7 @@ const Hyperspeed = ({
     }
   }
 }) => {
+  const { reducedMotionMode } = useContext(ReducedMotionContext);
   const hyperspeed = useRef(null);
   const appRef = useRef(null);
 
@@ -533,6 +535,8 @@ const Hyperspeed = ({
       }
 
       update(delta) {
+        if (reducedMotionMode === 'enabled') return;
+
         let lerpPercentage = Math.exp(-(-60 * Math.log2(1 - 0.1)) * delta);
         this.speedUp += lerp(this.speedUp, this.speedUpTarget, lerpPercentage, 0.00001);
         this.timeOffset += this.speedUp * delta;
@@ -1115,9 +1119,14 @@ const Hyperspeed = ({
         appRef.current.dispose();
       }
     };
-  }, [effectOptions]);
+  }, [effectOptions, reducedMotionMode]);
 
-  return <div id="lights" ref={hyperspeed}></div>;
+  return (
+    <>
+      <div id="lights" className="base-motion" ref={hyperspeed}></div>
+      <div id="lights-disabled" className="reduced-motion"></div>
+    </>
+  )
 };
 
 export default Hyperspeed;

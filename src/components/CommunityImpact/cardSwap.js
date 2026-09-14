@@ -19,8 +19,8 @@ export const Card = forwardRef(({ customClass, ...rest }, ref) => (
         className={`
       tw-absolute tw-top-1/2 tw-left-1/2
       tw-rounded-xl tw-outline tw-border-2 tw-border-white tw-outline-white tw-bg-slate-900 tw-text-white
-      tw-p-6 lg:tw-p-10
-      tw-text-base
+      tw-p-6
+      tw-text-xs lg:tw-text-base
       [transform-style:preserve-3d]
       [will-change:transform]
       [backface-visibility:hidden]

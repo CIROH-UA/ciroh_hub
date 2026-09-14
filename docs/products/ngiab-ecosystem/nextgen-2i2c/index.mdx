@@ -1,0 +1,67 @@
+---
+sidebar_position: 3
+title: "CIROH Community NextGen Hub"
+description: "A dedicated image on CIROH-2i2c JupyterHub for running NextGen In A Box."
+tags: [Products, CIROH, NGIAB, NextGen, Services, JupyterHub, 2i2c, HydroShare, Hydrofabric]
+---
+
+:::info
+If you are looking for the tutorial on working with AORC data, please refer to [its new location under the HydroShare documentation folder](/docs/products/data-management/hydroshare/aorc-tutorial).
+:::
+
+CIROH-2i2c JupyterHub provides an image named "CIROH Community NextGen Hub". This image has the required packages for both NGIAB Data Preprocess and NextGen pre-installed.
+
+> *You can access CIROH-2i2c JupyterHub from here:*
+> - *Primary environment:* [https://ciroh.awi.2i2c.cloud/hub/login](https://ciroh.awi.2i2c.cloud/hub/login)
+> - *Workshop environment:* [https://workshop.ciroh.awi.2i2c.cloud/hub/login](https://workshop.ciroh.awi.2i2c.cloud/hub/login)
+
+--- 
+
+## Using NextGen on CIROH-2i2c JupyterHub
+
+1. Log in to CIROH-2i2c JupyterHub. *(If you need to request access, please see the [Infrastructure Access page](/docs/services/access).)*
+2. Select your preferred server size, along with the "CIROH Community NextGen Hub" image. 
+    - This image contains the prerequisites and entry points to run the NextGen framework.
+    - If you're just testing, or if you're otherwise unsure of what server size to use, then start with the default "Small" server.
+    - If a pre-existing server is already running, you can stop it from the "File → Hub Control Panel" section in the upper toolbar. For a video tutorial, visit the [CIROH-2i2c JupyterHub page](/docs/services/cloudservices/2i2c/#ciroh-2i2c-jupyterhub-environments) under Hub's IT Services section.
+
+![The "Server Options" menu; displayed upon initially logging in to CIROH-2i2c JupyterHub. The "Small" server size is selected, alongside the "CIROH Community NextGen Hub" image.](/img/products/nextgen-on-2i2c/jupyterhub.png)
+
+3. Scroll down and click "Start" to boot up your JupyterHub server instance. *(This will take a few moments to complete.)*
+4. Visit the [NextGen Water Modeling Workflow for Research-Scale Applications](https://www.hydroshare.org/resource/27045581bdea4808a393330f2417379c/) resource on HydroShare.
+    - This resource contains the frontend notebooks from which you can run the NGIAB workflow.
+5. Click the "Open with..." prompt in the top-right corner. *(This may take a few moments to appear.)*
+6. Select "CIROH-2i2c JupyterHub" to proceed to the primary CIROH-2i2c JupyterHub production environment.
+    - For the workshop environment, see ["Enabling the CIROH-2i2c JupyterHub (Workshop) app connector"](#enabling-the-ciroh-2i2c-jupyterhub-workshop-app-connector) below.
+7. The JupyterHub environment will load, and you will be brought to a folder containing the workflow notebooks.
+    - Refer to the included README.md file for detailed instructions on how to use these notebooks.
+
+![A screenshot of the filesystem panel within CIROH-2i2c JupyterHub after loading the HydroShare resource linked above. Several Python notebooks and scripts are present, alongside a "README.md" file, which is highlighted.](/img/products/nextgen-on-2i2c/resource-loaded.png)
+
+---
+
+## Importing HydroShare data into CIROH-2i2c JupyterHub
+
+You can also use the "Open with..." integration within HydroShare to directly load arbitrary datasets, notebooks, and other content into 2i2c-JupyterHub, further expanding your modeling workflows.
+
+1. Visit the HydroShare resource that you'd like to load into CIROH-2i2c JupyterHub.
+2. Click the "Open with..." prompt in the top-right corner. (This may take a few moments to load.)
+3. Select "CIROH-2i2c JupyterHub" to proceed to the primary CIROH-2i2c JupyterHub production environment.
+4. The JupyterHub environment will load, and you will be brought to a folder containing your desired resource.
+
+To browse relevant resources, see the [Datasets](/datasets) and [Notebooks](/notebooks) research portals.
+
+### Enabling the CIROH-2i2c JupyterHub (Workshop) app connector
+If you are participating in a workshop, you will need to enable the [CIROH-2i2c JupyterHub (Workshop)](https://www.hydroshare.org/resource/b76622a31f5a400480455c1fe86b34ee/) app connector.
+
+1. Create an account or log in at [hydroshare.org](https://www.hydroshare.org).
+2. Visit the [CIROH-2i2c JupyterHub (Workshop)](https://www.hydroshare.org/resource/b76622a31f5a400480455c1fe86b34ee/) app connector.
+3. In the top-right corner, click the icon depicting a grid of squares to add this web app to your "Open with..." list.
+
+![A row of icons displayed at the top right of a HydroShare App Connector resource, below the "Open with..." button. The hovered icon provides the tooltip "Add WebApp to 'Open with' list".](/img/products/nextgen-on-2i2c/add-webapp.png)
+
+4. To open resources into the workshop environment, use the app connector labeled "(Workshop)".
+
+![The dropdown menu displayed from HydroShare's "Open with..." prompt. Four options are present, including "CIROH-2i2c JupyterHub" and "CIROH-2i2c JupyterHub (Workshop)".](/img/products/nextgen-on-2i2c/open-with.png)
+
+---

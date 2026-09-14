@@ -177,6 +177,7 @@ export default function Publications({ apiKey, groupId }) {
         }
       } catch {
         if (apiKey === 'dummy') setError('Site administrator: Please provide a Zotero API key in this website\'s environment file.');
+        else if (apiKey == 'forbidden') setError('Access forbidden by CI/CD. (This may be built from a remote branch that cannot access secrets.)')
         else setError('Error retrieving the publications.');
       } finally {
         fetching.current = false;

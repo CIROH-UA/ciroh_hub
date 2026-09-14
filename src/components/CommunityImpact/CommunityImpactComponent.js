@@ -4,11 +4,14 @@ import BlogFilter from '../BlogFilter';
 import clsx from 'clsx';
 import Layout from '@theme/Layout';
 import useBaseUrl from '@docusaurus/useBaseUrl';
-import CardSwap, { Card } from './cardSwap'
+import CardSwap, { Card } from './cardSwap';
+import CardSwapAccessible from './cardSwapAccessible';
+import cardSwapEntries from './cardSwapEntries';
 import Particles from './particleBG';
 import CloudInfraDashboard from "./cloudInfraDashboard";
 import Link from '@docusaurus/Link';
 import { communityImpactData } from '@site/src/data/communityImpactData';
+
 
 
 const ImpactItem = ({ title, count, imageSrc, users }) => (
@@ -28,8 +31,8 @@ export default function CommunityImpactComponent() {
     color: "#FF9900",
     svg: <img src={useBaseUrl("/img/logos/corp/aws-black.svg")} alt="AWS Logo" />,
     stats: [
-      { value: communityImpactData.aws.projects, bar: communityImpactData.aws.projectsBar, label: "Ongoing Projects" },
-      { value: communityImpactData.aws.users, bar: communityImpactData.aws.usersBar, label: "Active Users" },
+      { value: communityImpactData.aws.projects, bar: communityImpactData.aws.projectsBar, label: "IT Requests" },
+      { value: communityImpactData.aws.users, bar: communityImpactData.aws.usersBar, label: "Users" },
     ],
   },
   {
@@ -38,8 +41,8 @@ export default function CommunityImpactComponent() {
     color: "#4285F4",
     svg: <img src={useBaseUrl("/img/logos/corp/google-cloud.jpg")} alt="GCP Logo" />,
     stats: [
-      { value: communityImpactData.gcp.projects, bar: communityImpactData.gcp.projectsBar, label: "Ongoing Projects" },
-      { value: communityImpactData.gcp.users, bar: communityImpactData.gcp.usersBar, label: "Active Users" },
+      { value: communityImpactData.gcp.projects, bar: communityImpactData.gcp.projectsBar, label: "IT Requests" },
+      { value: communityImpactData.gcp.users, bar: communityImpactData.gcp.usersBar, label: "Users" },
     ],
   },
   {
@@ -48,8 +51,8 @@ export default function CommunityImpactComponent() {
     color: "#10B981",
     svg: <img src={useBaseUrl("/img/logos/pantarhei.jpg")} alt="HPC Logo" />,
     stats: [
-      { value: communityImpactData.nsf.projects, bar: communityImpactData.nsf.projectsBar, label: "Ongoing Projects" },
-      { value: communityImpactData.nsf.users, bar: communityImpactData.nsf.usersBar, label: "Active Users" },
+      { value: communityImpactData.hpc.projects, bar: communityImpactData.hpc.projectsBar, label: "IT Requests" },
+      { value: communityImpactData.hpc.users, bar: communityImpactData.hpc.usersBar, label: "Users" },
     ],
   },
   {
@@ -58,8 +61,8 @@ export default function CommunityImpactComponent() {
     color: "#8B5CF6",
     svg: <img src={useBaseUrl("/img/logos/nsf-logo.png")} alt="NSF Logo" />,
     stats: [
-      { value: communityImpactData.nsf.projects, bar: communityImpactData.nsf.projectsBar, label: "Ongoing Projects" },
-      { value: communityImpactData.nsf.users, bar: communityImpactData.nsf.usersBar, label: "Active Users" },
+      { value: communityImpactData.nsf.projects, bar: communityImpactData.nsf.projectsBar, label: "IT Requests" },
+      { value: communityImpactData.nsf.users, bar: communityImpactData.nsf.usersBar, label: "Users" },
     ],
   },
 ];
@@ -69,7 +72,8 @@ export default function CommunityImpactComponent() {
       <section className="tw-text-black dark:tw-text-white tw-body-font tw-relative tw-overflow-hidden">
 
         {/* PARTICLES BACKGROUND (receives mouse events) */}
-        <div className="tw-absolute tw-inset-0 tw--z-10 tw-pointer-events-auto">
+        {/*
+        <div className="tw-absolute tw-inset-0 tw--z-10 tw-pointer-events-auto base-motion">
           <Particles
             particleColors={['#ffffff', '#ffffff']}
             particleCount={200}
@@ -81,6 +85,7 @@ export default function CommunityImpactComponent() {
             disableRotation={false}
           />
         </div>
+        */}
 
         {/* HERO CONTENT (ignores pointer events EXCEPT buttons/card components) */}
         <div className="tw-container tw-mx-auto tw-flex tw-px-5 tw-py-6 md:tw-py-8 lg:tw-py-16 tw-flex-col lg:tw-flex-row tw-items-center tw-relative tw-z-10 tw-pointer-events-none">
@@ -106,7 +111,7 @@ export default function CommunityImpactComponent() {
 
               <Link
                                 className={`tw-no-underline lg:tw-text-xl tw-inline-flex tw-items-center tw-justify-center tw-px-6 tw-py-3 tw-rounded-lg tw-font-semibold tw-transition-all tw-duration-300 tw-border-2 tw-outline tw-outline-cyan-500 tw-text-cyan-600 hover:tw-bg-cyan-500 hover:tw-text-black dark:tw-outline-cyan-500 dark:tw-text-cyan-300 dark:hover:tw-bg-cyan-500 dark:hover:tw-text-black`}
-                                href="/docs/products/ngiab/office-hours"
+                                href="/docs/products/ngiab-ecosystem/ngiab/office-hours"
                                 style={{ textDecoration: "none", marginRight: "10px" }}
                               >
                                 Get Involved
@@ -114,57 +119,27 @@ export default function CommunityImpactComponent() {
             </div>
           </div>
 
-          {/* CARD SWAP SECTION (also restored pointer events) */}
-          <div className="lg:tw-max-w-xl sm:tw-w-1/2 md:tw-w-5/6 lg:tw-w-full tw-pointer-events-auto">
-            <div className="tw-relative tw-h-[360px] lg:tw-h-[600px]">
+          {/* CARD SWAP SECTION (note: respective versions are bound to reduced motion mode */}
+          <div className="lg:tw-max-w-xl md:tw-w-5/6 lg:tw-w-full tw-pointer-events-auto">
+            <div className="tw-relative tw-h-[360px] lg:tw-h-[600px] base-motion">
               <CardSwap
                 cardDistance={60}
                 verticalDistance={70}
                 delay={5000}
                 pauseOnHover={true}
               >
-                <Card>
-                  <h3 className="tw-text-white">💧Transforming Water Prediction</h3>
-                  <p>
-                    CIROH is building the next generation of operational hydrologic models used
-                    across the nation. By integrating research-grade science into deployable tools,
-                    we help agencies and communities make faster, more informed decisions about water resources.
-                    Our work ensures that flood, drought, and streamflow predictions are more accurate,
-                    accessible, and actionable than ever before.
-                  </p>
-                </Card>
-
-                <Card>
-                  <h3 className="tw-text-white">🤝 Powered by Collaborative Science</h3>
-                  <p>
-                    CIROH connects leading universities, federal agencies, and scientists to tackle
-                    the nation’s most pressing water challenges. Our collaborative framework enables
-                    shared data, open models, and scalable breakthroughs. Instead of working in isolation,
-                    researchers innovate as part of a unified national hydrology community.
-                  </p>
-                </Card>
-
-                <Card>
-                  <h3 className="tw-text-white">💻 Data, Cloud & Cyberinfrastructure</h3>
-                  <p>
-                    Modern water research demands advanced computing - and CIROH delivers. Through
-                    cloud-ready workflows, curated datasets, HPC resources, and the CIROH-2i2c JupyterHub,
-                    we eliminate barriers to scientific experimentation. Researchers can run complex
-                    hydrologic models at scale, collaborate instantly, and accelerate time-to-discovery.
-                  </p>
-                </Card>
-
-                <Card>
-                  <h3 className="tw-text-white">🌍 Community Impact & Resilience</h3>
-                  <p>
-                    Our mission goes far beyond research - CIROH helps communities better understand
-                    and prepare for water-related risks. By partnering with local agencies and
-                    practitioners, we bring advanced prediction tools into real-world decision making.
-                    This work strengthens resilience, protects infrastructure, and safeguards lives.
-                  </p>
-                </Card>
-
+                {cardSwapEntries.map(card => {
+                  return (
+                    <Card key={card.key}>
+                      <h3 className="tw-text-white"> {card.icon} {card.title} </h3>
+                      <p> {card.body} </p>
+                    </Card>
+                  );
+                })}
               </CardSwap>
+            </div>
+            <div className="tw-relative tw-h-[360px] lg:tw-h-[600px] reduced-motion">
+                <CardSwapAccessible cards={cardSwapEntries} />
             </div>
           </div>
 

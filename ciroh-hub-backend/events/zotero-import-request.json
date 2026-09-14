@@ -1,0 +1,47 @@
+{
+  "body": "{\"recaptchaToken\":\"local-test-token\",\"doi\":\"10.1029/2024WR037789\",\"notes\":[\"Selected collections: None\",\"Shared code location: GitHub\",\"Shared code URL: https://github.com/example/repo\",\"Shared data location: HydroShare\",\"Shared data URL: https://www.hydroshare.org/resource/example\",\"Acknowledges CIROH: Yes\"],\"collections\":[],\"thumbnail\":null}",
+  "resource": "/zotero-import-request",
+  "path": "/zotero-import-request",
+  "httpMethod": "POST",
+  "isBase64Encoded": false,
+  "queryStringParameters": null,
+  "pathParameters": null,
+  "stageVariables": null,
+  "headers": {
+    "Accept": "application/json",
+    "Content-Type": "application/json",
+    "Host": "127.0.0.1:3000",
+    "Origin": "http://localhost:3001",
+    "Referer": "http://localhost:3001/",
+    "User-Agent": "Mozilla/5.0 (Local Test Event)",
+    "X-Forwarded-For": "127.0.0.1",
+    "X-Forwarded-Port": "3000",
+    "X-Forwarded-Proto": "http"
+  },
+  "requestContext": {
+    "accountId": "123456789012",
+    "resourceId": "abc123",
+    "stage": "Prod",
+    "requestId": "c6af9ac6-7b61-11e6-9a41-93e8deadbeef",
+    "requestTime": "08/May/2026:12:34:56 +0000",
+    "requestTimeEpoch": 1746710096000,
+    "identity": {
+      "cognitoIdentityPoolId": null,
+      "accountId": null,
+      "cognitoIdentityId": null,
+      "caller": null,
+      "accessKey": null,
+      "sourceIp": "127.0.0.1",
+      "cognitoAuthenticationType": null,
+      "cognitoAuthenticationProvider": null,
+      "userArn": null,
+      "userAgent": "Mozilla/5.0 (Local Test Event)",
+      "user": null
+    },
+    "path": "/Prod/zotero-import-request",
+    "resourcePath": "/zotero-import-request",
+    "httpMethod": "POST",
+    "apiId": "abc123def4",
+    "protocol": "HTTP/1.1"
+  }
+}

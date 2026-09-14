@@ -78,7 +78,7 @@ export default function OfficeHoursFeature() {
                         tw-py-3 tw-px-8 tw-rounded-lg tw-text-lg tw-font-semibold
                         hover:tw-bg-cyan-600 tw-transition-colors
                         dark:tw-bg-cyan-500 dark:tw-text-white dark:hover:tw-bg-cyan-600`}
-                        href="/docs/products/ngiab/office-hours"
+                        href="/docs/products/ngiab-ecosystem/ngiab/office-hours"
                         style={{ textDecoration: "none", marginRight: "10px" }}
                         >
                         Learn More

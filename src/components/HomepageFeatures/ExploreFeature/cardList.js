@@ -21,7 +21,7 @@ export default [
     title: "NextGen In A Box",
     image: "img/logos/ngiab.png",
     description: "Utilize NextGen In A Box (NGIAB) to locally run NextGen framework. Choose specific regions or basins for analysis, control input data, and modify confiurations, all within a containerized environment.",
-    link: "/docs/products/ngiab/distributions/ngiab-docker"
+    link: "/docs/products/ngiab-ecosystem/ngiab/distributions/ngiab-docker"
   },
   {
     title: "AWS",
@@ -51,6 +51,6 @@ export default [
     title: "NRDS",
     image: "img/products/nrds/nrds.png",
     description: "An archive of daily NextGen-based hydrologic simulations living entirely in AWS. NRDS democratizes forcings, outputs, and configurations so the community can iterate, validate, and operationalize better streamflow predictions.",
-    link: "docs/products/research-datastream/"
+    link: "/docs/products/ngiab-ecosystem/nrds/"
   }
 ];

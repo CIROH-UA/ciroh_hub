@@ -1,0 +1,18 @@
+{
+  "name": "zotero_import_request",
+  "version": "1.0.0",
+  "description": "Zotero import request handler for NodeJS",
+  "main": "app.mjs",
+  "author": "SAM CLI",
+  "license": "MIT",
+  "dependencies": {
+    "zotero-api-client": "^0.48.0"
+  },
+  "scripts": {
+    "test": "mocha tests/unit/"
+  },
+  "devDependencies": {
+    "chai": "^4.3.6",
+    "mocha": "^10.2.0"
+  }
+}

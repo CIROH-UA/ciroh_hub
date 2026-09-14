@@ -76,8 +76,8 @@ export default function InfrastructureFeature() {
               </div>
 
               <div className="tw-mt-12 tw-grid tw-grid-cols-1 md:tw-grid-cols-1 lg:tw-grid-cols-2 tw-gap-6 tw-max-w-5xl tw-mx-auto">
-                <Link class="button button--active button--primary" to="/impact">Explore Community Impact</Link>
-                <Link class="button button--active button--primary" to="/docs/services/intro">Request IT Access</Link>
+                <Link className="button button--active button--primary" to="/impact">Explore Community Impact</Link>
+                <Link className="button button--active button--primary" to="/docs/services/intro">Request IT Access</Link>
               </div>
               
             </div>

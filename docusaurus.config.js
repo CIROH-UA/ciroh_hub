@@ -84,20 +84,12 @@ const config = {
       },
 
     ],
-    zotero_api_key: process.env.ZOTERO_API_KEY || "dummy",
+    zotero_api_key_read_only: process.env.ZOTERO_API_KEY_READ_ONLY || "dummy",
     zotero_group_id: process.env.ZOTERO_CIROH_GROUP_ID || 999999999,
-    captcha_key: process.env.CAPTCHA_KEY || "dummy",
-    s3_bucket: process.env.S3_BUCKET_NAME,
-    s3_access_key: process.env.S3_ACCESS_KEY,
-    s3_secret_key: process.env.S3_SECRET_KEY,
-    s3_region: process.env.S3_REGION,
-    hs_client_id: process.env.HS_CLIENT_ID || "dummy",
-    hs_scopes: ['read', 'write'],
-    hs_authorize_url: "https://www.hydroshare.org/o/authorize/",
-    hs_token_url: "https://www.hydroshare.org/o/token/",
-    hs_redirect_uri: "https://portal.ciroh.org/contribute",
-    hs_logout_endpoint: "https://www.hydroshare.org/accounts/logout/",
-    hs_logout_redirect: "https://portal.ciroh.org/contribute",
+    zotero_staging_group_id: process.env.ZOTERO_CIROH_STAGING_GROUP_ID || 999999999,
+    recaptcha_site_key: process.env.RECAPTCHA_SITE_KEY || "dummy",
+    zotero_import_request_api_url: process.env.ZOTERO_IMPORT_REQUEST_API_URL || "http://127.0.0.1:3000/zotero-import-request",
+    
     hs_featured_apps_collection_id: process.env.HS_FEATURED_APPS_COLLECTION_ID || "dummy",
     hs_featured_datasets_collection_id: process.env.HS_FEATURED_DATASETS_COLLECTION_ID || "dummy",
     hs_featured_courses_collection_id: process.env.HS_FEATURED_COURSES_COLLECTION_ID || "dummy",
@@ -205,6 +197,48 @@ const config = {
         //authorsMapPath: "authors.yaml", // Path to the authors' mapping file (unneeded in this case)
       }
     ],
+
+    [
+      '@docusaurus/plugin-client-redirects',
+      {
+        redirects: [
+          {
+            to: '/docs/products/data-management/fim-database',
+            from: '/docs/products/community-fim/fim-database',
+          },
+        ],
+        createRedirects(existingPath) {
+          if (existingPath.includes('/docs/products/ngiab-ecosystem/ngiab')) {
+            return [
+              existingPath.replace('/docs/products/ngiab-ecosystem/ngiab', '/docs/products/ngiab'),
+            ];
+          }
+          else if (existingPath.includes('/docs/products/ngiab-ecosystem/about-nwm')) {
+            return [
+              existingPath.replace('/docs/products/ngiab-ecosystem/about-nwm', '/docs/products/national-water-model'),
+            ];
+          }
+          else if (existingPath.includes('/docs/products/ngiab-ecosystem/nrds')) {
+            return [
+              existingPath.replace('/docs/products/ngiab-ecosystem/nrds', '/docs/products/research-datastream'),
+            ];
+          }
+          else if (existingPath.includes('/docs/products/ngiab-ecosystem/dependencies/hydrofabric')) {
+            return [
+              existingPath.replace('/docs/products/ngiab-ecosystem/dependencies/hydrofabric', '/docs/products/Hydrofabric'),
+
+            ];
+          }
+          else if (existingPath.includes('/docs/products/ngiab-ecosystem/dependencies')) {
+            return [
+              existingPath.replace('/docs/products/ngiab-ecosystem/dependencies', '/docs/products/ngiab/community-nextgen-repos'),
+
+            ];
+          }
+          return undefined; // Return a falsy value: no redirect created
+        },
+      },
+    ],
   ],
 
   themeConfig:
@@ -223,6 +257,14 @@ const config = {
           defaultMode: 'dark',
           disableSwitch: false,
           respectPrefersColorScheme: false,
+        },
+        customFields: {
+          // Configuration for reduced motion plugin.
+          reducedMotionMode: {
+            defaultMode: 'disabled',
+            disableSwitch: false,
+            respectPrefersReducedMotion: true,
+          },
         },
         docs: {
           sidebar: {
@@ -289,8 +331,8 @@ const config = {
                 // The sidebar loader is weirdly brittle. If a page is instantiated in "index.js", that must be specified explicitly.
                 {
                   type: "doc",
-                  docId: "products/ngiab/index",
-                  label: "NGIAB Ecosystem",
+                  docId: "products/ngiab-ecosystem/index",
+                  label: "Community NextGen Ecosystem",
                 },
                 {
                   type: "doc",
@@ -325,6 +367,10 @@ const config = {
               label: "Community",
               position: "left",
               items: [
+                {
+                  href: "/calendar",
+                  label: "Calendar"
+                },
                 {
                   type: "doc",
                   docId: "policies/intro",

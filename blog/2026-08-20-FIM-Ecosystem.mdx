@@ -1,0 +1,212 @@
+---
+title: "CIROH Flood Inundation Mapping (FIM) Community Ecosystem: A Large-Scale Operational Flood Modeling-to-Evaluation Framework"
+description: "A large-scale, cloud-native, open-source ecosystem for flood inundation modeling, simulation, benchmarking, and evaluation, built at the University of Alabama's Surface Dynamics Modeling Lab with support from CIROH."
+slug: fim-community-ecosystem
+tags: [Flooding, "Flood Inundation Mapping", "Operational Research", "Large-Scale", Hydrology, HAND, "National Water Model", Benchmarking, Evaluation, "Remote Sensing", "Hydrodynamic Modeling"]
+authors: [supath-dhital, dipsikha-devi, anupal-baruah, dinuke-munasinghe, parvaneh-nikrou, dan-tian, yixian-chen, sagy-cohen]
+image: /img/blog/2026-08-fim-ecosystem/ecosystem-overview.png
+---
+
+import useBaseUrl from "@docusaurus/useBaseUrl"
+import ProfileCards from '/src/components/ProfileCards';
+
+export const fimProfiles = [
+  {
+    name: 'Supath Dhital',
+    title: 'Geography Researcher II',
+    organization: 'The University of Alabama',
+    imagePath: '/img/profiles/Supath_Dhital.jpg',
+  },
+  {
+    name: 'Dipsikha Devi',
+    title: 'Postdoctoral Researcher',
+    organization: 'The University of Alabama',
+    imagePath: '/img/profiles/Dipsikha_Devi.jpg',
+  },
+  {
+    name: 'Anupal Baruah',
+    title: 'Research Scientist',
+    organization: 'The University of Alabama',
+    imagePath: '/img/profiles/Anupal_Baruah.jpg',
+  },
+  {
+    name: 'Dinuke Munasinghe',
+    title: 'Research Scientist',
+    organization: 'The University of Alabama',
+    imagePath: '/img/profiles/Dinuke_Munasinghe.jpg',
+  },
+  {
+    name: 'Parvaneh Nikrou',
+    title: 'PhD Candidate',
+    organization: 'The University of Alabama',
+    imagePath: '/img/profiles/Parvaneh_Nikrou.jpg',
+  },
+  {
+    name: 'Dan Tian',
+    title: 'Postdoctoral Researcher',
+    organization: 'The University of Alabama',
+    imagePath: '/img/profiles/Dan_Tian.jpg',
+  },
+  {
+    name: 'Yixian Chen',
+    title: 'Research Scientist',
+    organization: 'The University of Alabama',
+    imagePath: '/img/profiles/Yixian_Chen.jpg',
+  },
+  {
+    name: 'Sagy Cohen (PI)',
+    title: 'Professor',
+    organization: 'The University of Alabama',
+    imagePath: '/img/profiles/Sagy_Cohen.jpg',
+  },
+]
+
+Flood Inundation Mapping (FIM) is the spatially explicit delineation of flood extent, turning hydrological forecasts and observations into actionable geospatial information. As the frequency and severity of flooding increase globally, accurate and scalable FIM has become essential to disaster preparedness, emergency response, infrastructure planning, and climate risk assessment. Operationally, flood maps are commonly generated from streamflow forecasts, such as those produced by NOAA's National Water Model in the United States. FIM, however, is only one part of the workflow. Before FIM can reliably inform decisions, it needs to be rigorously checked against high-quality observations of real flood events.
+
+At the University of Alabama's Surface Dynamics Modeling Lab (SDML), with support from CIROH in partnership with NOAA, we have been building the CIROH FIM Community Ecosystem, an interconnected, open-source, Python-based suite of toolsets for large-scale flood inundation modeling, simulation, benchmarking, and evaluation. Below we describe what each component of the Ecosystem does, how they work together, and how to get started.
+
+## The problem: fragmented capabilities without a unified FIM framework
+
+This effort starts with a simple question: can flood inundation modeling, benchmarking, and evaluation be brought together into a seamless, unified, and, most importantly, scalable system that serves both operational forecasters and the research community? What exists today are small-scale studies and individual tools: models predict floods, methods that evaluate accuracy, observations that record real events, each built for a specific task and demanding its own painstaking setup. What does not exist is a unified framework spanning modeling to evaluation at scale, for one study area or a thousand, so that methodologies are consistent and ready to calibrate models and test hypotheses. For operational forecasters, the missing piece is scale: mapping a single basin is a tractable problem, but operational forecasting requires generating and trusting a modeling approach across numerous river reaches in real time.
+
+Evaluation raises the bar further. A model's true potential and limitations emerge only when it is tested at scale across many events, diverse floodplains, topographic settings, and hydrologic regimes. Large-scale evaluation is what turns a case study into a defensible conclusion about where a model works, where it fails, and why. Yet such evaluation depends on an "answer key": high-quality records of flood inundation for real flooding events. Those benchmark data have historically been scarce, scattered, and inconsistent, and where benchmarks are unavailable or of poor quality, evaluations lose credibility, and even skillful models are met with mistrust. The result: research groups rebuild the same pipelines from scratch, evaluations cannot be compared across regions or scales, and promising models take longer to reach the people who need them.
+
+## Our effort: the CIROH FIM Ecosystem
+
+Our answer is an interconnected, interoperable system of open-source components designed to work together through simple programmatic interfaces. Most components are deployed as standalone Python packages: install only what you need, or chain them into a complete workflow.
+
+<figure style={{ textAlign: "center" }}>
+  <img
+   class="dark-mode-white-bg"
+   src={useBaseUrl('/img/blog/2026-08-fim-ecosystem/ecosystem-overview.png')}
+   width='100%'
+   alt="The CIROH FIM ecosystem at a glance: FIMserv and FIMsim for generation and simulation, FIMbench for benchmarking, FIMeval for evaluation, FIMbox as a sandbox, and FIMsens for observation, all sharing one CIROH cloud backbone."
+   />
+  <figcaption><em>The CIROH FIM ecosystem at a glance: FIMserv (generation) and FIMsim (simulations); FIMbench (benchmark database); FIMeval (evaluation); FIMbox (sandbox); FIMsens (observation). Each is a standalone tool, all sharing one CIROH cloud backbone.</em></figcaption>
+</figure>
+
+{/* place truncation here when ready */}
+
+### (a) FIMserv: FIM generation tool using the NOAA OWP HAND-FIM operational framework
+
+The Office of Water Prediction's Height Above Nearest Drainage (OWP HAND) framework, the operational FIM system of the United States, is a deliberately simple terrain-based model run over Hydrologic Unit Code 8 (HUC8) watersheds ([more about HUCs](https://nas.er.usgs.gov/hucs.aspx)) using National Water Model streamflow predictions across 2.7 million river reaches nationwide. Configuring it, however, is not straightforward: setting up the full pipeline from watershed data to streamflow and reproducing it across computing systems have been persistent obstacles to applying, improving, or studying an otherwise scalable model. [FIMserv](https://github.com/sdmlua/FIMserv), the modeling component of the CIROH FIM Ecosystem, removes that barrier. Given a watershed of interest and an event, it automatically configures the entire modeling setup, retrieving the OWP-precalculated watershed data from CIROH's AWS S3 cloud storage (which mirrors the NOAA OWP-precalculated HUC8 datasets for the HAND FIM run) and the NWM streamflow for the chosen event (a past event, also called retrospective data; a live National Water Model forecast; USGS gauge records; or global hydrological products such as GeoGLOWS). It then leverages the [OWP inundation mapping framework](https://github.com/NOAA-OWP/inundation-mapping) to produce a flood extent map within minutes (Baruah et al., 2025). It covers NOAA's full forecast range, from hourly short-range runs to 30-day outlooks, and supports simulation of many watersheds and flood events. It can also evaluate the NWM streamflow against USGS gauge observations, providing a measure of confidence in a map's inputs. Users can also modify key configuration inputs, such as river slope, calibration coefficients, and river bathymetry, supporting experimentation well beyond the default modeling setup. It is wrapped as a Python package that runs just as well on a laptop as on cloud infrastructure, so what once took a long time now takes a single installation command.
+
+### (b) FIMeval: FIM predictions evaluation framework
+
+A flood map is only as useful as the confidence placed in it, and that confidence comes from evaluation: comparing a model-predicted extent against a benchmark flood map from an actual or synthetic event. The traditional methods of evaluation, however, are manual, time-intensive, and error-prone; preparing maps in GIS platforms and/or doing it programmatically, and standardizing models and benchmarks (such as removing permanent water bodies and aligning projections) is so laborious that testing a model across many events becomes impractical. [FIMeval](https://github.com/sdmlua/fimeval) automates, standardizes, and scales that step, evaluating any flood maps against benchmarks in a consistent, reproducible manner (Devi et al., 2026). It is deliberately model- and benchmark-agnostic: the map can come from any terrain-based, hydraulic, or data-driven model, and the benchmark from any trusted source. It computes several standard accuracy metrics, with built-in checks for how data imbalance between flooded and dry areas skews those scores. It then goes further, answering the impact-based question communities actually ask: which buildings does the model predict will be inundated, and was that prediction correct? It fits into any Python-based workflow: bring a flood map, whether produced by FIMserv or any other model, together with a benchmark you supply, and FIMeval scores the pair. What makes it especially powerful, though, is that users do not need to supply a benchmark at all: FIMeval connects seamlessly to the FIMbench database, so a single automated query pulls the right quality-controlled benchmark for your area and event and scores against it, provided the event date falls within our available benchmark coverage. FIMbench itself is our rigorously quality-controlled, multi-source benchmark database, described in detail in section (c) below. For FIMserv users, the evaluation can run embedded within FIMserv, generating and evaluating a map in a single pass. Demonstrations span major observed events and design floods alike across continental to global watersheds.
+
+### (c) FIMbench: an extensive FIM benchmarking database
+
+Trusting a model-predicted flood extent requires real-world evidence, precisely the benchmark data that has been hardest to obtain. [FIMbench](https://github.com/sdmlua/fimbench) fills that gap with a rigorously quality-controlled library of multi-source, multi-sensor benchmark flood maps. Its current release includes 190+ maps (it will continuously keep growing with time) across the United States (Devi et al., in preparation), derived from aerial imagery acquired via NOAA's National Geodetic Survey (NGS), PlanetScope satellite imagery, Sentinel-1 radar, FEMA Base Level Engineering (BLE) 100- and 500-year return-period flow-based FIM products, and FIMs derived from USGS-surveyed high-water marks. Every map undergoes standardized processing and quality screening and is cataloged into quality- and product-based tiers; the guiding philosophy is "quality over quantity." FIMbench utilities then package each approved map into a database-compatible format and publish it to the CIROH AWS S3 database. Contributing to the database is currently limited to the SDML team, though we are exploring ways for the community to add data in the future; every published dataset, however, is openly available to everyone. Access follows two routes: the interactive [FIMbench WebApp](https://tethys.ciroh.org/apps/fimbench-gui/), developed with our partners at Aquaveo, supports visualizing, filtering, and downloading flood events; and the FIMbench Python API retrieves selected benchmarks programmatically from the [cloud-hosted CIROH AWS S3 database](https://sdmlab.ciroh.org/#FIM_Database/). A cataloged, quality-assured, multi-sensor benchmark collection at this national scale has not, to our knowledge, been openly published before; paired with FIMeval, it makes testing a flood model against hundreds of real events practical rather than prohibitively laborious.
+
+<figure style={{ textAlign: "center" }}>
+  <img
+   class="dark-mode-white-bg"
+   src={useBaseUrl('/img/blog/2026-08-fim-ecosystem/fimbench-webapp.png')}
+   width='100%'
+   alt="Homepage snapshot of the extensive Flood Inundation Mapping Benchmark data web portal."
+   />
+  <figcaption><em>Homepage snapshot of the extensive Flood Inundation Mapping Benchmark data web portal (Web portal: <a href="https://tethys.ciroh.org/apps/fimbench-gui/">https://tethys.ciroh.org/apps/fimbench-gui/</a>)</em></figcaption>
+</figure>
+
+### (d) FIMsens: flood extent and depth from satellite observations
+
+FIMsens, an upcoming Ecosystem component, adds an observation mode to the ecosystem: an end-to-end toolset that turns satellite imagery into error-corrected flood extent and depth products. Given a user-defined area of interest and event period, FIMsens discovers and previews suitable SAR or optical scenes, then processes them through linked modules for initial flood detection, reliability assessment, omission reconstruction, and depth estimation, beginning with Seeded Local Adaptive Thresholding (SLAT) (Wang et al., under review), which extracts the inundation directly observable in the imagery. The detections then pass to the Flood Object Reliability Filter (FOR-Filter) (Tian et al., in preparation), which uses image, geometric, terrain, and hydrologic evidence to remove or flag likely false positives before they propagate downstream. Finally, RS-FloodXDepth (Tian et al., 2026) combines retained flood evidence with surrounding topography to reconstruct hydrologically plausible inundation that would otherwise be missed due to vegetation, urban structures, clouds, or weak water signals, and to estimate depth from the inferred water surface and DEM elevation. A single pass delivers raw, filtered, and corrected extent layers together with a DEM-guided depth map.
+
+Within the broader ecosystem, FIMsens complements rather than replaces the curated FIMbench reference databases. The same algorithm underpins FIMbench's Tier 2 and Tier 3 benchmarks, where its output is conservatively confirmed through qualitative assessment. Where the rigorously quality-controlled FIMbench database has a match, that curated map stays the trusted reference. Where no suitable benchmark exists, FIMsens can be used to generate event-specific, observation-derived flood extent and depth products from available satellite imagery, providing additional spatial and temporal coverage for FIMeval and related analyses. Because these event-specific products depend on the quality of the selected observations and processing conditions, they should still be reviewed through the toolset's QA outputs and, where appropriate, qualitative inspection before being used as reference information.
+
+### (e) FIMsim: cloud-based multi-model flood simulation
+
+FIMsim expands the ecosystem's flood-simulation engine, which models flooding using either terrain-based or hydraulic approaches: it runs the terrain-based [NOAA OWP HAND-FIM](https://github.com/NOAA-OWP/inundation-mapping) through FIMserv, the [ARC-Curve2Flood model](https://github.com/MikeFHS/curve2flood), and extends the workflow to 2D hydraulic simulation using models with varying levels of physical complexity. Because no single flood model performs best everywhere, comparing alternatives has meant rebuilding a pipeline for each one; [FIMsim](https://github.com/sdmlua/FIMsim) removes that burden. In practice, the workflow is simple: the user defines a study area, and FIMsim acquires the inputs, builds the model configuration, and runs the hydrodynamic models of their choice, such as [LISFLOOD-FP](https://zenodo.org/records/6912932) and [TRITON](https://triton.ornl.gov/). These hydrodynamic models provide GPU-enabled implementations that can substantially reduce execution time for computationally demanding simulations. Through the planned web application, users will be able to run the models remotely in a GPU-enabled Linux environment and download the results without installing the software locally. Different models can be run across catchments, or several models over a single catchment for agreement and ensemble analysis; integrating FIMeval and FIMbench provides evaluation for every output. Since FIMsim can be set up and run for every reach, a hypothesis can be tested across models rather than trusted to just one model. Simulation is not its only use. FIMsim can also serve purely as a preprocessor for hydraulic modeling, generating each input required for a 2D model separately. It can produce a mosaicked, clipped, reprojected, and resampled DEM at different spatial resolutions; generate Manning's n roughness grids from land-cover datasets of different sources, years, and resolutions; provide flowline data; and obtain inflow hydrographs from NWM, a USGS gauge, or an uploaded CSV file. The processed inputs can be exported in several commonly used formats, allowing modelers to use the ready-to-run files directly in their preferred hydraulic modeling engine. Today, FIMsim is available as a Python framework and a desktop application for macOS and Windows; a pip-installable Python library and a web application are also under development.
+
+### (f) FIMbox: a sandbox for large-scale, multi-model FIM development and analysis
+
+[FIMbox](https://github.com/sdmlua/fimbox) is an open-source Python sandbox that treats flood inundation mapping as a controlled experiment: models, inputs, and parameters become variables that a researcher deliberately sets, holds fixed, or sweeps across in a single, reproducible run. A run begins with a boundary polygon for any area of interest rather than a precalculated HUC8, and a shared initialization step stages the common resources every model needs into one working directory: the DEM, NHD and NWM hydrography, FEMA NFHL flood hazard layers, NLD levees, OSM bridges and roads, and USGS gauge records. A configuration wrapper then exposes each subsequent stage, so a user-defined topography, hydrography, or roughness field is applied where it matters. The experiment setup determines which models to run, the terrain-based HAND workflow, a hydrodynamic model, or both. Each model triggers its own preprocessor, which builds only the datasets it needs and pulls inflows from the National Water Model or NextGen, or through the crosswalk module from global sources such as GEOGloWS.
+
+Where FIMserv runs only the operational OWP HAND framework over precalculated HUC8 data, FIMbox opens the pipeline itself. Its HAND FIM modeling breaks the OWP HAND-FIM pre- and post-processing chain (from a DEM to a mapped extent) into small composable pieces: staging inputs, hydroconditioning the terrain, segmenting the stream network, generating HAND and its synthetic rating curves, calibrating them, generating the FIM, and evaluating it. Every stage exposes its parameters and writes intermediate products the user can inspect, replace, or feed back in, so a dataset or a coefficient can be substituted at one step and its consequences traced through to the mapped extent and depth. Because each dataset and parameter is a variable under the user's control, questions that are ordinarily laborious become routine: how much the resolution or the source of the river network, catchments, or DEM changes the predicted extent; how sensitive the result is to Manning's n roughness; and whether a better synthetic rating curve, a different stream segmentation, or an improved slope treatment sharpens extent and depth. Dask parallelization runs across the whole HAND pipeline, so the same workflow scales from a single basin to continental domains without rewriting a line of code, and the package runs the same way on a local workstation or on cloud computing resources.
+
+What sets FIMbox apart is that a single experiment carries seamlessly from modeling through evaluation to benchmarking. Within one run it can drive a terrain-based HAND solution and, through the integrated FIMsim framework, a hydrodynamic model such as TRITON or LISFLOOD-FP, without altering their native configurations, then score each predicted extent with FIMeval against the best-matching FIMbench benchmark, selected by event date, geographic domain, spatial overlap, quality tier, or any combination of these; where no benchmark exists, FIMsens can attempt to derive one from satellite imagery. Because the whole chain, from fetching flows to scoring the result, is scriptable from a notebook or a scheduled job, FIMbox makes FIM research genuinely iterative: a hypothesis can be posed, tested, and scored at any scale, one basin or a thousand, with no manual handoffs between tools. That same design makes multi-model analysis natural, and work is now underway to extend the sandbox beyond a single model toward ensemble, multi-model FIM extents, repurposing results from a range of hydrologic models through the same workflow. Looking ahead, integrating NOAA's Next Generation Water Resources Modeling Framework (NextGen) will close the loop from meteorological forcing through hydrologic and inundation modeling to flood-extent assessment and evaluation, an end-to-end ecosystem simulation.
+
+<figure style={{ textAlign: "center" }}>
+  <img
+   class="dark-mode-white-bg"
+   src={useBaseUrl('/img/blog/2026-08-fim-ecosystem/fimbox-workflow.jpg')}
+   width='100%'
+   alt="The FIMbox modular workflow: shared inputs feed swappable stages, from model initialization and preprocessing to FIM generation and evaluation."
+   />
+  <figcaption><em>The FIMbox modular workflow: shared inputs feed swappable stages, from model initialization and preprocessing to FIM generation and evaluation, so terrain-based (e.g., HAND) or hydrodynamic models can be configured, run, and compared in one framework, with FIMsim, FIMeval, and FIMbench plugged in for simulation, evaluation, and benchmarks.</em></figcaption>
+</figure>
+
+## When should you use the FIM ecosystem?
+
+Each component can be used on its own; you do not need to adopt the entire ecosystem to benefit from a single component. However, integrating the components opens up research questions that no single component can answer alone. A few common starting points:
+
+- *"I need flood maps for a forecast or a past event or a synthetic scenario anywhere in the US; however, I need them fast and running on any local or cloud system."* FIMserv can do that.
+- *"I built a flood inundation model, hydraulic, data-driven, or otherwise, and I have my own benchmark; I want to know how accurate the model is."* FIMeval can do that.
+- *"I built a flood inundation model intended for regional, continental, or global application, and I want to investigate its potential and limitations across different hydroclimates and topographic settings."* FIMeval, leveraging the FIMbench database, can do that.
+- *"I just need reliable benchmark flood maps for my study area."* FIMbench, via the GUI or the Python API, can provide that.
+- *"I want to prepare the inputs for a 2D hydrodynamic model such as LISFLOOD-FP or TRITON, or run the model itself, wherever I need and without the usual setup hassle."* FIMsim can do that, in a desktop app or Python framework, either handing you ready-to-run inputs and configuration to run on your own or running the simulation for you.
+- *"I want to run several flood models over the same watershed for ensemble and agreement analysis or assign a different model to each catchment according to what performs best there."* FIMbox can do that, orchestrating the models through FIMsim and passing every result on to FIMeval and FIMbench for evaluation.
+- *"I want to experiment with the HAND workflow itself, swapping terrain, roughness, calibration, or model engines, feeding it custom or repurposed streamflow, and scaling from a single basin to continental domains."* FIMbox can do that, breaking the workflow into flexible, Dask-parallel pieces that run straight through to evaluation.
+- *"I want to test a hypothesis on the terrain-based NOAA OWP HAND model, evaluating it across dozens or hundreds of events to judge whether the approach can be implemented across the US."* The integrated ecosystem can enable that: FIMserv handles the modeling, and FIMeval, drawing benchmarks from FIMbench, handles the evaluation; the entire process is automated, programmatically and seamlessly.
+- *"I have no benchmark for my event and need to derive a flood extent and depth directly from satellite imagery."* FIMsens can do that (once integrated), turning SAR or optical scenes into error-corrected extent and depth products.
+
+## Under the hood: technical dissemination
+
+Technically, the ecosystem is a modular, cloud-native suite of open-source Python packages and frameworks. What holds it together is a shared CIROH cloud backbone: every component reads and writes the same cloud-hosted data, so one tool's output is directly consumable by the next. FIMserv streams its inputs on demand: precalculated HAND hydrofabrics from the CIROH AWS S3 buckets, retrospective National Water Model (NWM) streamflow from NOAA's public S3 archive, and forecast NetCDF files from Google Cloud Storage, with the TEEHR framework's PySpark engine handling massive streamflow extractions. FIMeval builds on the standard geospatial Python stack (Rasterio, PyProj, GeoPandas, Shapely) for raster reprojection, map algebra, and dynamic bounding geometries based on different evaluation methods. The heavy layers it needs on the fly, such as permanent water bodies and Microsoft building footprints for impact-based assessment, are hosted on ArcGIS Online and other cloud services and fetched through REST endpoints for the evaluation domain only, so nothing oversized ever lands on the user's machine. FIMbench's dissemination rests on a decoupled web architecture: a Tethys Platform backend acts as a tile proxy, streaming compressed vector tiles of benchmark FIM extent straight from the CIROH AWS S3 storage to a React front end that renders interactive maps with MapLibre GL. The same S3 store serves the stateless FIMbench Python API, so the database remains a single, consistent source of truth, regardless of how it is accessed. FIMbox adds a parallel execution layer: it decomposes the HAND workflow into independent per-branch computations (hydroconditioning, branching, relative elevation, and synthetic rating curves) and uses Dask to distribute those branches across local cores or cloud workers. FIMsim moves computation to the cloud, provisioning the hydrodynamic engines on managed resources and assembling their inputs from public sources: USGS 3DEP terrain, land-cover-derived roughness, and NWM, USGS, or user-supplied hydrographs. Hardware is the one practical dividing line across the ecosystem: FIMbox's terrain-based HAND workflows run on ordinary local systems without a GPU, while the full FIMbox and FIMsim capability, terrain-based modeling coupled with 2D hydrodynamic simulation, is currently GPU-backed for accelerating the computation and Linux-based. FIMsens will add the observation path, query SAR and optical image catalogs, align downloaded scenes to a common DEM, and then hand them to the correction routine described above.
+
+<figure style={{ textAlign: "center" }}>
+  <img
+   class="dark-mode-white-bg"
+   src={useBaseUrl('/img/blog/2026-08-fim-ecosystem/technical-architecture.jpg')}
+   width='100%'
+   alt="Technical architecture components of the ecosystem: FIMserv assembles HAND-based flood maps from cloud-hosted terrain and streamflow data sources; FIMeval retrieves benchmarks and evaluation layers from cloud-hosted endpoints; and FIMbench disseminates its curated database via the web portal and the Python API."
+   />
+  <figcaption><em>Technical architecture components of the ecosystem: FIMserv assembles HAND-based flood maps from cloud-hosted terrain and streamflow data sources; FIMeval retrieves benchmarks and evaluation layers from cloud-hosted endpoints; and FIMbench disseminates its curated database via the web portal and the Python API, drawing from a single AWS S3 source of truth.</em></figcaption>
+</figure>
+
+## Who is it for? Try it today
+
+The CIROH FIM Community Ecosystem is completely open source and already in active use across the community: as of mid-2026, PyPI records put FIMserv past 45,000 downloads and FIMeval past 20,000, with the FIMbench API and the FIMbox testbed more recently released. How you start depends on the component: four of them are installed as Python packages with a single command (Astral uv makes it faster still), FIMsim ships as a desktop application, and FIMsens will join once released.
+
+```bash
+uv/pip install fimserve   # flood map generation
+
+uv/pip install fimeval    # flood map evaluation
+
+uv/pip install fimbench   # benchmark database access
+
+uv/pip install fimbox     # FIM testbed access
+```
+
+Each framework is provided with step-by-step documentation and example notebooks on its GitHub repository: [FIMserv](https://github.com/sdmlua/FIMserv/tree/main/docs), [FIMeval](https://github.com/sdmlua/fimeval/tree/main/docs), [FIMbench](https://github.com/sdmlua/fimbench/docs), [FIMbox](https://github.com/sdmlua/fimbox#module-documentation) and so on, so any user can go from installation to a first flood map and its evaluation without leaving the documentation. Run them wherever you work, from a laptop to Google Colab or CIROH's 2i2c JupyterHub. Prefer a point-and-click route? The [FIMbench web portal](https://tethys.ciroh.org/apps/fimbench-gui/) lets you browse the benchmark database, and FIMsim runs today as a desktop application.
+
+Who benefits from the FIM ecosystem? Broadly, anyone who works with flood hazard modeling. From researchers testing new models to forecasters, planners, engineers, and students, each takes something different from it: a place to experiment, options they can defend in operations, and flood information that has been checked before it is trusted. Our goal is simple: anyone, whatever their background, can make a flood map, check it against reality, and trust what it tells them.
+
+## Get involved
+
+The FIM ecosystem is a living effort, and feedback will improve it. We will appreciate your feedback and suggestions about technical problems, proposed utilities, and additional components. We are committed to incorporating that input into each release, and collaboration is what we need most. The ecosystem is still very much in motion: not every framework yet has its own graphical interface, and some are not yet packaged for PyPI, but many avenues and dimensions are advancing in parallel. Keep an eye out for new releases, and email us about collaborations, ideas, or anything you would like to build with us. All the FIM components code lives in the [SDML GitHub repository](https://github.com/sdmlua), and each repository has its own contribution guidelines: open an issue with a new idea or a bug, submit a contribution, or simply reach out to the [SDML team](https://sdml.ua.edu). We would genuinely love to hear from you; it is how this ecosystem will keep evolving. And this is only a start: the CIROH FIM Community Ecosystem is not limited to the components described here. We want it to grow beyond SDML, with colleagues across CIROH institutions and the broader community contributing new components, datasets, and ideas that strengthen it as a shared, community-owned capability.
+
+## Acknowledgments
+
+This work is supported by the National Oceanic and Atmospheric Administration (NOAA) through the Cooperative Institute for Research to Operations in Hydrology (CIROH) under the NOAA Cooperative Agreement with The University of Alabama (NA22NWS4320003). We thank the Aquaveo team for collaborating on the development of the Graphical User Interfaces for these tools.
+
+**CIROH cyberinfrastructure used:** [CIROH AWS S3 cloud storage](https://ciroh-owp-hand-fim.ciroh.org/index.html) hosts the OWP-precalculated HUC8 HAND hydrofabric datasets streamed on demand by FIMserv, and hosts the [FIMbench benchmark database](https://sdmlab.ciroh.org/#FIM_Database/); the CIROH Tethys Platform / CIROH Portal hosts the [FIMbench WebApp](https://tethys.ciroh.org/apps/fimbench-gui/), developed with our partners at Aquaveo (we are also thinking of hosting a curated virtual environment/image on 2i2c services soon). This cyberinfrastructure is the backbone that makes the ecosystem scalable and interoperable: because every component reads from and writes to the same CIROH cloud-hosted data, one tool's output is directly consumable by the next, and users never need to download oversized national datasets. CIROH's Tethys hosting and 2i2c JupyterHub lower the barrier further, providing point-and-click and zero-install routes into the tools, while CIROH compute resources make evaluation across hundreds of events and continental-scale runs practical rather than prohibitive.
+
+### Additional Links
+
+- Understand the CIROH FIM ecosystem visually: https://sdml.ua.edu/fim-ecosystem/
+- Explore the CIROH FIM ecosystem more interactively with our [NotebookLM Mind Map](https://notebooklm.google.com/notebook/0cbf3ebc-9ebd-41c9-ba56-24922c934be7/artifact/66c95aa6-5532-4a64-b3db-3dde7c000b70?utm_source=nlm_web_share&utm_medium=google_oo&utm_campaign=art_share_1&utm_content=&utm_smc=nlm_web_share_google_oo_art_share_1_)
+
+## Publications
+
+1. Baruah, A., Dhital, S., Cohen, S., Tran, T.N.D., Elhaddad, H., Watts, C.L., Devi, D., Chen, Y., & Pruitt, C. (2025). FIMserv v.1.0: A tool for streamlining Flood Inundation Mapping (FIM) using the United States operational hydrological forecasting framework. *Environmental Modelling & Software*, 192, 106581. https://doi.org/10.1016/j.envsoft.2025.106581
+2. Devi, D., Dhital, S., Munasinghe, D., Cohen, S., Baruah, A., Chen, Y., Tian, D., & Pruitt, C. (2026). A framework for the evaluation of flood inundation predictions over extensive benchmark databases. *Environmental Modelling & Software*, 196, 106786. https://doi.org/10.1016/j.envsoft.2025.106786
+3. Devi, D., Munasinghe, D., Tian, D., Dhital, S., Cohen, S., Raghavan, R., Swain, N., Nikrou, P., Baruah, A., & Chen, Y. (in preparation). FIMbench: A benchmark database of multi-tier flood inundation maps for large-scale evaluation.
+4. Tian, D., Liu, H., Wang, L., Cohen, S., & Mandal, T. (2026). RS-FloodXDepth: Enhancing remote sensing-derived flood extent and estimating flood depth using a hydrologically guided region-growing method and high-resolution DEMs. *Water Resources Research*, 62, e2025WR042384. https://doi.org/10.1029/2025WR042384
+5. Tian, D., Liu, H., Cohen, S., & Wang, L. (in preparation). Commission error analysis and correction in remote sensing flood maps using an object-oriented, hydrologically informed approach.
+6. Wang, L., Liu, H., Tian, D., & Cohen, S. (2025, under review). Rapid automated flood mapping using SAR imagery and locally adaptive thresholds derived from multivariate gamma probability distributions. *International Journal of Applied Earth Observation and Geoinformation*.
+
+## Our Team
+
+<ProfileCards profiles={fimProfiles} />

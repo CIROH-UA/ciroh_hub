@@ -11,20 +11,24 @@ The source code for CIROH Hub is available at:
 
 ### Production
 The production environment is available at:  
+
 [https://hub.ciroh.org/](https://hub.ciroh.org/)
 
 ### Staging
 The staging environment is used for testing and validating changes before deploying to production. This allows contributors to preview their changes in a live environment without affecting the production site.
-[https://hub.ciroh.org/docuhub-staging/](https://hub.ciroh.org/docuhub-staging/)
+
+[https://hub.ciroh.org/staging/main](https://hub.ciroh.org/staging/main): Daily preview; built from main branch when new changes are merged.  
+[https://hub.ciroh.org/staging/{PR number}](https://github.com/CIROH-UA/subdomain-hub/tree/gh-pages/staging): Previews of PRs with the 'preview on staging' tag added by a maintainer. *(Hyperlink points to current contents of staging directory.)*
+
 ## How to Contribute
 
 1. **Edit Content**: See something that needs to be updated? Click on the "Edit page" button at the bottom of the page to make direct changes to the documentation.
 
 2. **Submit Changes**: Make your edits and create a Pull Request on GitHub. Your changes will be reviewed and merged by the admin team.
 
-3. **Contribute to Products Tab**: For CIROH projects related to NextGen, please send your GitHub repository URL to the admin for inclusion.
+3. **Contribute a new Product or Blog Post**: If you have a product GitHub repository or Blog post that you'd like to submit, please create a new issue on GitHub
 
-4. **Contribute to Blog Section**: To add content to the blog, please follow the guidelines in [How to write a new Blog?](https://github.com/CIROH-UA/ciroh-ua_website/blob/main/blog/2023-10-29-intro-docuhub-blog.md)
+4. **Contribute to the Research Portal**: Information on contributing resources to a Portal can be found on [CIROH Hub's contribute page](https://hub.ciroh.org/contribute)
 
 5. **Report Issues**: Found a bug or have a suggestion? Open an issue in the [GitHub repository](https://github.com/CIROH-UA/ciroh_hub) to help improve CIROH Hub.
 

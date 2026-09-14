@@ -185,8 +185,11 @@
   }
   
   .publicationCard:hover {
-    transform: translateY(-3px);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  [data-reduce-motion="false"] .publicationCard:hover {
+    transform: translateY(-3px);
   }
   
   

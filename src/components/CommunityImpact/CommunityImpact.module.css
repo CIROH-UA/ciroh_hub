@@ -40,8 +40,11 @@
 }
 
 .postCard:hover {
-  transform: translateY(-5px);
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+[data-reduce-motion="disabled"] .postCard:hover {
+  transform: translateY(-5px);
 }
 
 .postImage {
@@ -64,7 +67,7 @@
   transition: all 0.3s ease;
 }
 
-.postImage:hover img {
+[data-reduce-motion="disabled"] .postImage:hover img {
   transform: scale(1.03);
 }
 
@@ -181,17 +184,20 @@ html[data-theme='dark'] .impactItem {
 }
 
 .btn {
-font-size: 1.4rem;
-padding: 0.5rem 1rem;
-border-radius: 20px;
-transition: all 0.3s ease;
-margin: 0.25rem;
-font-weight: 600;
-text-transform: capitalize;
+  font-size: 1.4rem;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  transition: all 0.3s ease;
+  margin: 0.25rem;
+  font-weight: 600;
+  text-transform: capitalize;
 }
 
 .btn:hover {
-background: #f0f0f0;
-transform: translateY(-1px);
-box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  background: #f0f0f0;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+[data-reduce-motion="disabled"] .btn:hover {
+  transform: translateY(-1px);
 }

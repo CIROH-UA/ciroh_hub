@@ -91,10 +91,13 @@
 }
 
 .toggleButton:hover {
-  transform: translateY(-1px);
   background-color: var(--ciroh-button-primary-bg);
   filter: brightness(1.05);
   box-shadow: 0 10px 25px rgba(102, 126, 234, 0.45);
+}
+
+[data-reduce-motion="false"] .toggleButton:hover {
+  transform: translateY(-1px);
 }
 
 .toggleButton:focus {
@@ -386,11 +389,14 @@
 }
 
 .readMoreLink:hover {
-  transform: translateY(-1px);
   background-color:var(--ifm-color-primary);
   box-shadow: 0 4px 12px rgba(12, 81, 191, 0.4);
   text-decoration: none;
   color: white;
+}
+
+[data-reduce-motion="false"] .readMoreLink:hover {
+  transform: translateY(-1px);
 }
 
 .newsGrid {
@@ -418,12 +424,15 @@
 }
 
 .newsCard:hover {
-  transform: translateY(-4px);
   box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12), 0 4px 8px rgba(0, 0, 0, 0.08);
 }
 
 [data-theme="dark"] .newsCard:hover {
   box-shadow: 0 12px 24px rgba(0, 0, 0, 0.5), 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+[data-reduce-motion="false"] .newsCard:hover {
+  transform: translateY(-4px);
 }
 
 .cardHeader {
@@ -582,7 +591,6 @@
 
 }
 .versionTag:hover {
-  transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   background: linear-gradient(135deg, #cbd5e0 0%, #a0aec0 100%);
   text-decoration: none;
@@ -675,11 +683,14 @@
 }
 
 .cardLink:hover {
-  transform: translateY(-1px);
   background: var(--ifm-color-primary);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
   text-decoration: none;
   color: white;
+}
+
+[data-reduce-motion="false"] .cardLink:hover {
+  transform: translateY(-1px);
 }
 
 .linkIcon {
