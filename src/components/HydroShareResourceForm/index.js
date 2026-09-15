@@ -62,11 +62,17 @@ export default function HydroShareResourceForm() {
 
     const handleAuthenticate = () => {
         // Save the form input so it survives the redirect to HydroShare
-        localStorage.setItem(FORM_STATE_KEY, JSON.stringify({
-            title,
-            resourceType,
-            timestamp: Date.now(),
-        }));
+        try {
+            localStorage.setItem(FORM_STATE_KEY, JSON.stringify({
+                title,
+                resourceType,
+                timestamp: Date.now(),
+            }));
+        } catch (err) {
+            console.warn('Failed to save form state before authentication:', err);
+        }
+
+        // Call the HydroShare login function to initiate authentication
         logIn();
     };
 
