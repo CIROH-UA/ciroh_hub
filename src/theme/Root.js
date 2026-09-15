@@ -1,5 +1,6 @@
 import React, {useContext, useState, useEffect} from 'react';
 import {ReducedMotionContext} from "@theme/Contexts";
+import HydroShareAuthProvider from '@site/src/components/HydroShareAuth';
 
 // Credit: https://developer.mozilla.org/en-US/docs/Web/API/Web_Storage_API/Using_the_Web_Storage_API#feature-detecting_localstorage
 function storageAvailable(type) {
@@ -68,7 +69,9 @@ export default function Root({children}) {
 
   return (
     <ReducedMotionContext.Provider value={value}>
-      {children}
+      <HydroShareAuthProvider>
+        {children}
+      </HydroShareAuthProvider>
     </ReducedMotionContext.Provider>
   );
 }
