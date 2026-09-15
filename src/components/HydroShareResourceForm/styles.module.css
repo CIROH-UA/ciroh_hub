@@ -108,7 +108,7 @@
   text-decoration: underline;
 }
 
-.errorMessage {
+.errorMessage:not(:empty) {
   color: #e00;
   margin-bottom: 1rem;
 }

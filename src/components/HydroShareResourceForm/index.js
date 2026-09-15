@@ -210,21 +210,25 @@ export default function HydroShareResourceForm() {
                 )}
 
                 {/* View Resource */}
-                {resourceUrl && (
-                    <button
-                        type='button'
-                        className={clsx(styles.button, styles.buttonVisitResource)}
-                        disabled={!resourceUrl}
-                        onClick={() => window.open(resourceUrl, '_blank', 'noopener,noreferrer')}
-                        title='View Resource'
-                    >
-                        Resource created successfully, finish editing it here
-                    </button>
-                )}
+                <div aria-live="polite">
+                    {resourceUrl && (
+                        <button
+                            type='button'
+                            className={clsx(styles.button, styles.buttonVisitResource)}
+                            disabled={!resourceUrl}
+                            onClick={() => window.open(resourceUrl, '_blank', 'noopener,noreferrer')}
+                            title='View Resource'
+                        >
+                            Resource created successfully, finish editing it here
+                        </button>
+                    )}
+                </div>
             </form>
 
             {/* Error Message */}
-            {error && <div className={styles.errorMessage}>{error}</div>}
+            <div className={styles.errorMessage} role="alert" aria-live="assertive">
+                {error}
+            </div>
         </div>
     );
 }
