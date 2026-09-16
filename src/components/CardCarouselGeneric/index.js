@@ -89,7 +89,7 @@ const CardCarouselGeneric = ({ cards = [], cardsPerView = 3, header, renderCard 
             <div className="tw-relative tw-max-w-7xl tw-mx-auto tw-px-4">
 
                 {/* Flexbox */}
-                <div className="tw-flex tw-items-center tw-relative">
+                <div className="tw-flex tw-items-center tw-relative tw-bg-white dark:tw-bg-[#060010]">
                     
                     {/* Navigation Arrow Left */}
                     { cards.length <= cardsPerView || (
