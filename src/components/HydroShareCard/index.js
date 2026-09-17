@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import useBaseUrl from '@docusaurus/useBaseUrl';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import styles from './styles.module.css';
@@ -8,9 +8,11 @@ import {
   HiOutlineLink,
   HiOutlineTag,
 } from 'react-icons/hi';
+import HydroShareResourceForm from '@site/src/components/HydroShareResourceForm';
+import ModalGeneric from '@site/src/components/ModalGeneric';
+import useHydroShareAuth from '@site/src/components/HydroShareAuth/useHydroShareAuth';
 
 export default function HydroShareCard() {
-  const hydroshareUrl = 'https://www.hydroshare.org/oidc/authenticate/';
   const logo = useBaseUrl('/img/logos/HydroShareLogo.png');
 
   const { siteConfig } = useDocusaurusContext();
@@ -20,19 +22,33 @@ export default function HydroShareCard() {
   const featuredPresentationsCollectionId = siteConfig.customFields.hs_featured_presentations_collection_id || '';
   const featuredNotebooksCollectionId = siteConfig.customFields.hs_featured_notebooks_collection_id || '';
 
+  // State to control the visibility of the HydroShareResourceForm modal
+  const [formOpen, setFormOpen] = useState(false);
+  const { returnedFromLogin, clearReturnedFromLogin } = useHydroShareAuth();
+  useEffect(() => {
+    // Reopen after returning from the HydroShare OAuth redirect
+    if (returnedFromLogin) {
+      setFormOpen(true);
+      clearReturnedFromLogin();
+    }
+  }, [returnedFromLogin, clearReturnedFromLogin]);
+
   return (
     <section className={styles.section}>
+      {/* Title */}
       <div className={styles.header}>
         <img src={logo} alt="HydroShare" className={styles.logo} />
         <div className={styles.titleRow}>  
-          <h2 className={styles.title}>Contribute to HydroShare Resources</h2>
+          <h2 className={styles.title}>Contribute to CIROH HydroShare Resources</h2>
         </div>
         <p className={styles.subtitle}>
-          Publish your apps, datasets, notebooks, courses, and presentations on HydroShare
+          Publish your apps, datasets, notebooks, courses, and presentations on HydroShare to make them discoverable on CIROH Hub
         </p>
       </div>
 
-        <div className={styles.grid}>
+      {/* Cards */}
+      <div className={styles.grid}>
+        {/* Quick Steps Card */}
         <div className={styles.card}>
           <div className={styles.icon}><HiOutlineClipboardList size={28} /></div>
           <h4>Quick Steps</h4>
@@ -43,6 +59,8 @@ export default function HydroShareCard() {
             <li>Add one of the Tags shown here.</li>
           </ol>
         </div>
+
+        {/* Use Tags Card */}
         <div className={styles.card}>
           <div className={styles.icon}><HiOutlineTag size={28} /></div>
           <h4>Use Tags</h4>
@@ -65,6 +83,8 @@ export default function HydroShareCard() {
               </div>
             </details>
         </div>
+
+        {/* Optional Metadata Card */}
         <div className={styles.card}>
           <div className={styles.icon}><HiOutlineLink size={28} /></div>
           <h4>Optional metadata</h4>
@@ -82,12 +102,17 @@ export default function HydroShareCard() {
         </div>
       </div>
 
+      {/* Create a CIROH HydroShare Resource Button */}
       <div className={styles.actions}>
-        <a href={hydroshareUrl} target="_blank" rel="noopener noreferrer" className={styles.primaryButton}>
-          Share on CIROH HydroShare
-        </a>
+        <button onClick={() => setFormOpen(true)} className={styles.primaryButton}>
+          Create a CIROH HydroShare Resource
+        </button>
+        <ModalGeneric open={formOpen} onClose={() => setFormOpen(false)} title="Create a CIROH HydroShare Resource">
+          <HydroShareResourceForm />
+        </ModalGeneric>
       </div>
 
+      {/* Footer */}
       <div className={styles.footer}>
         <p className={styles.subtitle}>
           Featured resources are drawn from <a href="https://help.hydroshare.org/hydroshare-resources/collections/">HydroShare Resource Collections</a>.

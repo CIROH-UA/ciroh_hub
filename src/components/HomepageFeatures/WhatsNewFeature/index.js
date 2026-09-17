@@ -14,12 +14,12 @@ function WhatsNewHeader() {
       >
         Fresh from the CIROH community
       </span>
-      <h2 className="tw-text-4xl md:tw-text-5xl tw-font-extrabold tw-text-blue-800 dark:tw-text-white tw-mt-4 tw-mb-3">
+      <h2 className="tw-text-4xl md:tw-text-5xl tw-font-extrabold tw-text-black dark:tw-text-white tw-mt-4 tw-mb-3">
         What's New
       </h2>
       <div className="tw-w-[70px] tw-h-1 tw-bg-[#19a7ce] tw-mx-auto tw-rounded-sm tw-mb-4"></div>
       <p className="tw-text-lg tw-font-normal tw-text-slate-900 dark:tw-text-slate-300">
-        Catch up on the latest blog post, community news, and documentation updates
+        Catch up on the latest blog posts, community news, and documentation updates
       </p>
     </div>
   );
