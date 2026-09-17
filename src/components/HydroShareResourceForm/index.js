@@ -156,6 +156,7 @@ export default function HydroShareResourceForm() {
                         value={title}
                         placeholder="Resource Title"
                         onChange={(e) => setTitle(e.target.value)}
+                        disabled={loading || loginInProgress || verifying || resourceUrl}
                     />
                 </label>
 
@@ -166,6 +167,7 @@ export default function HydroShareResourceForm() {
                         className={styles.input}
                         value={resourceType}
                         onChange={(e) => setResourceType(e.target.value)}
+                        disabled={loading || loginInProgress || verifying || resourceUrl}
                     >
                         <option value="" disabled>Select a resource type…</option>
                         {resourceTypeOptions.map((opt) => (
@@ -211,7 +213,7 @@ export default function HydroShareResourceForm() {
 
                 {/* View Resource */}
                 <div aria-live="polite">
-                    {resourceUrl && (
+                    {resourceUrl && (<>
                         <button
                             type='button'
                             className={clsx(styles.button, styles.buttonVisitResource)}
@@ -221,7 +223,16 @@ export default function HydroShareResourceForm() {
                         >
                             Resource created successfully, finish editing it here
                         </button>
-                    )}
+                        <button
+                            type='button'
+                            className={clsx(styles.button, styles.buttonPrimary)}
+                            disabled={!resourceUrl}
+                            onClick={() => setResourceUrl('')}
+                            title='View Resource'
+                        >
+                            Create another resource
+                        </button>
+                    </>)}
                 </div>
             </form>
 
