@@ -212,7 +212,7 @@ export default function HydroShareResourceForm() {
                 )}
 
                 {/* View Resource */}
-                <div aria-live="polite">
+                <div aria-live="polite" align="center">
                     {resourceUrl && (<>
                         <button
                             type='button'
@@ -220,6 +220,7 @@ export default function HydroShareResourceForm() {
                             disabled={!resourceUrl}
                             onClick={() => window.open(resourceUrl, '_blank', 'noopener,noreferrer')}
                             title='View Resource'
+                            style={{marginBottom: "0.5rem"}}
                         >
                             Resource created successfully, finish editing it here
                         </button>
