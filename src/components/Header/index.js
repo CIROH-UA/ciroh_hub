@@ -7,7 +7,7 @@ import useBaseUrl from '@docusaurus/useBaseUrl';
 export default function Header({ title, tagline, description, buttons, notice }) {
   const { colorMode } = useColorMode();
   const isDarkTheme = colorMode === 'dark';
-  return (
+  return (<>
     <header
       className={clsx(
         styles.heroBanner,
@@ -121,5 +121,5 @@ export default function Header({ title, tagline, description, buttons, notice })
         </div>
       </div>
     </header>
-  );
+  </>);
 }
