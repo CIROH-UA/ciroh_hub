@@ -1,0 +1,80 @@
+.navbar-hydroshare-login,
+.navbar-hydroshare-logout {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    border-radius: 8px;
+    color: white;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    margin-left: 8px;
+    margin-right: 8px;
+}
+
+.navbar-hydroshare-login {
+    background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+    border: 1px solid #0284c7;
+}
+
+.navbar-hydroshare-login:hover {
+    filter: brightness(0.97);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3);
+}
+
+.navbar-hydroshare-login:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.navbar-hydroshare-logout {
+    background: linear-gradient(135deg, #64748b 0%, #475569 100%);
+    border: 1px solid #475569;
+}
+
+.navbar-hydroshare-logout:hover {
+    filter: brightness(0.97);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+}
+
+/* Hide the top-bar button on mobile like every other navbar__item (Infima's
+   own hide rule loses to our display above); the button still appears in the
+   hamburger drawer via the mobile menu__link variant, so it stays reachable */
+@media (max-width: 996px) {
+    .navbar-hydroshare-login,
+    .navbar-hydroshare-logout {
+        display: none;
+    }
+}
+
+/* Hamburger-drawer variants: keep the menu__link layout but carry the same
+   login/logout colors as the desktop button so login still reads as blue */
+.navbar-hydroshare-menu-login,
+.navbar-hydroshare-menu-logout {
+    color: white;
+    font-weight: 600;
+    border-radius: 8px;
+}
+
+.navbar-hydroshare-menu-login,
+.navbar-hydroshare-menu-login:hover {
+    color: white;
+    background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+}
+
+.navbar-hydroshare-menu-logout,
+.navbar-hydroshare-menu-logout:hover {
+    color: white;
+    background: linear-gradient(135deg, #64748b 0%, #475569 100%);
+}
+
+.navbar-hydroshare-menu-login:hover,
+.navbar-hydroshare-menu-logout:hover {
+    filter: brightness(0.97);
+}
