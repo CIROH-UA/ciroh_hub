@@ -106,6 +106,7 @@ function mapDiscoveryResource(resource) {
     abstract: resource.description,
     date_created: resource.document[0].dateCreated,
     date_last_updated: resource.document[0].dateModified,
+    keywords: resource.keywords || []
   };
 }
 

@@ -17,6 +17,9 @@ export function ResourceCard({ resource, defaultImage }) {
     const title = resource?.title || 'Untitled';
     const description = resource?.description || '';
     const authors = splitAuthors(resource?.authors);
+    const keywords = Array.isArray(resource?.keywords)
+        ? resource.keywords
+        : (Array.isArray(resource?.subjects) ? resource.subjects : []);
 
     const thumbnailUrl = resource?.thumbnail_url || defaultImage;
     const pageUrl = resource?.page_url;

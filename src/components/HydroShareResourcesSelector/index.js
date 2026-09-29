@@ -149,6 +149,16 @@ export default function HydroShareResourcesSelector({
           communityResponse = await getCommunityResources(keyword, "4", filterSearch, ascending, sortType, undefined, groupPageNumberRef.current, communityTokenRef.current, PAGE_SIZE);
           resourceList = communityResponse.resources || [];
 
+          // Ensure every datasets resource has the 'ciroh_hub_data' keyword so cards can detect the dataset type
+          for (const resource of resourceList) {
+            if (!Array.isArray(resource.keywords)) {
+              resource.keywords = [];
+            }
+            if (!resource.keywords.includes('ciroh_hub_data')) {
+              resource.keywords.push('ciroh_hub_data');
+            }
+          }
+
           // Advance pagination state for the next fetch.
           groupPageNumberRef.current = (communityResponse.groupResourcesPageData?.pageNumber || 1) + 1;
           communityTokenRef.current = communityResponse.extraResourcesPageData?.nextPaginationToken;
@@ -170,7 +180,9 @@ export default function HydroShareResourcesSelector({
           description: res.abstract || "No description available.",
           date_created: res.date_created,
           date_last_updated: res.date_last_updated,
-          keywords: res.subjects,
+          keywords: Array.isArray(res.keywords)
+            ? res.keywords
+            : (Array.isArray(res.subjects) ? res.subjects : []),
           thumbnail_url: "",
           page_url: "",
           docs_url: "",
