@@ -653,6 +653,77 @@ async function fetchResourceImageUrls(resourceId) {
   return imageUrls;
 }
 
+/**
+ * Update a resource's science metadata (title, authors, and/or abstract).
+ *
+ * Pass plain values; this builds HydroShare's CoreMetaData shapes for you.
+ * Only the fields you provide are sent — omit one to leave it unchanged.
+ *
+ * Note: HydroShare REPLACES the whole `creators` list, so `authors` must be the
+ * complete author list, not just additions or changes.
+ *
+ * @param {string} resourceId The id of the resource to update
+ * @param {string} authToken HydroShare OAuth bearer token (must have edit rights)
+ * @param {Object} fields The fields to update
+ * @param {string} [fields.title] New title
+ * @param {string[]} [fields.authors] Full author list in "First Last" display order
+ * @param {string} [fields.description] New abstract
+ * @returns {Promise<Object>} The updated science metadata returned by HydroShare
+ */
+async function updateResourceScimeta(resourceId, authToken, { title, authors, description } = {}) {
+  const updateUrl = `https://www.hydroshare.org/hsapi/resource/${resourceId}/scimeta/elements/`;
+
+  // Build the CoreMetaData body from only the provided fields
+  const scimetaData = {};
+
+  // Add title if provided
+  if (title !== undefined)
+  {
+    scimetaData.title = title;
+  }
+
+  // Add description if provided
+  if (description !== undefined)
+  {
+    scimetaData.description = description;
+  }
+
+  // Add authors if provided
+  if (authors !== undefined)
+  {
+    // HydroShare stores each creator as { name: "Last, First" }
+    scimetaData.creators = authors
+      .map(author => author.trim())
+      .filter(Boolean)
+      .map(name => ({ name: convertAuthorToLastFirst(name) }));
+  }
+
+  try {
+    // Send the updated CoreMetaData to HydroShare via a PUT request
+    const response = await fetch(updateUrl, {
+      method: 'PUT',
+      headers: {
+        'Authorization': `Bearer ${authToken}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(scimetaData),
+    });
+
+    // Check if the response indicates a successful update
+    if (!response.ok)
+    {
+      throw new Error(`Error updating scimeta for resource ${resourceId} (status: ${response.status})`);
+    }
+
+    // Return the updated science metadata as JSON
+    return response.json();
+
+  } catch (error) {
+    console.error(`Error updating scimeta for resource ${resourceId}:`, error);
+    throw error;
+  }
+}
+
 export {
   getCuratedIds, 
   fetchResource, 
@@ -667,5 +738,6 @@ export {
   fetchRawCuratedResources,
   convertAuthorToLastFirst,
   fetchResourcesFromCollection,
-  fetchResourceImageUrls
+  fetchResourceImageUrls,
+  updateResourceScimeta
 };

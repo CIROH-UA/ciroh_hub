@@ -15,3 +15,102 @@
 .scrollbar::-webkit-scrollbar-track {
     background-color: #e0e0e000;
 }
+
+.editButton {
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px;
+    border-radius: 5px;
+    transition: background-color 0.1s ease-in-out;
+}
+
+.editButton:hover {
+    background-color: rgba(156, 166, 177, 0.2);
+}
+
+/* ---- Edit mode form ---- */
+.editForm {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.editField {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.editLabel {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--ifm-color-emphasis-700);
+}
+
+.editInput {
+    width: 100%;
+    padding: 0.5rem 0.625rem;
+    font-family: inherit;
+    font-size: 0.9rem;
+    color: inherit;
+    background-color: #ffffff;
+    border: 1px solid var(--ifm-color-emphasis-300);
+    border-radius: 6px;
+}
+
+.editInput:focus {
+    outline: none;
+    border-color: var(--ifm-color-primary);
+    box-shadow: 0 0 0 1px var(--ifm-color-primary);
+}
+
+textarea.editInput {
+    resize: vertical;
+    min-height: 5rem;
+}
+
+:root[data-theme='dark'] .editInput {
+    background-color: #0f172a;
+    border-color: #334155;
+    color: #fff;
+}
+
+.editActions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    margin-top: 0.25rem;
+}
+
+.editSave,
+.editCancel {
+    padding: 0.4rem 0.9rem;
+    font-family: inherit;
+    font-size: 0.85rem;
+    font-weight: 600;
+    border-radius: 6px;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: filter 0.15s ease, background-color 0.15s ease;
+}
+
+.editSave {
+    color: #fff;
+    background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+}
+
+.editSave:hover {
+    filter: brightness(0.97);
+}
+
+.editCancel {
+    color: var(--ifm-color-emphasis-800);
+    background-color: transparent;
+    border-color: var(--ifm-color-emphasis-300);
+}
+
+.editCancel:hover {
+    background-color: var(--ifm-color-emphasis-200);
+}

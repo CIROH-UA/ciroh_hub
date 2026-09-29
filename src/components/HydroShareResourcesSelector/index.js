@@ -323,6 +323,14 @@ export default function HydroShareResourcesSelector({
     [resources]
   );
 
+  // Merge saved edits into the matching resource so the card re-renders in place.
+  // `resources` is the single source of truth, so cards read the new values from props.
+  const handleResourceUpdated = useCallback((resourceId, patch) => {
+    setResources(prev =>
+      prev.map(r => (r.resource_id === resourceId ? { ...r, ...patch } : r))
+    );
+  }, []);
+
   useEffect(() => {
     if (typeof onResultsChange !== 'function') return;
     onResultsChange(nonPlaceholderResources, {
@@ -523,7 +531,7 @@ export default function HydroShareResourcesSelector({
           {view === 'grid' ? (
             <HydroShareResourcesTiles resources={resources} defaultImage={defaultImage} />
           ) : (
-            <CardsComponent resources={resources} defaultImage={defaultImage} />
+            <CardsComponent resources={resources} defaultImage={defaultImage} onResourceUpdated={handleResourceUpdated} />
           )}
 
           {!loading && !fetching.current && nonPlaceholderResources.length === 0 && (
