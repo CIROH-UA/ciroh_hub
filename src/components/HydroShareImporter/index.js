@@ -375,7 +375,7 @@ async function getCommunityResources(
     };
   } catch (error) {
     console.error('Community resource fetch failed:', error);
-    return {};
+    throw error;
   }
 }
 
@@ -558,7 +558,7 @@ async function fetchRawCuratedResources(curated_parent_id) {
     return curatedList;
   } catch (err) {
     console.error("Error fetching curated resources:", err);
-    return [];
+    throw err;
   }
 };
 
