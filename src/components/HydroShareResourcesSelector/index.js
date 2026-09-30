@@ -243,6 +243,7 @@ export default function HydroShareResourcesSelector({
               thumbnail_url: customMetadata?.thumbnail_url || "",
               page_url: customMetadata?.page_url || "",
               docs_url: customMetadata?.docs_url || "",
+              pres_path: customMetadata?.pres_path || "",
               embed_url: embedUrl,
             };
 

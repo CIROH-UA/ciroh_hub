@@ -724,6 +724,59 @@ async function updateResourceScimeta(resourceId, authToken, { title, authors, de
   }
 }
 
+/**
+ * Update a resource's custom (extended) metadata — the key/value fields such as
+ * page_url, docs_url, thumbnail_url, and pres_path.
+ *
+ * The scimeta/custom endpoint only supports GET and POST (no PUT), and POST
+ * REPLACES the entire custom metadata set. So this reads the existing metadata
+ * first and merges the provided fields on top before POSTing — otherwise keys
+ * we're not changing would be wiped. Only the keys you pass are changed; pass
+ * an empty string to blank a key.
+ *
+ * Throws if the existing metadata can't be read, since POSTing without it would
+ * destroy the resource's other custom fields.
+ *
+ * @param {string} resourceId The id of the resource to update
+ * @param {string} authToken HydroShare OAuth bearer token (must have edit rights)
+ * @param {Object} fields Custom metadata key/values to set (e.g. { page_url, docs_url, thumbnail_url, pres_path })
+ * @returns {Promise<void>} Resolves when the update succeeds; throws otherwise
+ */
+async function updateResourceCustomMetadata(resourceId, authToken, fields = {}) {
+  const updateUrl = `https://www.hydroshare.org/hsapi/resource/${resourceId}/scimeta/custom/`;
+
+  // POST replaces the whole custom metadata set, so read the existing fields and
+  // merge our changes on top. Let a read failure throw — POSTing partial data
+  // would wipe the keys we didn't include.
+  const existing = await fetchResourceCustomMetadata(resourceId) || {};
+  const merged = { ...existing, ...fields };
+
+  try {
+    // POST is the update mechanism for custom metadata (there is no PUT)
+    const response = await fetch(updateUrl, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${authToken}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(merged),
+    });
+
+    // Check if the response indicates a successful update
+    if (!response.ok)
+    {
+      throw new Error(`Error updating custom metadata for resource ${resourceId} (status: ${response.status})`);
+    }
+
+    // Success — this endpoint returns an empty body, so there's nothing to return
+
+  } catch (error) {
+    console.error(`Error updating custom metadata for resource ${resourceId}:`, error);
+    throw error;
+  }
+}
+
+
 export {
   getCuratedIds, 
   fetchResource, 
@@ -739,5 +792,6 @@ export {
   convertAuthorToLastFirst,
   fetchResourcesFromCollection,
   fetchResourceImageUrls,
-  updateResourceScimeta
+  updateResourceScimeta,
+  updateResourceCustomMetadata
 };

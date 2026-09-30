@@ -6,7 +6,7 @@ import { LuLayers3, LuPencil } from 'react-icons/lu';
 import { HiOutlineGlobeAlt, HiOutlineUserGroup } from 'react-icons/hi';
 import styles from './styles.module.css';
 import { isPlaceholder, splitAuthors, StatTag, ActionLink, ActionButton } from './shared';
-import { updateResourceScimeta } from '@site/src/components/HydroShareImporter';
+import { updateResourceScimeta, updateResourceCustomMetadata } from '@site/src/components/HydroShareImporter';
 import useHydroShareAuth from '@site/src/components/HydroShareAuth/useHydroShareAuth';
 
 
@@ -23,9 +23,11 @@ export function ResourceCard({ resource, defaultImage, onResourceUpdated }) {
         ? resource.keywords
         : (Array.isArray(resource?.subjects) ? resource.subjects : []);
 
-    const thumbnailUrl = resource?.thumbnail_url || defaultImage;
+    const thumbnailUrl = resource?.thumbnail_url || defaultImage; // For display: falls back to the default image
+    const rawThumbnailUrl = resource?.thumbnail_url ?? '';        // For editing: the resource's actual value, no fallback
     const pageUrl = resource?.page_url;
     const docsUrl = resource?.docs_url;
+    const presPath = resource?.pres_path;
     const resourceUrl = resource?.resource_url;
     const embedUrl = resource?.embed_url;
     const resourceType = resource?.resource_type;
@@ -37,6 +39,38 @@ export function ResourceCard({ resource, defaultImage, onResourceUpdated }) {
     const [editTitle, setEditTitle] = useState(title);
     const [editAuthorsText, setEditAuthorsText] = useState(authors.join(', ')); // Authors are edited as a single comma-separated string
     const [editDescription, setEditDescription] = useState(description);
+    const [editDocsUrl, setEditDocsUrl] = useState(docsUrl ?? '');
+    const [editPageUrl, setEditPageUrl] = useState(pageUrl ?? '');
+    const [editPresPath, setEditPresPath] = useState(presPath ?? '');
+    const [editThumbnailUrl, setEditThumbnailUrl] = useState(rawThumbnailUrl);
+
+    // Get the keyword type of the resource (app, course, presentation, dataset, notebook, event, or group)
+    let keywordType = '';
+
+    const tags = {
+        nwm_portal_app: 'app',
+        ciroh_hub_app: 'app',
+        nwm_portal_module: 'course',
+        ciroh_hub_module: 'course',
+        ciroh_portal_presentation: 'presentation',
+        ciroh_hub_presentation: 'presentation',
+        ciroh_portal_data: 'dataset',
+        ciroh_hub_data: 'dataset',
+        ciroh_hub_notebook: 'notebook',
+        ciroh_hub_event: 'event',
+        ciroh_hub_group: 'group',
+    }
+
+    const normalizedKeywords = keywords
+        .map((k) => (typeof k === 'string' ? k.trim().toLowerCase() : ''))
+        .filter(Boolean);
+
+    for (const tag of Object.keys(tags)) {
+        if (normalizedKeywords.includes(tag.toLowerCase())) {
+            keywordType = tags[tag];
+            break;
+        }
+    }
 
     useEffect(() => {
         if (!showEmbed || !embedUrl) {
@@ -90,6 +124,10 @@ export function ResourceCard({ resource, defaultImage, onResourceUpdated }) {
         setEditTitle(title);
         setEditAuthorsText(authors.join(', '));
         setEditDescription(description);
+        setEditDocsUrl(docsUrl ?? '');
+        setEditPageUrl(pageUrl ?? '');
+        setEditPresPath(presPath ?? '');
+        setEditThumbnailUrl(rawThumbnailUrl);
         setIsEditing(true);
     }
 
@@ -107,12 +145,13 @@ export function ResourceCard({ resource, defaultImage, onResourceUpdated }) {
     async function handleSave(e) {
         e.preventDefault();
 
-        const changes = {};         // The changed fields to send to updateResourceScimeta
-        const displayPatch = {};    // The shape used to update the card in place
+        const attributeChanges = {};    // The changed fields to send to updateResourceScimeta
+        const metadataChanges = {};     // The changed fields to send to updateResourceCustomMetadata
+        const displayPatch = {};        // The shape used to update the card in place
 
         // Add title if it has changed
         if (editTitle.trim() !== title) {
-            changes.title = editTitle.trim();
+            attributeChanges.title = editTitle.trim();
             displayPatch.title = editTitle.trim();
         }
 
@@ -120,7 +159,7 @@ export function ResourceCard({ resource, defaultImage, onResourceUpdated }) {
         if (editAuthorsText.trim() !== authors.join(', ')) {
             // Split the edited authors text into an array of individual author names
             const authorNames = editAuthorsText.split(',').map(a => a.trim()).filter(Boolean);
-            changes.authors = authorNames;
+            attributeChanges.authors = authorNames;
 
             // Join the author names with the 🖊 separator for display purposes
             displayPatch.authors = authorNames.join(' 🖊 ');
@@ -128,19 +167,51 @@ export function ResourceCard({ resource, defaultImage, onResourceUpdated }) {
 
         // Add description if it has changed (HydroShare's abstract)
         if (editDescription.trim() !== description) {
-            changes.description = editDescription.trim();
+            attributeChanges.description = editDescription.trim();
             displayPatch.description = editDescription.trim();
         }
 
+        // Add page_url metadata if it has changed
+        if (editPageUrl != null && editPageUrl.trim() !== (pageUrl ?? '')) {
+            metadataChanges.page_url = editPageUrl.trim();
+            displayPatch.page_url = editPageUrl.trim();
+        }
+
+        // Add docs_url metadata if it has changed
+        if (editDocsUrl != null && editDocsUrl.trim() !== (docsUrl ?? '')) {
+            metadataChanges.docs_url = editDocsUrl.trim();
+            displayPatch.docs_url = editDocsUrl.trim();
+        }
+
+        // Add thumbnail_url metadata if it has changed (compare against the raw
+        // value, not thumbnailUrl, which includes the display fallback)
+        if (editThumbnailUrl != null && editThumbnailUrl.trim() !== rawThumbnailUrl) {
+            metadataChanges.thumbnail_url = editThumbnailUrl.trim();
+            displayPatch.thumbnail_url = editThumbnailUrl.trim();
+        }
+
+        // Add pres_path metadata if it has changed
+        if (editPresPath != null && editPresPath.trim() !== (presPath ?? '')) {
+            metadataChanges.pres_path = editPresPath.trim();
+            displayPatch.pres_path = editPresPath.trim();
+        }
+
         // Nothing changed — just leave edit mode without a request
-        if (Object.keys(changes).length === 0) {
+        if (Object.keys(attributeChanges).length === 0 && Object.keys(metadataChanges).length === 0) {
             setIsEditing(false);
             return;
         }
 
         try {
-            // Send the changes to HydroShare to update the resource's science metadata
-            await updateResourceScimeta(resource?.resource_id, token, changes);
+            // Send the science metadata changes to HydroShare to update the resource's science metadata
+            if (Object.keys(attributeChanges).length > 0) {
+                await updateResourceScimeta(resource?.resource_id, token, attributeChanges);
+            }
+
+            // Send the custom metadata changes to HydroShare to update the resource's custom metadata
+            if (Object.keys(metadataChanges).length > 0) {
+                await updateResourceCustomMetadata(resource?.resource_id, token, metadataChanges);
+            }
 
             // Update the card in place through the parent so the new values
             // persist in the list; the card re-renders from the updated prop
@@ -200,6 +271,103 @@ export function ResourceCard({ resource, defaultImage, onResourceUpdated }) {
                                 onChange={(e) => setEditDescription(e.target.value)}
                             />
                         </label>
+
+                        {/* Action Button Fields */}
+                        {keywordType === 'app' || keywordType === 'dataset' ? (
+                            <>
+                            {/* Documentation URL Field */}
+                            <label className={styles.editField}>
+                                <span className={styles.editLabel}>Documentation URL</span>
+                                <input
+                                    type="text"
+                                    className={styles.editInput}
+                                    value={editDocsUrl}
+                                    onChange={(e) => setEditDocsUrl(e.target.value)}
+                                />
+                            </label>
+
+                            {/* Page URL Field */}
+                            <label className={styles.editField}>
+                                <span className={styles.editLabel}>Page URL</span>
+                                <input
+                                    type="text"
+                                    className={styles.editInput}
+                                    value={editPageUrl}
+                                    onChange={(e) => setEditPageUrl(e.target.value)}
+                                />
+                            </label>
+
+                            {/* Thumbnail URL Field */}
+                            <label className={styles.editField}>
+                                <span className={styles.editLabel}>Thumbnail URL</span>
+                                <input
+                                    type="text"
+                                    className={styles.editInput}
+                                    value={editThumbnailUrl}
+                                    onChange={(e) => setEditThumbnailUrl(e.target.value)}
+                                />
+                            </label>
+                            </>
+                        ) : keywordType === 'course' || keywordType === 'notebook' ? (
+                            <>
+                            {/* Page URL Field */}
+                            <label className={styles.editField}>
+                                <span className={styles.editLabel}>Page URL</span>
+                                <input
+                                    type="text"
+                                    className={styles.editInput}
+                                    value={editPageUrl}
+                                    onChange={(e) => setEditPageUrl(e.target.value)}
+                                />
+                            </label>
+                            
+                            {/* Thumbnail URL Field */}
+                            <label className={styles.editField}>
+                                <span className={styles.editLabel}>Thumbnail URL</span>
+                                <input
+                                    type="text"
+                                    className={styles.editInput}
+                                    value={editThumbnailUrl}
+                                    onChange={(e) => setEditThumbnailUrl(e.target.value)}
+                                />
+                            </label>
+                            </>
+                        ) : keywordType === 'presentation' && (
+                            <>
+                            {/* Page URL Field */}
+                            <label className={styles.editField}>
+                                <span className={styles.editLabel}>Page URL</span>
+                                <input
+                                    type="text"
+                                    className={styles.editInput}
+                                    value={editPageUrl}
+                                    onChange={(e) => setEditPageUrl(e.target.value)}
+                                />
+                            </label>
+
+                            {/* Presentation Path Field */}
+                            <label className={styles.editField}>
+                                <span className={styles.editLabel}>Presentation Path</span>
+                                <input
+                                    type="text"
+                                    className={styles.editInput}
+                                    value={editPresPath}
+                                    onChange={(e) => setEditPresPath(e.target.value)}
+                                />
+                            </label>
+
+                            {/* Thumbnail URL Field */}
+                            <label className={styles.editField}>
+                                <span className={styles.editLabel}>Thumbnail URL</span>
+                                <input
+                                    type="text"
+                                    className={styles.editInput}
+                                    value={editThumbnailUrl}
+                                    onChange={(e) => setEditThumbnailUrl(e.target.value)}
+                                />
+                            </label>
+                            </>
+                        )}
 
                         {/* Cancel and Save Buttons */}
                         <div className={styles.editActions}>
