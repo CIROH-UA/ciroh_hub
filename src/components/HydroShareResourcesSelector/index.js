@@ -147,7 +147,7 @@ export default function HydroShareResourcesSelector({
         if (keyword.includes('data')) {
           // Fetch resources using the community endpoint which handles both group and keyword resources, along with pagination tokens
           communityResponse = await getCommunityResources(keyword, "4", filterSearch, ascending, sortType, undefined, groupPageNumberRef.current, communityTokenRef.current, PAGE_SIZE);
-          resourceList = communityResponse.resources || [];
+          resourceList = communityResponse?.resources || [];
 
           // Advance pagination state for the next fetch.
           groupPageNumberRef.current = (communityResponse.groupResourcesPageData?.pageNumber || 1) + 1;
@@ -336,10 +336,6 @@ export default function HydroShareResourcesSelector({
     onResultsChange,
   ]);
 
-  if (error) {
-    return <p style={{ color: "red" }}>Error: {error}</p>;
-  }
-
   /* infinite scroll */
   useEffect(() => {
     const onScroll = () => {
@@ -375,6 +371,21 @@ export default function HydroShareResourcesSelector({
 
 
   /* ---------------- render ---------------- */
+  if (error) {
+    return (
+      <section className={clsx(styles.cardsContainer, 'tw-relative tw-z-20 tw-w-full tw-py-10')}>
+        <div className="tw-mx-auto tw-max-w-7xl tw-px-4 sm:tw-px-6 lg:tw-px-8 tw-py-10">
+            <p className="tw-mt-10 tw-text-center tw-text-lg tw-text-slate-600 dark:tw-text-slate-300">
+              Failed to load HydroShare content. HydroShare may be undergoing maintenence, or your browser may be blocking resources from <a href="https://hydroshare.org">hydroshare.org</a>. Please try again later.
+            </p>
+            <p className="tw-mt-10 tw-text-center tw-text-md tw-text-slate-500 dark:tw-text-slate-400">
+              Error details: {error}
+            </p>
+        </div>
+      </section>
+    );
+  }
+
   if (variant === 'modern') {
     return (
       <section className={clsx(styles.cardsContainer, 'tw-relative tw-z-20 tw-w-full tw-py-10')}>
