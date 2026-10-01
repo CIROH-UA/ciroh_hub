@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { LiaExternalLinkSquareAltSolid } from 'react-icons/lia';
-import { FaGraduationCap } from 'react-icons/fa';
+import { FaGraduationCap, FaSpinner } from 'react-icons/fa';
 import { IoTvOutline } from 'react-icons/io5';
 import { LuLayers3, LuPencil } from 'react-icons/lu';
 import { HiOutlineGlobeAlt, HiOutlineUserGroup } from 'react-icons/hi';
@@ -36,6 +36,7 @@ export function ResourceCard({ resource, defaultImage, onResourceUpdated }) {
 
     // Stores the user's edits for the resource fields until either saved or canceled
     const [isEditing, setIsEditing] = useState(false);
+    const [saving, setSaving] = useState(false);
     const [editTitle, setEditTitle] = useState(title);
     const [editAuthorsText, setEditAuthorsText] = useState(authors.join(', ')); // Authors are edited as a single comma-separated string
     const [editDescription, setEditDescription] = useState(description);
@@ -202,6 +203,9 @@ export function ResourceCard({ resource, defaultImage, onResourceUpdated }) {
             return;
         }
 
+        // Show visual feedback to user that the save operation is in progress
+        setSaving(true);
+
         try {
             // Send the science metadata changes to HydroShare to update the resource's science metadata
             if (Object.keys(attributeChanges).length > 0) {
@@ -225,6 +229,10 @@ export function ResourceCard({ resource, defaultImage, onResourceUpdated }) {
         catch (error) {
             console.error('Error updating resource:', error);
             // Keep the form open so the user can retry; don't close on failure
+        }
+        finally {
+            // Hide the visual feedback after the save operation is complete
+            setSaving(false);
         }
     }
 
@@ -371,11 +379,19 @@ export function ResourceCard({ resource, defaultImage, onResourceUpdated }) {
 
                         {/* Cancel and Save Buttons */}
                         <div className={styles.editActions}>
-                            <button type="button" className={styles.editCancel} onClick={cancelEditing}>
+                            {/* Cancel Button */}
+                            <button type="button" className={styles.editCancel} onClick={cancelEditing} disabled={saving}>
                                 Cancel
                             </button>
-                            <button type="submit" className={styles.editSave}>
-                                Save
+
+                            {/* Save Button */}
+                            <button type="submit" className={styles.editSave} disabled={saving}>
+                                {saving ? (
+                                    <>
+                                        <FaSpinner className={styles.spinner} />
+                                        Saving…
+                                    </>
+                                ) : 'Save'}
                             </button>
                         </div>
                     </form>

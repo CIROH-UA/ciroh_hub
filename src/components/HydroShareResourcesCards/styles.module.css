@@ -86,6 +86,9 @@ textarea.editInput {
 
 .editSave,
 .editCancel {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
     padding: 0.4rem 0.9rem;
     font-family: inherit;
     font-size: 0.85rem;
@@ -94,6 +97,27 @@ textarea.editInput {
     cursor: pointer;
     border: 1px solid transparent;
     transition: filter 0.15s ease, background-color 0.15s ease;
+}
+
+.editSave:disabled,
+.editCancel:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.spinner {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* Under reduced motion the site disables all animations, so a static spinner
+   would just sit frozen — hide it and let the "Saving…" text carry the feedback */
+:global([data-reduce-motion="true"]) .spinner {
+    display: none;
 }
 
 .editSave {
