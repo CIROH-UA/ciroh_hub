@@ -9,6 +9,7 @@ import { HydroShareAuthContext } from './index';
  *   verifying: boolean,
  *   loginInProgress: boolean,
  *   returnedFromLogin: boolean,
+ *   userInfo: ?Object,
  *   logIn: function,
  *   logOut: function,
  *   clearReturnedFromLogin: function,
