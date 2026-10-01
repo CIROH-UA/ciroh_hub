@@ -10,7 +10,7 @@ import { updateResourceScimeta, updateResourceCustomMetadata } from '@site/src/c
 import useHydroShareAuth from '@site/src/components/HydroShareAuth/useHydroShareAuth';
 
 
-export function ResourceCard({ resource, defaultImage, onResourceUpdated }) {
+export function ResourceCard({ resource, defaultImage, onResourceUpdated, editableResourceIds }) {
     const placeholder = isPlaceholder(resource);
     const [showEmbed, setShowEmbed] = useState(false);
     const [embedSrc, setEmbedSrc] = useState(null);
@@ -444,7 +444,7 @@ export function ResourceCard({ resource, defaultImage, onResourceUpdated }) {
                             </div>
 
                             {/* Edit Button */}
-                            {authenticated && (
+                            {authenticated && editableResourceIds?.has(resource?.resource_id) && (
                                 <div className={styles.editButton} onClick={enableEditing}>
                                     <LuPencil size={16} />
                                 </div>
@@ -555,7 +555,7 @@ export function ResourceCard({ resource, defaultImage, onResourceUpdated }) {
     );
 }
 
-export default function HydroShareResourcesCards({ resources, defaultImage, onResourceUpdated }) {
+export default function HydroShareResourcesCards({ resources, defaultImage, onResourceUpdated, editableResourceIds }) {
     return (
         <div className="tw-grid tw-grid-cols-1 lg:tw-grid-cols-2 2xl:tw-grid-cols-3 tw-gap-6">
             {resources.map(resource => (
@@ -564,6 +564,7 @@ export default function HydroShareResourcesCards({ resources, defaultImage, onRe
                     resource={resource}
                     defaultImage={defaultImage}
                     onResourceUpdated={onResourceUpdated}
+                    editableResourceIds={editableResourceIds}
                 />
             ))}
         </div>

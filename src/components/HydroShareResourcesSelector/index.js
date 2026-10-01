@@ -5,7 +5,8 @@ import styles from "./styles.module.css";
 import HydroShareResourcesTiles from "@site/src/components/HydroShareResourcesTiles";
 import HydroShareResourcesRows from "@site/src/components/HydroShareResourcesRows";
 import HydroShareResourcesCards from "@site/src/components/HydroShareResourcesCards";
-import { fetchResourcesBySearch, fetchResourceCustomMetadata, getCommunityResources, fetchResourcesFromCollection } from "@site/src/components/HydroShareImporter";
+import { fetchResourcesBySearch, fetchResourceCustomMetadata, getCommunityResources, fetchResourcesFromCollection, fetchResourcesOwnedByUser } from "@site/src/components/HydroShareImporter";
+import useHydroShareAuth from "@site/src/components/HydroShareAuth/useHydroShareAuth";
 import {
   HiOutlineSortDescending,
   HiOutlineSortAscending,
@@ -332,6 +333,33 @@ export default function HydroShareResourcesSelector({
     );
   }, []);
 
+  // Fetch the set of resource ids the signed-in user can edit, so cards only
+  // show the edit button for resources they actually own. Runs once per
+  // sign-in (null while loading / signed out = no edit buttons).
+  const { authenticated, userInfo, token } = useHydroShareAuth();
+  const [editableResourceIds, setEditableResourceIds] = useState(null);
+  useEffect(() => {
+    // If the user is not authenticated or does not have a username, clear the editable resource IDs and exit early.
+    if (!authenticated || !userInfo?.username) {
+      setEditableResourceIds(null);
+      return;
+    }
+
+    // Fetch the list of resources owned by the user to determine which ones are editable.
+    let cancelled = false;
+    fetchResourcesOwnedByUser(userInfo.username, token, { editableOnly: true })
+      .then(owned => {
+        if (!cancelled) setEditableResourceIds(new Set(owned.map(r => r.resource_id)));
+      })
+      .catch(err => {
+        if (!cancelled) {
+          console.error('Failed to load editable resources:', err);
+          setEditableResourceIds(null);
+        }
+      });
+    return () => { cancelled = true; };
+  }, [authenticated, userInfo?.username, token]);
+
   useEffect(() => {
     if (typeof onResultsChange !== 'function') return;
     onResultsChange(nonPlaceholderResources, {
@@ -532,7 +560,7 @@ export default function HydroShareResourcesSelector({
           {view === 'grid' ? (
             <HydroShareResourcesTiles resources={resources} defaultImage={defaultImage} />
           ) : (
-            <CardsComponent resources={resources} defaultImage={defaultImage} onResourceUpdated={handleResourceUpdated} />
+            <CardsComponent resources={resources} defaultImage={defaultImage} onResourceUpdated={handleResourceUpdated} editableResourceIds={editableResourceIds} />
           )}
 
           {!loading && !fetching.current && nonPlaceholderResources.length === 0 && (
