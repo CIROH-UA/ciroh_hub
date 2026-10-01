@@ -776,10 +776,58 @@ async function updateResourceCustomMetadata(resourceId, authToken, fields = {}) 
   }
 }
 
+/**
+ * Fetch all resources owned by a given user, paging through the full result set.
+ *
+ * Requires an auth token to see the user's non-public resources (and to use
+ * edit_permission). Returns the raw hsapi resource list shape — note these
+ * objects carry `creator` as a name string and include NO subjects/keywords,
+ * unlike the discovery-atlas results.
+ *
+ * @param {string} user The owner to filter by (HydroShare username or email)
+ * @param {string} authToken HydroShare OAuth bearer token
+ * @param {Object} [options]
+ * @param {boolean} [options.editableOnly=false] Only include resources the user can edit
+ * @param {number} [options.pageSize=100] Results requested per page
+ * @returns {Promise<Array>} All matching resources (hsapi list objects)
+ */
+async function fetchResourcesOwnedByUser(user, authToken, { editableOnly = false, pageSize = 100 } = {}) {
+  // Construct the query parameters for the API request.
+  const params = new URLSearchParams({ owner: user, count: String(pageSize) });
+  if (editableOnly) {
+    params.set('edit_permission', 'true');
+  }
+
+  // Construct the initial URL for the API request using the query parameters.
+  let url = `https://www.hydroshare.org/hsapi/resource/?${params.toString()}`;
+  const headers = { Authorization: `Bearer ${authToken}` };
+  const resources = [];
+
+  // Page through the results by following the `next` cursor until it's null.
+  // HydroShare returns `next` as a full URL that preserves the query params.
+  while (url) {
+    // Fetch the current page of resources from the API.
+    const response = await fetch(url, { headers });
+
+    // Check for failure
+    if (!response.ok) {
+      throw new Error(`Error fetching resources owned by ${user} (status: ${response.status})`);
+    }
+
+    // Parse the JSON response and extract the list of resources and the next page URL.
+    const data = await response.json();
+    resources.push(...(data.results || []));
+    url = data.next || null;
+  }
+
+  // Return the accumulated list of resources after paging through all results.
+  return resources;
+}
+
 
 export {
-  getCuratedIds, 
-  fetchResource, 
+  getCuratedIds,
+  fetchResource,
   fetchResourcesByGroup, 
   fetchResourcesByKeyword, 
   fetchResourcesByKeywordsIntersection,
@@ -793,5 +841,6 @@ export {
   fetchResourcesFromCollection,
   fetchResourceImageUrls,
   updateResourceScimeta,
-  updateResourceCustomMetadata
+  updateResourceCustomMetadata,
+  fetchResourcesOwnedByUser
 };
