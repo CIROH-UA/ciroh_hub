@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { LiaExternalLinkSquareAltSolid } from 'react-icons/lia';
 import { FaGraduationCap, FaSpinner } from 'react-icons/fa';
 import { IoTvOutline } from 'react-icons/io5';
@@ -10,7 +10,7 @@ import { updateResourceScimeta, updateResourceCustomMetadata } from '@site/src/c
 import useHydroShareAuth from '@site/src/components/HydroShareAuth/useHydroShareAuth';
 
 
-export function ResourceCard({ resource, defaultImage, onResourceUpdated, editableResourceIds }) {
+export function ResourceCard({ resource, defaultImage, onResourceUpdated, editableResourceIds, onEditingChange }) {
     const placeholder = isPlaceholder(resource);
     const [showEmbed, setShowEmbed] = useState(false);
     const [embedSrc, setEmbedSrc] = useState(null);
@@ -116,6 +116,13 @@ export function ResourceCard({ resource, defaultImage, onResourceUpdated, editab
         window.addEventListener('keydown', onKeyDown);
         return () => window.removeEventListener('keydown', onKeyDown);
     }, [showEmbed]);
+
+    // Let the grid know when this card is being edited so it can stop sibling cards in the same row from stretching to the taller edit form
+    useEffect(() => {
+        if (!isEditing) return;
+        onEditingChange?.(true);
+        return () => onEditingChange?.(false);
+    }, [isEditing, onEditingChange]);
 
     /**
      * Puts the component into edit mode, allowing the user to modify the resource fields.
@@ -240,7 +247,7 @@ export function ResourceCard({ resource, defaultImage, onResourceUpdated, editab
         <>
             <article
                 id={resource?.resource_id}
-                className="tw-group tw-flex tw-h-full tw-flex-col tw-overflow-hidden tw-rounded-xl tw-border-2 tw-border-slate-400 dark:tw-border-slate-500 tw-bg-slate-100 dark:tw-bg-slate-900 tw-shadow-md hover:tw-shadow-xl hover:tw-border-cyan-500 tw-transition"
+                className="tw-group tw-flex tw-flex-col tw-overflow-hidden tw-rounded-xl tw-border-2 tw-border-slate-400 dark:tw-border-slate-500 tw-bg-slate-100 dark:tw-bg-slate-900 tw-shadow-md hover:tw-shadow-xl hover:tw-border-cyan-500 tw-transition"
             >
             <div className="tw-flex tw-flex-1 tw-flex-col tw-gap-4 tw-p-5">
                 {isEditing ? (
@@ -556,8 +563,16 @@ export function ResourceCard({ resource, defaultImage, onResourceUpdated, editab
 }
 
 export default function HydroShareResourcesCards({ resources, defaultImage, onResourceUpdated, editableResourceIds }) {
+    // Count how many cards are currently being edited. While any card is in edit
+    // mode, align grid items to the top so a tall edit form doesn't stretch the
+    // other cards in its row; otherwise keep the default stretch for equal heights.
+    const [editingCount, setEditingCount] = useState(0);
+    const handleEditingChange = useCallback((isEditing) => {
+        setEditingCount(count => count + (isEditing ? 1 : -1));
+    }, []);
+
     return (
-        <div className="tw-grid tw-grid-cols-1 lg:tw-grid-cols-2 2xl:tw-grid-cols-3 tw-gap-6">
+        <div className={`tw-grid tw-grid-cols-1 lg:tw-grid-cols-2 2xl:tw-grid-cols-3 tw-gap-6 ${editingCount > 0 ? 'tw-items-start' : ''}`}>
             {resources.map(resource => (
                 <ResourceCard
                     key={resource.resource_id}
@@ -565,6 +580,7 @@ export default function HydroShareResourcesCards({ resources, defaultImage, onRe
                     defaultImage={defaultImage}
                     onResourceUpdated={onResourceUpdated}
                     editableResourceIds={editableResourceIds}
+                    onEditingChange={handleEditingChange}
                 />
             ))}
         </div>
