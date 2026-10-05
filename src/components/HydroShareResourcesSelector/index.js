@@ -93,6 +93,7 @@ export default function HydroShareResourcesSelector({
   const [sortDirection,  setSortDirection]  = useState('desc');
   const [ecosystems, setEcosystems] = useState([]);
   const [ecosystem, setEcosystem] = useState('');
+  const [editableOnly, setEditableOnly] = useState(false);  // Whether to only show resources that the user can edit
 
 
   const fetchResources = useCallback(
@@ -360,6 +361,20 @@ export default function HydroShareResourcesSelector({
     return () => { cancelled = true; };
   }, [authenticated, userInfo?.username, token]);
 
+  // When "only editable" is checked, filter the list down to resources the user
+  // can edit. This is a client-side filter over what's already loaded. With infinite scroll it only reflects fetched pages
+  const displayedResources = useMemo(() => {
+    if (!editableOnly || !editableResourceIds) return resources;
+    return resources.filter(r => editableResourceIds.has(r.resource_id));
+  }, [resources, editableOnly, editableResourceIds]);
+
+  const displayedNonPlaceholderCount = useMemo(
+    () => displayedResources.filter(
+      r => !String(r.resource_id || '').startsWith('placeholder-')
+    ).length,
+    [displayedResources]
+  );
+
   useEffect(() => {
     if (typeof onResultsChange !== 'function') return;
     onResultsChange(nonPlaceholderResources, {
@@ -429,12 +444,13 @@ export default function HydroShareResourcesSelector({
       <section className={clsx(styles.cardsContainer, 'tw-relative tw-z-20 tw-w-full tw-py-10')}>
         <div className="tw-mx-auto tw-max-w-7xl tw-px-4 sm:tw-px-6 lg:tw-px-8">
           <div className="tw-flex tw-flex-col lg:tw-flex-row lg:tw-items-center lg:tw-justify-between tw-gap-4 tw-mb-6">
+            {/* Result Count / Loading Indicator */}
             <div className="tw-text-sm sm:tw-text-base tw-text-slate-600 dark:tw-text-slate-300">
               {loading || fetching.current ? "Fetching " + resultLabel + "..." : (
                 <>
                   Showing{' '}
                   <strong className="tw-font-semibold tw-text-slate-900 dark:tw-text-white">
-                    {nonPlaceholderResources.length}
+                    {displayedNonPlaceholderCount}
                   </strong>{' '}
                   {resultLabel}
                 </>
@@ -442,35 +458,51 @@ export default function HydroShareResourcesSelector({
             </div>
 
             <form
-              className="tw-flex tw-flex-col md:tw-flex-row md:tw-items-end tw-gap-3 tw-w-full lg:tw-w-auto"
+              className="tw-flex tw-flex-col md:tw-flex-row md:tw-items-start tw-gap-3 tw-w-full lg:tw-w-auto"
               onSubmit={e => { e.preventDefault(); commitSearch(searchInput); }}
             >
-              {/* Search Input */}
-              <label className="tw-flex tw-flex-col tw-w-full md:tw-w-[28rem]">
-                <span className="tw-mb-1 tw-text-sm tw-font-semibold tw-text-slate-600 dark:tw-text-slate-300">
-                  Search
-                </span>
-                <div className="tw-relative">
-                  <span className="tw-pointer-events-none tw-absolute tw-left-3 tw-inset-y-0 tw-flex tw-items-center tw-text-slate-400 dark:tw-text-slate-500">
-                    <HiOutlineSearch size={18} />
+              {/* Search Input and Editable Resources Filter */}
+              <div className="tw-flex tw-flex-col tw-w-full md:tw-w-[28rem] tw-gap-2">
+                {/* Search Input */}
+                <label className="tw-flex tw-flex-col">
+                  <span className="tw-mb-1 tw-text-sm tw-font-semibold tw-text-slate-600 dark:tw-text-slate-300">
+                    Search
                   </span>
-                  <input
-                    type="text"
-                    placeholder="Search by Title, Author, Description..."
-                    className="tw-w-full tw-rounded-lg tw-border tw-border-slate-200/80 dark:tw-border-slate-700/80 tw-bg-white/80 dark:tw-bg-slate-900/50 tw-backdrop-blur tw-pl-10 tw-pr-3 tw-py-3 tw-text-sm tw-text-slate-900 dark:tw-text-white placeholder:tw-text-slate-400 dark:placeholder:tw-text-slate-500 focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-cyan-500/30"
-                    value={searchInput}
-                    onChange={e => setSearchInput(e.target.value)}
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter') {
-                        e.preventDefault();
-                        commitSearch(e.currentTarget.value);
-                      }
-                    }}
-                    onBlur={(e) => commitSearch(e.currentTarget.value)}
-                  />
-                </div>
-              </label>
-              
+                  <div className="tw-relative">
+                    <span className="tw-pointer-events-none tw-absolute tw-left-3 tw-inset-y-0 tw-flex tw-items-center tw-text-slate-400 dark:tw-text-slate-500">
+                      <HiOutlineSearch size={18} />
+                    </span>
+                    <input
+                      type="text"
+                      placeholder="Search by Title, Author, Description..."
+                      className="tw-w-full tw-rounded-lg tw-border tw-border-slate-200/80 dark:tw-border-slate-700/80 tw-bg-white/80 dark:tw-bg-slate-900/50 tw-backdrop-blur tw-pl-10 tw-pr-3 tw-py-3 tw-text-sm tw-text-slate-900 dark:tw-text-white placeholder:tw-text-slate-400 dark:placeholder:tw-text-slate-500 focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-cyan-500/30"
+                      value={searchInput}
+                      onChange={e => setSearchInput(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                          e.preventDefault();
+                          commitSearch(e.currentTarget.value);
+                        }
+                      }}
+                      onBlur={(e) => commitSearch(e.currentTarget.value)}
+                    />
+                  </div>
+                </label>
+
+                {/* Editable Resources Filter */}
+                {editableResourceIds && (
+                  <label className="tw-flex tw-items-center tw-gap-2 tw-text-sm tw-text-slate-600 dark:tw-text-slate-300 tw-cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={editableOnly}
+                      onChange={e => setEditableOnly(e.target.checked)}
+                      className={styles.filterCheckbox}
+                    />
+                    Show only editable resources
+                  </label>
+                )}
+              </div>
+
               {/* Group Selector */}
               <div className="tw-flex tw-flex-wrap tw-gap-2 tw-items-center">
                 <label className="tw-flex tw-flex-col">
@@ -488,7 +520,7 @@ export default function HydroShareResourcesSelector({
                   </select>
                 </label>
               </div>
-              
+
               {/* Sort Inputs */}
               <div className="tw-flex tw-flex-wrap tw-gap-2 tw-items-end">
                 {/* Sort By Selector */}
@@ -558,12 +590,12 @@ export default function HydroShareResourcesSelector({
           </div>
 
           {view === 'grid' ? (
-            <HydroShareResourcesTiles resources={resources} defaultImage={defaultImage} />
+            <HydroShareResourcesTiles resources={displayedResources} defaultImage={defaultImage} />
           ) : (
-            <CardsComponent resources={resources} defaultImage={defaultImage} onResourceUpdated={handleResourceUpdated} editableResourceIds={editableResourceIds} />
+            <CardsComponent resources={displayedResources} defaultImage={defaultImage} onResourceUpdated={handleResourceUpdated} editableResourceIds={editableResourceIds} />
           )}
 
-          {!loading && !fetching.current && nonPlaceholderResources.length === 0 && (
+          {!loading && !fetching.current && displayedNonPlaceholderCount === 0 && (
             <p className="tw-mt-10 tw-text-center tw-text-sm tw-text-slate-600 dark:tw-text-slate-300">
               No {resultLabel} Found
             </p>

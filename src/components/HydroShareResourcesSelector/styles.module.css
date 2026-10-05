@@ -161,4 +161,36 @@
       background-position: 200% 0;
     }
   }
-  
+
+/* Editable Resources Filter checkbox */
+.filterCheckbox {
+  appearance: none;
+  -webkit-appearance: none;
+  flex-shrink: 0;
+  width: 1rem;
+  height: 1rem;
+  margin: 0;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
+  background-color: #ffffff;
+  cursor: pointer;
+}
+
+:root[data-theme='dark'] .filterCheckbox {
+  background-color: #0A0B1D;
+  border-color: #334155;
+}
+
+.filterCheckbox:checked {
+  background-color: var(--ifm-color-primary);
+  border-color: var(--ifm-color-primary);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%23ffffff' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3.5 8.5l3 3 6-7'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 80%;
+}
+
+.filterCheckbox:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(6, 182, 212, 0.3);
+}
