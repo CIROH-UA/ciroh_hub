@@ -77,6 +77,31 @@ textarea.editInput {
     color: #fff;
 }
 
+.editFileInput {
+    margin-top: 0.4rem;
+    font-size: 0.8rem;
+    color: var(--ifm-color-emphasis-700);
+}
+
+.editFileInput::file-selector-button {
+    margin-right: 0.5rem;
+    padding: 0.25rem 0.6rem;
+    font-family: inherit;
+    font-size: 0.8rem;
+    color: #fff;
+    background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.editFileHint {
+    margin-top: 0.25rem;
+    font-size: 0.75rem;
+    color: var(--ifm-color-emphasis-600);
+    overflow-wrap: anywhere;
+}
+
 .editActions {
     display: flex;
     justify-content: flex-end;

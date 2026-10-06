@@ -6,7 +6,7 @@ import { LuLayers3, LuPencil } from 'react-icons/lu';
 import { HiOutlineGlobeAlt, HiOutlineUserGroup } from 'react-icons/hi';
 import styles from './styles.module.css';
 import { isPlaceholder, splitAuthors, StatTag, ActionLink, ActionButton } from './shared';
-import { updateResourceScimeta, updateResourceCustomMetadata } from '@site/src/components/HydroShareImporter';
+import { updateResourceScimeta, updateResourceCustomMetadata, uploadResourceFile } from '@site/src/components/HydroShareImporter';
 import useHydroShareAuth from '@site/src/components/HydroShareAuth/useHydroShareAuth';
 
 
@@ -44,6 +44,7 @@ export function ResourceCard({ resource, defaultImage, onResourceUpdated, editab
     const [editPageUrl, setEditPageUrl] = useState(pageUrl ?? '');
     const [editPresPath, setEditPresPath] = useState(presPath ?? '');
     const [editThumbnailUrl, setEditThumbnailUrl] = useState(rawThumbnailUrl);
+    const [editThumbnailFile, setEditThumbnailFile] = useState(null); // An image file to upload as the thumbnail, if the user picks one
 
     // Get the keyword type of the resource (app, course, presentation, dataset, notebook, event, or group)
     let keywordType = '';
@@ -136,6 +137,7 @@ export function ResourceCard({ resource, defaultImage, onResourceUpdated, editab
         setEditPageUrl(pageUrl ?? '');
         setEditPresPath(presPath ?? '');
         setEditThumbnailUrl(rawThumbnailUrl);
+        setEditThumbnailFile(null);
         setIsEditing(true);
     }
 
@@ -191,9 +193,8 @@ export function ResourceCard({ resource, defaultImage, onResourceUpdated, editab
             displayPatch.docs_url = editDocsUrl.trim();
         }
 
-        // Add thumbnail_url metadata if it has changed (compare against the raw
-        // value, not thumbnailUrl, which includes the display fallback)
-        if (editThumbnailUrl != null && editThumbnailUrl.trim() !== rawThumbnailUrl) {
+        // Add thumbnail_url metadata if it has changed and an image file has not been chosen
+        if (!editThumbnailFile && editThumbnailUrl != null && editThumbnailUrl.trim() !== rawThumbnailUrl) {
             metadataChanges.thumbnail_url = editThumbnailUrl.trim();
             displayPatch.thumbnail_url = editThumbnailUrl.trim();
         }
@@ -204,8 +205,8 @@ export function ResourceCard({ resource, defaultImage, onResourceUpdated, editab
             displayPatch.pres_path = editPresPath.trim();
         }
 
-        // Nothing changed — just leave edit mode without a request
-        if (Object.keys(attributeChanges).length === 0 && Object.keys(metadataChanges).length === 0) {
+        // Nothing changed, just leave edit mode without a request
+        if (Object.keys(attributeChanges).length === 0 && Object.keys(metadataChanges).length === 0 && !editThumbnailFile) {
             setIsEditing(false);
             return;
         }
@@ -214,6 +215,23 @@ export function ResourceCard({ resource, defaultImage, onResourceUpdated, editab
         setSaving(true);
 
         try {
+            // Upload a chosen thumbnail image to the resource and point thumbnail_url at it
+            if (editThumbnailFile) {
+                // Determine the file extension for the uploaded thumbnail
+                const ext = editThumbnailFile.name.includes('.') ? editThumbnailFile.name.split('.').pop() : 'img';
+
+                // Generate a unique name for the uploaded thumbnail
+                const uniqueName = `thumbnail_${crypto.randomUUID()}.${ext}`;
+                const namedFile = new File([editThumbnailFile], uniqueName, { type: editThumbnailFile.type });
+
+                // Upload the named file to HydroShare and get its public URL
+                const uploadedUrl = await uploadResourceFile(resource?.resource_id, token, namedFile);
+
+                // Update the metadata changes and display patch with the uploaded thumbnail URL
+                metadataChanges.thumbnail_url = uploadedUrl;
+                displayPatch.thumbnail_url = uploadedUrl;
+            }
+
             // Send the science metadata changes to HydroShare to update the resource's science metadata
             if (Object.keys(attributeChanges).length > 0) {
                 await updateResourceScimeta(resource?.resource_id, token, attributeChanges);
@@ -242,6 +260,33 @@ export function ResourceCard({ resource, defaultImage, onResourceUpdated, editab
             setSaving(false);
         }
     }
+
+    // Edit Thumbnail Inputs (File upload takes precedence over URL)
+    const thumbnailField = (
+        <label className={styles.editField}>
+            <span className={styles.editLabel}>Thumbnail</span>
+            {/* Thumbnail URL Text Input */}
+            <input
+                type="text"
+                className={styles.editInput}
+                placeholder="Image URL"
+                value={editThumbnailUrl}
+                onChange={(e) => setEditThumbnailUrl(e.target.value)}
+                disabled={Boolean(editThumbnailFile)}
+            />
+
+            {/* Thumbnail File Input */}
+            <input
+                type="file"
+                accept="image/*"
+                className={styles.editFileInput}
+                onChange={(e) => setEditThumbnailFile(e.target.files?.[0] || null)}
+            />
+            {editThumbnailFile && (
+                <span className={styles.editFileHint}>Will upload: {editThumbnailFile.name}</span>
+            )}
+        </label>
+    );
 
     return (
         <>
@@ -312,16 +357,8 @@ export function ResourceCard({ resource, defaultImage, onResourceUpdated, editab
                                 />
                             </label>
 
-                            {/* Thumbnail URL Field */}
-                            <label className={styles.editField}>
-                                <span className={styles.editLabel}>Thumbnail URL</span>
-                                <input
-                                    type="text"
-                                    className={styles.editInput}
-                                    value={editThumbnailUrl}
-                                    onChange={(e) => setEditThumbnailUrl(e.target.value)}
-                                />
-                            </label>
+                            {/* Thumbnail Field (URL or Image Upload) */}
+                            {thumbnailField}
                             </>
                         ) : keywordType === 'course' || keywordType === 'notebook' ? (
                             <>
@@ -336,16 +373,8 @@ export function ResourceCard({ resource, defaultImage, onResourceUpdated, editab
                                 />
                             </label>
                             
-                            {/* Thumbnail URL Field */}
-                            <label className={styles.editField}>
-                                <span className={styles.editLabel}>Thumbnail URL</span>
-                                <input
-                                    type="text"
-                                    className={styles.editInput}
-                                    value={editThumbnailUrl}
-                                    onChange={(e) => setEditThumbnailUrl(e.target.value)}
-                                />
-                            </label>
+                            {/* Thumbnail Field (URL or Image Upload) */}
+                            {thumbnailField}
                             </>
                         ) : keywordType === 'presentation' && (
                             <>
@@ -371,16 +400,8 @@ export function ResourceCard({ resource, defaultImage, onResourceUpdated, editab
                                 />
                             </label>
 
-                            {/* Thumbnail URL Field */}
-                            <label className={styles.editField}>
-                                <span className={styles.editLabel}>Thumbnail URL</span>
-                                <input
-                                    type="text"
-                                    className={styles.editInput}
-                                    value={editThumbnailUrl}
-                                    onChange={(e) => setEditThumbnailUrl(e.target.value)}
-                                />
-                            </label>
+                            {/* Thumbnail Field (URL or Image Upload) */}
+                            {thumbnailField}
                             </>
                         )}
 

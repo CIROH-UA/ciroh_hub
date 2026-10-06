@@ -824,6 +824,40 @@ async function fetchResourcesOwnedByUser(user, authToken, { editableOnly = false
   return resources;
 }
 
+/**
+ * Upload a file into a resource's content and return its public content URL.
+ *
+ * The file is added at the resource root. The returned URL only serves to
+ * anonymous viewers (e.g. as an <img src>) once the resource is public.
+ *
+ * @param {string} resourceId The id of the resource to upload into
+ * @param {string} authToken HydroShare OAuth bearer token (must have edit rights)
+ * @param {File} file The file to upload
+ * @returns {Promise<string>} The uploaded file's content URL
+ */
+async function uploadResourceFile(resourceId, authToken, file) {
+  const url = `https://www.hydroshare.org/hsapi/resource/${resourceId}/files/`;
+
+  // multipart/form-data with a single `file` field
+  const formData = new FormData();
+  formData.append('file', file);
+
+  // Send the file as multipart/form-data
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${authToken}` },
+    body: formData,
+  });
+
+  // Check for failure
+  if (!response.ok) {
+    throw new Error(`Error uploading file to resource ${resourceId} (status: ${response.status})`);
+  }
+
+  // Return the public content URL for the uploaded file
+  return `https://www.hydroshare.org/resource/${resourceId}/data/contents/${encodeURIComponent(file.name)}`;
+}
+
 
 export {
   getCuratedIds,
@@ -842,5 +876,6 @@ export {
   fetchResourceImageUrls,
   updateResourceScimeta,
   updateResourceCustomMetadata,
-  fetchResourcesOwnedByUser
+  fetchResourcesOwnedByUser,
+  uploadResourceFile
 };
