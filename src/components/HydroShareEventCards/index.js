@@ -1,15 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { LiaExternalLinkSquareAltSolid } from 'react-icons/lia';
 import { FaGraduationCap } from 'react-icons/fa';
-import { LuLayers3 } from 'react-icons/lu';
+import { LuLayers3, LuPencil } from 'react-icons/lu';
 import { HiOutlineGlobeAlt, HiOutlineUserGroup } from 'react-icons/hi';
 import { isPlaceholder, splitAuthors, StatTag, ActionLink } from '@site/src/components/HydroShareResourcesCards/shared';
+import ResourceEditForm from '@site/src/components/HydroShareResourcesCards/ResourceEditForm';
+import cardStyles from '@site/src/components/HydroShareResourcesCards/styles.module.css';
 import { fetchResourcesFromCollection, fetchResourceCustomMetadata, fetchResourceImageUrls, } from '@site/src/components/HydroShareImporter';
+import useHydroShareAuth from '@site/src/components/HydroShareAuth/useHydroShareAuth';
 import ModalEventPresentations from './ModalEventPresentations';
 
 /**
  * Load event presentations for a given collection.
- * @param {string} collectionId 
+ * @param {string} collectionId
  * @returns {Promise<Array>} List of presentation cards
  */
 async function loadEventPresentations(collectionId) {
@@ -66,9 +69,12 @@ async function loadEventPresentations(collectionId) {
  * A component to display an individual event card, which can be clicked to view associated presentations.
  * @param {*} resource The event resource to display
  * @param {*} defaultImage The default image to use if the resource doesn't have one
+ * @param {function} onResourceUpdated Called after a successful edit so the card updates in place
+ * @param {Set} editableResourceIds Ids of resources the signed-in user can edit
+ * @param {function} onEditingChange Notifies the grid when this card enters/leaves edit mode
  * @returns JSX element rendering the event card
  */
-export function EventCard({ resource, defaultImage }) {
+export function EventCard({ resource, defaultImage, onResourceUpdated, editableResourceIds, onEditingChange }) {
     const placeholder = isPlaceholder(resource);
 
     const title = resource?.title || 'Untitled';
@@ -82,6 +88,9 @@ export function EventCard({ resource, defaultImage }) {
     const resourceType = resource?.resource_type;
     const collectionId = resource?.resource_id;
 
+    const { authenticated } = useHydroShareAuth();
+
+    const [isEditing, setIsEditing] = useState(false);
     const [showModal, setShowModal] = useState(false);
     const [presentations, setPresentations] = useState(null);
     const [loadError, setLoadError] = useState(null);
@@ -116,6 +125,13 @@ export function EventCard({ resource, defaultImage }) {
         return () => window.removeEventListener('keydown', onKeyDown);
     }, [showModal]);
 
+    // Let the grid know when this card is being edited so it can stop sibling cards from stretching to the taller edit form
+    useEffect(() => {
+        if (!isEditing) return;
+        onEditingChange?.(true);
+        return () => onEditingChange?.(false);
+    }, [isEditing, onEditingChange]);
+
     // Open modal when title is clicked, but only if not a placeholder
     const openModal = (e) => {
         e.preventDefault();
@@ -126,88 +142,106 @@ export function EventCard({ resource, defaultImage }) {
         <>
             <article
                 id={collectionId}
-                className="tw-group tw-flex tw-h-full tw-flex-col tw-overflow-hidden tw-rounded-xl tw-border-2 tw-border-slate-400 dark:tw-border-slate-500 tw-bg-slate-100 dark:tw-bg-slate-900 tw-shadow-md hover:tw-shadow-xl hover:tw-border-cyan-500 tw-transition"
+                className="tw-group tw-flex tw-flex-col tw-overflow-hidden tw-rounded-xl tw-border-2 tw-border-slate-400 dark:tw-border-slate-500 tw-bg-slate-100 dark:tw-bg-slate-900 tw-shadow-md hover:tw-shadow-xl hover:tw-border-cyan-500 tw-transition"
             >
                 <div className="tw-flex tw-flex-1 tw-flex-col tw-gap-4 tw-p-5">
-                    {/* Thumbnail and Title Container */}
-                    <div className="tw-flex tw-items-start tw-gap-4">
-                        {/* Thumbnail */}
-                        <div className="tw-relative tw-shrink-0 tw-w-16 tw-h-16 sm:tw-w-20 sm:tw-h-20 tw-rounded-lg tw-overflow-hidden tw-bg-slate-100 dark:tw-bg-slate-800">
-                            {placeholder ? (
-                                <div className="tw-h-full tw-w-full tw-animate-pulse tw-bg-slate-200 dark:tw-bg-slate-800" />
-                            ) : thumbnailUrl ? (
-                                <img
-                                    src={thumbnailUrl}
-                                    alt={title}
-                                    className="tw-h-full tw-w-full tw-object-fill"
-                                    loading="lazy"
-                                />
-                            ) : (
-                                <div className="tw-flex tw-h-full tw-w-full tw-items-center tw-justify-center tw-text-slate-400 dark:tw-text-slate-500">
-                                    <LuLayers3 size={28} />
+                    {isEditing ? (
+                        /* Edit Mode */
+                        <ResourceEditForm
+                            resource={resource}
+                            onResourceUpdated={onResourceUpdated}
+                            onClose={() => setIsEditing(false)}
+                        />
+                    ) : (
+                        <>
+                            {/* Thumbnail and Title Container */}
+                            <div className="tw-flex tw-items-start tw-gap-4">
+                                {/* Thumbnail */}
+                                <div className="tw-relative tw-shrink-0 tw-w-16 tw-h-16 sm:tw-w-20 sm:tw-h-20 tw-rounded-lg tw-overflow-hidden tw-bg-slate-100 dark:tw-bg-slate-800">
+                                    {placeholder ? (
+                                        <div className="tw-h-full tw-w-full tw-animate-pulse tw-bg-slate-200 dark:tw-bg-slate-800" />
+                                    ) : thumbnailUrl ? (
+                                        <img
+                                            src={thumbnailUrl}
+                                            alt={title}
+                                            className="tw-h-full tw-w-full tw-object-fill"
+                                            loading="lazy"
+                                        />
+                                    ) : (
+                                        <div className="tw-flex tw-h-full tw-w-full tw-items-center tw-justify-center tw-text-slate-400 dark:tw-text-slate-500">
+                                            <LuLayers3 size={28} />
+                                        </div>
+                                    )}
                                 </div>
+
+                                {/* Title */}
+                                <div className="tw-min-w-0 tw-flex-1">
+                                    {placeholder ? (
+                                        <div className="tw-space-y-3">
+                                            <div className="tw-h-5 tw-w-2/3 tw-animate-pulse tw-rounded tw-bg-slate-200 dark:tw-bg-slate-800" />
+                                            <div className="tw-h-4 tw-w-1/3 tw-animate-pulse tw-rounded tw-bg-slate-200 dark:tw-bg-slate-800" />
+                                        </div>
+                                    ) : (
+                                        <h3 className="tw-text-base sm:tw-text-lg tw-font-semibold tw-leading-snug tw-text-slate-900 dark:tw-text-white tw-line-clamp-2">
+                                            <button
+                                                type="button"
+                                                onClick={openModal}
+                                                title={`View presentations for ${title}`}
+                                                className="tw-text-left tw-w-full tw-bg-transparent tw-border-0 tw-p-0 tw-no-underline [font:inherit] tw-text-black hover:tw-text-cyan-700 dark:tw-text-white dark:hover:tw-text-cyan-300 tw-cursor-pointer"
+                                            >
+                                                {title}
+                                            </button>
+                                        </h3>
+                                    )}
+                                </div>
+
+                                {/* Edit Button */}
+                                {authenticated && editableResourceIds?.has(collectionId) && (
+                                    <div className={cardStyles.editButton} onClick={() => setIsEditing(true)}>
+                                        <LuPencil size={16} />
+                                    </div>
+                                )}
+                            </div>
+
+                            {/* Authors */}
+                            {placeholder ? (
+                                <div className="tw-h-4 tw-w-1/2 tw-animate-pulse tw-rounded tw-bg-slate-200 dark:tw-bg-slate-800" />
+                            ) : (
+                                authors.length > 0 && (
+                                    <div className="tw-flex tw-items-start tw-gap-2 tw-text-xs tw-text-slate-600 dark:tw-text-slate-300 tw-whitespace-normal tw-break-words">
+                                        <span className="tw-mt-[1px] tw-shrink-0 tw-text-slate-500 dark:tw-text-slate-400" aria-hidden="true">
+                                            <HiOutlineUserGroup size={16} />
+                                        </span>
+                                        <span>{authors.join(' • ')}</span>
+                                    </div>
+                                )
                             )}
-                        </div>
-                        
-                        {/* Title */}
-                        <div className="tw-min-w-0 tw-flex-1">
+
+                            {/* Description */}
                             {placeholder ? (
                                 <div className="tw-space-y-3">
-                                    <div className="tw-h-5 tw-w-2/3 tw-animate-pulse tw-rounded tw-bg-slate-200 dark:tw-bg-slate-800" />
-                                    <div className="tw-h-4 tw-w-1/3 tw-animate-pulse tw-rounded tw-bg-slate-200 dark:tw-bg-slate-800" />
+                                    <div className="tw-h-4 tw-w-full tw-animate-pulse tw-rounded tw-bg-slate-200 dark:tw-bg-slate-800" />
+                                    <div className="tw-h-4 tw-w-5/6 tw-animate-pulse tw-rounded tw-bg-slate-200 dark:tw-bg-slate-800" />
+                                    <div className="tw-h-4 tw-w-3/4 tw-animate-pulse tw-rounded tw-bg-slate-200 dark:tw-bg-slate-800" />
                                 </div>
                             ) : (
-                                <h3 className="tw-text-base sm:tw-text-lg tw-font-semibold tw-leading-snug tw-text-slate-900 dark:tw-text-white tw-line-clamp-2">
-                                    <button
-                                        type="button"
-                                        onClick={openModal}
-                                        title={`View presentations for ${title}`}
-                                        className="tw-text-left tw-w-full tw-bg-transparent tw-border-0 tw-p-0 tw-no-underline [font:inherit] tw-text-black hover:tw-text-cyan-700 dark:tw-text-white dark:hover:tw-text-cyan-300 tw-cursor-pointer"
-                                    >
-                                        {title}
-                                    </button>
-                                </h3>
+                                description && (
+                                    <p className="tw-text-sm tw-leading-relaxed tw-text-slate-600 dark:tw-text-slate-300 tw-overflow-y-auto tw-max-h-36">
+                                        {description}
+                                    </p>
+                                )
                             )}
-                        </div>
-                    </div>
-                    
-                    {/* Authors */}
-                    {placeholder ? (
-                        <div className="tw-h-4 tw-w-1/2 tw-animate-pulse tw-rounded tw-bg-slate-200 dark:tw-bg-slate-800" />
-                    ) : (
-                        authors.length > 0 && (
-                            <div className="tw-flex tw-items-start tw-gap-2 tw-text-xs tw-text-slate-600 dark:tw-text-slate-300 tw-whitespace-normal tw-break-words">
-                                <span className="tw-mt-[1px] tw-shrink-0 tw-text-slate-500 dark:tw-text-slate-400" aria-hidden="true">
-                                    <HiOutlineUserGroup size={16} />
-                                </span>
-                                <span>{authors.join(' • ')}</span>
-                            </div>
-                        )
-                    )}
-
-                    {/* Description */}
-                    {placeholder ? (
-                        <div className="tw-space-y-3">
-                            <div className="tw-h-4 tw-w-full tw-animate-pulse tw-rounded tw-bg-slate-200 dark:tw-bg-slate-800" />
-                            <div className="tw-h-4 tw-w-5/6 tw-animate-pulse tw-rounded tw-bg-slate-200 dark:tw-bg-slate-800" />
-                            <div className="tw-h-4 tw-w-3/4 tw-animate-pulse tw-rounded tw-bg-slate-200 dark:tw-bg-slate-800" />
-                        </div>
-                    ) : (
-                        description && (
-                            <p className="tw-text-sm tw-leading-relaxed tw-text-slate-600 dark:tw-text-slate-300 tw-overflow-y-auto tw-max-h-36">
-                                {description}
-                            </p>
-                        )
+                        </>
                     )}
                 </div>
-                
+
                 {/* Footer */}
                 <div className="tw-mt-auto tw-flex tw-flex-wrap tw-items-center tw-justify-between tw-gap-3 tw-border-t tw-border-slate-200/70 tw-text-black dark:tw-text-white dark:tw-border-slate-700/70 tw-bg-cyan-400 dark:tw-bg-slate-800 tw-px-5 tw-py-3">
                     {/* Resource Type */}
                     <div className="tw-flex tw-flex-wrap tw-gap-2">
                         {!placeholder && <StatTag>{resourceType || 'Event'}</StatTag>}
                     </div>
-                    
+
                     {/* Action Link Buttons */}
                     <div className="tw-flex tw-items-center tw-gap-2">
                         <ActionLink href={pageUrl} title="Website">
@@ -222,7 +256,7 @@ export function EventCard({ resource, defaultImage }) {
                     </div>
                 </div>
             </article>
-            
+
             {/* Event Presentations Modal */}
             <ModalEventPresentations
                 show={showModal}
@@ -239,16 +273,28 @@ export function EventCard({ resource, defaultImage }) {
  * Component to display a grid of event cards.
  * @param {Array} resources List of event resources to display
  * @param {string} defaultImage URL of default image to use if a resource doesn't have one
+ * @param {function} onResourceUpdated Called after a successful edit so a card updates in place
+ * @param {Set} editableResourceIds Ids of resources the signed-in user can edit
  * @returns JSX element rendering the grid of event cards
  */
-export default function HydroShareEventCards({ resources, defaultImage }) {
+export default function HydroShareEventCards({ resources, defaultImage, onResourceUpdated, editableResourceIds }) {
+    // While any card is being edited, align grid items to the top so a tall edit
+    // form doesn't stretch the other cards in its row (see HydroShareResourcesCards).
+    const [editingCount, setEditingCount] = useState(0);
+    const handleEditingChange = useCallback((isEditing) => {
+        setEditingCount(count => count + (isEditing ? 1 : -1));
+    }, []);
+
     return (
-        <div className="tw-grid tw-grid-cols-1 lg:tw-grid-cols-2 2xl:tw-grid-cols-3 tw-gap-6">
+        <div className={`tw-grid tw-grid-cols-1 lg:tw-grid-cols-2 2xl:tw-grid-cols-3 tw-gap-6 ${editingCount > 0 ? 'tw-items-start' : ''}`}>
             {resources.map(resource => (
                 <EventCard
                     key={resource.resource_id}
                     resource={resource}
                     defaultImage={defaultImage}
+                    onResourceUpdated={onResourceUpdated}
+                    editableResourceIds={editableResourceIds}
+                    onEditingChange={handleEditingChange}
                 />
             ))}
         </div>
