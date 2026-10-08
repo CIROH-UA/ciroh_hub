@@ -4,6 +4,7 @@ import styles from './styles.module.css';
 import { splitAuthors } from './shared';
 import { updateResourceScimeta, updateResourceCustomMetadata, uploadResourceFile } from '@site/src/components/HydroShareImporter';
 import useHydroShareAuth from '@site/src/components/HydroShareAuth/useHydroShareAuth';
+import SegmentedToggle from '@site/src/components/SegmentedToggle';
 
 // Maps a resource's keyword to a type, which decides what metadata fields are editable
 const TAGS = {
@@ -76,6 +77,7 @@ export default function ResourceEditForm({ resource, onResourceUpdated, onClose 
     const [editPresPath, setEditPresPath] = useState(presPath ?? '');
     const [editThumbnailUrl, setEditThumbnailUrl] = useState(rawThumbnailUrl);
     const [editThumbnailFile, setEditThumbnailFile] = useState(null); // An image file to upload as the thumbnail, if the user picks one
+    const [thumbnailMode, setThumbnailMode] = useState('url'); // Which thumbnail input to show: 'url' or 'upload'
 
     /**
      * Save the edits to HydroShare, then update the card in place and close.
@@ -190,32 +192,66 @@ export default function ResourceEditForm({ resource, onResourceUpdated, onClose 
     // Events are HydroShare collections, which can't host uploaded files. Show only the URL field for thumbnails when editing an Event card
     const allowThumbnailUpload = keywordType !== 'event';
 
-    // Thumbnail Fields/Inputs (File upload takes precedence over URL)
+    // The URL text input, reused in both the toggle and the events-only case
+    const thumbnailUrlInput = (
+        <input
+            type="text"
+            className={styles.editInput}
+            placeholder="Image URL"
+            value={editThumbnailUrl}
+            onChange={(e) => setEditThumbnailUrl(e.target.value)}
+        />
+    );
+
+    // Thumbnail Field. Shows toggle between URL input and file upload.
+    // Event cards only show the URL input. (Events are HydroShare collections which can't host uploaded files)
     const thumbnailField = (
-        <label className={styles.editField}>
+        <div className={styles.editField}>
             <span className={styles.editLabel}>Thumbnail</span>
-            <input
-                type="text"
-                className={styles.editInput}
-                placeholder="Image URL"
-                value={editThumbnailUrl}
-                onChange={(e) => setEditThumbnailUrl(e.target.value)}
-                disabled={Boolean(editThumbnailFile)}
-            />
-            {allowThumbnailUpload && (
+
+            {/* Only show the toggle if thumbnail uploads are allowed (i.e., not an event card) */}
+            {allowThumbnailUpload ? (
                 <>
-                    <input
-                        type="file"
-                        accept="image/*"
-                        className={styles.editFileInput}
-                        onChange={(e) => setEditThumbnailFile(e.target.files?.[0] || null)}
+                    {/* Toggle between URL input and file upload */}
+                    <SegmentedToggle
+                        style={{ marginBottom: '0.25rem' }}
+                        ariaLabel="Thumbnail source"
+                        value={thumbnailMode}
+                        onChange={(mode) => {
+                            setThumbnailMode(mode);
+                            // Discard a picked file when switching back to URL mode
+                            if (mode === 'url') setEditThumbnailFile(null);
+                        }}
+                        options={[
+                            { label: 'URL', value: 'url' },
+                            { label: 'Upload', value: 'upload' },
+                        ]}
                     />
-                    {editThumbnailFile && (
-                        <span className={styles.editFileHint}>Will upload: {editThumbnailFile.name}</span>
+
+                    {/* Show URL input or file upload based on the selected mode */}
+                    {thumbnailMode === 'url' ? (
+                        // URL input
+                        thumbnailUrlInput
+                    ) : (
+                        <>
+                            {/* File upload input */}
+                            <input
+                                type="file"
+                                accept="image/*"
+                                className={styles.editFileInput}
+                                onChange={(e) => setEditThumbnailFile(e.target.files?.[0] || null)}
+                            />
+                            {editThumbnailFile && (
+                                <span className={styles.editFileHint}>Will upload: {editThumbnailFile.name}</span>
+                            )}
+                        </>
                     )}
                 </>
+            ) : (
+                // Show URL input when thumbnail uploads are not allowed
+                thumbnailUrlInput
             )}
-        </label>
+        </div>
     );
 
     // page_url Field/Input
