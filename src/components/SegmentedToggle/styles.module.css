@@ -1,0 +1,72 @@
+/* Segmented toggle with rounded corners.
+   Defaults match the site (Infima theme vars); override per instance
+   with the --toggle-* custom properties (e.g. style={{ '--toggle-accent': '#2ee6a0' }}). */
+.toggle {
+    --toggle-accent: var(--ifm-color-primary);        /* selected fill + text/border when idle */
+    --toggle-track: var(--ifm-color-emphasis-200);    /* the track behind the segments */
+    --toggle-on-text: #ffffff;                      /* text on the selected (filled) segment */
+
+    position: relative;
+    display: inline-flex;
+    align-items: stretch;
+    align-self: flex-start;  /* size to content instead of stretching to fill a flex column */
+    gap: 2px;
+    padding: 2px;
+    border: 2px solid var(--toggle-accent);
+    border-radius: 9999px;
+    background-color: var(--toggle-track);
+}
+
+/* The sliding fill that sits behind the selected segment. Its position and
+   width are set inline from the measured segment; it slides between them. */
+.thumb {
+    position: absolute;
+    top: 2px;
+    bottom: 2px;
+    left: 0;
+    border-radius: 9999px;
+    background-color: var(--toggle-accent);
+    pointer-events: none;
+    transition: transform 0.16s ease, width 0.16s ease;
+}
+
+/* The individual segment buttons representing each option */
+.segment {
+    appearance: none;
+    -webkit-appearance: none;
+    position: relative;     /* sit above the sliding thumb */
+    z-index: 1;
+    flex: 1 1 auto;
+    padding: 0.12rem 0.7rem;
+    border: none;
+    border-radius: 9999px;
+    background-color: transparent;
+    color: var(--toggle-accent);
+    font: inherit;
+    font-size: 0.7rem;
+    font-weight: 600;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.segmentActive {
+    color: var(--toggle-on-text);
+}
+
+.segment:focus-visible {
+    outline: 2px solid var(--toggle-accent);
+    outline-offset: 2px;
+}
+
+/* Respect reduced-motion: snap instead of slide. (The site also enforces this
+   globally via [data-reduce-motion="true"] * { transition: none !important }.) */
+:global([data-reduce-motion="true"]) .thumb {
+    transition: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .thumb {
+        transition: none;
+    }
+}
