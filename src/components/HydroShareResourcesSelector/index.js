@@ -498,7 +498,7 @@ export default function HydroShareResourcesSelector({
                       onChange={e => setEditableOnly(e.target.checked)}
                       className={styles.filterCheckbox}
                     />
-                    Show only editable resources
+                    Show only my resources
                   </label>
                 )}
               </div>
