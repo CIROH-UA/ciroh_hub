@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { FaSpinner } from 'react-icons/fa';
+import React, { useState, useRef } from 'react';
+import { FaSpinner, FaCheckCircle } from 'react-icons/fa';
 import styles from './PublicationsSubmissionForm.module.css';
 import clsx from 'clsx';
 import api from 'zotero-api-client';
@@ -32,6 +32,7 @@ export default function PublicationsSubmissionForm({ groupId, zoteroApiKey }) {
   const [query, setQuery] = useState('');
   const [loading, setLoading] = useState(false);
   const [progressMessage, setProgressMessage] = useState('');
+  const [submitSuccess, setSubmitSuccess] = useState(false);
   const [selectedCollections, setSelectedCollections] = useState([]);
   const [citationUrl, setCitationUrl] = useState('');
   const [error, setError] = useState('');
@@ -43,6 +44,7 @@ export default function PublicationsSubmissionForm({ groupId, zoteroApiKey }) {
   const [codeLocationUrl, setCodeLocationUrl] = useState('');
   const [dataLocationUrl, setDataLocationUrl] = useState('');
   const [thumbnailFile, setThumbnailFile] = useState(null);
+  const thumbnailInputRef = useRef(null);   // Lets us clear the file input's displayed filename, which React state can't do on its own
   const [thumbnailWarning, setThumbnailWarning] = useState('');
 
   const baseUrl = useBaseUrl('/');
@@ -70,6 +72,7 @@ export default function PublicationsSubmissionForm({ groupId, zoteroApiKey }) {
     e.preventDefault();
     setError('');
     setProgressMessage('');
+    setSubmitSuccess(false);
     setCitationUrl('');
     setThumbnailWarning('');
     
@@ -221,7 +224,25 @@ export default function PublicationsSubmissionForm({ groupId, zoteroApiKey }) {
 
       // Update state. Do not show citation URL at this time, as the library is private
       // setCitationUrl(importedUrl);
-      setProgressMessage('Citation imported successfully! Your submission will be reviewed soon.');
+
+      // Clear any in-progress message and show the success callout
+      setProgressMessage('');
+      setSubmitSuccess(true);
+
+      // Clear inputs
+      setQuery('');
+      setLoading(false);
+      setSelectedCollections([]);
+      setCitationUrl('');
+      setAcknowledgesCIROH(false);
+      setCodeLocation(codeLocationOptions[0]);
+      setDataLocation(dataLocationOptions[0]);
+      setCodeLocationUrl('');
+      setDataLocationUrl('');
+      setThumbnailFile(null);
+      if (thumbnailInputRef.current) thumbnailInputRef.current.value = '';
+      setThumbnailWarning('');
+
     } catch (err) {
       setError(err.message);
       setProgressMessage(err.message);
@@ -278,8 +299,9 @@ export default function PublicationsSubmissionForm({ groupId, zoteroApiKey }) {
         {/* Select Collection */}
         <label className={styles.label}>Select Collection</label>
         <SelectCollection
-            zotero={zoteroClient}
-           onChange={(opts) => setSelectedCollections(opts || [])}
+          zotero={zoteroClient}
+          value={selectedCollections}
+          onChange={(opts) => setSelectedCollections(opts || [])}
         />
 
         {/* Shared Code Location Selector */}
@@ -342,6 +364,7 @@ export default function PublicationsSubmissionForm({ groupId, zoteroApiKey }) {
         {/* Thumbnail Image Upload */}
         <label className={styles.label}>Thumbnail Image</label>
         <input
+          ref={thumbnailInputRef}
           type="file"
           accept="image/*"
           className={styles.fileInput}
@@ -382,11 +405,27 @@ export default function PublicationsSubmissionForm({ groupId, zoteroApiKey }) {
           {loading ? 'Processing...' : 'Import Citation'}
         </button>
       </form>
+      {/* Thumbnail Image Warning Message */}
       {thumbnailWarning && (
         <div className={styles.warningMessage}>
           {thumbnailWarning}
         </div>
       )}
+
+      {/* Submission Success Message */}
+      {submitSuccess && (
+        <div className={styles.successCallout} role="status">
+          <FaCheckCircle className={styles.successIcon} aria-hidden="true" />
+          <div className={styles.successText}>
+            <span className={styles.successTitle}>Citation imported successfully!</span>
+            <span className={styles.successSubtitle}>
+              Your submission will be reviewed by a moderator before it appears on CIROH Hub. This process may take a few days.
+            </span>
+          </div>
+        </div>
+      )}
+
+      {/* Progress Message */}
       {progressMessage && (
         <div className={clsx(styles.progressMessage, error && styles.errorMessage)}>
           {loading && <FaSpinner className={styles.spinner} />}
@@ -400,6 +439,7 @@ export default function PublicationsSubmissionForm({ groupId, zoteroApiKey }) {
           </span>
         </div>
       )}
+
       {/* Wikimedia Privacy and Terms of Use Notice */}
       <br />
       <div className={styles.wikimediaPrivacyNotice}>
