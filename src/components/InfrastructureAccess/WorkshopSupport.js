@@ -9,7 +9,7 @@ const WorkshopSupport = () => {
       buttons: [
         {
           text: "Workshop IT Request Form",
-          link: "https://github.com/CIROH-UA/NGIAB-CloudInfra/issues/new?template=workshop_IT_request_template.yml"
+          link: "https://github.com/CIROH-UA/r2ohc_platform/issues/new?template=workshop_IT_request.yml"
         }
       ],
       details: "Our team will process your request and ensure participants have necessary access before your workshop begins."
