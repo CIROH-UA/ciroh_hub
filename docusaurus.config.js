@@ -408,7 +408,10 @@ const config = {
               position: "right",
               to: "/release-notes",
             },
-            
+            {
+              type: "custom-hydroShareAuth",
+              position: "right",
+            },
           ],
         },
         footer: {

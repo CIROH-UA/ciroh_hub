@@ -5,7 +5,8 @@ import styles from "./styles.module.css";
 import HydroShareResourcesTiles from "@site/src/components/HydroShareResourcesTiles";
 import HydroShareResourcesRows from "@site/src/components/HydroShareResourcesRows";
 import HydroShareResourcesCards from "@site/src/components/HydroShareResourcesCards";
-import { fetchResourcesBySearch, fetchResourceCustomMetadata, getCommunityResources, fetchResourcesFromCollection } from "@site/src/components/HydroShareImporter";
+import { fetchResourcesBySearch, fetchResourceCustomMetadata, getCommunityResources, fetchResourcesFromCollection, fetchResourcesOwnedByUser } from "@site/src/components/HydroShareImporter";
+import useHydroShareAuth from "@site/src/components/HydroShareAuth/useHydroShareAuth";
 import {
   HiOutlineSortDescending,
   HiOutlineSortAscending,
@@ -92,6 +93,7 @@ export default function HydroShareResourcesSelector({
   const [sortDirection,  setSortDirection]  = useState('desc');
   const [ecosystems, setEcosystems] = useState([]);
   const [ecosystem, setEcosystem] = useState('');
+  const [editableOnly, setEditableOnly] = useState(false);  // Whether to only show resources that the user can edit
 
 
   const fetchResources = useCallback(
@@ -149,6 +151,16 @@ export default function HydroShareResourcesSelector({
           communityResponse = await getCommunityResources(keyword, "4", filterSearch, ascending, sortType, undefined, groupPageNumberRef.current, communityTokenRef.current, PAGE_SIZE);
           resourceList = communityResponse.resources || [];
 
+          // Ensure every datasets resource has the 'ciroh_hub_data' keyword so cards can detect the dataset type
+          for (const resource of resourceList) {
+            if (!Array.isArray(resource.keywords)) {
+              resource.keywords = [];
+            }
+            if (!resource.keywords.includes('ciroh_hub_data')) {
+              resource.keywords.push('ciroh_hub_data');
+            }
+          }
+
           // Advance pagination state for the next fetch.
           groupPageNumberRef.current = (communityResponse.groupResourcesPageData?.pageNumber || 1) + 1;
           communityTokenRef.current = communityResponse.extraResourcesPageData?.nextPaginationToken;
@@ -170,7 +182,9 @@ export default function HydroShareResourcesSelector({
           description: res.abstract || "No description available.",
           date_created: res.date_created,
           date_last_updated: res.date_last_updated,
-          keywords: res.subjects,
+          keywords: Array.isArray(res.keywords)
+            ? res.keywords
+            : (Array.isArray(res.subjects) ? res.subjects : []),
           thumbnail_url: "",
           page_url: "",
           docs_url: "",
@@ -231,6 +245,7 @@ export default function HydroShareResourcesSelector({
               thumbnail_url: customMetadata?.thumbnail_url || "",
               page_url: customMetadata?.page_url || "",
               docs_url: customMetadata?.docs_url || "",
+              pres_path: customMetadata?.pres_path || "",
               embed_url: embedUrl,
             };
 
@@ -311,6 +326,55 @@ export default function HydroShareResourcesSelector({
     [resources]
   );
 
+  // Merge saved edits into the matching resource so the card re-renders in place.
+  // `resources` is the single source of truth, so cards read the new values from props.
+  const handleResourceUpdated = useCallback((resourceId, patch) => {
+    setResources(prev =>
+      prev.map(r => (r.resource_id === resourceId ? { ...r, ...patch } : r))
+    );
+  }, []);
+
+  // Fetch the set of resource ids the signed-in user can edit, so cards only
+  // show the edit button for resources they actually own. Runs once per
+  // sign-in (null while loading / signed out = no edit buttons).
+  const { authenticated, userInfo, token } = useHydroShareAuth();
+  const [editableResourceIds, setEditableResourceIds] = useState(null);
+  useEffect(() => {
+    // If the user is not authenticated or does not have a username, clear the editable resource IDs and exit early.
+    if (!authenticated || !userInfo?.username) {
+      setEditableResourceIds(null);
+      return;
+    }
+
+    // Fetch the list of resources owned by the user to determine which ones are editable.
+    let cancelled = false;
+    fetchResourcesOwnedByUser(userInfo.username, token, { editableOnly: true })
+      .then(owned => {
+        if (!cancelled) setEditableResourceIds(new Set(owned.map(r => r.resource_id)));
+      })
+      .catch(err => {
+        if (!cancelled) {
+          console.error('Failed to load editable resources:', err);
+          setEditableResourceIds(null);
+        }
+      });
+    return () => { cancelled = true; };
+  }, [authenticated, userInfo?.username, token]);
+
+  // When "only editable" is checked, filter the list down to resources the user
+  // can edit. This is a client-side filter over what's already loaded. With infinite scroll it only reflects fetched pages
+  const displayedResources = useMemo(() => {
+    if (!editableOnly || !editableResourceIds) return resources;
+    return resources.filter(r => editableResourceIds.has(r.resource_id));
+  }, [resources, editableOnly, editableResourceIds]);
+
+  const displayedNonPlaceholderCount = useMemo(
+    () => displayedResources.filter(
+      r => !String(r.resource_id || '').startsWith('placeholder-')
+    ).length,
+    [displayedResources]
+  );
+
   useEffect(() => {
     if (typeof onResultsChange !== 'function') return;
     onResultsChange(nonPlaceholderResources, {
@@ -380,12 +444,13 @@ export default function HydroShareResourcesSelector({
       <section className={clsx(styles.cardsContainer, 'tw-relative tw-z-20 tw-w-full tw-py-10')}>
         <div className="tw-mx-auto tw-max-w-7xl tw-px-4 sm:tw-px-6 lg:tw-px-8">
           <div className="tw-flex tw-flex-col lg:tw-flex-row lg:tw-items-center lg:tw-justify-between tw-gap-4 tw-mb-6">
+            {/* Result Count / Loading Indicator */}
             <div className="tw-text-sm sm:tw-text-base tw-text-slate-600 dark:tw-text-slate-300">
               {loading || fetching.current ? "Fetching " + resultLabel + "..." : (
                 <>
                   Showing{' '}
                   <strong className="tw-font-semibold tw-text-slate-900 dark:tw-text-white">
-                    {nonPlaceholderResources.length}
+                    {displayedNonPlaceholderCount}
                   </strong>{' '}
                   {resultLabel}
                 </>
@@ -393,35 +458,51 @@ export default function HydroShareResourcesSelector({
             </div>
 
             <form
-              className="tw-flex tw-flex-col md:tw-flex-row md:tw-items-end tw-gap-3 tw-w-full lg:tw-w-auto"
+              className="tw-flex tw-flex-col md:tw-flex-row md:tw-items-start tw-gap-3 tw-w-full lg:tw-w-auto"
               onSubmit={e => { e.preventDefault(); commitSearch(searchInput); }}
             >
-              {/* Search Input */}
-              <label className="tw-flex tw-flex-col tw-w-full md:tw-w-[28rem]">
-                <span className="tw-mb-1 tw-text-sm tw-font-semibold tw-text-slate-600 dark:tw-text-slate-300">
-                  Search
-                </span>
-                <div className="tw-relative">
-                  <span className="tw-pointer-events-none tw-absolute tw-left-3 tw-inset-y-0 tw-flex tw-items-center tw-text-slate-400 dark:tw-text-slate-500">
-                    <HiOutlineSearch size={18} />
+              {/* Search Input and Editable Resources Filter */}
+              <div className="tw-flex tw-flex-col tw-w-full md:tw-w-[28rem] tw-gap-2">
+                {/* Search Input */}
+                <label className="tw-flex tw-flex-col">
+                  <span className="tw-mb-1 tw-text-sm tw-font-semibold tw-text-slate-600 dark:tw-text-slate-300">
+                    Search
                   </span>
-                  <input
-                    type="text"
-                    placeholder="Search by Title, Author, Description..."
-                    className="tw-w-full tw-rounded-lg tw-border tw-border-slate-200/80 dark:tw-border-slate-700/80 tw-bg-white/80 dark:tw-bg-slate-900/50 tw-backdrop-blur tw-pl-10 tw-pr-3 tw-py-3 tw-text-sm tw-text-slate-900 dark:tw-text-white placeholder:tw-text-slate-400 dark:placeholder:tw-text-slate-500 focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-cyan-500/30"
-                    value={searchInput}
-                    onChange={e => setSearchInput(e.target.value)}
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter') {
-                        e.preventDefault();
-                        commitSearch(e.currentTarget.value);
-                      }
-                    }}
-                    onBlur={(e) => commitSearch(e.currentTarget.value)}
-                  />
-                </div>
-              </label>
-              
+                  <div className="tw-relative">
+                    <span className="tw-pointer-events-none tw-absolute tw-left-3 tw-inset-y-0 tw-flex tw-items-center tw-text-slate-400 dark:tw-text-slate-500">
+                      <HiOutlineSearch size={18} />
+                    </span>
+                    <input
+                      type="text"
+                      placeholder="Search by Title, Author, Description..."
+                      className="tw-w-full tw-rounded-lg tw-border tw-border-slate-200/80 dark:tw-border-slate-700/80 tw-bg-white/80 dark:tw-bg-slate-900/50 tw-backdrop-blur tw-pl-10 tw-pr-3 tw-py-3 tw-text-sm tw-text-slate-900 dark:tw-text-white placeholder:tw-text-slate-400 dark:placeholder:tw-text-slate-500 focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-cyan-500/30"
+                      value={searchInput}
+                      onChange={e => setSearchInput(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                          e.preventDefault();
+                          commitSearch(e.currentTarget.value);
+                        }
+                      }}
+                      onBlur={(e) => commitSearch(e.currentTarget.value)}
+                    />
+                  </div>
+                </label>
+
+                {/* Editable Resources Filter */}
+                {editableResourceIds && (
+                  <label className="tw-flex tw-items-center tw-gap-2 tw-text-sm tw-text-slate-600 dark:tw-text-slate-300 tw-cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={editableOnly}
+                      onChange={e => setEditableOnly(e.target.checked)}
+                      className={styles.filterCheckbox}
+                    />
+                    Show only my resources
+                  </label>
+                )}
+              </div>
+
               {/* Group Selector */}
               <div className="tw-flex tw-flex-wrap tw-gap-2 tw-items-center">
                 <label className="tw-flex tw-flex-col">
@@ -439,7 +520,7 @@ export default function HydroShareResourcesSelector({
                   </select>
                 </label>
               </div>
-              
+
               {/* Sort Inputs */}
               <div className="tw-flex tw-flex-wrap tw-gap-2 tw-items-end">
                 {/* Sort By Selector */}
@@ -509,12 +590,12 @@ export default function HydroShareResourcesSelector({
           </div>
 
           {view === 'grid' ? (
-            <HydroShareResourcesTiles resources={resources} defaultImage={defaultImage} />
+            <HydroShareResourcesTiles resources={displayedResources} defaultImage={defaultImage} />
           ) : (
-            <CardsComponent resources={resources} defaultImage={defaultImage} />
+            <CardsComponent resources={displayedResources} defaultImage={defaultImage} onResourceUpdated={handleResourceUpdated} editableResourceIds={editableResourceIds} />
           )}
 
-          {!loading && !fetching.current && nonPlaceholderResources.length === 0 && (
+          {!loading && !fetching.current && displayedNonPlaceholderCount === 0 && (
             <p className="tw-mt-10 tw-text-center tw-text-sm tw-text-slate-600 dark:tw-text-slate-300">
               No {resultLabel} Found
             </p>
