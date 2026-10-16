@@ -5,7 +5,7 @@ import { LuLayers3 } from 'react-icons/lu';
 import { HiOutlineGlobeAlt, HiOutlineUserGroup } from 'react-icons/hi';
 import { isPlaceholder, splitAuthors, StatTag, ActionLink } from '@site/src/components/HydroShareResourcesCards/shared';
 import { fetchResourcesFromCollection, fetchResourceCustomMetadata, fetchResourceImageUrls, } from '@site/src/components/HydroShareImporter';
-import ModalEventPresentations from './ModalEventPresentations';
+import ModalEventPresentations from '@site/src/components/ModalEventPresentations';
 
 /**
  * Load event presentations for a given collection.
