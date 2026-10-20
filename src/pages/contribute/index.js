@@ -3,7 +3,7 @@ import Layout from '@theme/Layout';
 import useBaseUrl from '@docusaurus/useBaseUrl';
 import styles from './contribute.module.css';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
-import HydroShareCard from '@site/src/components/HydroShare/HydroShareCard';
+import HydroShareCard from '@site/src/components/Contribute/HydroShareCard';
 import PublicationsSubmissionForm from '@site/src/components/Contribute/PublicationsSubmissionForm';
 import clsx from 'clsx';
 import Header from '@site/src/components/Header';
