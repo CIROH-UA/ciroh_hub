@@ -71,6 +71,7 @@ export default function HydroShareCard() {
             <span className={`${styles.tag} ${styles.tagPresentation}`} title="Presentations">ciroh_hub_presentation</span>
             <span className={`${styles.tag} ${styles.tagData}`} title="Datasets">ciroh_hub_data</span>
             <span className={`${styles.tag} ${styles.tagNotebook}`} title="Notebooks">ciroh_hub_notebook</span>
+            <span className={`${styles.tag} ${styles.tagEvent}`} title="Events">ciroh_hub_event</span>
           </div>
           <details>
               <summary>About deprecated tags...</summary>

@@ -7,4 +7,56 @@ tags: [Products, CIROH Hub]
 
 # HydroShare Portals on CIROH Hub
 
-dummy
+The majority of CIROH Hub's research portals pull their content from HydroShare based on the presence of keyword tags.
+
+## Pulling HydroShare content
+
+### Keyword tags
+
+Each research portal pulls from a set of keyword tags to determine
+which resources to surface in the portal.
+
+Note that only the first tag listed for each category is encouraged
+and supported. The other tags are retained for backwards compatibility.
+
+- Apps: `ciroh_hub_app`, `nwm_portal_app`
+- Datasets: `ciroh_hub_data`, `ciroh_portal_data`
+- Courses: `ciroh_hub_module`, `nwm_portal_module`
+- Presentations: `ciroh_hub_presentation`, `ciroh_portal_presentation`
+- Notebooks: `ciroh_hub_notebook`
+- Events: `ciroh_hub_event`
+
+### Optional metadata
+
+Adding the following metadata will extend the functionality of a resource's CIROH Hub presence.
+
+- `page_url`: A URL for the resource's website. Replaces the standard link.
+- `docs_url`: A URL for the resource's documentation. Provided as a link button.
+- `thumbnail_url`: A URL for the resource's thumbnail. Including the thumbnail within the resource and updating this value after uploading is often the best approach.
+- `pres_path`: File path to a PDF within the resource. Used by Presentations to offer on-site PDF viewing.
+
+{/* TODO: map out components */}
+
+## Setting secrets and variables
+Secrets and variables for Zotero are retrieved from the process environment in `docusaurus.config.js`.
+For local development, these can be supplied via a `.env` file. For deployment, these are injected via
+the CI/CD scripts.
+
+The following config variables are currently retrieved for HydroShare,
+with the corresponding environment variables being in all caps:
+- `hs_client_id`: Used in HydroShare authorization to denote which application the request is coming from.
+- `hs_featured_*_collection_id`: Denotes the collection ID for a given featured collection. Present for the following categories:
+    - `apps`
+    - `datasets`
+    - `courses`
+    - `presentations`
+    - `notebooks`
+
+:::warning
+CIROH Hub uses static site generation.
+**Any config variables will be baked into the production website.**
+
+Please be sure to only provide public-facing values, such as read-only keys,
+to the website build. For anything that requires access control, it should
+be kept safely within the [backend](docs/products/hub-meta/backend).
+:::

@@ -161,6 +161,7 @@ html[data-theme='dark'] .tagModule { --tag-text: #c4b5fd; }
 html[data-theme='dark'] .tagPresentation { --tag-text: #fcd34d; }
 html[data-theme='dark'] .tagData { --tag-text: #6ee7b7; }
 html[data-theme='dark'] .tagNotebook { --tag-text: var(--ifm-color-success-light); }
+html[data-theme='dark'] .tagNotebook { --tag-text: #9fe6fe; }
 
 .steps {
   margin: 0.25rem 0 0;
