@@ -24,21 +24,21 @@
     color: var(--text-secondary);
 }
 
-.hideable {
+.collapsible {
     height: 1.4rem;
     contain: strict;
     text-align: right;
 }
 
-[data-reduce-motion="false"] .hideabletransition {
+[data-reduce-motion="false"] .collapsibletransition {
     transition: width 1s;
 }
 
-.unhidden {
+.uncollapsed {
     width: 6.975rem;
 }
 
-.hidden {
+.collapsed {
     width: 0px;
 }
 
@@ -69,4 +69,8 @@
 
 .rotated {
     rotate: 90deg;
+}
+
+.hidden {
+    display: none;
 }
