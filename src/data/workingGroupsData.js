@@ -14,6 +14,7 @@ export const workingGroups = [
       "Support FIM-related education and training opportunities, including webinars, DevCon workshops, hackathons, and Summer Institute participation.",
     ],
     leads: ["Sagy Cohen, University of Alabama"],
+    resource_id: "dbcb9c4428d5444bb89a704b1c7a3e59",
   },
   {
     id: "decision-support",
@@ -26,6 +27,7 @@ export const workingGroups = [
       "Organize activities that increase the visibility of CIROH's decision support portfolio, such as lead/co-lead conference sessions, serve on steering committees, or otherwise contribute to activities supporting CIROH's priorities.",
     ],
     leads: ["Melissa Kenney, University of Minnesota"],
+    resource_id: "b9911f1f9d9a48c096fd9a29867d5062",
   },
   {
     id: "hydrologic-modeling",
@@ -38,6 +40,7 @@ export const workingGroups = [
       "Contribute to the creation of a CIROH-sponsored cross-institution large-domain hydrologic modeling course.",
     ],
     leads: ["Martyn Clark, University of Calgary"],
+    resource_id: "34a9941731d14465ae2e38f9eb9e5d77",
   },
   {
     id: "hydroinformatics",
@@ -50,6 +53,7 @@ export const workingGroups = [
       "Provide detailed guidance and documentation for integrating research tools in the CIROH Portal/Hub.",
     ],
     leads: ["Dan Ames, BYU"],
+    resource_id: "8e61920dcca04399902cfe87cf877966",
   },
   {
     id: "early-career",
@@ -62,6 +66,7 @@ export const workingGroups = [
       "Identify resources that are available to and/or needed by CIROH early career scientists.",
     ],
     leads: ["Juli Scamardo, Utah State University"],
+    resource_id: "418c80f27c0341378638c3f45eb4da95",
   },
   {
     id: "community-resources",
@@ -75,6 +80,7 @@ export const workingGroups = [
       "Lead the development of articles/publications (e.g., R2X).",
     ],
     leads: ["Arpita Patel, The University of Alabama"],
+    resource_id: "254d878facd24bc1a4cd5b5573505806",
   },
   {
     id: "artificial-intelligence",
@@ -87,6 +93,7 @@ export const workingGroups = [
       "Organize AI/ML Track for CIROH Developer's Conference.",
     ],
     leads: ["Jonathan Frame, The University of Alabama"],
+    resource_id: "91abf707534a4db8801fb2d6de238a38",
   },
   {
     id: "model-forecast-evaluation",
@@ -99,5 +106,6 @@ export const workingGroups = [
       "Analyze CIROH's research portfolio and broader research community model and forecast evaluation research and inform CIROH's research and development strategy and roadmap.",
     ],
     leads: ["Shaun Carney, RTI"],
+    resource_id: "e3eb01f6e3d349c9a843c7dfb6508eae",
   },
 ];

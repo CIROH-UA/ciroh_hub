@@ -4,15 +4,108 @@ import clsx from 'clsx';
 import { gsap } from 'gsap';
 import { FiTarget, FiSearch, FiUsers } from 'react-icons/fi';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
+import { fetchResourcesFromCollection, fetchResourceCustomMetadata, fetchResourceImageUrls } from '@site/src/components/HydroShareImporter';
 
 import styles from './styles.module.css';
 import { workingGroups } from '@site/src/data/workingGroupsData';
 import { ReducedMotionContext } from '@theme/Contexts';
+import ModalResourceCards from '@site/src/components/ModalResourceCards';
 
 const normalize = (s) => (s ?? '').toLowerCase().trim();
 
+/**
+ * Load working group reports for a given collection.
+ * @param {string} collectionId 
+ * @returns {Promise<Array>} List of working group report cards
+ */
+async function loadWorkingGroupReports(collectionId) {
+    // Fetch working group reports in the collection
+    const resources = await fetchResourcesFromCollection(collectionId);
+
+    // Map to card format and enrich with custom metadata and images
+    const mapped = resources.map(resource => ({
+        authors: (resource.authors || [])
+            .map(a => a.split(',').reverse().join(' '))
+            .join(' 🖊 '),
+        description: resource.abstract || '',
+        docs_url: '',
+        embed_url: '',
+        page_url: '',
+        resource_id: resource.resource_id,
+        resource_type: resource.resource_type,
+        resource_url: resource.resource_url,
+        date_created: resource.date_created || '',
+        date_last_updated: resource.date_last_updated || '',
+        thumbnail_url: '',
+        title: resource.resource_title,
+        images: [],
+    }));
+    
+    // Update each report card with custom metadata and images
+    await Promise.all(
+        mapped.map(async (card) => {
+            try {
+                // Fetch custom metadata and images for each report
+                const [customMetadata, imageUrls] = await Promise.all([
+                    fetchResourceCustomMetadata(card.resource_id).catch(() => null),
+                    fetchResourceImageUrls(card.resource_id).catch(() => []),
+                ]);
+
+                // Update card with fetched metadata, falling back to existing values if not available
+                if (customMetadata?.pres_path) {
+                    card.embed_url = `https://www.hydroshare.org/resource/${card.resource_id}/data/contents/${customMetadata.pres_path}`;
+                }
+                card.thumbnail_url = customMetadata?.thumbnail_url || card.thumbnail_url;
+                card.page_url = customMetadata?.page_url || card.page_url;
+                card.docs_url = customMetadata?.docs_url || card.docs_url;
+                card.images = imageUrls || [];
+            } catch (err) {
+                console.error(`Error enriching report ${card.resource_id}:`, err);
+            }
+        })
+    );
+
+    return mapped;
+}
+
 function WorkingGroupCard({ group, index }) {
+
+  const [showModal, setShowModal] = useState(false);
+  const [reports, setReports] = useState(null);
+  const [loadError, setLoadError] = useState(null);
+
+  // Load reports when modal is opened for the first time
+  useEffect(() => {
+      // Only load if modal is being shown and we haven't already loaded children
+      if (!showModal || reports !== null) return;
+
+      // Load reports for the working group
+      let cancelled = false;
+      setLoadError(null);
+      loadWorkingGroupReports(group.resource_id)
+          .then(list => {
+              if (!cancelled) setReports(list);
+          })
+          .catch(err => {
+              if (!cancelled) {
+                  console.error(`Error loading reports for ${group.resource_id}:`, err);
+                  setLoadError(err.message || 'Failed to load reports.');
+                  setReports([]);
+              }
+          });
+      return () => { cancelled = true; };
+  }, [showModal, group.resource_id, reports]);
+
+  // Close modal on Escape key press
+  useEffect(() => {
+      if (!showModal) return;
+      const onKeyDown = (e) => { if (e.key === 'Escape') setShowModal(false); };
+      window.addEventListener('keydown', onKeyDown);
+      return () => window.removeEventListener('keydown', onKeyDown);
+  }, [showModal]);
+  
   return (
+    <>
     <article
       className={clsx(
         styles.card,
@@ -20,11 +113,12 @@ function WorkingGroupCard({ group, index }) {
         'tw-border tw-border-slate-200/70 dark:tw-border-slate-700/70',
         'tw-bg-white/70 dark:tw-bg-slate-900/50',
         'tw-shadow-[0_10px_30px_-18px_rgba(2,6,23,0.35)] dark:tw-shadow-[0_10px_30px_-18px_rgba(0,0,0,0.70)]',
-        'tw-p-6 tw-h-full'
+        'tw-p-6 tw-h-full tw-flex tw-flex-col'
       )}
       data-animate="card"
       data-index={index}
     >
+      {/* Title Section */}
       <div className="tw-flex tw-items-start tw-justify-between tw-gap-4">
         <div>
           <div className={clsx(styles.kicker, 'tw-text-cyan-700 dark:tw-text-cyan-300')}>
@@ -45,13 +139,15 @@ function WorkingGroupCard({ group, index }) {
           {String(index + 1).padStart(2, '0')}
         </span>
       </div>
-
+      
+      {/* Summary Section */}
       {group.summary ? (
         <p className="tw-mt-4 tw-text-[15px] tw-leading-relaxed tw-text-slate-700 dark:tw-text-slate-300">
           {group.summary}
         </p>
       ) : null}
 
+      {/* Objectives Section */}
       {group.objectives?.length ? (
         <div className="tw-mt-5">
           <div className="tw-flex tw-items-center tw-gap-2 tw-text-slate-900 dark:tw-text-white tw-font-semibold">
@@ -66,6 +162,7 @@ function WorkingGroupCard({ group, index }) {
         </div>
       ) : null}
 
+      {/* Leads Section */}
       {group.leads?.length ? (
         <div className="tw-mt-5">
           <div className="tw-flex tw-items-center tw-gap-2 tw-text-slate-900 dark:tw-text-white tw-font-semibold">
@@ -84,7 +181,29 @@ function WorkingGroupCard({ group, index }) {
           </div>
         </div>
       ) : null}
+
+      {/* Working Group Reports Button */}
+      <div className="tw-mt-auto tw-pt-5 tw-flex tw-justify-end">
+        <button
+          type="button"
+          onClick={() => setShowModal(true)}
+          className="tw-appearance-none tw-border-0 tw-cursor-pointer tw-font-[inherit] tw-inline-flex tw-items-center tw-gap-2 tw-rounded tw-bg-cyan-600 tw-px-4 tw-py-2 tw-text-sm tw-font-semibold tw-text-white hover:tw-bg-cyan-700 dark:tw-bg-slate-900 dark:hover:tw-bg-slate-700"
+        >
+          View Reports
+        </button>
+      </div>
     </article>
+
+    {/* Modal for Working Group Reports */}
+    <ModalResourceCards
+        show={showModal}
+        onClose={() => setShowModal(false)}
+        title={group.title}
+        cards={reports}
+        itemLabel="Reports"
+        loadError={loadError}
+    />
+    </>
   );
 }
 
@@ -185,6 +304,7 @@ export default function WorkingGroupsPage() {
     >
       <main ref={containerRef} className="tw-pb-16">
         <div className="container tw-mt-8">
+          {/* Hero Section */}
           <section
             className={clsx(
               styles.hero,
@@ -271,14 +391,17 @@ export default function WorkingGroupsPage() {
               </div>
             </div>
           </section>
-
+          
+          {/* Working Group Cards */}
           <section className="tw-mt-8">
+            {/* Grid of working group cards */}
             <div className="tw-grid tw-grid-cols-1 lg:tw-grid-cols-2 tw-gap-5">
               {filteredGroups.map((group, idx) => (
                 <WorkingGroupCard key={group.id ?? group.title ?? idx} group={group} index={idx} />
               ))}
             </div>
-
+            
+            {/* No Results Message */}
             {filteredGroups.length === 0 ? (
               <div className="tw-mt-8 tw-rounded-2xl tw-border tw-border-slate-200/70 dark:tw-border-slate-700/70 tw-bg-white/60 dark:tw-bg-slate-900/40 tw-p-6 tw-text-slate-700 dark:tw-text-slate-300">
                 No working groups matched your search.
