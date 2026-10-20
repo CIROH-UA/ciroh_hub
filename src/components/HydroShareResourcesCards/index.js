@@ -25,6 +25,8 @@ export function ResourceCard({ resource, defaultImage }) {
     const embedUrl = resource?.embed_url;
     const resourceType = resource?.resource_type;
 
+    const titleLinkClassName = 'tw-no-underline tw-text-black hover:tw-text-cyan-700 dark:tw-text-white dark:hover:tw-text-cyan-300';
+
     useEffect(() => {
         if (!showEmbed || !embedUrl) {
             if (objectUrlRef.current) {
@@ -109,16 +111,37 @@ export function ResourceCard({ resource, defaultImage }) {
                         ) : (
                             <>
                                 <h3 className="tw-text-base sm:tw-text-lg tw-font-semibold tw-leading-snug tw-text-slate-900 dark:tw-text-white tw-line-clamp-2">
-                                    {pageUrl || resourceUrl ? (
+                                    {pageUrl ? (
                                         <a
-                                            href={pageUrl || resourceUrl}
+                                            href={pageUrl}
                                             target="_blank"
                                             rel="noreferrer"
                                             title={title}
-                                            className="tw-no-underline tw-text-black hover:tw-text-cyan-700 dark:tw-text-white dark:hover:tw-text-cyan-300"
+                                            className={titleLinkClassName}
                                         >
                                             {title}
                                         </a>
+                                ) : embedUrl ? (
+                                    <a
+                                        href={embedUrl}
+                                        target="_blank"
+                                        rel="noreferrer"
+                                        title={title}
+                                        onClick={(e) => { e.preventDefault(); setShowEmbed(true); }}
+                                        className={titleLinkClassName}
+                                    >
+                                        {title}
+                                    </a>
+                                ) : resourceUrl ? (
+                                    <a
+                                        href={resourceUrl}
+                                        target="_blank"
+                                        rel="noreferrer"
+                                        title={title}
+                                        className={titleLinkClassName}
+                                    >
+                                        {title}
+                                    </a>
                                 ) : (
                                     <div title={title}>{title}</div>
                                 )}
