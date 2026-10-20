@@ -30,7 +30,7 @@
     text-align: right;
 }
 
-[data-reduce-motion="false"] .hideable {
+[data-reduce-motion="false"] .hideabletransition {
     transition: width 1s;
 }
 
