@@ -9,7 +9,7 @@ import {
   HiOutlineTag,
 } from 'react-icons/hi';
 import HydroShareResourceForm from '@site/src/components/HydroShareResourceForm';
-import ModalGeneric from '@site/src/components/ModalGeneric';
+import ModalGeneric from '@site/src/components/Modal/ModalGeneric';
 import useHydroShareAuth from '@site/src/components/HydroShareAuth/useHydroShareAuth';
 
 export default function HydroShareCard() {
