@@ -98,7 +98,9 @@ function AppsPageContent({ contributeUrl, docsUrl, defaultImage }) {
       <main className="tw-relative tw-z-20">
         {/* Link to tethys.ciroh.org */}
         <div className="tw-flex tw-w-full tw-h-full tw-pt-10 tw-justify-center tw-items-center tw-bg-white dark:tw-bg-[#060010]">
-            <h2>Explore real-world Tethys apps built by the CIROH community on the <a href="https://tethys.ciroh.org/apps/">CIROH Tethys Portal</a></h2>
+            <h2 className="tw-px-2 tw-text-center">
+              Explore real-world Tethys apps built by the CIROH community on the <a href="https://tethys.ciroh.org/apps/">CIROH Tethys Portal</a>
+            </h2>
         </div>
 
         {/* Featured Apps Carousel */}

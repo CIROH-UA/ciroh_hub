@@ -53,7 +53,7 @@ export default function Header({ title, tagline, description, buttons, notice })
             </div>
 
             {buttons && buttons.length > 0 && (
-              <div className="tw-flex tw-flex-col sm:tw-flex-row tw-gap-3 sm:tw-gap-4 tw-pt-4 tw-justify-center md:tw-justify-start">
+              <div className="tw-flex tw-flex-row tw-flex-wrap tw-gap-3 sm:tw-gap-4 tw-pt-4 tw-justify-center md:tw-justify-start">
 
                 {buttons.map((button, index) => (
                   <Link
