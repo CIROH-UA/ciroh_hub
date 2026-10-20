@@ -259,7 +259,7 @@ export default function ModalResourceCards({ show, onClose, title, cards, loadEr
                     ) : totalCount === 0 ? (
                         <div className="tw-flex tw-h-64 tw-items-center tw-justify-center tw-text-slate-600 dark:tw-text-slate-300">
                             {loadError
-                                ? `Could not load resources: ${loadError}`
+                                ? 'Could not load resources'
                                 : 'No Resources Available'}
                         </div>
                     ) : shownCount === 0 ? (
