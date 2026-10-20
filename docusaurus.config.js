@@ -225,13 +225,16 @@ const config = {
           else if (existingPath.includes('/docs/products/ngiab-ecosystem/dependencies/hydrofabric')) {
             return [
               existingPath.replace('/docs/products/ngiab-ecosystem/dependencies/hydrofabric', '/docs/products/Hydrofabric'),
-
             ];
           }
           else if (existingPath.includes('/docs/products/ngiab-ecosystem/dependencies')) {
             return [
               existingPath.replace('/docs/products/ngiab-ecosystem/dependencies', '/docs/products/ngiab/community-nextgen-repos'),
-
+            ];
+          }
+          else if (existingPath.includes('/contribute/')) {
+            return [
+              existingPath.replace('/contribute/', '/docs/contribute/'),
             ];
           }
           return undefined; // Return a falsy value: no redirect created
