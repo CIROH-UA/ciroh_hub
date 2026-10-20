@@ -5,9 +5,11 @@ import styles from "./styles.module.css";
 import { FaCaretDown } from "react-icons/fa";
 import { storageAvailable } from '@site/src/utils/localStorage';
 import useIsBrowser from '@docusaurus/useIsBrowser';
+import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 
 export default function FeedbackButton() {
 
+    const {siteConfig} = useDocusaurusContext();
     const [expanded, setExpanded] = useState(false);
     const [blockAnimation, setBlockAnimation] = useState(true);
     const [hidden, setHidden] = useState(true);
@@ -46,7 +48,7 @@ export default function FeedbackButton() {
             <span className={clsx(styles.collapsible, blockAnimation ? "" : styles.collapsibletransition, expanded ? styles.uncollapsed : styles.collapsed)}>
                 <span className={styles.inner}>
                     <Link
-                        to="https://forms.cloud.microsoft/Pages/DesignPageV2.aspx?origin=NeoPortalPage&subpage=design&id=jnIAKtDwtECk6M5DPz-8p4IIpHdEnmhNgjOa9FjrwGtUMkI0NDFOOVlTVURTRThKMFVaT1ZNQ0hHSy4u"
+                        to={siteConfig.customFields.externalLinks.feedbackForm}
                         className={styles.greytext}
                     >
                         SEND FEEDBACK
