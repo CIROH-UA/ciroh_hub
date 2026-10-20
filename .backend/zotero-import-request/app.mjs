@@ -180,6 +180,30 @@ export const lambdaHandler = async (event, context) => {
   const collections = body?.collections || [];
   const thumbnail = body?.thumbnail || null;
 
+  // Validate thumbnail
+  if (!thumbnail || typeof thumbnail.data !== 'string' || thumbnail.data.length === 0) {
+    return {
+      statusCode: 400,
+      headers: corsHeaders,
+      body: JSON.stringify({
+        message: 'Please select a thumbnail image.',
+      }),
+    };
+  }
+
+  // Check the size of the thumbnail image (base64-encoded) to ensure it is less than 4 MB
+  const thumbnailPadding = thumbnail.data.endsWith('==') ? 2 : thumbnail.data.endsWith('=') ? 1 : 0;
+  const thumbnailBytes = (thumbnail.data.length * 3) / 4 - thumbnailPadding;
+  if (thumbnailBytes > 4 * 1024 * 1024) {
+    return {
+      statusCode: 400,
+      headers: corsHeaders,
+      body: JSON.stringify({
+        message: 'Thumbnail image size must be less than 4 MB.',
+      }),
+    };
+  }
+
   // Validate doi
   const doiRegex = /^(10\.\d{4,9}\/[-._;()/:A-Z0-9]+)$/i;
   if (!doiRegex.test(doi))

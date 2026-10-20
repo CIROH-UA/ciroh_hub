@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 320" role="img" aria-label="Documentation illustration">
+  <defs>
+    <linearGradient id="exDocSpine" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#3b82f6"/>
+      <stop offset="1" stop-color="#1d4ed8"/>
+    </linearGradient>
+  </defs>
+
+  <!-- soft backdrop -->
+  <circle cx="200" cy="168" r="132" fill="#bfdbfe" opacity="0.35"/>
+  <circle cx="86" cy="70" r="10" fill="#60a5fa" opacity="0.8"/>
+  <circle cx="322" cy="60" r="7" fill="#19a7ce" opacity="0.8"/>
+
+  <!-- back page peeking -->
+  <rect x="120" y="70" width="150" height="150" rx="10" fill="#dbeafe" transform="rotate(-8 195 145)"/>
+
+  <!-- open book -->
+  <g>
+    <path d="M60 96 C110 78 168 78 200 100 C232 78 290 78 340 96 L340 250 C290 232 232 232 200 254 C168 232 110 232 60 250 Z" fill="#ffffff" stroke="#1e40af" stroke-width="5" stroke-linejoin="round"/>
+    <rect x="192" y="92" width="16" height="164" rx="4" fill="url(#exDocSpine)"/>
+
+    <!-- left page lines -->
+    <g fill="#cbd5e1">
+      <rect x="88" y="120" width="88" height="8" rx="4"/>
+      <rect x="88" y="140" width="88" height="8" rx="4"/>
+      <rect x="88" y="160" width="72" height="8" rx="4"/>
+      <rect x="88" y="188" width="88" height="8" rx="4"/>
+    </g>
+    <rect x="88" y="120" width="46" height="8" rx="4" fill="#1d4ed8"/>
+
+    <!-- right page lines -->
+    <g fill="#cbd5e1">
+      <rect x="224" y="120" width="88" height="8" rx="4"/>
+      <rect x="224" y="140" width="88" height="8" rx="4"/>
+      <rect x="224" y="160" width="72" height="8" rx="4"/>
+      <rect x="224" y="188" width="60" height="8" rx="4"/>
+    </g>
+    <rect x="224" y="120" width="52" height="8" rx="4" fill="#19a7ce"/>
+  </g>
+
+  <!-- bookmark ribbon -->
+  <path d="M244 78 h30 v58 l-15 -14 l-15 14 z" fill="#f59e0b"/>
+
+  <!-- magnifying glass -->
+  <g transform="translate(250 196)">
+    <circle cx="0" cy="0" r="34" fill="#ffffff" stroke="#19a7ce" stroke-width="9"/>
+    <circle cx="0" cy="0" r="16" fill="#bae6fd" opacity="0.7"/>
+    <rect x="24" y="24" width="40" height="14" rx="7" transform="rotate(45 24 24)" fill="#1e40af"/>
+  </g>
+
+  <!-- sparkle -->
+  <path d="M96 226 l5 13 l13 5 l-13 5 l-5 13 l-5 -13 l-13 -5 l13 -5 z" fill="#1d4ed8" opacity="0.75"/>
+</svg>

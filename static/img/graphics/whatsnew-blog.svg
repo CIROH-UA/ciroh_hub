@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 280" role="img" aria-label="Latest blog post illustration">
+  <defs>
+    <linearGradient id="wnBlogBg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#eff6ff"/>
+      <stop offset="1" stop-color="#dbeafe"/>
+    </linearGradient>
+    <linearGradient id="wnBlogCard" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#f1f5f9"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="480" height="280" fill="url(#wnBlogBg)"/>
+  <circle cx="70" cy="60" r="34" fill="#bfdbfe" opacity="0.7"/>
+  <circle cx="426" cy="220" r="44" fill="#93c5fd" opacity="0.45"/>
+
+  <!-- back page -->
+  <rect x="150" y="70" width="176" height="150" rx="12" fill="#bfdbfe" transform="rotate(-6 238 145)"/>
+
+  <!-- main article card -->
+  <g transform="rotate(3 240 145)">
+    <rect x="144" y="60" width="196" height="170" rx="14" fill="url(#wnBlogCard)" stroke="#1e40af" stroke-width="3"/>
+    <rect x="164" y="84" width="92" height="14" rx="7" fill="#1d4ed8"/>
+    <rect x="164" y="110" width="148" height="8" rx="4" fill="#cbd5e1"/>
+    <rect x="164" y="128" width="148" height="8" rx="4" fill="#cbd5e1"/>
+    <rect x="164" y="146" width="120" height="8" rx="4" fill="#cbd5e1"/>
+    <rect x="164" y="176" width="60" height="20" rx="10" fill="#19a7ce"/>
+    <circle cx="298" cy="186" r="12" fill="#f59e0b"/>
+  </g>
+
+  <!-- speech bubble -->
+  <g>
+    <path d="M330 44 h74 a14 14 0 0 1 14 14 v34 a14 14 0 0 1 -14 14 h-42 l-16 16 v-16 h-16 a14 14 0 0 1 -14 -14 v-34 a14 14 0 0 1 14 -14 z" fill="#1e40af"/>
+    <circle cx="352" cy="75" r="5" fill="#ffffff"/>
+    <circle cx="370" cy="75" r="5" fill="#ffffff"/>
+    <circle cx="388" cy="75" r="5" fill="#ffffff"/>
+  </g>
+
+  <!-- pencil -->
+  <g transform="rotate(38 320 210)">
+    <rect x="270" y="200" width="96" height="20" rx="4" fill="#f59e0b"/>
+    <rect x="270" y="200" width="18" height="20" fill="#fcd34d"/>
+    <path d="M366 200 l20 10 l-20 10 z" fill="#1e293b"/>
+    <rect x="258" y="200" width="12" height="20" rx="3" fill="#f472b6"/>
+  </g>
+</svg>

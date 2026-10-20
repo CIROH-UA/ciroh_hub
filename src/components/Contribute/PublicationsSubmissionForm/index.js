@@ -45,6 +45,8 @@ export default function PublicationsSubmissionForm({ groupId, zoteroApiKey }) {
   const [thumbnailFile, setThumbnailFile] = useState(null);
   const [thumbnailWarning, setThumbnailWarning] = useState('');
 
+  const baseUrl = useBaseUrl('/');
+
   const zoteroClient = React.useMemo(
     () => api(zoteroApiKey).library('group', groupId),
     [zoteroApiKey, groupId],
@@ -102,6 +104,17 @@ export default function PublicationsSubmissionForm({ groupId, zoteroApiKey }) {
       return;
     }
 
+    // Validate thumbnail
+    if (!thumbnailFile) {
+      setError('Please select a thumbnail image.');
+      setProgressMessage('Please select a thumbnail image.');
+      handleRecaptcha('');
+      if (recaptchaRef.current) {
+        recaptchaRef.current.reset();
+      }
+      return;
+    }
+
     setLoading(true);
     try {
       // Holds any notes we want to add to the Zotero item based on user input
@@ -149,13 +162,9 @@ export default function PublicationsSubmissionForm({ groupId, zoteroApiKey }) {
         notes.push('Acknowledges CIROH: No');
       }
 
-      // Read thumbnail file as ArrayBuffer if one was selected
-      let thumbnailData = null;
-      if (thumbnailFile)
-      {
-        setProgressMessage('Reading thumbnail image...');
-        thumbnailData = await thumbnailFile.arrayBuffer();
-      }
+      // Read thumbnail file as ArrayBuffer
+      setProgressMessage('Reading thumbnail image...');
+      const thumbnailData = await thumbnailFile.arrayBuffer();
 
       // Build request headers for the backend API call
       const requestHeaders = {
@@ -168,28 +177,22 @@ export default function PublicationsSubmissionForm({ groupId, zoteroApiKey }) {
         doi: query.trim(),
         notes: notes,
         collections: selectedCollections.map(o => o.value),
-        thumbnail: thumbnailFile ? {
+        thumbnail: {
           name: thumbnailFile.name,
           type: thumbnailFile.type,
           size: thumbnailFile.size,
           data: arrayBufferToBase64(thumbnailData),
-        } : null,
+        },
       });
 
-      // Give feedback if thumbnail was not selected
-      if (!thumbnailFile || !thumbnailData)
-      {
-        setProgressMessage('Importing Citation...');
-      }
+      setProgressMessage('Importing Citation...');
 
       // Check for unavailable API url
-      if (customFields.zotero_import_request_api_url == "http://127.0.0.1:3000/zotero-import-request" && !(useBaseUrl('/') === '/local')) {
-        let errorMessage = 'Site administrator: Please configure the import request URL in this website\'s environment file.';
-        throw new Error(errorMessage);
+      if (customFields.zotero_import_request_api_url === "http://127.0.0.1:3000/zotero-import-request" && baseUrl !== '/local/') {
+        throw new Error('Site administrator: Please configure the import request URL in this website\'s environment file.');
       }
-      else if (customFields.zotero_import_request_url == "forbidden") {
-        let errorMessage = 'Access forbidden by CI/CD. (This may be built from a remote branch that cannot access secrets.)';
-        throw new Error(errorMessage);
+      else if (customFields.zotero_import_request_api_url === "forbidden") {
+        throw new Error('Access forbidden by CI/CD. (This may be built from a remote branch that cannot access secrets.)');
       }
 
       // Make request to the backend API to verify reCAPTCHA and import the citation data into Zotero
@@ -337,7 +340,7 @@ export default function PublicationsSubmissionForm({ groupId, zoteroApiKey }) {
         </div>
 
         {/* Thumbnail Image Upload */}
-        <label className={styles.label}>Thumbnail Image (optional)</label>
+        <label className={styles.label}>Thumbnail Image</label>
         <input
           type="file"
           accept="image/*"
