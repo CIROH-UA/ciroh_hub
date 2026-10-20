@@ -1,6 +1,6 @@
 import React, {useContext, useState, useEffect} from 'react';
 import {ReducedMotionContext} from "@theme/Contexts";
-import HydroShareAuthProvider from '@site/src/components/HydroShareAuth';
+import HydroShareAuthProvider from '@site/src/components/HydroShare/Auth';
 
 // Credit: https://developer.mozilla.org/en-US/docs/Web/API/Web_Storage_API/Using_the_Web_Storage_API#feature-detecting_localstorage
 function storageAvailable(type) {

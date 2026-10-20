@@ -8,9 +8,9 @@ import {
   HiOutlineLink,
   HiOutlineTag,
 } from 'react-icons/hi';
-import HydroShareResourceForm from '@site/src/components/HydroShareResourceForm';
+import HydroShareResourceForm from '@site/src/components/Contribute/HydroShareResourceForm';
 import ModalGeneric from '@site/src/components/Modal/ModalGeneric';
-import useHydroShareAuth from '@site/src/components/HydroShareAuth/useHydroShareAuth';
+import useHydroShareAuth from '@site/src/components/HydroShare/Auth/useHydroShareAuth';
 
 export default function HydroShareCard() {
   const logo = useBaseUrl('/img/logos/HydroShareLogo.png');

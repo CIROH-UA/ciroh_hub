@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { FaSpinner } from 'react-icons/fa';
 import clsx from 'clsx';
-import useHydroShareAuth from '@site/src/components/HydroShareAuth/useHydroShareAuth';
+import useHydroShareAuth from '@site/src/components/HydroShare/Auth/useHydroShareAuth';
 import styles from './styles.module.css';
 
 const resourceTypeOptions = [
