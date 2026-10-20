@@ -43,7 +43,13 @@ export function ResourceCard({ resource, defaultImage }) {
                 if (objectUrlRef.current) {
                     URL.revokeObjectURL(objectUrlRef.current);
                 }
-                const url = URL.createObjectURL(blob);
+                // HydroShare sometimes serves PDFs as application/octet-stream, which makes the
+                // browser download the blob instead of rendering it inline. Force the PDF type so
+                // <embed> always views it in-browser.
+                const pdfBlob = blob.type === 'application/pdf'
+                    ? blob
+                    : new Blob([blob], { type: 'application/pdf' });
+                const url = URL.createObjectURL(pdfBlob);
                 objectUrlRef.current = url;
                 setEmbedSrc(url);
             })
