@@ -7,7 +7,7 @@ import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 
 import styles from './styles.module.css';
 import { workingGroups } from '@site/src/data/workingGroupsData';
-import { ReducedMotionContext } from '@theme/Contexts';
+import { ReducedMotionContext } from '@site/src/components/ReducedMotion/Context';
 
 const normalize = (s) => (s ?? '').toLowerCase().trim();
 

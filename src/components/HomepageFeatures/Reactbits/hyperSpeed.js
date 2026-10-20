@@ -1,7 +1,7 @@
 import { useEffect, useRef, useContext } from 'react';
 import * as THREE from 'three';
 import { BloomEffect, EffectComposer, EffectPass, RenderPass, SMAAEffect, SMAAPreset } from 'postprocessing';
-import { ReducedMotionContext } from '@theme/Contexts'
+import { ReducedMotionContext } from '@site/src/components/ReducedMotion/Context'
 
 import './hyperSpeed.css';
 
