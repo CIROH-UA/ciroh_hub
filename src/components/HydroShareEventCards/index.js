@@ -12,7 +12,7 @@ import ModalResourceCards from '@site/src/components/ModalResourceCards';
  * @param {string} collectionId 
  * @returns {Promise<Array>} List of presentation cards
  */
-async function loadEventPresentations(collectionId) {
+export async function loadEventPresentations(collectionId) {
     // Fetch presentations in the collection
     const resources = await fetchResourcesFromCollection(collectionId);
 
