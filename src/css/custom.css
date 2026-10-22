@@ -12,16 +12,6 @@
 }
 
 :root {
-  @media (width <= 1280px) {
-    .navbar__item {
-      display: none;
-    }
-
-    .navbar__toggle {
-      display: inherit;
-    }
-  }
-
   /* Font size adjustments (note: these need to have the font tag recalculate for scoping reasons) */
 
   /* Increase text size for markdown components (see Issue #107) */
