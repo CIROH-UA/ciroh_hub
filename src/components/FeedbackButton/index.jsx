@@ -24,24 +24,28 @@ export default function FeedbackButton() {
             localStorage.setItem('feedback-collapse-date', "");
         }
         else if (prev == null || prev === "") {
-            localStorage.setItem('feedback-collapse-date', toString(Date.now()));
+            localStorage.setItem('feedback-collapse-date', String(Date.now()));
         }
     };
 
     useEffect(() => {
         const ONE_DAY_MS = 86400000;
-        let prev = localStorage.getItem('feedback-collapse-date');
         let shouldCollapse = false;
-        if (prev != null && !(prev === "")) {
-            if (+prev < Date.now() - ONE_DAY_MS) {
-                localStorage.setItem('feedback-collapse-date', "");
-            } else {
-                shouldCollapse = true;
+        try {
+            const prev = localStorage.getItem('feedback-collapse-date');
+            if (prev != null && prev !== "") {
+                if (+prev < Date.now() - ONE_DAY_MS) {
+                    localStorage.setItem('feedback-collapse-date', "");
+                } else {
+                    shouldCollapse = true;
+                }
             }
+        } catch {
+            // Continue without persistence when storage is unavailable.
         }
         setExpanded(!shouldCollapse);
         setHidden(false);
-    });
+    }, []);
 
     return (
         <div className={clsx(styles.topright, styles.feedbackbutton, hidden ? styles.hidden : "")}>
@@ -50,15 +54,25 @@ export default function FeedbackButton() {
                     <Link
                         to={siteConfig.customFields.externalLinks.feedbackForm}
                         className={styles.greytext}
+                        tabIndex={expanded ? 0 : -1}
+                        aria-hidden={!expanded}
                     >
                         SEND FEEDBACK
                     </Link>
                 </span>
             </span>
-            <FaCaretDown
+            <button
+                type="button"
                 onClick={toggleFeedbackCollapsible}
-                className={clsx(styles.rotcarat, expanded ? styles.rotated : "")}
-            />
+                aria-label={expanded ? "Collapse feedback button" : "Expand feedback button"}
+                aria-expanded={expanded}
+                style={{ display: "inline-flex", padding: 0, border: 0, background: "none", color: "inherit", cursor: "pointer" }}
+            >
+                <FaCaretDown
+                    aria-hidden="true"
+                    className={clsx(styles.rotcarat, expanded ? styles.rotated : "")}
+                />
+            </button>
         </div>
     )
 };
