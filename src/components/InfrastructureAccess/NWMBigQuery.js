@@ -102,7 +102,7 @@ const NWMBigQuery = () => {
         </div>
 
         <a
-          href="https://github.com/CIROH-UA/NGIAB-CloudInfra/issues/new?template=case_studies_call_template.yml"
+          href="https://github.com/CIROH-UA/r2ohc_platform/issues/new?template=cloud_resources_request.yml"
           target="_blank"
           rel="noopener noreferrer"
           style={{

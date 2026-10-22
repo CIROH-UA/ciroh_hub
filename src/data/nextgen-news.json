@@ -22,8 +22,8 @@
 		{
 			"type": "pantarhei",
 			"title": "Pantarhei 2.0: Migration Requests Open",
-			"link": "https://github.com/CIROH-UA/NGIAB-CloudInfra/issues/new?template=new-onprem-request.yml",
-			"description": "CIROH is expanding the Pantarhei cluster. For migration of data or to get access to new Pantarhei 2.0 system, please [submit an IT ticket](https://github.com/CIROH-UA/NGIAB-CloudInfra/issues/new?template=new-onprem-request.yml) using the linked issue template."
+			"link": "https://github.com/CIROH-UA/r2ohc_platform/issues/new?template=pantarhei_migration_request.yml",
+			"description": "CIROH is expanding the Pantarhei cluster. For migration of data or to get access to new Pantarhei 2.0 system, please [submit an IT ticket](https://github.com/CIROH-UA/r2ohc_platform/issues/new?template=pantarhei_migration_request.yml) using the linked issue template."
 		},
 		{
 			"type": "cyberinfrastructure",
@@ -480,7 +480,7 @@
 			{
 			"type": "update",
 			"title": "DevCon Workshops IT needs - Due on April 1st, 2026❗",
-			"description":"If you are planning a workshop for DevCon, please submit your IT requirements using the [workshop IT request form](https://github.com/CIROH-UA/NGIAB-CloudInfra/issues/new?assignees=&projects=&template=workshop_IT_request.md)."
+			"description":"If you are planning a workshop for DevCon, please submit your IT requirements using the [workshop IT request form](https://github.com/CIROH-UA/r2ohc_platform/issues/new?template=workshop_IT_request.yml)."
 			}
 		],
 

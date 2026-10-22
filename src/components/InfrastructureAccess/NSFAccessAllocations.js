@@ -21,7 +21,7 @@ const NSFAccessAllocations = () => {
       buttons: [
         {
           text: "Infrastructure Request Form",
-          link: "https://github.com/CIROH-UA/NGIAB-CloudInfra/issues/new?template=onprem-request.yml"
+          link: "https://github.com/CIROH-UA/r2ohc_platform/issues/new?template=on_premise_request.yml&labels=infrastructure%2Cresource-request%2Caccess-allocation&title=%5BACCESS%20Allocation%20Request%5D%3A%20"
         }
       ],
       details: "This form ensures your project is properly registered and your team has the necessary permissions."
