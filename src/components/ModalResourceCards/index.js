@@ -1,5 +1,4 @@
 import React, { useEffect, useMemo, useRef, useState, startTransition } from 'react';
-import { useTheme } from '@docusaurus/theme-common';
 import ReactDOM from 'react-dom';
 import HydroShareResourcesCards from "@site/src/components/HydroShareResourcesCards";
 import { FaWindowClose } from 'react-icons/fa';
@@ -12,27 +11,27 @@ import DatasetDarkIcon from '@site/static/img/cards/datasets_logo_dark.png';
 const DEBOUNCE_MS = 1_000;
 
 /**
- * Filter and sort a list of presentation cards locally.
- * @param {Array} presentations - List of presentation objects to filter/sort.
- * @param {string} filterSearch - Search query to filter presentations by (matches title, description, authors, or dates).
+ * Filter and sort a list of cards locally.
+ * @param {Array} cards - List of card objects to filter/sort.
+ * @param {string} filterSearch - Search query to filter cards by (matches title, description, authors, or dates).
  * @param {string} sortType - Field to sort by ('modified', 'created', 'title', 'author').
  * @param {string} sortDirection - Sort direction ('asc' or 'desc').
- * @returns {Array} Filtered and sorted list of presentations.
+ * @returns {Array} Filtered and sorted list of cards.
  */
-function filterAndSortPresentations(presentations, filterSearch, sortType, sortDirection) {
+function filterAndSortCards(cards, filterSearch, sortType, sortDirection) {
     // Remove leading/trailing whitespace and make search case-insensitive
     const query = (filterSearch || '').trim().toLowerCase();
 
     // Search / Filter
     const filtered = !query
-        ? presentations.slice()
-        : presentations.filter(presentation => {
+        ? cards.slice()
+        : cards.filter(card => {
             const searchableFields = [
-                presentation.title,
-                presentation.description,
-                presentation.authors,
-                presentation.date_created,
-                presentation.date_last_updated,
+                card.title,
+                card.description,
+                card.authors,
+                card.date_created,
+                card.date_last_updated,
             ];
             return searchableFields.some(field =>
                 typeof field === 'string' && field.toLowerCase().includes(query)
@@ -65,14 +64,16 @@ function filterAndSortPresentations(presentations, filterSearch, sortType, sortD
 }
 
 /**
- * Full-screen modal for displaying event presentations.
+ * Full-screen modal for displaying HydroShare resource cards.
  * @param {boolean} show - Whether the modal is visible.
  * @param {function} onClose - Function to call when the modal is closed.
  * @param {string} title - Title of the modal.
- * @param {Array} presentations - List of presentations to display.
- * @param {boolean} loadError - Whether there was an error loading the presentations.
+ * @param {Array} cards - A list of objects holding data (resource_id, title, etc) for each card to display.
+ * @param {boolean} loadError - Whether there was an error loading the cards.
+ * @param {string} itemLabel - Noun for the items shown (e.g. 'Presentations'), used in the heading and counts.
+ * @param {function} resourceCardComponent - Component to use for rendering each HydroShare resource card.
  */
-export default function ModalEventPresentations({ show, onClose, title, presentations, loadError }) {
+export default function ModalResourceCards({ show, onClose, title, cards, loadError, itemLabel = 'Items', resourceCardComponent: ResourceCardComponent }) {
     const { colorMode } = useColorMode();
     const isDarkTheme = colorMode === 'dark';
     const defaultImage = isDarkTheme ? DatasetDarkIcon : DatasetLightIcon;
@@ -130,18 +131,18 @@ export default function ModalEventPresentations({ show, onClose, title, presenta
     }, [show]);
 
     // Filtered and sorted list (from search input and sort options) - memoized for performance
-    const displayedPresentations = useMemo(() => {
-        if (!Array.isArray(presentations)) return presentations;
-        return filterAndSortPresentations(presentations, filterSearch, sortType, sortDirection);
-    }, [presentations, filterSearch, sortType, sortDirection]);
+    const displayedCards = useMemo(() => {
+        if (!Array.isArray(cards)) return cards;
+        return filterAndSortCards(cards, filterSearch, sortType, sortDirection);
+    }, [cards, filterSearch, sortType, sortDirection]);
 
     // Don't render the modal at all if it's not shown
     if (!show) return null;
 
     // Counts for display above the search bar
-    const isLoaded = Array.isArray(presentations);
-    const totalCount = isLoaded ? presentations.length : 0;
-    const shownCount = isLoaded ? (displayedPresentations?.length || 0) : 0;
+    const isLoaded = Array.isArray(cards);
+    const totalCount = isLoaded ? cards.length : 0;
+    const shownCount = isLoaded ? (displayedCards?.length || 0) : 0;
 
     return ReactDOM.createPortal(
         <div
@@ -163,11 +164,11 @@ export default function ModalEventPresentations({ show, onClose, title, presenta
                     <FaWindowClose />
                 </button>
 
-                {/* Title, Search/Filter Bar, and Presentations Container */}
+                {/* Title, Search/Filter Bar, and Cards Container */}
                 <div className="tw-h-full tw-w-full tw-p-6">
                     {/* Title */}
                     <h1 className="tw-mb-4 tw-pr-10 tw-text-2xl tw-font-semibold tw-text-center tw-text-cyan-700 dark:tw-text-cyan-300">
-                        {title} Presentations
+                        {title} {itemLabel}
                     </h1>
 
                     {/* Search and Filter Inputs */}
@@ -183,7 +184,7 @@ export default function ModalEventPresentations({ show, onClose, title, presenta
                                 <strong className="tw-font-semibold tw-text-slate-900 dark:tw-text-white">
                                     {totalCount}
                                 </strong>{' '}
-                                Presentations
+                                {itemLabel}
                             </div>
 
                             {/* Search and Sort Form */}
@@ -246,8 +247,8 @@ export default function ModalEventPresentations({ show, onClose, title, presenta
                         </div>
                     )}
 
-                    {/* Presentations */}
-                    {presentations === null ? (
+                    {/* Cards */}
+                    {cards === null ? (
                         <div id="selected-image-loader" className="tw-absolute tw-inset-0 tw-z-10 tw-pointer-events-none">
                             <div className="tw-w-full tw-h-full tw-flex tw-items-center tw-justify-center">
                                 <span className="spinner-border" role="status">
@@ -258,15 +259,15 @@ export default function ModalEventPresentations({ show, onClose, title, presenta
                     ) : totalCount === 0 ? (
                         <div className="tw-flex tw-h-64 tw-items-center tw-justify-center tw-text-slate-600 dark:tw-text-slate-300">
                             {loadError
-                                ? `Could not load presentations: ${loadError}`
-                                : 'No presentations are associated with this event yet.'}
+                                ? `Could not load resources: ${loadError}`
+                                : 'No Resources Available'}
                         </div>
                     ) : shownCount === 0 ? (
                         <p className="tw-mt-10 tw-text-center tw-text-sm tw-text-slate-600 dark:tw-text-slate-300">
-                            No Presentations Found
+                            No Resources Found
                         </p>
                     ) : (
-                        <HydroShareResourcesCards resources={displayedPresentations} defaultImage={defaultImage} />
+                        <HydroShareResourcesCards resources={displayedCards} defaultImage={defaultImage} resourceCardComponent={ResourceCardComponent} />
                     )}
                 </div>
             </div>
