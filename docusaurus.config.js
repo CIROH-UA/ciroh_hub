@@ -163,6 +163,9 @@ const config = {
       }
     ],
 
+    // Working group details pages
+    './plugins/plugin-working-groups.js',
+
     // Draw.io Plugin for embedding diagrams
     ['drawio', {}],
 

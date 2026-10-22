@@ -5,14 +5,14 @@ import { LuLayers3 } from 'react-icons/lu';
 import { HiOutlineGlobeAlt, HiOutlineUserGroup } from 'react-icons/hi';
 import { isPlaceholder, splitAuthors, StatTag, ActionLink } from '@site/src/components/HydroShare/HydroShareResourcesCards/shared';
 import { fetchResourcesFromCollection, fetchResourceCustomMetadata, fetchResourceImageUrls, } from '@site/src/components/HydroShare/HydroShareImporter';
-import ModalEventPresentations from './ModalEventPresentations';
+import ModalResourceCards from '@site/src/components/Modal/ModalResourceCards';
 
 /**
  * Load event presentations for a given collection.
  * @param {string} collectionId 
  * @returns {Promise<Array>} List of presentation cards
  */
-async function loadEventPresentations(collectionId) {
+export async function loadEventPresentations(collectionId) {
     // Fetch presentations in the collection
     const resources = await fetchResourcesFromCollection(collectionId);
 
@@ -223,12 +223,13 @@ export function EventCard({ resource, defaultImage }) {
                 </div>
             </article>
             
-            {/* Event Presentations Modal */}
-            <ModalEventPresentations
+            {/* Presentations Modal */}
+            <ModalResourceCards
                 show={showModal}
                 onClose={() => setShowModal(false)}
                 title={title}
-                presentations={presentations}
+                cards={presentations}
+                itemLabel="Presentations"
                 loadError={loadError}
             />
         </>

@@ -220,11 +220,11 @@ export function ResourceCard({ resource, defaultImage }) {
     );
 }
 
-export default function HydroShareResourcesCards({ resources, defaultImage }) {
+export default function HydroShareResourcesCards({ resources, defaultImage, resourceCardComponent: ResourceCardComponent = ResourceCard }) {
     return (
         <div className="tw-grid tw-grid-cols-1 lg:tw-grid-cols-2 2xl:tw-grid-cols-3 tw-gap-6">
             {resources.map(resource => (
-                <ResourceCard
+                <ResourceCardComponent
                     key={resource.resource_id}
                     resource={resource}
                     defaultImage={defaultImage}

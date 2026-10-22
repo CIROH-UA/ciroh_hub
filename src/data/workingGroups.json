@@ -1,0 +1,164 @@
+[
+  {
+    "id": "fim",
+    "title": "Flood Inundation Mapping Working Group",
+    "description": "Cultivates a vibrant Community of Practice among CIROH researchers and federal partners, providing thought leadership by synthesizing CIROH's advancements in FIM and aligning them with broader developments in the FIM research community. Serves as a key advocate for FIM within CIROH, informing strategic direction and CIROH roadmap development.",
+    "leads": [
+      "Sagy Cohen, University of Alabama"
+    ],
+    "reportsCollectionId": "",
+    "annual": {
+      "period": "2025-2026",
+      "objectives": [
+        "Analyze CIROH's research portfolio and the broader research community FIM research. Provide input for roadmaps, governance documents, and documentation for CIROH's community FIM products.",
+        "Develop a scholarly product (e.g., journal article, special issue in a high-profile journal, conference session) spotlighting CIROH's research advances in large-domain FIM.",
+        "Initiate discussions with the CIROH R2X team and OWP personnel toward the development of a FIM-centric R2O transition roadmap.",
+        "Support FIM-related education and training opportunities, including webinars, DevCon workshops, hackathons, and Summer Institute participation."
+      ],
+      "accomplishments": [
+        "Monthly virtual meeting, and two in-person meetings (during DevCon26 and Science Meeting)",
+        "Six (6) seminar presentations by group members (Objective #4)",
+        "Two (2) presentations by OWP staff on research efforts and operational tools (Objectives #4 & #3)",
+        "Identification of six (6) training workshops for the FIM track in the 2026 CIROH Developers Conference (Objective #4)",
+        "Development of a large overview paper involving over a dozen WG members (Objective #2)"
+      ],
+      "products": [
+        "The CIROH Community FIM Ecosystem: https://hub.ciroh.org/docs/products/community-fim/"
+      ]
+    }
+  },
+  {
+    "id": "decision-support",
+    "title": "Decision Support Working Group",
+    "description": "Focuses on understanding and advancing CIROH's decision support and social and behavioral sciences research portfolio, providing strategic guidance and visibility for these critical research areas.",
+    "leads": [
+      "Melissa Kenney, University of Minnesota"
+    ],
+    "reportsCollectionId": "",
+    "annual": {
+      "period": "2025-2026",
+      "objectives": [
+        "Develop recommendations to guide CIROH's integration of decision support and social and behavioral science across research activities.",
+        "Lead the development of a journal article synthesizing CIROH's decision support and social science research-to-impact advances.",
+        "Organize activities that increase the visibility of CIROH's decision support portfolio, such as lead/co-lead conference sessions, serve on steering committees, or otherwise contribute to activities supporting CIROH's priorities."
+      ],
+      "accomplishments": [],
+      "products": []
+    }
+  },
+  {
+    "id": "hydrologic-modeling",
+    "title": "Hydrologic Modeling and Prediction Working Group",
+    "description": "Aligns and synthesizes CIROH's hydrologic modeling research advances with those from the hydrologic sciences community. Informs CIROH's hydrologic modeling strategy and roadmap while organizing activities to advance the state of CIROH's hydrologic modeling research.",
+    "leads": [
+      "Martyn Clark, University of Calgary"
+    ],
+    "reportsCollectionId": "",
+    "annual": {
+      "period": "2025-2026",
+      "objectives": [
+        "Lead the development of a thought piece, journal article, and/or conference presentation providing a vision for hydrologic modeling and prediction that informs CIROH's hydrologic modeling research.",
+        "Analyze CIROH's research portfolio and broader hydrologic sciences community hydrologic modeling research and inform CIROH's medium and long-term hydrologic modeling research and development strategy and roadmap.",
+        "Contribute to the creation of a CIROH-sponsored cross-institution large-domain hydrologic modeling course."
+      ],
+      "accomplishments": [],
+      "products": []
+    }
+  },
+  {
+    "id": "hydroinformatics",
+    "title": "Hydroinformatics Working Group",
+    "description": "Connects and coordinates projects and researchers involved in water data science with the goal of advancing broader-scale, cross-cutting initiatives across CIROH's computational infrastructure and tools.",
+    "leads": [
+      "Dan Ames, BYU"
+    ],
+    "reportsCollectionId": "",
+    "annual": {
+      "period": "2025-2026",
+      "objectives": [
+        "Design strategy and document for a generic hydroinformatics library (Python: import ciroh; from ciroh import forecasts).",
+        "Plan and develop strategy for a hydroinformatics field camp.",
+        "Provide detailed guidance and documentation for integrating research tools in the CIROH Portal/Hub."
+      ],
+      "accomplishments": [],
+      "products": []
+    }
+  },
+  {
+    "id": "early-career",
+    "title": "Early Career Working Group",
+    "description": "Supports the advancement and success of CIROH's early career scientists by providing recommendations to CIROH leadership, informing early career scientist development strategy, and leading the organization of signature activities geared towards this community.",
+    "leads": [
+      "Juli Scamardo, Utah State University"
+    ],
+    "reportsCollectionId": "",
+    "annual": {
+      "period": "2025-2026",
+      "objectives": [
+        "Support the development and implementation of a CIROH early career peer mentoring program.",
+        "Develop signature activities for CIROH's early career scientists to be delivered during DevCon, Science Meeting, and national conferences.",
+        "Identify resources that are available to and/or needed by CIROH early career scientists."
+      ],
+      "accomplishments": [],
+      "products": []
+    }
+  },
+  {
+    "id": "community-resources",
+    "title": "Community Resources Working Group",
+    "description": "Informs the planning of CIROH's community resources, including research cyberinfrastructure (computing and storage capacity), research hydrology forecasting capabilities (NGIAB, NRDS), community documentation (CIROH Hub), and products/datasets (Portal). Oversees organization and dissemination of resources through CIROH Hub, Portal, HydroShare, and other outlets.",
+    "leads": [
+      "Arpita Patel, The University of Alabama"
+    ],
+    "reportsCollectionId": "",
+    "annual": {
+      "period": "2025-2026",
+      "objectives": [
+        "Establish the CIROH Hub and Portal policies.",
+        "Lead the development of cyberinfrastructure (Compute/Storage) roadmap.",
+        "Plan and develop the roadmap for NGIAB and NRDS.",
+        "Lead the development of articles/publications (e.g., R2X)."
+      ],
+      "accomplishments": [],
+      "products": []
+    }
+  },
+  {
+    "id": "artificial-intelligence",
+    "title": "Artificial Intelligence Working Group",
+    "description": "Informs the creation of CIROH's AI strategy and implementation roadmap. Encourages and supports white papers, facilitates DevCon AI/ML track workshops, synthesizes CIROH's AI research advances, and organizes activities to advance the state of CIROH's AI research.",
+    "leads": [
+      "Jonathan Frame, The University of Alabama"
+    ],
+    "reportsCollectionId": "",
+    "annual": {
+      "period": "2025-2026",
+      "objectives": [
+        "Develop CIROH AI Strategy document (submit for CIROH Internal Review in Early December, NOAA Review in Early January, release at CIROH Developer's Conference).",
+        "Support and facilitate white papers that make progress towards CIROH's AI Strategy.",
+        "Organize AI/ML Track for CIROH Developer's Conference."
+      ],
+      "accomplishments": [],
+      "products": []
+    }
+  },
+  {
+    "id": "model-forecast-evaluation",
+    "title": "Model & Forecast Evaluation Working Group",
+    "description": "Informs the creation of CIROH's model and forecast evaluation expectation, strategy, and implementation roadmap. Helps synthesize CIROH's model and forecast evaluation research advances with those from the hydrologic sciences community and organizes activities to advance this research area.",
+    "leads": [
+      "Shaun Carney, RTI"
+    ],
+    "reportsCollectionId": "",
+    "annual": {
+      "period": "2025-2026",
+      "objectives": [
+        "Solidify with guidance and examples CIROH's model and forecast evaluation approach, including \"model/example\" protocols for evaluation, definition of data, metrics, and tools for hydrologic modeling (simulation & forecasting), flood inundation mapping, forcing data, decision support, and observations.",
+        "Produce scholarly output documenting evaluation protocols and guidance.",
+        "Analyze CIROH's research portfolio and broader research community model and forecast evaluation research and inform CIROH's research and development strategy and roadmap."
+      ],
+      "accomplishments": [],
+      "products": []
+    }
+  }
+]
