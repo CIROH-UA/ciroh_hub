@@ -15,8 +15,16 @@
         "Initiate discussions with the CIROH R2X team and OWP personnel toward the development of a FIM-centric R2O transition roadmap.",
         "Support FIM-related education and training opportunities, including webinars, DevCon workshops, hackathons, and Summer Institute participation."
       ],
-      "accomplishments": [],
-      "products": []
+      "accomplishments": [
+        "Monthly virtual meeting, and two in-person meetings (during DevCon26 and Science Meeting)",
+        "Six (6) seminar presentations by group members (Objective #4)",
+        "Two (2) presentations by OWP staff on research efforts and operational tools (Objectives #4 & #3)",
+        "Identification of six (6) training workshops for the FIM track in the 2026 CIROH Developers Conference (Objective #4)",
+        "Development of a large overview paper involving over a dozen WG members (Objective #2)"
+      ],
+      "products": [
+        "The CIROH Community FIM Ecosystem: https://hub.ciroh.org/docs/products/community-fim/"
+      ]
     }
   },
   {
