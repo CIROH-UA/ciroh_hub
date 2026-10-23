@@ -114,13 +114,27 @@
     "annual": {
       "period": "2025-2026",
       "objectives": [
-        "Establish the CIROH Hub and Portal policies.",
-        "Lead the development of cyberinfrastructure (Compute/Storage) roadmap.",
-        "Plan and develop the roadmap for NGIAB and NRDS.",
-        "Lead the development of articles/publications (e.g., R2X)."
+        "Provide inputs for the CIROH CyberInfrastructure roadmaps to meet community and research needs, governance documents, establish cybersecurity protocols and documentation for products/tools developed/deployed using CIROH IT.",
+        "Plan and develop the roadmap for community open source projects, develop governance, PR review process, implement CI/CD pipelines, automated tests and monitoring frameworks to accelerate deployment cycles.",
+        "Establish the community contributions guidelines for documentation on CIROH Hub, governance and help community adopt IT and DevOps tools and processes.",
+        "Provide technical assistance, training sessions, and collaboratively develop articles/publications/presentations."
       ],
-      "accomplishments": [],
-      "products": []
+      "accomplishments": [
+        "Monthly virtual meetings.",
+        "Integrated 10+ models into NextGen In A Box (NGIAB) (Objective #2)",
+        "Expanded research datastream configurations using NGIAB to 6 active datastreams",
+        "Supported extensive cloud and HPC usage, recording 76 users on AWS, 95 on GCP + 2i2c, 71 on Pantarhei + Wukong, and 141 on NSF ACCESS. (Objective #1)",
+        "Merged DocuHub and Portal repositories and deployed the CIROH Hub in March 2026 with new apps, documents and improved accessibility. Helped drive the total number of blogs to 30. (Objective #2)",
+        "CIROH Hub as centralized place for CIROH resources totaling 36 applications, 45 datasets, 271 publications, 40 presentations, 7 notebooks, and 19 courses as of September 2026. (Objective #2)",
+        "Published three papers from research projects - NGIAB, CCNH and NRDS (in review) are published out of this WG members. (Objective #4)",
+        "Two (2) presentations by group members about research projects. (CCNH, NRDS) (Objective #4)",
+        "Identification of six (6) training workshops for the Community NextGen track in the 2026 CIROH Developers Conference (Objective #4)"
+      ],
+      "products": [
+        "CIROH Hub - hub.ciroh.org",
+        "CIROH Community NextGen Ecosystem: https://hub.ciroh.org/docs/products/ngiab-ecosystem/, https://ngiab.ciroh.org",
+        "CIROH Cyberinfrastructure - Research to Operation Hybrid Cloud (R2OHC) Platform: https://hub.ciroh.org/docs/services/intro"
+      ]
     }
   },
   {
