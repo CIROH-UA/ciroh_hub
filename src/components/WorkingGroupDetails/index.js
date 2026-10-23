@@ -59,7 +59,7 @@ export default function WorkingGroupDetails({ group }) {
           ) : null}
           {annual.period ? (
             <p className="tw-mt-2 tw-text-sm tw-text-slate-600 dark:tw-text-slate-400">
-              Reporting period: {annual.period}
+              Reporting period: {annual.period}{annual.updated ? ` (updated ${annual.updated})` : ''}
             </p>
           ) : null}
 

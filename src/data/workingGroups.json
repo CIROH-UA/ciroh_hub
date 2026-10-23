@@ -106,21 +106,46 @@
   {
     "id": "community-resources",
     "title": "Community Resources Working Group",
-    "description": "Informs the planning of CIROH's community resources, including research cyberinfrastructure (computing and storage capacity), research hydrology forecasting capabilities (NGIAB, NRDS), community documentation (CIROH Hub), and products/datasets (Portal). Oversees organization and dissemination of resources through CIROH Hub, Portal, HydroShare, and other outlets.",
+    "description": "The Community Resources Working Group (CRWG) serves as a collaborative hub within CIROH, dedicated to strengthening the digital infrastructure and operational efficiency of community-driven initiatives. By leveraging modern IT practices and DevOps methodologies, the group ensures that CIROH’s platforms, tools, and shared resources remain reliable, scalable and secure. The group bridges technical expertise with community needs, empowering researchers, practitioners and stakeholders to access, contribute to, and benefit from CIROH’s digital ecosystem. It also enables community support and provides a platform for discussion related to CIROH hybrid research cyberinfrastructure (R2OHC) (computing and storage capacity), open-source community repositories to advance research hydrology forecasting capabilities using NGIAB and Research Datastream (NRDS), other projects and integration work across CIROH projects, and regular updates to the wider community on product documentation, resources (publications, courses, trainings), community blogs and latest news.",
     "leads": [
-      "Arpita Patel, The University of Alabama"
+      "Arpita Patel, University of Alabama"
     ],
     "reportsCollectionId": "",
     "annual": {
-      "period": "2025-2026",
+      "period": "2026",
       "objectives": [
-        "Establish the CIROH Hub and Portal policies.",
-        "Lead the development of cyberinfrastructure (Compute/Storage) roadmap.",
-        "Plan and develop the roadmap for NGIAB and NRDS.",
-        "Lead the development of articles/publications (e.g., R2X)."
+        "Provide inputs for the CIROH cyberinfrastructure roadmaps to meet community and research needs, governance documents, cybersecurity protocols, and documentation for products/tools developed/deployed using CIROH IT.",
+        "Plan and develop the roadmap for community open source projects, develop governance and a PR review process, and implement CI/CD pipelines, automated tests and monitoring frameworks to accelerate deployment cycles.",
+        "Establish community contribution guidelines for documentation on CIROH Hub and governance, and help the community adopt IT and DevOps tools and processes.",
+        "Provide technical assistance and training sessions, and collaboratively develop articles/publications/presentations."
       ],
-      "accomplishments": [],
-      "products": []
+      "accomplishments": [
+        "Held monthly virtual meetings.",
+        "Integrated 10+ models into NextGen In A Box (NGIAB) (Objective #2).",
+        "Expanded research datastream configurations using NGIAB to 6 active datastreams.",
+        "Supported extensive cloud and HPC usage, recording 76 users on AWS, 95 on GCP + 2i2c, 71 on Pantarhei + Wukong, and 141 on NSF ACCESS (Objective #1).",
+        "Merged the DocuHub and Portal repositories and deployed the CIROH Hub in March 2026 with new apps, documents and improved accessibility. Helped drive the total number of blogs to 30 (Objective #2).",
+        "CIROH Hub serves as the centralized place for CIROH resources, totaling 36 applications, 45 datasets, 271 publications, 40 presentations, 7 notebooks, and 19 courses as of September 2026 (Objective #2).",
+        "Three papers from research projects (NGIAB, CCNH and NRDS (in review)) published by working group members (Objective #4).",
+        "Two presentations by group members about research projects (CCNH, NRDS) (Objective #4).",
+        "Identified six training workshops for the Community NextGen track in the 2026 CIROH Developers Conference (Objective #4)."
+      ],
+      "products": [
+        {
+          "title": "The CIROH Hub",
+          "url": "https://hub.ciroh.org"
+        },
+        {
+          "title": "The CIROH Community NextGen Ecosystem",
+          "description": "NGIAB ecosystem documentation and ngiab.ciroh.org",
+          "url": "https://hub.ciroh.org/docs/products/ngiab-ecosystem/"
+        },
+        {
+          "title": "The CIROH Cyberinfrastructure: Research to Operation Hybrid Cloud (R2OHC) Platform",
+          "url": "https://hub.ciroh.org/docs/services/intro"
+        }
+      ],
+      "updated": "October 2026"
     }
   },
   {
