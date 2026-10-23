@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useContext } from 'react';
-import { ReducedMotionContext } from '@theme/Contexts';
+import { ReducedMotionContext } from '@site/src/components/ReducedMotion/Context';
 
 export function ConstellationCanvas({ isDarkTheme }) {
   const canvasRef = useRef(null);

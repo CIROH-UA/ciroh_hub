@@ -1,0 +1,44 @@
+---
+sidebar_position: 4
+title: "Publications Portal"
+description: "Technical information regarding how CIROH Hub's Zotero-based research portal works."
+tags: [Products, CIROH Hub]
+---
+
+# Zotero Portals on CIROH Hub
+
+For the forseeable future, the Publications Portal is the only portal to pull from Zotero.
+
+{/* TODO: map out components */}
+
+## Setting secrets and variables
+Secrets and variables for Zotero are retrieved from the process environment in `docusaurus.config.js`.
+For local development, these can be supplied via a `.env` file. For deployment, these are injected via
+the CI/CD scripts.
+
+The following config variables are currently retrieved for Zotero,
+with the corresponding environment variables being in all caps:
+- `zotero_api_key_read_only`: API key to read publications from the Zotero group.
+- `zotero_group_id` (environment: `ZOTERO_CIROH_GROUP_ID`): The ID for the Zotero group that will be surfaced in Publications.
+- `zotero_staging_group_id` (environment: `ZOTERO_CIROH_STAGING_GROUP_ID`): The ID for the Zotero group where submissions from the Contribute page will be submitted.
+- `recaptcha_site_key`: A Recaptcha key. Used to manage submissions to the staging group.
+- `zotero_import_request_api_url`: The API URL used to submit submissions to the staging group. Should point at the backend once deployed.
+
+:::warning
+CIROH Hub uses static site generation.
+**Any config variables will be baked into the production website.**
+
+Please be sure to only provide public-facing values, such as read-only keys,
+to the website build. For anything that requires access control, it should
+be kept safely within the [backend](docs/products/hub-meta/backend).
+:::
+
+## Publications Mailing List
+
+:::info
+The Publications mailing list is maintained internally via Microsoft PowerAutomate.
+
+It uses largely the same API calls as Hub's Zotero integration to do so.
+
+For CIROH Cyberinfrastructure Team members: please refer to the internal wiki for more information.
+:::
