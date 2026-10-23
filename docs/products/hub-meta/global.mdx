@@ -52,7 +52,8 @@ In CSS, the `[data-reduce-motion="{true/false}"]` condition can be used to filte
 In React, the current reduced-motion mode can be checked by importing the context as a hook:
 
 ```js
-import ReducedMotionContext from "@site/src/components/ReducedMotion/Context"
+import { useContext } from 'react';
+import { ReducedMotionContext } from '@site/src/components/ReducedMotion/Context';
 const { reducedMotionMode } = useContext(ReducedMotionContext);
 ```
 

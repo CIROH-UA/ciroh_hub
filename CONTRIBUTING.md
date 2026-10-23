@@ -9,7 +9,7 @@
 > https://hub.ciroh.org/contribute
 
 > For technical information on the repository and its structure, please see the meta documentation: 
-> https://hub.ciroh.org/docs/hub-meta/
+> https://hub.ciroh.org/docs/products/hub-meta/
 
 There are two primary ways to help:
  - Using the issue tracker, and
