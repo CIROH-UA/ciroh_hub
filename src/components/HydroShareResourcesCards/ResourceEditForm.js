@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { FaSpinner } from 'react-icons/fa';
 import styles from './styles.module.css';
-import { splitAuthors } from './shared';
 import { updateResourceScimeta, updateResourceCustomMetadata, uploadResourceFile } from '@site/src/components/HydroShareImporter';
 import useHydroShareAuth from '@site/src/components/HydroShareAuth/useHydroShareAuth';
 import SegmentedToggle from '@site/src/components/SegmentedToggle';
@@ -57,7 +56,6 @@ export default function ResourceEditForm({ resource, onResourceUpdated, onClose 
     // Current values the drafts are compared against
     const title = resource?.title || 'Untitled';
     const description = resource?.description || '';
-    const authors = splitAuthors(resource?.authors);
     const keywords = Array.isArray(resource?.keywords)
         ? resource.keywords
         : (Array.isArray(resource?.subjects) ? resource.subjects : []);
@@ -70,7 +68,6 @@ export default function ResourceEditForm({ resource, onResourceUpdated, onClose 
     // Draft state — Initialized from the current values on mount (the form only mounts when editing starts, so these are always fresh)
     const [saving, setSaving] = useState(false);
     const [editTitle, setEditTitle] = useState(title);
-    const [editAuthorsText, setEditAuthorsText] = useState(authors.join(', ')); // Authors are edited as a single comma-separated string
     const [editDescription, setEditDescription] = useState(description);
     const [editDocsUrl, setEditDocsUrl] = useState(docsUrl ?? '');
     const [editPageUrl, setEditPageUrl] = useState(pageUrl ?? '');
@@ -93,16 +90,6 @@ export default function ResourceEditForm({ resource, onResourceUpdated, onClose 
         if (editTitle.trim() !== title) {
             attributeChanges.title = editTitle.trim();
             displayPatch.title = editTitle.trim();
-        }
-
-        // Add updated authors if they have changed
-        if (editAuthorsText.trim() !== authors.join(', ')) {
-            // Split the edited authors text into an array of individual author names
-            const authorNames = editAuthorsText.split(',').map(a => a.trim()).filter(Boolean);
-            attributeChanges.authors = authorNames;
-
-            // Join the author names with the 🖊 separator for display purposes
-            displayPatch.authors = authorNames.join(' 🖊 ');
         }
 
         // Add description if it has changed (HydroShare's abstract)
@@ -280,17 +267,6 @@ export default function ResourceEditForm({ resource, onResourceUpdated, onClose 
                 />
             </label>
 
-            {/* Authors Field */}
-            <label className={styles.editField}>
-                <span className={styles.editLabel}>Authors</span>
-                <input
-                    type="text"
-                    className={styles.editInput}
-                    value={editAuthorsText}
-                    onChange={(e) => setEditAuthorsText(e.target.value)}
-                    placeholder="Separate authors with commas"
-                />
-            </label>
 
             {/* Description Field */}
             <label className={styles.editField}>
