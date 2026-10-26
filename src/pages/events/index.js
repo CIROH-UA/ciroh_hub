@@ -80,13 +80,15 @@ function EventsPageContent({ contributeUrl, docsUrl }) {
       />
 
       <main className="tw-relative tw-z-20">
-        <HydroShareResourcesSelector
-          keyword="ciroh_hub_event"
-          defaultImage={defaultImage}
-          variant="modern"
-          cardsComponent={HydroShareEventCards}
-          onResultsChange={onResultsChange}
-        />
+        <div className="tw-pt-10 tw-bg-white dark:tw-bg-[#060010]">
+          <HydroShareResourcesSelector
+            keyword="ciroh_hub_event"
+            defaultImage={defaultImage}
+            variant="modern"
+            cardsComponent={HydroShareEventCards}
+            onResultsChange={onResultsChange}
+          />
+        </div>
 
         <div className="tw-pb-16">
           <TechBox items={items} type={"Events"} />

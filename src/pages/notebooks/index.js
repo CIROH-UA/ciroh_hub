@@ -99,12 +99,15 @@ function NoteBooksPageContent({ contributeUrl, docsUrl, defaultImage }) {
           />
         </div>
 
-        <HydroShareResourcesSelector
-          keyword="ciroh_hub_notebook"
-          defaultImage={defaultImage}
-          variant="modern"
-          onResultsChange={onResultsChange}
-        />
+        {/* Resources Selector */}
+        <div className="tw-pt-10 tw-bg-white dark:tw-bg-[#060010]">
+          <HydroShareResourcesSelector
+            keyword="ciroh_hub_notebook"
+            defaultImage={defaultImage}
+            variant="modern"
+            onResultsChange={onResultsChange}
+          />
+        </div>
 
         <div className="tw-pb-16">
           <TechBox items={items} type={"NoteBooks"} tethys />

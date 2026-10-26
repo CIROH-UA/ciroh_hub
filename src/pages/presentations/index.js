@@ -98,12 +98,15 @@ function PresentationsPageContent({ contributeUrl, docsUrl }) {
           />
         </div>
 
-        <HydroShareResourcesSelector
-          keyword="ciroh_portal_presentation,ciroh_hub_presentation"
-          defaultImage={defaultImage}
-          variant="modern"
-          onResultsChange={onResultsChange}
-        />
+        {/* Resources Selector */}
+        <div className="tw-pt-10 tw-bg-white dark:tw-bg-[#060010]">
+          <HydroShareResourcesSelector
+            keyword="ciroh_portal_presentation,ciroh_hub_presentation"
+            defaultImage={defaultImage}
+            variant="modern"
+            onResultsChange={onResultsChange}
+          />
+        </div>
 
         <div className="tw-pb-16">
           <TechBox items={items} type={"Presentations"} />

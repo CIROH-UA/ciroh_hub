@@ -7,6 +7,7 @@ import HydroShareResourcesRows from "@site/src/components/HydroShareResourcesRow
 import HydroShareResourcesCards from "@site/src/components/HydroShareResourcesCards";
 import { fetchResourcesBySearch, fetchResourceCustomMetadata, getCommunityResources, fetchResourcesFromCollection, fetchResourcesOwnedByUser } from "@site/src/components/HydroShareImporter";
 import useHydroShareAuth from "@site/src/components/HydroShareAuth/useHydroShareAuth";
+import HydroShareAuthBar from "@site/src/components/HydroShareAuthBar";
 import {
   HiOutlineSortDescending,
   HiOutlineSortAscending,
@@ -441,6 +442,8 @@ export default function HydroShareResourcesSelector({
   /* ---------------- render ---------------- */
   if (variant === 'modern') {
     return (
+      <>
+      <HydroShareAuthBar />
       <section className={clsx(styles.cardsContainer, 'tw-relative tw-z-20 tw-w-full tw-py-10')}>
         <div className="tw-mx-auto tw-max-w-7xl tw-px-4 sm:tw-px-6 lg:tw-px-8">
           <div className="tw-flex tw-flex-col lg:tw-flex-row lg:tw-items-center lg:tw-justify-between tw-gap-4 tw-mb-6">
@@ -602,6 +605,7 @@ export default function HydroShareResourcesSelector({
           )}
         </div>
       </section>
+      </>
     );
   }
 
