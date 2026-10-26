@@ -1,0 +1,107 @@
+.band {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 1.5rem 1rem;
+    background-color: #fff;
+}
+
+:global([data-theme='dark']) .band {
+    background-color: #060010;
+}
+
+.bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem 1rem;
+    padding: 0.75rem 1.25rem;
+    width: fit-content;
+    max-width: 100%;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    background-color: #f1f5f9;
+}
+
+:global([data-theme='dark']) .bar {
+    border-color: #334155;
+    background-color: #0f172a;
+}
+
+.message {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.95rem;
+    color: var(--ifm-color-emphasis-800);
+}
+
+.icon {
+    flex-shrink: 0;
+    font-size: 1.1rem;
+    color: var(--ifm-color-primary);
+}
+
+.loginButton,
+.logoutButton {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    border-radius: 8px;
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: filter 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.loginButton {
+    background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+    border: 1px solid #0284c7;
+}
+
+.loginButton:hover {
+    filter: brightness(0.97);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3);
+}
+
+.loginButton:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.logoutButton {
+    background: linear-gradient(135deg, #64748b 0%, #475569 100%);
+    border: 1px solid #475569;
+}
+
+.logoutButton:hover {
+    filter: brightness(0.97);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+}
+
+/* Respect the site's reduced-motion preference for the button hover lift */
+:global([data-reduce-motion="true"]) .loginButton,
+:global([data-reduce-motion="true"]) .logoutButton {
+    transition: none;
+}
+
+:global([data-reduce-motion="true"]) .loginButton:hover,
+:global([data-reduce-motion="true"]) .logoutButton:hover {
+    transform: none;
+}
+
+/* On narrow screens let the message and button stack and go full width */
+@media (max-width: 576px) {
+    .loginButton,
+    .logoutButton {
+        width: 100%;
+        justify-content: center;
+    }
+}
