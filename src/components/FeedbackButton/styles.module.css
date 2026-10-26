@@ -11,7 +11,7 @@
     padding: 0.3rem 0.3rem 0.3rem 0.3rem;
     background-color: var(--bg-card);
     outline: 2px solid var(--text-secondary);
-    color: var(--text-secondary);
+    color: var(--text-primary);
     border-radius: 0.5rem 0.5rem 0 0;
     z-index: 199; /* Override everything but the navbar */
     flex-shrink: 0; /* For breadcrumbs integration */
@@ -21,7 +21,7 @@
 }
 
 .greytext {
-    color: var(--text-secondary);
+    color: var(--text-primary);
 }
 
 .collapsible {
@@ -48,7 +48,7 @@
     padding-left: 0.2rem;
     padding-right: 0.5rem;
     margin-right: 0.2rem;
-    border-right: 1px solid var(--text-secondary);
+    border-right: 1px solid var(--text-primary);
     position: absolute;
     right: 0;
     top: 0;
