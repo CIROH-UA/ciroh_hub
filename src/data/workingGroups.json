@@ -23,8 +23,12 @@
         "Development of a large overview paper involving over a dozen WG members (Objective #2)"
       ],
       "products": [
-        "The CIROH Community FIM Ecosystem: https://hub.ciroh.org/docs/products/community-fim/"
-      ]
+        {
+          "title": "The CIROH Community FIM Ecosystem",
+          "url": "https://hub.ciroh.org/docs/products/community-fim/"
+        }
+      ],
+      "updated": "October 2026"
     }
   },
   {
@@ -108,7 +112,7 @@
     "title": "Community Resources Working Group",
     "description": "The Community Resources Working Group (CRWG) serves as a collaborative hub within CIROH, dedicated to strengthening the digital infrastructure and operational efficiency of community-driven initiatives. By leveraging modern IT practices and DevOps methodologies, the group ensures that CIROH’s platforms, tools, and shared resources remain reliable, scalable and secure. The group bridges technical expertise with community needs, empowering researchers, practitioners and stakeholders to access, contribute to, and benefit from CIROH’s digital ecosystem. It also enables community support and provides a platform for discussion related to CIROH hybrid research cyberinfrastructure (R2OHC) (computing and storage capacity), open-source community repositories to advance research hydrology forecasting capabilities using NGIAB and Research Datastream (NRDS), other projects and integration work across CIROH projects, and regular updates to the wider community on product documentation, resources (publications, courses, trainings), community blogs and latest news.",
     "leads": [
-      "Arpita Patel, University of Alabama"
+      "Arpita Patel, The University of Alabama"
     ],
     "reportsCollectionId": "",
     "annual": {
@@ -132,16 +136,16 @@
       ],
       "products": [
         {
-          "title": "The CIROH Hub",
+          "title": "CIROH Hub",
           "url": "https://hub.ciroh.org"
         },
         {
-          "title": "The CIROH Community NextGen Ecosystem",
+          "title": "CIROH Community NextGen Ecosystem",
           "description": "NGIAB ecosystem documentation and ngiab.ciroh.org",
           "url": "https://hub.ciroh.org/docs/products/ngiab-ecosystem/"
         },
         {
-          "title": "The CIROH Cyberinfrastructure: Research to Operation Hybrid Cloud (R2OHC) Platform",
+          "title": "CIROH Cyberinfrastructure: Research to Operation Hybrid Cloud (R2OHC) Platform",
           "url": "https://hub.ciroh.org/docs/services/intro"
         }
       ],
