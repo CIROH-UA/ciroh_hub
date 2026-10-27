@@ -248,6 +248,7 @@ export default function HydroShareResourcesSelector({
               docs_url: customMetadata?.docs_url || "",
               pres_path: customMetadata?.pres_path || "",
               embed_url: embedUrl,
+              metadata_loaded: true,
             };
 
             setResources((current) =>

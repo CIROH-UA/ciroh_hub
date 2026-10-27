@@ -53,26 +53,30 @@ function getKeywordType(keywords) {
 export default function ResourceEditForm({ resource, onResourceUpdated, onClose }) {
     const { token } = useHydroShareAuth();
 
-    // Current values the drafts are compared against
-    const title = resource?.title || 'Untitled';
-    const description = resource?.description || '';
+    // Get the keywordType of the resource (app, course, presentation, etc.). Determines which fields are editable in the form
     const keywords = Array.isArray(resource?.keywords)
         ? resource.keywords
         : (Array.isArray(resource?.subjects) ? resource.subjects : []);
-    const rawThumbnailUrl = resource?.thumbnail_url ?? ''; // The actual value, no display fallback
-    const pageUrl = resource?.page_url;
-    const docsUrl = resource?.docs_url;
-    const presPath = resource?.pres_path;
     const keywordType = getKeywordType(keywords);
 
-    // Draft state — Initialized from the current values on mount (the form only mounts when editing starts, so these are always fresh)
+    // Get the baseline values the editable fields will be compared against. Get them now so metadata that arrives later does not overwrite the initial snapshot
+    const [baseline] = useState(() => ({
+        title: resource?.title || 'Untitled',
+        description: resource?.description || '',
+        pageUrl: resource?.page_url ?? '',
+        docsUrl: resource?.docs_url ?? '',
+        presPath: resource?.pres_path ?? '',
+        thumbnailUrl: resource?.thumbnail_url ?? '',
+    }));
+
+    // Draft state - holds the current values of the editable fields in the form
     const [saving, setSaving] = useState(false);
-    const [editTitle, setEditTitle] = useState(title);
-    const [editDescription, setEditDescription] = useState(description);
-    const [editDocsUrl, setEditDocsUrl] = useState(docsUrl ?? '');
-    const [editPageUrl, setEditPageUrl] = useState(pageUrl ?? '');
-    const [editPresPath, setEditPresPath] = useState(presPath ?? '');
-    const [editThumbnailUrl, setEditThumbnailUrl] = useState(rawThumbnailUrl);
+    const [editTitle, setEditTitle] = useState(baseline.title);
+    const [editDescription, setEditDescription] = useState(baseline.description);
+    const [editDocsUrl, setEditDocsUrl] = useState(baseline.docsUrl);
+    const [editPageUrl, setEditPageUrl] = useState(baseline.pageUrl);
+    const [editPresPath, setEditPresPath] = useState(baseline.presPath);
+    const [editThumbnailUrl, setEditThumbnailUrl] = useState(baseline.thumbnailUrl);
     const [editThumbnailFile, setEditThumbnailFile] = useState(null); // An image file to upload as the thumbnail, if the user picks one
     const [thumbnailMode, setThumbnailMode] = useState('url'); // Which thumbnail input to show: 'url' or 'upload'
 
@@ -87,37 +91,37 @@ export default function ResourceEditForm({ resource, onResourceUpdated, onClose 
         const displayPatch = {};        // The shape used to update the card in place
 
         // Add title if it has changed
-        if (editTitle.trim() !== title) {
+        if (editTitle.trim() !== baseline.title) {
             attributeChanges.title = editTitle.trim();
             displayPatch.title = editTitle.trim();
         }
 
         // Add description if it has changed (HydroShare's abstract)
-        if (editDescription.trim() !== description) {
+        if (editDescription.trim() !== baseline.description) {
             attributeChanges.description = editDescription.trim();
             displayPatch.description = editDescription.trim();
         }
 
         // Add page_url metadata if it has changed
-        if (editPageUrl != null && editPageUrl.trim() !== (pageUrl ?? '')) {
+        if (editPageUrl != null && editPageUrl.trim() !== baseline.pageUrl) {
             metadataChanges.page_url = editPageUrl.trim();
             displayPatch.page_url = editPageUrl.trim();
         }
 
         // Add docs_url metadata if it has changed
-        if (editDocsUrl != null && editDocsUrl.trim() !== (docsUrl ?? '')) {
+        if (editDocsUrl != null && editDocsUrl.trim() !== baseline.docsUrl) {
             metadataChanges.docs_url = editDocsUrl.trim();
             displayPatch.docs_url = editDocsUrl.trim();
         }
 
         // Add thumbnail_url metadata if the pasted URL changed and no image file was chosen
-        if (!editThumbnailFile && editThumbnailUrl != null && editThumbnailUrl.trim() !== rawThumbnailUrl) {
+        if (!editThumbnailFile && editThumbnailUrl != null && editThumbnailUrl.trim() !== baseline.thumbnailUrl) {
             metadataChanges.thumbnail_url = editThumbnailUrl.trim();
             displayPatch.thumbnail_url = editThumbnailUrl.trim();
         }
 
         // Add pres_path metadata if it has changed
-        if (editPresPath != null && editPresPath.trim() !== (presPath ?? '')) {
+        if (editPresPath != null && editPresPath.trim() !== baseline.presPath) {
             metadataChanges.pres_path = editPresPath.trim();
             displayPatch.pres_path = editPresPath.trim();
         }

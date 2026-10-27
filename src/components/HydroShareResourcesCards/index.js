@@ -145,7 +145,7 @@ export function ResourceCard({ resource, defaultImage, onResourceUpdated, editab
                             </div>
 
                             {/* Edit Button */}
-                            {authenticated && editableResourceIds?.has(resource?.resource_id) && (
+                            {authenticated && editableResourceIds?.has(resource?.resource_id) && resource?.metadata_loaded && (
                                 <div className={styles.editButton} onClick={() => setIsEditing(true)}>
                                     <LuPencil size={16} />
                                 </div>
