@@ -106,6 +106,16 @@ textarea.editInput {
     overflow-wrap: anywhere;
 }
 
+.editError {
+    margin: 0;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.8rem;
+    color: var(--ifm-color-danger-contrast-foreground);
+    background-color: var(--ifm-color-danger-contrast-background);
+    border: 1px solid var(--ifm-color-danger);
+    border-radius: 6px;
+}
+
 .editActions {
     display: flex;
     justify-content: flex-end;

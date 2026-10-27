@@ -71,6 +71,7 @@ export default function ResourceEditForm({ resource, onResourceUpdated, onClose 
 
     // Draft state - holds the current values of the editable fields in the form
     const [saving, setSaving] = useState(false);
+    const [saveError, setSaveError] = useState(null); // Set when a save request fails, so the failure can be shown and the draft retried
     const [editTitle, setEditTitle] = useState(baseline.title);
     const [editDescription, setEditDescription] = useState(baseline.description);
     const [editDocsUrl, setEditDocsUrl] = useState(baseline.docsUrl);
@@ -140,6 +141,9 @@ export default function ResourceEditForm({ resource, onResourceUpdated, onClose 
         // Show visual feedback to user that the save operation is in progress
         setSaving(true);
 
+        // clear any error from a previous attempt so stale feedback isn't shown
+        setSaveError(null);
+
         try {
             // Upload a chosen thumbnail image to the resource and point thumbnail_url at it
             if (editThumbnailFile) {
@@ -178,7 +182,8 @@ export default function ResourceEditForm({ resource, onResourceUpdated, onClose 
         }
         catch (error) {
             console.error('Error updating resource:', error);
-            // Keep the form open so the user can retry; don't close on failure
+            // Keep the form open and notify the user of failure
+            setSaveError('Something went wrong while saving. Some of your changes may not have been saved, please review and try again.');
         }
         finally {
             setSaving(false);
@@ -324,6 +329,13 @@ export default function ResourceEditForm({ resource, onResourceUpdated, onClose 
                 </label>
                 {thumbnailField}
                 </>
+            )}
+
+            {/* Save Failure Feedback */}
+            {saveError && (
+                <p className={styles.editError} role="alert">
+                    {saveError}
+                </p>
             )}
 
             {/* Cancel and Save Buttons */}
