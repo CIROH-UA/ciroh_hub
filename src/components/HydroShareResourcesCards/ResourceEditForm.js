@@ -197,6 +197,7 @@ export default function ResourceEditForm({ resource, onResourceUpdated, onClose 
     const thumbnailUrlInput = (
         <input
             type="text"
+            aria-label="Thumbnail image URL"
             className={styles.editInput}
             placeholder="Image URL"
             value={editThumbnailUrl}
@@ -238,6 +239,7 @@ export default function ResourceEditForm({ resource, onResourceUpdated, onClose 
                             {/* File upload input */}
                             <input
                                 type="file"
+                                aria-label="Thumbnail image file"
                                 accept="image/*"
                                 className={styles.editFileInput}
                                 onChange={(e) => setEditThumbnailFile(e.target.files?.[0] || null)}
