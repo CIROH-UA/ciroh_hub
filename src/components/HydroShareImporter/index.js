@@ -858,6 +858,21 @@ async function uploadResourceFile(resourceId, authToken, file) {
   return `https://www.hydroshare.org/resource/${resourceId}/data/contents/${encodeURIComponent(file.name)}`;
 }
 
+/**
+ * Build the public URL for a resource's embeddable content (e.g. a presentation
+ * PDF) from its content path. The path is a stored relative path that may contain
+ * slashes, so it is not URL-encoded. Returns '' when no path is given, so callers
+ * can use the result directly as the presence check for a preview.
+ *
+ * @param {string} resourceId The id of the resource
+ * @param {string} presPath The content path within the resource (e.g. "slides.pdf")
+ * @returns {string} The content URL, or '' if presPath is empty
+ */
+function buildEmbedUrl(resourceId, presPath) {
+  if (!resourceId || !presPath) return '';
+  return `https://www.hydroshare.org/resource/${resourceId}/data/contents/${presPath}`;
+}
+
 
 export {
   getCuratedIds,
@@ -877,5 +892,6 @@ export {
   updateResourceScimeta,
   updateResourceCustomMetadata,
   fetchResourcesOwnedByUser,
-  uploadResourceFile
+  uploadResourceFile,
+  buildEmbedUrl
 };

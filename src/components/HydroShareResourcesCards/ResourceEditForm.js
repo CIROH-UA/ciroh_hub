@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { FaSpinner } from 'react-icons/fa';
 import styles from './styles.module.css';
-import { updateResourceScimeta, updateResourceCustomMetadata, uploadResourceFile } from '@site/src/components/HydroShareImporter';
+import { updateResourceScimeta, updateResourceCustomMetadata, uploadResourceFile, buildEmbedUrl } from '@site/src/components/HydroShareImporter';
 import useHydroShareAuth from '@site/src/components/HydroShareAuth/useHydroShareAuth';
 import SegmentedToggle from '@site/src/components/SegmentedToggle';
 
@@ -122,8 +122,13 @@ export default function ResourceEditForm({ resource, onResourceUpdated, onClose 
 
         // Add pres_path metadata if it has changed
         if (editPresPath != null && editPresPath.trim() !== baseline.presPath) {
-            metadataChanges.pres_path = editPresPath.trim();
-            displayPatch.pres_path = editPresPath.trim();
+            // Trim the new presentation path and update the metadata and display patch accordingly
+            const newPresPath = editPresPath.trim();
+            metadataChanges.pres_path = newPresPath;
+            displayPatch.pres_path = newPresPath;
+
+            // Update embed_url in the patch to reflect the new pres_path
+            displayPatch.embed_url = buildEmbedUrl(resource?.resource_id, newPresPath);
         }
 
         // Nothing changed, just leave edit mode without a request

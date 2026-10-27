@@ -5,7 +5,7 @@ import styles from "./styles.module.css";
 import HydroShareResourcesTiles from "@site/src/components/HydroShareResourcesTiles";
 import HydroShareResourcesRows from "@site/src/components/HydroShareResourcesRows";
 import HydroShareResourcesCards from "@site/src/components/HydroShareResourcesCards";
-import { fetchResourcesBySearch, fetchResourceCustomMetadata, getCommunityResources, fetchResourcesFromCollection, fetchResourcesOwnedByUser } from "@site/src/components/HydroShareImporter";
+import { fetchResourcesBySearch, fetchResourceCustomMetadata, getCommunityResources, fetchResourcesFromCollection, fetchResourcesOwnedByUser, buildEmbedUrl } from "@site/src/components/HydroShareImporter";
 import useHydroShareAuth from "@site/src/components/HydroShareAuth/useHydroShareAuth";
 import HydroShareAuthBar from "@site/src/components/HydroShareAuthBar";
 import {
@@ -239,15 +239,13 @@ export default function HydroShareResourcesSelector({
         for (let res of mappedList) {
           try {
             const customMetadata = await fetchResourceCustomMetadata(res.resource_id);
-            let embedUrl = "";
-            if (customMetadata?.pres_path) embedUrl = `https://www.hydroshare.org/resource/${res.resource_id}/data/contents/${customMetadata.pres_path}`;
             const updatedResource = {
               ...res,
               thumbnail_url: customMetadata?.thumbnail_url || "",
               page_url: customMetadata?.page_url || "",
               docs_url: customMetadata?.docs_url || "",
               pres_path: customMetadata?.pres_path || "",
-              embed_url: embedUrl,
+              embed_url: buildEmbedUrl(res.resource_id, customMetadata?.pres_path),
               metadata_loaded: true,
             };
 
