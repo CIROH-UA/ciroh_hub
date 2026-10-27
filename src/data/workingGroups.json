@@ -116,7 +116,7 @@
     ],
     "reportsCollectionId": "",
     "annual": {
-      "period": "2026",
+      "period": "2025-2026",
       "objectives": [
         "Provide inputs for the CIROH cyberinfrastructure roadmaps to meet community and research needs, governance documents, cybersecurity protocols, and documentation for products/tools developed/deployed using CIROH IT.",
         "Plan and develop the roadmap for community open source projects, develop governance and a PR review process, and implement CI/CD pipelines, automated tests and monitoring frameworks to accelerate deployment cycles.",
