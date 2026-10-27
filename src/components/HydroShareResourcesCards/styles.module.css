@@ -17,6 +17,10 @@
 }
 
 .editButton {
+    background: none;
+    border: none;
+    color: inherit;
+    font: inherit;
     cursor: pointer;
     display: inline-flex;
     align-items: center;

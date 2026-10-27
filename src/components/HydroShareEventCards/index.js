@@ -197,9 +197,14 @@ export function EventCard({ resource, defaultImage, onResourceUpdated, editableR
 
                                 {/* Edit Button */}
                                 {authenticated && editableResourceIds?.has(collectionId) && (
-                                    <div className={cardStyles.editButton} onClick={() => setIsEditing(true)}>
+                                    <button
+                                        type="button"
+                                        className={cardStyles.editButton}
+                                        onClick={() => setIsEditing(true)}
+                                        aria-label="Edit event"
+                                    >
                                         <LuPencil size={16} />
-                                    </div>
+                                    </button>
                                 )}
                             </div>
 

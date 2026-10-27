@@ -146,9 +146,14 @@ export function ResourceCard({ resource, defaultImage, onResourceUpdated, editab
 
                             {/* Edit Button */}
                             {authenticated && editableResourceIds?.has(resource?.resource_id) && resource?.metadata_loaded && (
-                                <div className={styles.editButton} onClick={() => setIsEditing(true)}>
+                                <button
+                                    type="button"
+                                    className={styles.editButton}
+                                    onClick={() => setIsEditing(true)}
+                                    aria-label="Edit resource"
+                                >
                                     <LuPencil size={16} />
-                                </div>
+                                </button>
                             )}
                         </div>
 
