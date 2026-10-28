@@ -5,7 +5,7 @@ import styles from "./styles.module.css";
 import HydroShareResourcesTiles from "@site/src/components/HydroShareResourcesTiles";
 import HydroShareResourcesRows from "@site/src/components/HydroShareResourcesRows";
 import HydroShareResourcesCards from "@site/src/components/HydroShareResourcesCards";
-import { fetchResourcesBySearch, fetchResourceCustomMetadata, getCommunityResources, fetchResourcesFromCollection, fetchResourcesOwnedByUser, buildEmbedUrl } from "@site/src/components/HydroShareImporter";
+import { fetchResourcesBySearch, fetchResourceCustomMetadata, getCommunityResources, fetchResourcesFromCollection, fetchResourcesOwnedByUser, fetchEditableResourcesByKeyword, buildEmbedUrl } from "@site/src/components/HydroShareImporter";
 import useHydroShareAuth from "@site/src/components/HydroShareAuth/useHydroShareAuth";
 import HydroShareAuthBar from "@site/src/components/HydroShareAuthBar";
 import {
@@ -96,6 +96,7 @@ export default function HydroShareResourcesSelector({
   const [ecosystem, setEcosystem] = useState('');
   const [editableOnly, setEditableOnly] = useState(false);  // Whether to only show resources that the user can edit
 
+  const { authenticated, userInfo, token } = useHydroShareAuth();
 
   const fetchResources = useCallback(
     async ({ reset = false } = {}) => {
@@ -140,6 +141,13 @@ export default function HydroShareResourcesSelector({
         let searchResponse = null;
         const ecosystemSelected = Boolean(ecosystem);
 
+        if (editableOnly) {
+          // Source the resources from the user's editable resources, scoped to the current keyword
+          resourceList = (authenticated && userInfo?.username)
+            ? await fetchEditableResourcesByKeyword(userInfo.username, token, keyword)
+            : [];
+        }
+        else
         if (ecosystemSelected) {
           // Fetch resources from the selected ecosystem collection
           searchResponse = await fetchResourcesFromCollection(ecosystem) || [];
@@ -192,8 +200,9 @@ export default function HydroShareResourcesSelector({
           embed_url: "",
         }));
 
-        // Search and filter locally when ecosystem is selected
-        if (ecosystemSelected) {
+        // Search and filter locally when viewing an ecosystem or resources the user can edit
+        if (ecosystemSelected || editableOnly) {
+          // Filter the mapped list based on the search term and page keywords
           const searchTerm = filterSearch.trim().toLowerCase();
           if (searchTerm) {
             mappedList = mappedList.filter(resource =>
@@ -210,8 +219,8 @@ export default function HydroShareResourcesSelector({
           );
         }
 
-        // Sort locally when fetching datasets (or an ecosystem) to account for curated resources being combined with searched resources
-        if (keyword.includes('data') || ecosystemSelected) {
+        // Sort locally when viewing datasets (curated resources combined with searched ones), ecosystems, or the user's editable resources
+        if (keyword.includes('data') || ecosystemSelected || editableOnly) {
           mappedList = sortResources(mappedList, sortType, sortDirection);
         }
 
@@ -266,7 +275,7 @@ export default function HydroShareResourcesSelector({
         fetching.current = false;
       }
     },
-    [keyword, filterSearch, sortDirection, sortType, ecosystem]
+    [keyword, filterSearch, sortDirection, sortType, ecosystem, editableOnly, authenticated, userInfo?.username, token]
   );
 
   // Fetch ecosystem resources and extract their titles for the ecosystem selector
@@ -337,16 +346,16 @@ export default function HydroShareResourcesSelector({
   // Fetch the set of resource ids the signed-in user can edit, so cards only
   // show the edit button for resources they actually own. Runs once per
   // sign-in (null while loading / signed out = no edit buttons).
-  const { authenticated, userInfo, token } = useHydroShareAuth();
   const [editableResourceIds, setEditableResourceIds] = useState(null);
   useEffect(() => {
-    // If the user is not authenticated or does not have a username, clear the editable resource IDs and exit early.
+    // Clear editable resource IDs and reset the "only my resources" view if the user is not authenticated or lacks a username
     if (!authenticated || !userInfo?.username) {
       setEditableResourceIds(null);
+      setEditableOnly(false);
       return;
     }
 
-    // Fetch the list of resources owned by the user to determine which ones are editable.
+    // Fetch the list of resources owned by the user to determine which ones are editable
     let cancelled = false;
     fetchResourcesOwnedByUser(userInfo.username, token, { editableOnly: true })
       .then(owned => {
@@ -361,12 +370,8 @@ export default function HydroShareResourcesSelector({
     return () => { cancelled = true; };
   }, [authenticated, userInfo?.username, token]);
 
-  // When "only editable" is checked, filter the list down to resources the user
-  // can edit. This is a client-side filter over what's already loaded. With infinite scroll it only reflects fetched pages
-  const displayedResources = useMemo(() => {
-    if (!editableOnly || !editableResourceIds) return resources;
-    return resources.filter(r => editableResourceIds.has(r.resource_id));
-  }, [resources, editableOnly, editableResourceIds]);
+  // The final list of resources to render
+  const displayedResources = resources;
 
   const displayedNonPlaceholderCount = useMemo(
     () => displayedResources.filter(

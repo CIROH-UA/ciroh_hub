@@ -3,6 +3,9 @@
 //   https://doi.org/10.4211/hs.<32-hex>
 const RESOURCE_ID_REGEX = /(?:\/resource\/|10\.4211\/hs\.)([0-9a-f]{32})/i;
 
+// Max concurrent science-metadata requests when fetching metadata for a user's owned resources
+const FETCH_CONCURRENCY = 10;
+
 /**
  * Sample endpoint: 
  *   GET https://www.hydroshare.org/hsapi/resources/?subject=YOUR_KEYWORD
@@ -825,6 +828,76 @@ async function fetchResourcesOwnedByUser(user, authToken, { editableOnly = false
 }
 
 /**
+ * Map an async function over a list with a bounded number of in-flight calls.
+ * Results are returned in input order. Used to enrich owned resources without
+ * firing one request per resource all at once, which would burst the API for
+ * users who own many resources.
+ *
+ * @param {T[]} items The items to map over
+ * @param {(item: T, index: number) => Promise<R>} worker The async mapper
+ * @param {number} limit Maximum number of concurrent calls
+ * @returns {Promise<R[]>} The results, in the same order as `items`
+ * @template T, R
+ */
+async function mapWithConcurrency(items, worker, limit) {
+  // Prepare an array to hold the results and a counter for the next index to process
+  const results = new Array(items.length);
+  let next = 0;
+
+  // Each runner pulls the next index until the list is exhausted, so at most `limit` calls are in flight at once
+  async function runner() {
+    while (next < items.length) {
+      const index = next++;
+      results[index] = await worker(items[index], index);
+    }
+  }
+
+  // Launch the runners with a concurrency limit and wait for all to complete
+  const runnerCount = Math.min(limit, items.length);
+  await Promise.all(Array.from({ length: runnerCount }, () => runner()));
+
+  // Return the results in the same order as the input items.
+  return results;
+}
+
+/**
+ * Fetch the resources a user can edit that are tagged with one of the given keywords.
+ *
+ * Edit permission is authoritative from hsapi (the owner listing with edit_permission),
+ * but that listing doesn't include subjects, so it can't be scoped to a page's keyword
+ * on its own. Each owned resource is therefore enriched with its science metadata (which
+ * carries subjects and the display fields) and then kept only if it is tagged with one of
+ * `keyword`'s comma-separated values.
+ *
+ * The returned objects use the same shape as the search endpoints (resource_title,
+ * authors[], subjects[], ...), so callers can map them the same way.
+ *
+ * @param {string} username The HydroShare username whose editable resources to fetch
+ * @param {string} authToken HydroShare OAuth bearer token
+ * @param {string} keyword Comma-separated keyword(s) to scope to (e.g. "ciroh_hub_app")
+ * @returns {Promise<Object[]>} The matching editable resources
+ */
+async function fetchEditableResourcesByKeyword(username, authToken, keyword) {
+  // Authoritative set of resources the user can edit
+  const owned = await fetchResourcesOwnedByUser(username, authToken, { editableOnly: true });
+
+  // The owner listing has no subjects, so pull each resource's science metadata (subjects + display fields)
+  const detailed = await mapWithConcurrency(
+    owned,
+    (r) => fetchResource(r.resource_id).catch(() => null),
+    FETCH_CONCURRENCY,
+  );
+
+  // Keep only resources tagged with one of the page's keywords
+  const pageKeywords = new Set(
+    String(keyword).split(',').map((k) => k.trim().toLowerCase()).filter(Boolean)
+  );
+  return detailed.filter(
+    (res) => res && (res.subjects || []).some((s) => pageKeywords.has(String(s).trim().toLowerCase()))
+  );
+}
+
+/**
  * Upload a file into a resource's content and return its public content URL.
  *
  * The file is added at the resource root. The returned URL only serves to
@@ -892,6 +965,7 @@ export {
   updateResourceScimeta,
   updateResourceCustomMetadata,
   fetchResourcesOwnedByUser,
+  fetchEditableResourcesByKeyword,
   uploadResourceFile,
   buildEmbedUrl
 };
