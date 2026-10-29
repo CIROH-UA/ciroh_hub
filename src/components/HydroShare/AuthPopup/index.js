@@ -1,7 +1,7 @@
 import React from 'react';
 import { LuPencil } from 'react-icons/lu';
 import clsx from 'clsx';
-import useHydroShareAuth from '@site/src/components/HydroShareAuth/useHydroShareAuth';
+import useHydroShareAuth from '@site/src/components/HydroShare/Auth/useHydroShareAuth';
 import styles from './styles.module.css';
 
 /**

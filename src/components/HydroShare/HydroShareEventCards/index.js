@@ -3,10 +3,10 @@ import { LiaExternalLinkSquareAltSolid } from 'react-icons/lia';
 import { FaGraduationCap } from 'react-icons/fa';
 import { LuLayers3, LuPencil } from 'react-icons/lu';
 import { HiOutlineGlobeAlt, HiOutlineUserGroup } from 'react-icons/hi';
-import { isPlaceholder, splitAuthors, StatTag, ActionLink } from '@site/src/components/HydroShareResourcesCards/shared';
-import ResourceEditForm from '@site/src/components/HydroShareResourcesCards/ResourceEditForm';
-import cardStyles from '@site/src/components/HydroShareResourcesCards/styles.module.css';
-import { fetchResourcesFromCollection, fetchResourceCustomMetadata, fetchResourceImageUrls, } from '@site/src/components/HydroShareImporter';
+import { isPlaceholder, splitAuthors, StatTag, ActionLink } from '@site/src/components/HydroShare/HydroShareResourcesCards/shared';
+import ResourceEditForm from '@site/src/components/HydroShare/HydroShareResourcesCards/ResourceEditForm';
+import cardStyles from '@site/src/components/HydroShare/HydroShareResourcesCards/styles.module.css';
+import { fetchResourcesFromCollection, fetchResourceCustomMetadata, fetchResourceImageUrls, } from '@site/src/components/HydroShare/HydroShareImporter';
 import useHydroShareAuth from '@site/src/components/HydroShare/Auth/useHydroShareAuth';
 import ModalEventPresentations from '@site/src/components/Modal/ModalEventPresentations';
 

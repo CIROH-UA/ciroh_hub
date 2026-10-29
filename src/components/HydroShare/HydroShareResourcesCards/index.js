@@ -6,8 +6,8 @@ import { LuLayers3, LuPencil } from 'react-icons/lu';
 import { HiOutlineGlobeAlt, HiOutlineUserGroup } from 'react-icons/hi';
 import styles from './styles.module.css';
 import { isPlaceholder, splitAuthors, StatTag, ActionLink, ActionButton } from './shared';
-import ResourceEditForm from '@site/src/components/HydroShareResourcesCards/ResourceEditForm';
-import useHydroShareAuth from '@site/src/components/HydroShareAuth/useHydroShareAuth';
+import ResourceEditForm from '@site/src/components/HydroShare/HydroShareResourcesCards/ResourceEditForm';
+import useHydroShareAuth from '@site/src/components/HydroShare/Auth/useHydroShareAuth';
 
 
 export function ResourceCard({ resource, defaultImage, onResourceUpdated, editableResourceIds, onEditingChange }) {
@@ -273,7 +273,7 @@ export default function HydroShareResourcesCards({ resources, defaultImage, onRe
     return (
         <div className={`tw-grid tw-grid-cols-1 lg:tw-grid-cols-2 2xl:tw-grid-cols-3 tw-gap-6 ${editingCount > 0 ? 'tw-items-start' : ''}`}>
             {resources.map(resource => (
-                <ResourceCardComponent
+                <ResourceCard
                     key={resource.resource_id}
                     resource={resource}
                     defaultImage={defaultImage}

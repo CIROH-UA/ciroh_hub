@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { FaSpinner } from 'react-icons/fa';
 import styles from './styles.module.css';
-import { updateResourceScimeta, updateResourceCustomMetadata, uploadResourceFile, buildEmbedUrl } from '@site/src/components/HydroShareImporter';
-import useHydroShareAuth from '@site/src/components/HydroShareAuth/useHydroShareAuth';
+import { updateResourceScimeta, updateResourceCustomMetadata, uploadResourceFile, buildEmbedUrl } from '@site/src/components/HydroShare/HydroShareImporter';
+import useHydroShareAuth from '@site/src/components/HydroShare/Auth/useHydroShareAuth';
 import SegmentedToggle from '@site/src/components/SegmentedToggle';
 
 // Maps a resource's keyword to a type, which decides what metadata fields are editable
