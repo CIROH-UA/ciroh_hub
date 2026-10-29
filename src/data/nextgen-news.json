@@ -22,6 +22,18 @@
 			"contributors": 1
 		},
 		{
+			"type": "update",
+			"title": "tethysportal-ciroh: Now Open to Community Contributions",
+			"links": [
+				"https://github.com/CIROH-UA/tethysportal-ciroh/releases/tag/v1.1.55",
+				"https://github.com/CIROH-UA/tethysportal-ciroh/releases/tag/v1.1.56"
+			],
+			"description": "CIROH Tethys Portal, a platform for community Tethys applications, is now open for app submissions! Requests for new applications to be [added](https://github.com/CIROH-UA/tethysportal-ciroh/issues/new?new-app.yml) or [updated](https://github.com/CIROH-UA/tethysportal-ciroh/issues/new?template=update-app.yml) can be submitted as GitHub issues. This month's updates also include new per-app S3 storage access and the addition of six new applications.",
+			"release_date": "2026-10-29",
+			"version": "v1.1.56",
+			"contributors": 1
+		},
+		{
 			"type": "NGIAB",
 			"title": "NGIAB_data_preprocess",
 			"links": [
