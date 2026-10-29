@@ -1,0 +1,123 @@
+/* Floating prompt pinned to the top-right, just under the navbar. Hovers above
+   page content (z-index below the navbar's so it never covers it). */
+.card {
+    position: fixed;
+    top: calc(var(--ifm-navbar-height, 3.75rem) + 0.75rem);
+    right: 1rem;
+    z-index: 150;
+    width: 360px;
+    max-width: calc(100vw - 2rem);
+    padding: 1rem 1.25rem;
+    border: 1px solid #cbd5e1;
+    border-radius: 12px;
+    background-color: #ffffff;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+}
+
+:global([data-theme='dark']) .card {
+    border-color: #334155;
+    background-color: #0f172a;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+}
+
+/* Logged-out layout */
+.column {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+/* Logged-in / verifying layout */
+.row {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem 0.75rem;
+}
+
+.message {
+    display: inline-flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    min-width: 0;
+    font-size: 0.9rem;
+    color: var(--ifm-color-emphasis-800);
+}
+
+.messageText {
+    text-wrap: balance;
+}
+
+.icon {
+    flex-shrink: 0;
+    font-size: 1.1rem;
+    color: var(--ifm-color-primary);
+}
+
+.loginButton,
+.logoutButton {
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 8px 16px;
+    border-radius: 8px;
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: filter 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Full-width button in the logged-out (stacked) layout */
+.loginButton {
+    width: 100%;
+    background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+    border: 1px solid #0284c7;
+}
+
+.loginButton:hover {
+    filter: brightness(0.97);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3);
+}
+
+.loginButton:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.logoutButton {
+    background: linear-gradient(135deg, #64748b 0%, #475569 100%);
+    border: 1px solid #475569;
+}
+
+.logoutButton:hover {
+    filter: brightness(0.97);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+}
+
+/* Respect the site's reduced-motion preference for the button hover lift */
+:global([data-reduce-motion="true"]) .loginButton,
+:global([data-reduce-motion="true"]) .logoutButton {
+    transition: none;
+}
+
+:global([data-reduce-motion="true"]) .loginButton:hover,
+:global([data-reduce-motion="true"]) .logoutButton:hover {
+    transform: none;
+}
+
+/* On narrow screens span the width between the side gutters */
+@media (max-width: 576px) {
+    .card {
+        left: 1rem;
+        right: 1rem;
+        width: auto;
+    }
+}

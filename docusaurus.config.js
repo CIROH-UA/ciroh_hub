@@ -416,12 +416,11 @@ const config = {
               to: "/news",
             },
             {
-              
+
               label: "Release Notes",
               position: "right",
               to: "/release-notes",
             },
-            
           ],
         },
         footer: {
