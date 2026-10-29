@@ -49,7 +49,7 @@ function buildGroups(raw = []) {
 /* Inner component (runs only in the browser)                         */
 /* ------------------------------------------------------------------ */
 
-function SelectCollectionInner({zotero, onChange}) {
+function SelectCollectionInner({zotero, onChange, value}) {
   const [groupedOptions, setGroupedOptions] = useState([]);
 
   /* fetch collections once ----------------------------------------- */
@@ -76,6 +76,7 @@ function SelectCollectionInner({zotero, onChange}) {
       classNamePrefix="zotero-select"
       theme={zoteroSelectTheme}
       styles={zoteroSelectStyles}
+      value={value}
       onChange={onChange}
     />
   );
