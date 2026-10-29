@@ -12,7 +12,7 @@ module.exports = function pluginWorkingGroups(context) {
         const dataPath = await createData(`working-group-${group.id}.json`, JSON.stringify(group));
         addRoute({
           path: `${baseUrl}working-groups/${group.id}`,
-          component: '@site/src/components/WorkingGroupDetails',
+          component: '@site/src/components/WorkingGroups/Details',
           exact: true,
           modules: { group: dataPath },
         });
