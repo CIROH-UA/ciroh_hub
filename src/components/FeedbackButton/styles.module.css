@@ -1,0 +1,76 @@
+
+.topright {
+    position: fixed;
+    bottom: -2px;
+    right: 1rem;
+    z-index: var(--ifm-z-index-overlay);
+}
+
+.feedbackbutton {
+    font-size: 0.8rem;
+    padding: 0.3rem 0.3rem 0.3rem 0.3rem;
+    background-color: var(--bg-card);
+    outline: 2px solid var(--text-secondary);
+    color: var(--text-primary);
+    border-radius: 0.5rem 0.5rem 0 0;
+    z-index: 199; /* Override everything but the navbar */
+    flex-shrink: 0; /* For breadcrumbs integration */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.greytext {
+    color: var(--text-primary);
+}
+
+.collapsible {
+    height: 1.4rem;
+    contain: strict;
+    text-align: right;
+}
+
+[data-reduce-motion="false"] .collapsibletransition {
+    transition: width 1s;
+}
+
+.uncollapsed {
+    width: 6.975rem;
+}
+
+.collapsed {
+    width: 0px;
+}
+
+.inner {
+    width: 6.775rem;
+    height: 1.4rem;
+    padding-left: 0.2rem;
+    padding-right: 0.5rem;
+    margin-right: 0.2rem;
+    border-right: 1px solid var(--text-primary);
+    position: absolute;
+    right: 0;
+    top: 0;
+    contain: strict;
+    text-align: right;
+    white-space: nowrap;
+}
+
+.rotcarat {
+    display: inline;
+    width: 1rem;
+    height: 1rem;
+}
+
+[data-reduce-motion="false"] .rotcarat {
+    transition: rotate 1s;
+}
+
+.rotated {
+    rotate: 90deg;
+}
+
+.hidden {
+    display: none;
+}

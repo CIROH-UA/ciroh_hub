@@ -35,8 +35,9 @@ export default function PublicationsPage() {
             title="Publications" 
             tagline="Explore a rich selection of publications and papers featuring CIROH and NOAA's collaborative research in hydrology. Discover insights on water management, forecasting, and climate impacts through this comprehensive resource for scholars and professionals." 
             buttons={[
-                { label: "Add your Publication", href: contributeUrl, primary: true },
-                { label: "Visit Our Library", href: "https://www.zotero.org/groups/5261687/ciroh/library" }
+                { label: "Add Your Publication", href: contributeUrl, primary: true },
+                { label: "Visit Our Library", href: "https://www.zotero.org/groups/5261687/ciroh/library" },
+                { label: "Join Our Mailing List", href: "https://forms.cloud.microsoft/r/QEkMJxaQVs"},
               ]}
         />
       </div>
