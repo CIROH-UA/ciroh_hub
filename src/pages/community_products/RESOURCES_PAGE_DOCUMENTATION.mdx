@@ -111,7 +111,7 @@ import Layout from '@theme/Layout';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import styles from './resources.module.css';
-import ResourceBrowser from '@site/src/components/ResourceBrowser';
+import ResourceBrowser from '@site/src/components/HydroShare/ResourceBrowser';
 
 export default function Resources() {
   const hydroShareIcon = 'https://storage.googleapis.com/hydroshare-prod-static-media/static/img/logo-lg.cf4395806c8e.png';
@@ -228,7 +228,7 @@ export default function Resources() {
 
 ---
 
-### 2. `/src/components/ResourceBrowser/index.js`
+### 2. `/src/components/HydroShare/ResourceBrowser/index.js`
 **Purpose:** Main orchestrator for fetching, filtering, sorting, and pagination
 
 **State Variables:**
@@ -765,7 +765,7 @@ async function fetchResourceCustomMetadata(resourceId) {
 
 ---
 
-### 4. `/src/components/ResourceBrowser/ResourceList/index.js`
+### 4. `/src/components/HydroShare/ResourceBrowser/ResourceList/index.js`
 **Purpose:** Simple wrapper that maps resources to ResourceRow components
 
 ```javascript
@@ -801,7 +801,7 @@ export default function ResourceList({ resources, defaultImage }) {
 
 ---
 
-### 5. `/src/components/ResourceBrowser/ResourceList/ResourceRow.js`
+### 5. `/src/components/HydroShare/ResourceBrowser/ResourceList/ResourceRow.js`
 **Purpose:** Individual resource card/row display
 
 **Structure:**
@@ -1098,7 +1098,7 @@ ResourceRow.propTypes = {
 
 ### Key CSS Files
 
-#### `/src/components/ResourceBrowser/styles.module.css`
+#### `/src/components/HydroShare/ResourceBrowser/styles.module.css`
 ```css
 .wrapper {
 	width: 100%;
@@ -1182,7 +1182,7 @@ html[data-theme='dark'] .sortSelect {
 html[data-theme='dark'] .empty { color: #aaa; }
 ```
 
-#### `/src/components/ResourceBrowser/ResourceList/styles.module.css`
+#### `/src/components/HydroShare/ResourceBrowser/ResourceList/styles.module.css`
 ```css
 .listContainer {
   display: flex;

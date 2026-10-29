@@ -8,9 +8,9 @@ import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 
 import styles from './styles.module.css';
 import { workingGroups } from '@site/src/data/workingGroupsData';
-import { ReducedMotionContext } from '@theme/Contexts';
-import ModalResourceCards from '@site/src/components/ModalResourceCards';
-import { loadEventPresentations } from '@site/src/components/HydroShareEventCards';
+import { ReducedMotionContext } from '@site/src/components/ReducedMotion/Context';
+import ModalResourceCards from '@site/src/components/Modal/ModalResourceCards';
+import { loadEventPresentations } from '@site/src/components/HydroShare/HydroShareEventCards';
 
 const normalize = (s) => (s ?? '').toLowerCase().trim();
 

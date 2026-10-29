@@ -4,7 +4,7 @@ on:
   push:
     branches: [main]
     paths:
-      - 'ciroh-hub-backend/**'
+      - '.backend/**'
       - '.github/workflows/cd_deploy_backend.yml'
 
 permissions:
@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ciroh-hub-backend
+        working-directory: .backend
     steps:
       - uses: actions/checkout@v4
 

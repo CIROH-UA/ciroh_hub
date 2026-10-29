@@ -3,7 +3,7 @@ import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import Header from "@site/src/components/Header";
 import Layout from '@theme/Layout';
 import Publications from "@site/src/components/Publications";
-import TechBox from "@site/src/components/TechBox";
+import TechBox from "@site/src/components/HydroShare/TechBox";
 import ZoteroLightLogo from '@site/static/img/cards/zotero_logo_light.png';
 import ZoteroDarkLogo from '@site/static/img/cards/zotero_logo_dark.png';
 import useBaseUrl from '@docusaurus/useBaseUrl';

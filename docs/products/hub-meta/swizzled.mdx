@@ -1,0 +1,94 @@
+---
+sidebar_position: 11
+title: "Swizzled Components"
+description: "Technical information regarding Docusaurus components that have been swizzled in CIROH Hub."
+tags: [Products, CIROH Hub]
+---
+
+In Docusaurus, [swizzling](https://docusaurus.io/docs/swizzling/) is a process that allows
+native Docusaurus components to be extended or modified to meet the needs of individual sites.
+CIROH Hub makes extensive use of swizzling to enable unique site functionality.
+
+This page covers all currently swizzled components and their custom functionality.
+All such components can be found in `/src/theme/`.
+In addition, the type and safety of each swizzle is noted.
+
+The "safety" of a swizzle indicates whether the Docusaurus team intends to avoid
+making breaking changes to the original component.
+While every effort has been made to ensure that "unsafe" swizzles are unlikely
+to break when updating between Docusaurus versions, it is nevertheless advisable
+to check on any unsafely swizzled component's functionality when updating Docusaurus.
+
+## Root.js
+
+**Swizzle type**: [Manual](https://docusaurus.io/docs/swizzling#wrapper-your-site-with-root)  
+**Swizzle safety**: Safe
+
+`Root.js` represents the highest-level component of the website.
+It should be used to provide [React contexts](https://react.dev/reference/react/useContext)
+to the website. Since these properties will be passed to all components on every page load,
+they should be as lightweight as possible.
+
+The following contexts are currently provided in `Root.js`:
+- `ReducedMotionContext.Provider`: Provides reduced motion status to JavaScript files. See ["Reduced Motion Mode"](/docs/products/hub-meta/global#reduced-motion-mode).
+- `HydroShareAuthProvider`: Maintains HydroShare authentication sitewide. See TBD.
+
+## Blog/Components/Author/Socials
+
+**Swizzle type**: Wrapped  
+**Swizzle safety**: Unsafe
+
+Replaces author social media links with an extra line of text for attribution.
+If reinstatement of social media links is desired, it can be restored
+by adding the original component to the wrapper.
+
+{/*
+CIROH is primarily an academic organization, and to be blunt, academic titles can be quite long.
+We also do not link out to author social media profiles from our blog.
+As such, the "Socials" component has been co-opted to allow for a third line of attribution.
+*/}
+
+For more information, see "[title2](docs/products/hub-meta/blogs#title2)".
+
+
+## BlogSidebar/Desktop
+
+**Swizzle type**: Ejected  
+**Swizzle safety**: Unsafe
+
+This file's changes allow for injection of an introductory blurb into the sidebar of a blog's desktop layout.
+Custom content has been siloed into the `BlogInjectionContent` child component,
+allowing easy substitution into future revisions of the parent class, if needed.
+
+For more information, see "[blogSidebarInjection](docs/products/hub-meta/blogs#blogsidebarinjection)".
+
+## Navbar/ColorModeToggle
+
+**Swizzle type**: Wrapped  
+**Swizzle safety**: Unsafe
+
+This wrapper is used to safely append the reduced motion toggle to the color mode toggle.
+
+## Navbar/ReducedMotionModeToggle
+
+**Swizzle type**: N/A
+
+Not actually a swizzle. This component is kept in close proximity to ColorModeToggle for ease of access.
+
+For more information, see ["Reduced Motion Mode"](docs/products/hub-meta/global#reduced-motion-mode).
+
+## NavbarItem/DocNavbarItem.js
+
+**Swizzle type**: Ejected  
+**Swizzle safety**: Unsafe
+
+Docusaurus's navbar behavior was designed with the expectation that only top-level Docs folders
+would be linked to from the navbar. This was a bad assumption that results in entire categories
+of pages being highlighted in the navbar as a group.
+
+To address this, the swizzled component checks the array `customFields.navbarReduceSubpageHighlights`
+in the site config. If the folder immediately below `docs/` is in the array, a stricter routine
+will be used to determine whether a link is highlighted (marked as active).
+
+Due to the highly invasive nature of this swizzle, it has a greater risk of breaking if
+changes are made to the original class in a Docusaurus update. It should be monitored accordingly.

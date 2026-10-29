@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useContext } from 'react';
-import { ReducedMotionContext } from '@theme/Contexts';
+import { ReducedMotionContext } from '@site/src/components/ReducedMotion/Context';
 
 export function ConstellationCanvas({ isDarkTheme }) {
   const canvasRef = useRef(null);
@@ -8,12 +8,13 @@ export function ConstellationCanvas({ isDarkTheme }) {
   const animationIdRef = useRef(null);
   const groupCounterRef = useRef(1);
   const isDark = Boolean(isDarkTheme);
-  const {reducedMotionMode} = useContext(ReducedMotionContext);
+  const { reducedMotionMode } = useContext(ReducedMotionContext);
+  const isReducedMotion = (reducedMotionMode === 'enabled')
 
   useEffect(() => {
-    if (reducedMotionMode === 'enabled') return;
     const canvas = canvasRef.current;
     if (!canvas) return;
+    if (isReducedMotion) return;
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
@@ -89,8 +90,8 @@ export function ConstellationCanvas({ isDarkTheme }) {
     window.addEventListener("click", handleClick);
 
     const animate = () => {
-      if (reducedMotionMode === 'enabled') return;
       ctx.clearRect(0, 0, canvas.width, canvas.height);
+      if (isReducedMotion) return;
 
       const nodeColor = isDark
         ? "rgba(255,255,255,0.85)"
@@ -118,7 +119,6 @@ export function ConstellationCanvas({ isDarkTheme }) {
             node.vx -= (dx / dist) * force * 0.4;  // run away fast
             node.vy -= (dy / dist) * force * 0.4;
           }
-
         }
 
         // gentle wander
@@ -203,7 +203,7 @@ export function ConstellationCanvas({ isDarkTheme }) {
       window.removeEventListener("click", handleClick);
       if (animationIdRef.current) cancelAnimationFrame(animationIdRef.current);
     };
-  }, [isDark, reducedMotionMode]);
+  }, [isDark, isReducedMotion]);
 
   return (
     <canvas
