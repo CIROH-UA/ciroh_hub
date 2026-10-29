@@ -9,6 +9,7 @@ const Help = () => {
   const isDark = colorMode === 'dark';
 
   const contactUrl = useBaseUrl('/contact');
+  const supportUrl = 'mailto:ciroh-it-support@ua.edu'
   const feedbackUrl = siteConfig?.customFields?.externalLinks?.feedbackForm || 'https://forms.cloud.microsoft/r/NzA2sLrzeJ';
 
   const sectionStyle = {
@@ -94,8 +95,8 @@ const Help = () => {
         </p>
 
         <div style={buttonsStyle}>
-          <a href={contactUrl} style={primaryButtonStyle}>
-            Contact Us
+          <a href={supportUrl} style={primaryButtonStyle}>
+            Contact Support
           </a>
           <a href={feedbackUrl} target="_blank" rel="noreferrer noopener" style={secondaryButtonStyle}>
             Provide Feedback
