@@ -11,6 +11,7 @@ export default function HydroShareResourceRow({ resource, defaultImage }) {
 
   const [showEmbed, setShowEmbed] = useState(false);
   const [embedSrc, setEmbedSrc] = useState(null);
+  const [thumbnailFailed, setThumbnailFailed] = useState(false);  // Used to fallback to default image when thumbnail fails to load
   const objectUrlRef = useRef(null);
 
   const toggleShowEmbed = (e) => {
@@ -75,8 +76,13 @@ export default function HydroShareResourceRow({ resource, defaultImage }) {
         />
         {/* ─── THUMBNAIL ─── */}
         <div className={styles.imageWrapper}>
-          {thumbnail_url ? (
-            <img src={thumbnail_url} alt={title} className={styles.image} />
+          {thumbnail_url && !thumbnailFailed ? (
+            <img
+              src={thumbnail_url}
+              alt={title}
+              className={styles.image}
+              onError={() => setThumbnailFailed(true)}
+            />
           ) : defaultImage ? (
             <img src={defaultImage} alt={title} className={styles.image} />
           ) : (

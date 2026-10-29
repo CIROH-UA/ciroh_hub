@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { MdDriveFileMove } from 'react-icons/md';
 import { LiaExternalLinkSquareAltSolid } from 'react-icons/lia';
 import { LuLayers3 } from 'react-icons/lu';
@@ -22,11 +23,18 @@ export default function HydroShareResourceCard({ resource, defaultImage }) {
     embed_url,
   } = resource;
 
+  const [thumbnailFailed, setThumbnailFailed] = useState(false);  // Used to fallback to default image when thumbnail fails to load
+
   return (
     <div id={resource_id} className={styles.gridItem}>
       <div className={styles.imageWrapper}>
-        {thumbnail_url ? (
-          <img src={thumbnail_url} alt={title} className={styles.image} />
+        {thumbnail_url && !thumbnailFailed ? (
+          <img
+            src={thumbnail_url}
+            alt={title}
+            className={styles.image}
+            onError={() => setThumbnailFailed(true)}
+          />
         ) : defaultImage ? (
           <img src={defaultImage} alt={title} className={styles.image} />
         ) : (
