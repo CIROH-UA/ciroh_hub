@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useContext } from "react";
 import gsap from "gsap";
 import "./cloudInfraDashboard.css";
-import { ReducedMotionContext } from '@theme/Contexts';
+import { ReducedMotionContext } from '@site/src/components/ReducedMotion/Context';
 
 /**
  * CloudInfraDashboard

@@ -1,17 +1,55 @@
 import React, { useEffect, useMemo, useRef, useState, useContext } from 'react';
 import Layout from '@theme/Layout';
+import Link from '@docusaurus/Link';
 import clsx from 'clsx';
 import { gsap } from 'gsap';
-import { FiTarget, FiSearch, FiUsers } from 'react-icons/fi';
+import { FiTarget, FiSearch, FiUsers, FiFileText, FiArrowRight } from 'react-icons/fi';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 
 import styles from './styles.module.css';
 import { workingGroups } from '@site/src/data/workingGroupsData';
-import { ReducedMotionContext } from '@theme/Contexts';
+import { ReducedMotionContext } from '@site/src/components/ReducedMotion/Context';
+import ModalResourceCards from '@site/src/components/Modal/ModalResourceCards';
+import { loadEventPresentations } from '@site/src/components/HydroShare/HydroShareEventCards';
 
 const normalize = (s) => (s ?? '').toLowerCase().trim();
 
 function WorkingGroupCard({ group, index }) {
+  const collectionId = group.reportsCollectionId;
+  const [showReports, setShowReports] = useState(false);
+  const [reports, setReports] = useState(null);
+  const [loadError, setLoadError] = useState(null);
+
+  // Load reports from the group's HydroShare collection the first time the modal opens
+  useEffect(() => {
+    if (!showReports || !collectionId || reports !== null) return;
+    let cancelled = false;
+    setLoadError(null);
+    loadEventPresentations(collectionId)
+      .then((list) => {
+        if (!cancelled) setReports(list);
+      })
+      .catch((err) => {
+        if (!cancelled) {
+          console.error(`Error loading reports for ${collectionId}:`, err);
+          setLoadError(err.message || 'Failed to load reports.');
+          setReports([]);
+        }
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [showReports, collectionId, reports]);
+
+  useEffect(() => {
+    if (!showReports) return;
+    const onKeyDown = (e) => {
+      if (e.key === 'Escape') setShowReports(false);
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [showReports]);
+
   return (
     <article
       className={clsx(
@@ -46,24 +84,10 @@ function WorkingGroupCard({ group, index }) {
         </span>
       </div>
 
-      {group.summary ? (
+      {group.description ? (
         <p className="tw-mt-4 tw-text-[15px] tw-leading-relaxed tw-text-slate-700 dark:tw-text-slate-300">
-          {group.summary}
+          {group.description}
         </p>
-      ) : null}
-
-      {group.objectives?.length ? (
-        <div className="tw-mt-5">
-          <div className="tw-flex tw-items-center tw-gap-2 tw-text-slate-900 dark:tw-text-white tw-font-semibold">
-            <FiTarget />
-            Objectives
-          </div>
-          <ul className="tw-mt-2 tw-space-y-2 tw-pl-5 tw-list-disc tw-text-[14px] tw-leading-relaxed tw-text-slate-700 dark:tw-text-slate-300">
-            {group.objectives.map((obj) => (
-              <li key={obj}>{obj}</li>
-            ))}
-          </ul>
-        </div>
       ) : null}
 
       {group.leads?.length ? (
@@ -84,6 +108,38 @@ function WorkingGroupCard({ group, index }) {
           </div>
         </div>
       ) : null}
+
+      <div className="tw-mt-6 tw-flex tw-flex-wrap tw-gap-3">
+        <Link
+          to={`/working-groups/${group.id}`}
+          className="tw-inline-flex tw-items-center tw-gap-2 tw-rounded-full tw-bg-cyan-600 tw-px-4 tw-py-2 tw-text-sm tw-font-semibold !tw-text-white hover:tw-bg-cyan-700 hover:!tw-no-underline tw-transition"
+        >
+          More Details
+          <FiArrowRight />
+        </Link>
+        {collectionId ? (
+          <button
+            type="button"
+            onClick={() => setShowReports(true)}
+            className="tw-inline-flex tw-items-center tw-gap-2 tw-cursor-pointer tw-rounded-full tw-border tw-border-cyan-600 tw-bg-cyan-500/10 tw-px-4 tw-py-2 tw-text-sm tw-font-semibold tw-text-cyan-800 dark:tw-text-cyan-200 hover:tw-bg-cyan-500/20 tw-transition"
+          >
+            <FiFileText />
+            View Reports
+          </button>
+        ) : null}
+      </div>
+      {collectionId ? (
+        <>
+          <ModalResourceCards
+            show={showReports}
+            onClose={() => setShowReports(false)}
+            title={group.title}
+            cards={reports}
+            itemLabel="Reports"
+            loadError={loadError}
+          />
+        </>
+      ) : null}
     </article>
   );
 }
@@ -99,7 +155,7 @@ export default function WorkingGroupsPage() {
     const q = normalize(query);
     if (!q) return workingGroups;
     return workingGroups.filter((g) => {
-      const haystack = [g.title, g.summary, ...(g.objectives ?? []), ...(g.leads ?? [])]
+      const haystack = [g.title, g.description, ...(g.leads ?? [])]
         .filter(Boolean)
         .join(' ')
         .toLowerCase();

@@ -1,0 +1,971 @@
+// Matches HydroShare resource ids contained in the relations, which can be in the form of:
+//   .../resource/<32-hex>
+//   https://doi.org/10.4211/hs.<32-hex>
+const RESOURCE_ID_REGEX = /(?:\/resource\/|10\.4211\/hs\.)([0-9a-f]{32})/i;
+
+// Max concurrent science-metadata requests when fetching metadata for a user's owned resources
+const FETCH_CONCURRENCY = 10;
+
+/**
+ * Sample endpoint: 
+ *   GET https://www.hydroshare.org/hsapi/resources/?subject=YOUR_KEYWORD
+ * 
+ * Resource metadata endpoint:
+ *   GET https://www.hydroshare.org/resource/{resource_id}/scimeta/elements/
+ * 
+ * Adjust or add query parameters (e.g., page, count) as needed.
+ */
+
+/**
+ * Convert author name from "First Middle Last" to "Last, First Middle"
+ * @param {string} author - The author name in "First Middle Last" format
+ * @returns {string} The author name in "Last, First Middle" format
+ */
+function convertAuthorToLastFirst(author) {
+  if (!author || typeof author !== 'string') {
+    return author;
+  }
+  
+  const nameParts = author.split(' ');
+
+  if (nameParts.length === 1) {
+    // Single-word name, leave as-is
+    author = nameParts[0];
+  } else {
+    const lastName = nameParts.pop();
+    const firstName = nameParts.join(' ');
+    author = `${lastName}, ${firstName}`;
+  }
+
+  return author;
+}
+
+async function fetchJson(url, errorContext = "resources") {
+  const response = await fetch(url);
+  if (!response.ok) {
+    throw new Error(`Error fetching ${errorContext} (status: ${response.status})`);
+  }
+  return response.json();
+}
+
+/**
+ * Builds the URL for the HydroShare Discovery Atlas API based on the provided search criteria.
+ *
+ * @param {string} keyword The keyword(s) (subject) to use for the api request
+ * @param {string} searchText The text to search for in the resources
+ * @param {boolean} ascending Whether to sort the results in ascending order
+ * @param {string} sortBy The field to sort the results by. One of "viewCount", "name", "dateCreated", "lastModified", "creatorName"
+ * @param {string} author The author name to filter the results by
+ * @param {string|undefined} paginationToken Token that identifies the next page. Omit on the first request.
+ * @param {number} pageSize The number of resources to request per page
+ * @returns {string} The constructed URL for the HydroShare Discovery Atlas API
+ */
+function buildDiscoveryAtlasApiUrl(
+  keyword,
+  searchText,
+  ascending = false,
+  sortBy = undefined,
+  author = undefined,
+  paginationToken = undefined,
+  pageSize = 50,
+) {
+  // Add required arguments
+  const params = new URLSearchParams({
+    keyword: keyword,
+    order: ascending ? "asc" : "desc",
+    pageSize: pageSize.toString(),
+  });
+
+  // Add search terms if provided
+  if (searchText !== undefined && searchText.trim() !== "") {
+    params.set("term", searchText);
+  }
+
+  // Add author filter if provided
+  if (author !== undefined) {
+    params.set("creatorName", author);
+  }
+
+  // Add sortBy if provided
+  if (sortBy !== undefined) {
+    params.set("sortBy", sortBy);
+  }
+
+  // Add pagination token for subsequent pages
+  if (paginationToken !== undefined && paginationToken !== null) {
+    params.set("paginationToken", paginationToken);
+  }
+
+  return `https://www.hydroshare.org/hsapi/discovery-atlas/search?${params.toString()}`;
+}
+
+function mapDiscoveryResource(resource) {
+  return {
+    resource_id: resource.document[0].url.match(/resource\/([^/]+)/)[1],
+    resource_title: resource.name,
+    authors: resource.creator.map(c => c.name),
+    resource_type: resource.document[0].additionalType,
+    resource_url: resource.document[0].url.replace(/^http:/, 'https:'),
+    abstract: resource.description,
+    date_created: resource.document[0].dateCreated,
+    date_last_updated: resource.document[0].dateModified,
+    keywords: resource.keywords || []
+  };
+}
+
+/**
+ * Normalize a discovery-atlas response body to a raw array of resource objects.
+ * Tolerates both an already-decoded array and a JSON-encoded string.
+ * 
+ * @param {Array|String} data The raw response body from the discovery-atlas API, either as an array or a JSON string
+ * @returns {Array} An array of resource objects
+ */
+function getRawDiscoveryResources(data) {
+  // Data given is an array
+  if (Array.isArray(data)) {
+    return data;
+  }
+
+  // Data given is a JSON string
+  if (typeof data === "string") {
+    try {
+      const parsed = JSON.parse(data);
+      return Array.isArray(parsed) ? parsed : [];
+    } catch (error) {
+      console.error("Failed to parse data as JSON string:", error);
+      return [];
+    }
+  }
+  console.warn("Unexpected format for data:", data);
+  return [];
+}
+
+// Helper function to fetch detailed metadata for a specific resource
+// async function fetchResourceMetadata(resourceId="302dcbef13614ac486fb260eaa1ca87c") {
+//   const url = `https://www.hydroshare.org/hsapi/resource/${resourceId}/scimeta/elements/`;
+//   const response = await fetch(url);
+//   if (!response.ok) {
+//     throw new Error(
+//       `Error fetching metadata for resource ${resourceId} (status: ${response.status})`
+//     );
+//   }
+//   const metadata = await response.json();
+//   return metadata;
+// }
+
+async function fetchResource(id) {
+  // Fetch the resource from HydroShare
+  const url = `https://www.hydroshare.org/hsapi/resource/${encodeURIComponent(id)}/scimeta/elements/`;
+  const response = await fetchJson(url, `scimeta elements for resource ${id}`);
+
+  // Extract identifiers and other relevant fields from the response
+  const identifiers = response.identifiers || [];
+  const hydroShareUrl = identifiers.find(i => i.name === 'hydroShareIdentifier')?.url;
+  const dates = response.dates || [];
+
+  return {
+    resource_id: id,
+    resource_title: response.title || "",
+    authors: (response.creators || []).map(c => c.name || c.organization || "").filter(Boolean),
+    resource_type: typeof response.type === 'string' ? response.type.replace(/^.*\//, "") : "", // Extract the last segment of the URI (http://www.hydroshare.org/terms/CollectionResource - > CollectionResource)
+    resource_url: hydroShareUrl || `https://www.hydroshare.org/resource/${id}/`,
+    doi: identifiers.find(i => i.name === 'doi')?.url || null,
+    abstract: response.description || "",
+    date_created: dates.find(d => d.type === 'created')?.start_date || "",
+    date_last_updated: dates.find(d => d.type === 'modified')?.start_date || "",
+    subjects: (response.subjects || []).map(s => s?.value).filter(Boolean),
+  };
+}
+
+// Helper function to fetch list of resources by group
+async function fetchResourcesByGroup(groupid, fullTextSearch=undefined, pageNumber=undefined, pageSize=undefined) {
+  let url = `https://www.hydroshare.org/hsapi/resource/?group=${encodeURIComponent(
+    groupid
+  )}`;
+
+  if (fullTextSearch !== undefined) {
+    url += `&full_text_search=${encodeURIComponent(fullTextSearch)}`;
+  }
+
+  if (pageNumber !== undefined) {
+    url += `&page=${encodeURIComponent(pageNumber)}`;
+  }
+
+  if (pageSize !== undefined) {
+    url += `&count=${encodeURIComponent(pageSize)}`;
+  }
+
+  // data.results is typically where the list of resources is stored.
+  const data = await fetchJson(url, "resources");
+
+  // Get resources and pagination info
+  const returnData = {
+    resources: data.results,
+    resourcesLength: data.results.length,
+    resourceCountTotal: data.count,
+    pageSize: pageSize,
+    pageNumber: pageNumber,
+    pageLast: pageSize ? Math.ceil(data.count / pageSize) : 1,
+    hasMorePages: data.next !== null,
+    pageNextUrl: data.next,
+    pagePreviousUrl: data.previous,
+  };
+
+  // Return the resources along with pagination info
+  return returnData;
+}
+  
+function extractRelatedResourceIds(metadata) {
+  const ids = metadata.relations
+    .filter(item => item.type === 'hasPart')
+    .map(item => {
+      const match = item.value.match(RESOURCE_ID_REGEX);
+      return match ? match[1].toLowerCase() : null;
+    })
+    .filter(id => id !== null); // Remove non-matching entries
+
+  // Deduplicate members cited in both URL and DOI form
+  return [...new Set(ids)];
+}
+
+async function getCuratedIds(resourceId) {
+  try {
+    const metadata = await fetchResourceMetadata(resourceId);
+    return extractRelatedResourceIds(metadata);
+  } catch (error) {
+    console.error('Error:', error);
+    return [];
+  }
+}
+
+async function getGroupIds(communityId="4") {
+  const url = `https://www.hydroshare.org/community/${communityId}/`;
+  try {
+    const response = await fetch(url);
+    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+    
+    const html = await response.text();
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, "text/html");
+    
+    // Find the JSON script tag
+    const scriptTag = doc.querySelector('script#community-app-data[type="application/json"]');
+    if (!scriptTag?.textContent) {
+      console.log("No script tag with id 'community-app-data' found or it contains no data.");
+      return [];
+    }
+
+    // Parse JSON and extract group IDs
+    const data = JSON.parse(scriptTag.textContent);
+    return data.members?.map(member => member.id.toString()).filter(Boolean) || [];
+
+  } catch (error) {
+    console.error(`Error processing community ${communityId}:`, error);
+    return [];
+  }
+}
+
+
+async function joinGroupResources(groupIds, fullTextSearch=undefined, pageNumber=undefined, pageSize=undefined) {
+  const seenResourceIds = new Set();
+  const uniqueResources = [];
+  let hasMorePages = false;
+
+  // Process groups sequentially to maintain order
+  for (const groupId of groupIds) {
+    try {
+      const apiResponse = await fetchResourcesByGroup(groupId, fullTextSearch, pageNumber, pageSize);
+      
+      if (apiResponse.hasMorePages) {
+        hasMorePages = true;
+      }
+
+      // Filter and collect unique resources
+      for (const resource of apiResponse.resources) {
+        const resourceId = resource.resource_id;
+        if (!seenResourceIds.has(resourceId)) {
+          seenResourceIds.add(resourceId);
+          uniqueResources.push(resource);
+        }
+      }
+    } catch (error) {
+      console.error(`Error processing group ${groupId}:`, error);
+      // Continue processing other groups even if one fails
+    }
+  }
+
+  return {
+    resources: uniqueResources,
+    resourcesLength: uniqueResources.length,
+    pageSize: pageSize,
+    pageNumber: pageNumber,
+    hasMorePages: hasMorePages,
+  };
+}
+
+function joinExtraResources(groupResources, extraResources) {
+  const seenResourceIds = new Set();
+  const allResources = groupResources.concat(extraResources);
+  const uniqueResources = [];
+  
+  // Filter and collect unique resources
+  allResources.forEach( (resource) => {
+    const resourceId = resource.resource_id;
+    if (!seenResourceIds.has(resourceId)) {
+      seenResourceIds.add(resourceId);
+      uniqueResources.push(resource);
+    }
+  });
+
+  return uniqueResources;
+
+}
+
+/**
+ * Fetch community resources by combining hsapi group results with
+ * discovery-atlas keyword search results.
+ *
+ * Pagination is heterogeneous: `groupPageNumber` advances the hsapi group call
+ * (1-based page numbers) while `paginationToken` advances the discovery-atlas
+ * call (cursor). For the first request, omit both. For subsequent requests,
+ * read the next values off the previous response:
+ *   - groupPageNumber: previousResponse.groupResourcesPageData.pageNumber + 1
+ *   - paginationToken: previousResponse.extraResourcesPageData.nextPaginationToken
+ *
+ * `hasMorePages` is the union of both internal sources' hasMorePages.
+ *
+ * @param {string} keyword The keyword(s) to search for in the discovery-atlas API
+ * @param {string} communityId The ID of the HydroShare community to fetch group resources from
+ * @param {string} fullTextSearch Optional full text search string to filter results
+ * @param {boolean} ascending Whether to sort discovery-atlas results in ascending order
+ * @param {string} sortBy The field to sort discovery-atlas results by. One of "viewCount", "name", "dateCreated", "lastModified", "creatorName"
+ * @param {string} author The author name to filter discovery-atlas results by
+ * @param {number|undefined} groupPageNumber Page number for the hsapi group call. Omit on the first request.
+ * @param {string|undefined} paginationToken Cursor for the discovery-atlas call. Omit on the first request.
+ * @param {number} pageSize The number of resources to request per page for both sources
+ * @returns {Promise<Object>} An object containing combined resources and pagination data from both sources
+ */
+async function getCommunityResources(
+  keyword="ciroh_portal_data,ciroh_hub_data",
+  communityId="4",
+  fullTextSearch=undefined,
+  ascending=false,
+  sortBy=undefined,
+  author=undefined,
+  groupPageNumber=undefined,
+  paginationToken=undefined,
+  pageSize=undefined,
+) {
+  try {
+    // Fetch resources
+    const groupIds = await getGroupIds(communityId);
+    const [groupResourcesResponse, extraResourcesResponse] = await Promise.all([
+      joinGroupResources(groupIds, fullTextSearch, groupPageNumber, pageSize),
+      fetchResourcesBySearch(keyword, fullTextSearch, ascending, sortBy, author, paginationToken, pageSize),
+    ]);
+
+    // Extract resources
+    let groupResources = groupResourcesResponse.resources;
+    let extraResources = extraResourcesResponse.resources;
+
+    const joinedResources = joinExtraResources(groupResources, extraResources);
+
+    // Return combined data
+    return {
+      groupResourcesPageData: groupResourcesResponse,
+      extraResourcesPageData: extraResourcesResponse,
+      resources: joinedResources,
+      hasMorePages: Boolean(groupResourcesResponse.hasMorePages || extraResourcesResponse.hasMorePages),
+    };
+  } catch (error) {
+    console.error('Community resource fetch failed:', error);
+    throw error;
+  }
+}
+
+async function fetchResourcesByKeyword(keyword, { page = 1, count = 15, fullTextSearch } = {}) {
+  const params = new URLSearchParams({
+    subject: keyword,
+    page: page.toString(),
+    count: count.toString(),
+  });
+  if (fullTextSearch) {
+    params.set('full_text_search', fullTextSearch);
+  }
+  const url = `https://www.hydroshare.org/hsapi/resource/?${params.toString()}`;
+  const data = await fetchJson(url, "resources");
+  // data.results is typically where the list of resources is stored.
+  // If your actual structure differs, adjust accordingly.
+  return data.results;
+}
+
+/**
+ * Internal helper that performs a single discovery-atlas request and returns
+ * mapped resources together with the cursor for the next page. Callers should
+ * use `fetchResourcesBySearch` instead, which wraps this core function.
+ *
+ * @param {Object} params
+ * @param {string} params.keyword The keyword (subject) to use for the api request
+ * @param {string} params.searchText The text to look for in all the resource fields
+ * @param {boolean} params.ascending Whether to sort results in ascending order
+ * @param {string} params.sortBy The field to sort by. One of 'viewCount', 'name', 'dateCreated', 'lastModified', 'creatorName'
+ * @param {string} params.author The author to filter by
+ * @param {string|undefined} params.paginationToken Cursor returned from the previous call. Omit on the first request.
+ * @param {number} params.pageSize The number of resources to request per page
+ * @returns {Promise<{resources: Array, nextPaginationToken: string|undefined, hasMorePages: boolean}>}
+ */
+async function fetchDiscoveryResourcesCore({
+  keyword,
+  searchText,
+  ascending = false,
+  sortBy = undefined,
+  author = undefined,
+  paginationToken = undefined,
+  pageSize = 50,
+}) {
+  const url = buildDiscoveryAtlasApiUrl(keyword, searchText, ascending, sortBy, author, paginationToken, pageSize);
+  const data = await fetchJson(url, "resources");
+  const rawResources = getRawDiscoveryResources(data);
+  const nextPaginationToken = rawResources.length === pageSize ? (rawResources[rawResources.length - 1].paginationToken ?? null) : null;
+  const resources = rawResources.map(mapDiscoveryResource);
+  return {
+    resources,
+    nextPaginationToken,
+    hasMorePages: nextPaginationToken !== undefined && nextPaginationToken !== null,
+  };
+}
+
+/**
+ * Fetch a page of resources from HydroShare's discovery-atlas search.
+ *
+ * Returns an object so callers can drive cursor-based pagination — the previous
+ * response's `nextPaginationToken` must be passed back as `paginationToken` to
+ * fetch the next page. On the first call, pass `undefined`.
+ *
+ * @param {string} keyword The keyword (subject) to use for the api request
+ * @param {string} searchText The text to look for in all the resource fields
+ * @param {boolean} ascending Whether to sort results in ascending order
+ * @param {string} sortBy The field to sort by. One of 'viewCount', 'name', 'dateCreated', 'lastModified', 'creatorName'
+ * @param {string} author The author to filter by
+ * @param {string|undefined} paginationToken Cursor returned from the previous call. Omit on the first request.
+ * @param {number} pageSize The number of resources to request per page
+ * @returns {Promise<{resources: Array, nextPaginationToken: string|undefined, hasMorePages: boolean}>}
+ */
+async function fetchResourcesBySearch(keyword, searchText, ascending=false, sortBy=undefined, author=undefined, paginationToken=undefined, pageSize=undefined) {
+  return fetchDiscoveryResourcesCore({
+    keyword,
+    searchText,
+    ascending,
+    sortBy,
+    author,
+    paginationToken,
+    pageSize,
+  });
+}
+
+function normalizeKeywordList(keywords = []) {
+  if (!Array.isArray(keywords)) {
+    return [];
+  }
+  return keywords
+    .map(keyword => (typeof keyword === 'string' ? keyword.trim() : ''))
+    .filter(Boolean);
+}
+
+async function fetchResourcesByKeywordsIntersection(keywords = [], options = {}) {
+  const {
+    page = 1,
+    count = 15,
+    fullTextSearch,
+  } = options;
+  const normalizedKeywords = normalizeKeywordList(keywords);
+
+  if (normalizedKeywords.length === 0) {
+    return [];
+  }
+
+  let encounteredError = null;
+  const keywordResults = await Promise.all(
+    normalizedKeywords.map(async keyword => {
+      try {
+        return await fetchResourcesByKeyword(keyword, { page, count, fullTextSearch });
+      } catch (error) {
+        console.error(`Error fetching resources for keyword "${keyword}":`, error);
+        if (!encounteredError) {
+          encounteredError = error;
+        }
+        return [];
+      }
+    }),
+  );
+
+  if (encounteredError) {
+    throw encounteredError;
+  }
+
+  // Early exit if any keyword returned no matches to avoid unnecessary processing.
+  if (keywordResults.some(result => result.length === 0)) {
+    return [];
+  }
+
+  const intersectionMap = new Map();
+  const occurrenceMap = new Map();
+
+  keywordResults.forEach(resultList => {
+    resultList.forEach(resource => {
+      const resourceId = resource?.resource_id;
+      if (!resourceId) {
+        return;
+      }
+
+      if (!intersectionMap.has(resourceId)) {
+        intersectionMap.set(resourceId, resource);
+      }
+      occurrenceMap.set(resourceId, (occurrenceMap.get(resourceId) || 0) + 1);
+    });
+  });
+
+  const fullMatchResources = [];
+  const requiredMatches = normalizedKeywords.length;
+
+  occurrenceMap.forEach((count, resourceId) => {
+    if (count === requiredMatches) {
+      const resource = intersectionMap.get(resourceId);
+      if (resource) {
+        fullMatchResources.push(resource);
+      }
+    }
+  });
+  return fullMatchResources;
+}
+
+async function fetchResourceCustomMetadata(resourceId) {
+  const url = `https://www.hydroshare.org/hsapi/resource/${resourceId}/scimeta/custom/`;
+  return fetchJson(url, `metadata for resource ${resourceId}`);
+}
+
+async function fetchResourceMetadata(resourceId) {
+  const url = `https://www.hydroshare.org/hsapi/resource/${resourceId}/scimeta/elements/`;
+  return fetchJson(url, `scimeta elements for resource ${resourceId}`);
+}
+
+// Fetch the curated resources first (from the "parent" resource).
+async function fetchRawCuratedResources(curated_parent_id) {
+  try {
+    const curatedIds = await getCuratedIds(curated_parent_id);
+
+    const curatedList = await Promise.all(curatedIds.map(async (id) => {
+      const resource = await fetchResource(id);
+      return resource;
+    }));
+
+    return curatedList;
+  } catch (err) {
+    console.error("Error fetching curated resources:", err);
+    throw err;
+  }
+};
+
+/**
+ * Fetch the HydroShare resources that have been added to the specified collection resource.
+ * @param {string} collectionId - The ID of the HydroShare collection resource to fetch contained resources from.
+ * @returns {Promise<Array>} An array of HydroShare resources.
+ */
+async function fetchResourcesFromCollection(collectionId) {
+  // Fetch the collection metadata to extract its contained resource ids
+  const collectionMetadataUrl = `https://www.hydroshare.org/hsapi/resource/${collectionId}/scimeta/elements/`;
+  const collectionMetadataResponse = await fetch(collectionMetadataUrl);
+
+  // Error occurred
+  if (!collectionMetadataResponse.ok) {
+    throw new Error(`Error fetching collection metadata for ${collectionId} (status: ${collectionMetadataResponse.status})`);
+  }
+
+  // Get the response data as JSON
+  const collectionMetadataJson = await collectionMetadataResponse.json();
+
+  // Get the relations of the collection (if available) to find the contained resources
+  const relations = collectionMetadataJson.relations || [];
+
+  // Extract each resource id from the collection relations
+  const resourceIds = new Set();
+  for (const relation of relations)
+  {
+    // Extract resource id
+    if (relation.type === 'hasPart' && relation.value)
+    {
+      // Extract the resource id from the relation
+      const match = relation.value.match(RESOURCE_ID_REGEX);
+
+      if (match)
+      {
+        // Add resource id to list
+        resourceIds.add(match[1].toLowerCase());
+      }
+      else
+      {
+        console.warn(`Unrecognized hasPart relation in collection ${collectionId}: ${relation.value}`);
+      }
+    }
+  }
+
+  // Fetch all resources in parallel
+  const resourcePromises = Array.from(resourceIds).map(resourceId =>
+    fetchResource(resourceId).catch(err => {
+      console.error(`Error fetching resource ${resourceId} from collection ${collectionId}:`, err);
+      return null;
+    })
+  );
+
+  const resources = (await Promise.all(resourcePromises)).filter(Boolean);
+
+  // Return the list of resources
+  return resources;
+}
+
+/**
+ * Fetch the URLs of image files for a given HydroShare resource.
+ * @param {string} resourceId - The ID of the HydroShare resource.
+ * @returns {Promise<Array<string>>} A promise that resolves to an array of image URLs.
+ */
+async function fetchResourceImageUrls(resourceId) {
+  // Fetch the list of files for the resource to find image files
+  const filesUrl = `https://www.hydroshare.org/hsapi/resource/${resourceId}/file_list/`;
+  const filesResponse = await fetch(filesUrl);
+
+  if (!filesResponse.ok) {
+    throw new Error(`Error fetching file list for resource ${resourceId} (status: ${filesResponse.status})`);
+  }
+
+  // Get the response data as JSON
+  const filesData = await filesResponse.json();
+
+  // Get the URLs of files that are images based on their content type
+  const imageUrls = [];
+  for (const result of filesData.results)
+  {
+    // Check if the content type indicates an image
+    if (result.content_type && result.content_type.startsWith('image/'))
+    {
+      // Add image URL to list
+      imageUrls.push(result.url);
+    }
+  }
+
+  // Return the list of image URLs
+  return imageUrls;
+}
+
+/**
+ * Update a resource's science metadata (title, authors, and/or abstract).
+ *
+ * Pass plain values; this builds HydroShare's CoreMetaData shapes for you.
+ * Only the fields you provide are sent — omit one to leave it unchanged.
+ *
+ * Note: HydroShare REPLACES the whole `creators` list, so `authors` must be the
+ * complete author list, not just additions or changes.
+ *
+ * @param {string} resourceId The id of the resource to update
+ * @param {string} authToken HydroShare OAuth bearer token (must have edit rights)
+ * @param {Object} fields The fields to update
+ * @param {string} [fields.title] New title
+ * @param {string[]} [fields.authors] Full author list in "First Last" display order
+ * @param {string} [fields.description] New abstract
+ * @returns {Promise<Object>} The updated science metadata returned by HydroShare
+ */
+async function updateResourceScimeta(resourceId, authToken, { title, authors, description } = {}) {
+  const updateUrl = `https://www.hydroshare.org/hsapi/resource/${resourceId}/scimeta/elements/`;
+
+  // Build the CoreMetaData body from only the provided fields
+  const scimetaData = {};
+
+  // Add title if provided
+  if (title !== undefined)
+  {
+    scimetaData.title = title;
+  }
+
+  // Add description if provided
+  if (description !== undefined)
+  {
+    scimetaData.description = description;
+  }
+
+  // Add authors if provided
+  if (authors !== undefined)
+  {
+    // HydroShare stores each creator as { name: "Last, First" }
+    scimetaData.creators = authors
+      .map(author => author.trim())
+      .filter(Boolean)
+      .map(name => ({ name: convertAuthorToLastFirst(name) }));
+  }
+
+  try {
+    // Send the updated CoreMetaData to HydroShare via a PUT request
+    const response = await fetch(updateUrl, {
+      method: 'PUT',
+      headers: {
+        'Authorization': `Bearer ${authToken}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(scimetaData),
+    });
+
+    // Check if the response indicates a successful update
+    if (!response.ok)
+    {
+      throw new Error(`Error updating scimeta for resource ${resourceId} (status: ${response.status})`);
+    }
+
+    // Return the updated science metadata as JSON
+    return response.json();
+
+  } catch (error) {
+    console.error(`Error updating scimeta for resource ${resourceId}:`, error);
+    throw error;
+  }
+}
+
+/**
+ * Update a resource's custom (extended) metadata — the key/value fields such as
+ * page_url, docs_url, thumbnail_url, and pres_path.
+ *
+ * The scimeta/custom endpoint only supports GET and POST (no PUT), and POST
+ * REPLACES the entire custom metadata set. So this reads the existing metadata
+ * first and merges the provided fields on top before POSTing — otherwise keys
+ * we're not changing would be wiped. Only the keys you pass are changed; pass
+ * an empty string to blank a key.
+ *
+ * Throws if the existing metadata can't be read, since POSTing without it would
+ * destroy the resource's other custom fields.
+ *
+ * @param {string} resourceId The id of the resource to update
+ * @param {string} authToken HydroShare OAuth bearer token (must have edit rights)
+ * @param {Object} fields Custom metadata key/values to set (e.g. { page_url, docs_url, thumbnail_url, pres_path })
+ * @returns {Promise<void>} Resolves when the update succeeds; throws otherwise
+ */
+async function updateResourceCustomMetadata(resourceId, authToken, fields = {}) {
+  const updateUrl = `https://www.hydroshare.org/hsapi/resource/${resourceId}/scimeta/custom/`;
+
+  // POST replaces the whole custom metadata set, so read the existing fields and
+  // merge our changes on top. Let a read failure throw — POSTing partial data
+  // would wipe the keys we didn't include.
+  const existing = await fetchResourceCustomMetadata(resourceId) || {};
+  const merged = { ...existing, ...fields };
+
+  try {
+    // POST is the update mechanism for custom metadata (there is no PUT)
+    const response = await fetch(updateUrl, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${authToken}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(merged),
+    });
+
+    // Check if the response indicates a successful update
+    if (!response.ok)
+    {
+      throw new Error(`Error updating custom metadata for resource ${resourceId} (status: ${response.status})`);
+    }
+
+    // Success — this endpoint returns an empty body, so there's nothing to return
+
+  } catch (error) {
+    console.error(`Error updating custom metadata for resource ${resourceId}:`, error);
+    throw error;
+  }
+}
+
+/**
+ * Fetch all resources owned by a given user, paging through the full result set.
+ *
+ * Requires an auth token to see the user's non-public resources (and to use
+ * edit_permission). Returns the raw hsapi resource list shape — note these
+ * objects carry `creator` as a name string and include NO subjects/keywords,
+ * unlike the discovery-atlas results.
+ *
+ * @param {string} user The owner to filter by (HydroShare username or email)
+ * @param {string} authToken HydroShare OAuth bearer token
+ * @param {Object} [options]
+ * @param {boolean} [options.editableOnly=false] Only include resources the user can edit
+ * @param {number} [options.pageSize=100] Results requested per page
+ * @returns {Promise<Array>} All matching resources (hsapi list objects)
+ */
+async function fetchResourcesOwnedByUser(user, authToken, { editableOnly = false, pageSize = 100 } = {}) {
+  // Construct the query parameters for the API request.
+  const params = new URLSearchParams({ owner: user, count: String(pageSize) });
+  if (editableOnly) {
+    params.set('edit_permission', 'true');
+  }
+
+  // Construct the initial URL for the API request using the query parameters.
+  let url = `https://www.hydroshare.org/hsapi/resource/?${params.toString()}`;
+  const headers = { Authorization: `Bearer ${authToken}` };
+  const resources = [];
+
+  // Page through the results by following the `next` cursor until it's null.
+  // HydroShare returns `next` as a full URL that preserves the query params.
+  while (url) {
+    // Fetch the current page of resources from the API.
+    const response = await fetch(url, { headers });
+
+    // Check for failure
+    if (!response.ok) {
+      throw new Error(`Error fetching resources owned by ${user} (status: ${response.status})`);
+    }
+
+    // Parse the JSON response and extract the list of resources and the next page URL.
+    const data = await response.json();
+    resources.push(...(data.results || []));
+    url = data.next || null;
+  }
+
+  // Return the accumulated list of resources after paging through all results.
+  return resources;
+}
+
+/**
+ * Map an async function over a list with a bounded number of in-flight calls.
+ * Results are returned in input order. Used to enrich owned resources without
+ * firing one request per resource all at once, which would burst the API for
+ * users who own many resources.
+ *
+ * @param {T[]} items The items to map over
+ * @param {(item: T, index: number) => Promise<R>} worker The async mapper
+ * @param {number} limit Maximum number of concurrent calls
+ * @returns {Promise<R[]>} The results, in the same order as `items`
+ * @template T, R
+ */
+async function mapWithConcurrency(items, worker, limit) {
+  // Prepare an array to hold the results and a counter for the next index to process
+  const results = new Array(items.length);
+  let next = 0;
+
+  // Each runner pulls the next index until the list is exhausted, so at most `limit` calls are in flight at once
+  async function runner() {
+    while (next < items.length) {
+      const index = next++;
+      results[index] = await worker(items[index], index);
+    }
+  }
+
+  // Launch the runners with a concurrency limit and wait for all to complete
+  const runnerCount = Math.min(limit, items.length);
+  await Promise.all(Array.from({ length: runnerCount }, () => runner()));
+
+  // Return the results in the same order as the input items.
+  return results;
+}
+
+/**
+ * Fetch the resources a user can edit that are tagged with one of the given keywords.
+ *
+ * Edit permission is authoritative from hsapi (the owner listing with edit_permission),
+ * but that listing doesn't include subjects, so it can't be scoped to a page's keyword
+ * on its own. Each owned resource is therefore enriched with its science metadata (which
+ * carries subjects and the display fields) and then kept only if it is tagged with one of
+ * `keyword`'s comma-separated values.
+ *
+ * The returned objects use the same shape as the search endpoints (resource_title,
+ * authors[], subjects[], ...), so callers can map them the same way.
+ *
+ * @param {string} username The HydroShare username whose editable resources to fetch
+ * @param {string} authToken HydroShare OAuth bearer token
+ * @param {string} keyword Comma-separated keyword(s) to scope to (e.g. "ciroh_hub_app")
+ * @returns {Promise<Object[]>} The matching editable resources
+ */
+async function fetchEditableResourcesByKeyword(username, authToken, keyword) {
+  // Authoritative set of resources the user can edit
+  const owned = await fetchResourcesOwnedByUser(username, authToken, { editableOnly: true });
+
+  // The owner listing has no subjects, so pull each resource's science metadata (subjects + display fields)
+  const detailed = await mapWithConcurrency(
+    owned,
+    (r) => fetchResource(r.resource_id).catch(() => null),
+    FETCH_CONCURRENCY,
+  );
+
+  // Keep only resources tagged with one of the page's keywords
+  const pageKeywords = new Set(
+    String(keyword).split(',').map((k) => k.trim().toLowerCase()).filter(Boolean)
+  );
+  return detailed.filter(
+    (res) => res && (res.subjects || []).some((s) => pageKeywords.has(String(s).trim().toLowerCase()))
+  );
+}
+
+/**
+ * Upload a file into a resource's content and return its public content URL.
+ *
+ * The file is added at the resource root. The returned URL only serves to
+ * anonymous viewers (e.g. as an <img src>) once the resource is public.
+ *
+ * @param {string} resourceId The id of the resource to upload into
+ * @param {string} authToken HydroShare OAuth bearer token (must have edit rights)
+ * @param {File} file The file to upload
+ * @returns {Promise<string>} The uploaded file's content URL
+ */
+async function uploadResourceFile(resourceId, authToken, file) {
+  const url = `https://www.hydroshare.org/hsapi/resource/${resourceId}/files/`;
+
+  // multipart/form-data with a single `file` field
+  const formData = new FormData();
+  formData.append('file', file);
+
+  // Send the file as multipart/form-data
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${authToken}` },
+    body: formData,
+  });
+
+  // Check for failure
+  if (!response.ok) {
+    throw new Error(`Error uploading file to resource ${resourceId} (status: ${response.status})`);
+  }
+
+  // Return the public content URL for the uploaded file
+  return `https://www.hydroshare.org/resource/${resourceId}/data/contents/${encodeURIComponent(file.name)}`;
+}
+
+/**
+ * Build the public URL for a resource's embeddable content (e.g. a presentation
+ * PDF) from its content path. The path is a stored relative path that may contain
+ * slashes, so it is not URL-encoded. Returns '' when no path is given, so callers
+ * can use the result directly as the presence check for a preview.
+ *
+ * @param {string} resourceId The id of the resource
+ * @param {string} presPath The content path within the resource (e.g. "slides.pdf")
+ * @returns {string} The content URL, or '' if presPath is empty
+ */
+function buildEmbedUrl(resourceId, presPath) {
+  if (!resourceId || !presPath) return '';
+  return `https://www.hydroshare.org/resource/${resourceId}/data/contents/${presPath}`;
+}
+
+
+export {
+  getCuratedIds,
+  fetchResource,
+  fetchResourcesByGroup, 
+  fetchResourcesByKeyword, 
+  fetchResourcesByKeywordsIntersection,
+  fetchResourcesBySearch,
+  getCommunityResources,
+  fetchResourceCustomMetadata, 
+  fetchResourceMetadata,
+  joinExtraResources, 
+  fetchRawCuratedResources,
+  convertAuthorToLastFirst,
+  fetchResourcesFromCollection,
+  fetchResourceImageUrls,
+  updateResourceScimeta,
+  updateResourceCustomMetadata,
+  fetchResourcesOwnedByUser,
+  fetchEditableResourcesByKeyword,
+  uploadResourceFile,
+  buildEmbedUrl
+};

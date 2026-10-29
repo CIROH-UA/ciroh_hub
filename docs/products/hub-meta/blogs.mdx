@@ -1,0 +1,50 @@
+---
+sidebar_position: 5
+title: "Blogs and Release Notes"
+description: "Technical information regarding how CIROH Hub's blog feeds work."
+tags: [Products, CIROH Hub]
+---
+
+# Blog Feeds on CIROH Hub
+
+CIROH's [blogs](/blog) and [release notes](/release-notes) are both powered by Docusaurus's native blog plugin, [`plugin-content-blog`](https://docusaurus.io/docs/api/plugins/@docusaurus/plugin-content-blog).
+
+Both blogs are initialized in the `plugins` field of `docusaurus.config.js`.
+
+## Best practices for author data
+
+If an author's position, title, or associated institution changes substantially,
+for the interest of historical preservation, please create a separate author entry for their future posts with
+their updated information. Internally, marking these new entries by year will usually suffice.
+
+For minor profile updates, editing the existing entries is acceptable.
+
+If an author wishes to change the name or image they are credited under,
+then both their current and historical author entries may be updated according to their preferences.
+
+Bear in mind that Docusaurus's native social media fields are disabled on CIROH Hub's
+blog layouts in favor of an extra attribution line. See "[title2](#title2)" below.
+
+## Custom injections
+
+CIROH Hub blogs inject custom content into their pages for extra functionality.
+In practice, this is really only used for the [main blog](/blog).
+
+These injections are implemented via [swizzling](docs/products/hub-meta/swizzled#http://localhost:3000/local/docs/products/hub-meta/swizzled#blogcomponentsauthorsocials).
+
+### blogSidebarInjection
+
+Matches against the blog title as provided to the sidebar. On a match,
+it will inject a provided block of HTML into the blog's sidebar below
+the title.
+
+Defined in `customFields.blogSidebarInjection` as a list of objects
+with the following fields:
+
+- `sidebarTitle`: The sidebar title of the blog where the HTML should be injected.
+- `html`: HTML to be injected.
+
+### title2
+
+In authors.yaml, a second title line should be used for each contributor.
+This is typically used to indicate the author's original institution.

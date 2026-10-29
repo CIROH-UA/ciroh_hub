@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import Hyperspeed from '@site/src/components/Reactbits/hyperSpeed'
+import Hyperspeed from '@site/src/components/HomepageFeatures/Reactbits/hyperSpeed'
 
 export default function HyperspeedSection() {
   const speedRef = useRef(2);

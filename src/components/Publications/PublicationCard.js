@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import clsx from 'clsx';
 import styles from './PublicationCard.module.css';
 import { useColorMode } from '@docusaurus/theme-common';
-import ModalImageViewer from '@site/src/components/ModalImageViewer';
+import ModalImageViewer from '@site/src/components/Modal/ModalImageViewer';
 import { FaRegImage } from 'react-icons/fa';
 
 
