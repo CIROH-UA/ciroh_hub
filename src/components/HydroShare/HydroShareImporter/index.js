@@ -3,6 +3,9 @@
 //   https://doi.org/10.4211/hs.<32-hex>
 const RESOURCE_ID_REGEX = /(?:\/resource\/|10\.4211\/hs\.)([0-9a-f]{32})/i;
 
+// Max concurrent science-metadata requests when fetching metadata for a user's owned resources
+const FETCH_CONCURRENCY = 10;
+
 /**
  * Sample endpoint: 
  *   GET https://www.hydroshare.org/hsapi/resources/?subject=YOUR_KEYWORD
@@ -106,6 +109,7 @@ function mapDiscoveryResource(resource) {
     abstract: resource.description,
     date_created: resource.document[0].dateCreated,
     date_last_updated: resource.document[0].dateModified,
+    keywords: resource.keywords || []
   };
 }
 
@@ -652,9 +656,300 @@ async function fetchResourceImageUrls(resourceId) {
   return imageUrls;
 }
 
+/**
+ * Update a resource's science metadata (title, authors, and/or abstract).
+ *
+ * Pass plain values; this builds HydroShare's CoreMetaData shapes for you.
+ * Only the fields you provide are sent — omit one to leave it unchanged.
+ *
+ * Note: HydroShare REPLACES the whole `creators` list, so `authors` must be the
+ * complete author list, not just additions or changes.
+ *
+ * @param {string} resourceId The id of the resource to update
+ * @param {string} authToken HydroShare OAuth bearer token (must have edit rights)
+ * @param {Object} fields The fields to update
+ * @param {string} [fields.title] New title
+ * @param {string[]} [fields.authors] Full author list in "First Last" display order
+ * @param {string} [fields.description] New abstract
+ * @returns {Promise<Object>} The updated science metadata returned by HydroShare
+ */
+async function updateResourceScimeta(resourceId, authToken, { title, authors, description } = {}) {
+  const updateUrl = `https://www.hydroshare.org/hsapi/resource/${resourceId}/scimeta/elements/`;
+
+  // Build the CoreMetaData body from only the provided fields
+  const scimetaData = {};
+
+  // Add title if provided
+  if (title !== undefined)
+  {
+    scimetaData.title = title;
+  }
+
+  // Add description if provided
+  if (description !== undefined)
+  {
+    scimetaData.description = description;
+  }
+
+  // Add authors if provided
+  if (authors !== undefined)
+  {
+    // HydroShare stores each creator as { name: "Last, First" }
+    scimetaData.creators = authors
+      .map(author => author.trim())
+      .filter(Boolean)
+      .map(name => ({ name: convertAuthorToLastFirst(name) }));
+  }
+
+  try {
+    // Send the updated CoreMetaData to HydroShare via a PUT request
+    const response = await fetch(updateUrl, {
+      method: 'PUT',
+      headers: {
+        'Authorization': `Bearer ${authToken}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(scimetaData),
+    });
+
+    // Check if the response indicates a successful update
+    if (!response.ok)
+    {
+      throw new Error(`Error updating scimeta for resource ${resourceId} (status: ${response.status})`);
+    }
+
+    // Return the updated science metadata as JSON
+    return response.json();
+
+  } catch (error) {
+    console.error(`Error updating scimeta for resource ${resourceId}:`, error);
+    throw error;
+  }
+}
+
+/**
+ * Update a resource's custom (extended) metadata — the key/value fields such as
+ * page_url, docs_url, thumbnail_url, and pres_path.
+ *
+ * The scimeta/custom endpoint only supports GET and POST (no PUT), and POST
+ * REPLACES the entire custom metadata set. So this reads the existing metadata
+ * first and merges the provided fields on top before POSTing — otherwise keys
+ * we're not changing would be wiped. Only the keys you pass are changed; pass
+ * an empty string to blank a key.
+ *
+ * Throws if the existing metadata can't be read, since POSTing without it would
+ * destroy the resource's other custom fields.
+ *
+ * @param {string} resourceId The id of the resource to update
+ * @param {string} authToken HydroShare OAuth bearer token (must have edit rights)
+ * @param {Object} fields Custom metadata key/values to set (e.g. { page_url, docs_url, thumbnail_url, pres_path })
+ * @returns {Promise<void>} Resolves when the update succeeds; throws otherwise
+ */
+async function updateResourceCustomMetadata(resourceId, authToken, fields = {}) {
+  const updateUrl = `https://www.hydroshare.org/hsapi/resource/${resourceId}/scimeta/custom/`;
+
+  // POST replaces the whole custom metadata set, so read the existing fields and
+  // merge our changes on top. Let a read failure throw — POSTing partial data
+  // would wipe the keys we didn't include.
+  const existing = await fetchResourceCustomMetadata(resourceId) || {};
+  const merged = { ...existing, ...fields };
+
+  try {
+    // POST is the update mechanism for custom metadata (there is no PUT)
+    const response = await fetch(updateUrl, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${authToken}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(merged),
+    });
+
+    // Check if the response indicates a successful update
+    if (!response.ok)
+    {
+      throw new Error(`Error updating custom metadata for resource ${resourceId} (status: ${response.status})`);
+    }
+
+    // Success — this endpoint returns an empty body, so there's nothing to return
+
+  } catch (error) {
+    console.error(`Error updating custom metadata for resource ${resourceId}:`, error);
+    throw error;
+  }
+}
+
+/**
+ * Fetch all resources owned by a given user, paging through the full result set.
+ *
+ * Requires an auth token to see the user's non-public resources (and to use
+ * edit_permission). Returns the raw hsapi resource list shape — note these
+ * objects carry `creator` as a name string and include NO subjects/keywords,
+ * unlike the discovery-atlas results.
+ *
+ * @param {string} user The owner to filter by (HydroShare username or email)
+ * @param {string} authToken HydroShare OAuth bearer token
+ * @param {Object} [options]
+ * @param {boolean} [options.editableOnly=false] Only include resources the user can edit
+ * @param {number} [options.pageSize=100] Results requested per page
+ * @returns {Promise<Array>} All matching resources (hsapi list objects)
+ */
+async function fetchResourcesOwnedByUser(user, authToken, { editableOnly = false, pageSize = 100 } = {}) {
+  // Construct the query parameters for the API request.
+  const params = new URLSearchParams({ owner: user, count: String(pageSize) });
+  if (editableOnly) {
+    params.set('edit_permission', 'true');
+  }
+
+  // Construct the initial URL for the API request using the query parameters.
+  let url = `https://www.hydroshare.org/hsapi/resource/?${params.toString()}`;
+  const headers = { Authorization: `Bearer ${authToken}` };
+  const resources = [];
+
+  // Page through the results by following the `next` cursor until it's null.
+  // HydroShare returns `next` as a full URL that preserves the query params.
+  while (url) {
+    // Fetch the current page of resources from the API.
+    const response = await fetch(url, { headers });
+
+    // Check for failure
+    if (!response.ok) {
+      throw new Error(`Error fetching resources owned by ${user} (status: ${response.status})`);
+    }
+
+    // Parse the JSON response and extract the list of resources and the next page URL.
+    const data = await response.json();
+    resources.push(...(data.results || []));
+    url = data.next || null;
+  }
+
+  // Return the accumulated list of resources after paging through all results.
+  return resources;
+}
+
+/**
+ * Map an async function over a list with a bounded number of in-flight calls.
+ * Results are returned in input order. Used to enrich owned resources without
+ * firing one request per resource all at once, which would burst the API for
+ * users who own many resources.
+ *
+ * @param {T[]} items The items to map over
+ * @param {(item: T, index: number) => Promise<R>} worker The async mapper
+ * @param {number} limit Maximum number of concurrent calls
+ * @returns {Promise<R[]>} The results, in the same order as `items`
+ * @template T, R
+ */
+async function mapWithConcurrency(items, worker, limit) {
+  // Prepare an array to hold the results and a counter for the next index to process
+  const results = new Array(items.length);
+  let next = 0;
+
+  // Each runner pulls the next index until the list is exhausted, so at most `limit` calls are in flight at once
+  async function runner() {
+    while (next < items.length) {
+      const index = next++;
+      results[index] = await worker(items[index], index);
+    }
+  }
+
+  // Launch the runners with a concurrency limit and wait for all to complete
+  const runnerCount = Math.min(limit, items.length);
+  await Promise.all(Array.from({ length: runnerCount }, () => runner()));
+
+  // Return the results in the same order as the input items.
+  return results;
+}
+
+/**
+ * Fetch the resources a user can edit that are tagged with one of the given keywords.
+ *
+ * Edit permission is authoritative from hsapi (the owner listing with edit_permission),
+ * but that listing doesn't include subjects, so it can't be scoped to a page's keyword
+ * on its own. Each owned resource is therefore enriched with its science metadata (which
+ * carries subjects and the display fields) and then kept only if it is tagged with one of
+ * `keyword`'s comma-separated values.
+ *
+ * The returned objects use the same shape as the search endpoints (resource_title,
+ * authors[], subjects[], ...), so callers can map them the same way.
+ *
+ * @param {string} username The HydroShare username whose editable resources to fetch
+ * @param {string} authToken HydroShare OAuth bearer token
+ * @param {string} keyword Comma-separated keyword(s) to scope to (e.g. "ciroh_hub_app")
+ * @returns {Promise<Object[]>} The matching editable resources
+ */
+async function fetchEditableResourcesByKeyword(username, authToken, keyword) {
+  // Authoritative set of resources the user can edit
+  const owned = await fetchResourcesOwnedByUser(username, authToken, { editableOnly: true });
+
+  // The owner listing has no subjects, so pull each resource's science metadata (subjects + display fields)
+  const detailed = await mapWithConcurrency(
+    owned,
+    (r) => fetchResource(r.resource_id).catch(() => null),
+    FETCH_CONCURRENCY,
+  );
+
+  // Keep only resources tagged with one of the page's keywords
+  const pageKeywords = new Set(
+    String(keyword).split(',').map((k) => k.trim().toLowerCase()).filter(Boolean)
+  );
+  return detailed.filter(
+    (res) => res && (res.subjects || []).some((s) => pageKeywords.has(String(s).trim().toLowerCase()))
+  );
+}
+
+/**
+ * Upload a file into a resource's content and return its public content URL.
+ *
+ * The file is added at the resource root. The returned URL only serves to
+ * anonymous viewers (e.g. as an <img src>) once the resource is public.
+ *
+ * @param {string} resourceId The id of the resource to upload into
+ * @param {string} authToken HydroShare OAuth bearer token (must have edit rights)
+ * @param {File} file The file to upload
+ * @returns {Promise<string>} The uploaded file's content URL
+ */
+async function uploadResourceFile(resourceId, authToken, file) {
+  const url = `https://www.hydroshare.org/hsapi/resource/${resourceId}/files/`;
+
+  // multipart/form-data with a single `file` field
+  const formData = new FormData();
+  formData.append('file', file);
+
+  // Send the file as multipart/form-data
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${authToken}` },
+    body: formData,
+  });
+
+  // Check for failure
+  if (!response.ok) {
+    throw new Error(`Error uploading file to resource ${resourceId} (status: ${response.status})`);
+  }
+
+  // Return the public content URL for the uploaded file
+  return `https://www.hydroshare.org/resource/${resourceId}/data/contents/${encodeURIComponent(file.name)}`;
+}
+
+/**
+ * Build the public URL for a resource's embeddable content (e.g. a presentation
+ * PDF) from its content path. The path is a stored relative path that may contain
+ * slashes, so it is not URL-encoded. Returns '' when no path is given, so callers
+ * can use the result directly as the presence check for a preview.
+ *
+ * @param {string} resourceId The id of the resource
+ * @param {string} presPath The content path within the resource (e.g. "slides.pdf")
+ * @returns {string} The content URL, or '' if presPath is empty
+ */
+function buildEmbedUrl(resourceId, presPath) {
+  if (!resourceId || !presPath) return '';
+  return `https://www.hydroshare.org/resource/${resourceId}/data/contents/${presPath}`;
+}
+
+
 export {
-  getCuratedIds, 
-  fetchResource, 
+  getCuratedIds,
+  fetchResource,
   fetchResourcesByGroup, 
   fetchResourcesByKeyword, 
   fetchResourcesByKeywordsIntersection,
@@ -666,5 +961,11 @@ export {
   fetchRawCuratedResources,
   convertAuthorToLastFirst,
   fetchResourcesFromCollection,
-  fetchResourceImageUrls
+  fetchResourceImageUrls,
+  updateResourceScimeta,
+  updateResourceCustomMetadata,
+  fetchResourcesOwnedByUser,
+  fetchEditableResourcesByKeyword,
+  uploadResourceFile,
+  buildEmbedUrl
 };

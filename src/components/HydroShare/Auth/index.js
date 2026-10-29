@@ -19,6 +19,7 @@ const DEFAULT_AUTH_STATE = {
     verifying: false,
     loginInProgress: false,
     returnedFromLogin: false,
+    userInfo: null,
     logIn: () => {},
     logOut: () => {},
     clearReturnedFromLogin: () => {},
@@ -38,21 +39,29 @@ function VerifiedAuthLayer({ children }) {
 
     const [tokenValid, setTokenValid] = useState(false);
     const [returnedFromLogin, setReturnedFromLogin] = useState(false);
+    const [userInfo, setUserInfo] = useState(null);
 
     // react-oauth2-code-pkce trusts whatever token is in localStorage, so verify it against HydroShare and discard it if it's stale or foreign
     useEffect(() => {
-        // No token exists, not verifying
-        if (!token) { setTokenValid(false); return; }
+        // No token exists, clear any stored user info
+        if (!token) { setTokenValid(false); setUserInfo(null); return; }
 
-        // Verify the token against HydroShare's userInfo endpoint
+        // Verify the token against HydroShare's userInfo endpoint, keeping the returned user profile (id, username, email, ...) for consumers
         let cancelled = false;
         fetch(`${HS_API_BASE}/userInfo/`, {
             headers: { Authorization: `Bearer ${token}` },
         })
-            .then((resp) => {
+            .then(async (resp) => {
                 if (cancelled) return;
-                if (resp.ok) setTokenValid(true);
-                else pkceLogOut();
+                if (resp.ok) {
+                    // The token is valid; parse and store the user info
+                    const info = await resp.json().catch(() => null);
+                    if (cancelled) return;
+                    setUserInfo(info);
+                    setTokenValid(true);
+                } else {
+                    pkceLogOut();
+                }
             })
             .catch(() => { if (!cancelled) pkceLogOut(); });
         return () => { cancelled = true; };
@@ -129,10 +138,11 @@ function VerifiedAuthLayer({ children }) {
         verifying: Boolean(token) && !tokenValid,
         loginInProgress,
         returnedFromLogin,
+        userInfo,
         logIn,
         logOut,
         clearReturnedFromLogin,
-    }), [token, tokenValid, loginInProgress, returnedFromLogin, logIn, logOut, clearReturnedFromLogin]);
+    }), [token, tokenValid, loginInProgress, returnedFromLogin, userInfo, logIn, logOut, clearReturnedFromLogin]);
 
     // Expose the auth state to consumers of HydroShareAuthContext
     return (
