@@ -1,4 +1,83 @@
 {
+	"October 2026 Update": [
+		{
+			"type": "r2ohc",
+			"title": "CIROH R2OHC User Support Gets an Upgrade",
+			"link": "mailto:ciroh-it-support@ua.edu",
+			"description": "CIROH's framework for handling user support requests for R2OHC has been made more robust with improved ticketing, allowing us to better support your needs. For support requests regarding CIROH R2OHC Cyberinfrastructure, please email us at [ciroh-it-support@ua.edu](mailto:ciroh-it-support@ua.edu)."
+		},
+		{
+			"type": "news",
+			"title": "CIROH Hub Publications Mailing List",
+			"link": "/publications",
+			"description": "CIROH Hub now offers weekly and monthly mailing lists with the latest CIROH Publications. To sign up, head to the [Publications research portal](/publications)."
+		},
+		{
+			"type": "NRDS",
+			"title": "ngen-datastream: Now Open to Community Contributions",
+			"link": "https://github.com/CIROH-UA/ngen-datastream/releases/tag/v3.3.0",
+			"description": "NRDS now features a full pipeline to integrate community contributions for new or existing datastreams! A new set of [contribution documents](https://github.com/CIROH-UA/ngen-datastream/blob/main/docs/nrds/contribute/README.md) explains what the NRDS is, what defines a datastream, and the two primary contribution paths: proposing a new datastream or updating an existing one.",
+			"release_date": "2026-10-6",
+			"version": "v3.3.0",
+			"contributors": 1
+		},
+		{
+			"type": "NGIAB",
+			"title": "NGIAB_data_preprocess",
+			"links": [
+				"https://github.com/CIROH-UA/NGIAB_data_preprocess/releases/tag/v4.9.4",
+				"https://github.com/CIROH-UA/NGIAB_data_preprocess/releases/tag/v4.9.4",
+				"https://github.com/CIROH-UA/NGIAB_data_preprocess/releases/tag/v5.0.0b1",
+				"https://github.com/CIROH-UA/NGIAB_data_preprocess/releases/tag/v5.0.0b2"
+			],
+			"description": "This month's releases enable PET output for NOAH-OWP-Modular, retrieve data faster, and include critical slope calculation and other fixes across all models. Additionally, support for **modular configurations** is now being tested on the v5.0.0b2 branch, featuring an implementation for the CASAM model and modular ports for all previously-supported realizations.",
+			"release_date": "2026-10-28",
+			"version": "v4.9.4",
+			"contributors": 8
+		},
+		{
+			"type": "NGIAB",
+			"title": "NGIAB-Cloudinfra",
+			"link": "https://github.com/CIROH-UA/NGIAB-CloudInfra/releases/tag/v2.1.0",
+			"description": "NGIAB now provides run metadata alongside all model runs. This month's release also includes quality-of-life improvements to `guide.sh` and pins PyArrow to `<26.0` to address compatibility issues.",
+			"release_date": "2026-10-28",
+			"version": "v2.1.0",
+			"contributors": 5
+		},
+		{
+			"type": "NGIAB",
+			"title": "ciroh_pyngiab",
+			"link": "https://github.com/CIROH-UA/ciroh_pyngiab/releases/tag/v1.1.2",
+			"description": "This month's release includes version updates for pandas, TEEHR, and ngiab_data_preprocess.",
+			"release_date": "2026-10-29",
+			"version": "v1.1.2",
+			"contributors": 2
+		},
+		{
+			"type": "NRDS",
+			"title": "DataStreamCLI",
+			"links": [
+				"https://github.com/CIROH-UA/datastreamcli/releases/tag/v1.7.3",
+				"https://github.com/CIROH-UA/datastreamcli/releases/tag/v1.7.4"
+			],
+			"description": "In alignment with ngen-datastream, DataStreamCLI now offers the [https://github.com/CIROH-UA/datastreamcli/issues/new?template=metadata_request.yml](Request Execution Metadata issue form). Users can request metadata output that NRDS currently lacks, shaping the platform's outputs to the community's needs. Additionally, in alignment with NGIAB_data_preprocess, catchment attributes related to hydrofabric slopes have now been fixed.",
+			"release_date": "2026-10-28",
+			"version": "v1.7.4",
+			"contributors": 3
+		},
+		{
+			"type": "NRDS",
+			"title": "Forcing Processor",
+			"links": [
+				"https://github.com/CIROH-UA/forcingprocessor/releases/tag/v2.3.1",
+				"https://github.com/CIROH-UA/forcingprocessor/releases/tag/v2.3.2"
+			],
+			"description": "In alignment with ngen-datastream, the forcing processor now offers a [community contributions form](https://github.com/CIROH-UA/forcingprocessor/issues/new?template=forcing_contribution.yml) to allow for community input on forcing processing in the NRDS. Additionally, NWM routed flows are now aggregated into the NextGen HydroFabric by maximum, improving NRDS performance against USGS observations",
+			"release_date": "2026-10-27",
+			"version": "v2.3.2",
+			"contributors": 2
+		}
+	],
 	"August 2026 Update": [
 		{
 			"type": "news",
