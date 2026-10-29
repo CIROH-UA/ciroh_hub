@@ -1,40 +1,52 @@
-.band {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    padding: 1.5rem 1rem;
-    background-color: #fff;
-}
-
-:global([data-theme='dark']) .band {
-    background-color: #060010;
-}
-
-.bar {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
-    gap: 0.75rem 1rem;
-    padding: 0.75rem 1.25rem;
-    width: fit-content;
-    max-width: 100%;
+/* Floating prompt pinned to the top-right, just under the navbar. Hovers above
+   page content (z-index below the navbar's so it never covers it). */
+.card {
+    position: fixed;
+    top: calc(var(--ifm-navbar-height, 3.75rem) + 0.75rem);
+    right: 1rem;
+    z-index: 150;
+    width: 360px;
+    max-width: calc(100vw - 2rem);
+    padding: 1rem 1.25rem;
     border: 1px solid #cbd5e1;
-    border-radius: 8px;
-    background-color: #f1f5f9;
+    border-radius: 12px;
+    background-color: #ffffff;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
 }
 
-:global([data-theme='dark']) .bar {
+:global([data-theme='dark']) .card {
     border-color: #334155;
     background-color: #0f172a;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+}
+
+/* Logged-out layout */
+.column {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+/* Logged-in / verifying layout */
+.row {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem 0.75rem;
 }
 
 .message {
     display: inline-flex;
-    align-items: center;
+    align-items: flex-start;
     gap: 0.5rem;
-    font-size: 0.95rem;
+    min-width: 0;
+    font-size: 0.9rem;
     color: var(--ifm-color-emphasis-800);
+}
+
+.messageText {
+    text-wrap: balance;
 }
 
 .icon {
@@ -46,7 +58,9 @@
 .loginButton,
 .logoutButton {
     display: inline-flex;
+    flex-shrink: 0;
     align-items: center;
+    justify-content: center;
     gap: 8px;
     padding: 8px 16px;
     border-radius: 8px;
@@ -58,7 +72,9 @@
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
+/* Full-width button in the logged-out (stacked) layout */
 .loginButton {
+    width: 100%;
     background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
     border: 1px solid #0284c7;
 }
@@ -97,11 +113,11 @@
     transform: none;
 }
 
-/* On narrow screens let the message and button stack and go full width */
+/* On narrow screens span the width between the side gutters */
 @media (max-width: 576px) {
-    .loginButton,
-    .logoutButton {
-        width: 100%;
-        justify-content: center;
+    .card {
+        left: 1rem;
+        right: 1rem;
+        width: auto;
     }
 }
