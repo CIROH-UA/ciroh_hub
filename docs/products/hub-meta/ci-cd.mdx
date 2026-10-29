@@ -17,7 +17,7 @@ Deploying to a remote target in this way allows for the subdomain to host conten
 
 CIROH Hub is currently the only producer for `subdomain-hub`, but it takes advantage of this structure by hosting multiple environments on its subdomain:
 
-- [hub.ciroh.org](https://hub.ciroh.org): The live, or "production", build. This is the primary version of CIROH Hub accessed by the community. It is only updated when a new production is triggered via a workflow call.
+- [hub.ciroh.org](https://hub.ciroh.org): The live, or "production", build. This is the primary version of CIROH Hub accessed by the community. It is only updated when a new production release is triggered via a workflow call.
 - [hub.ciroh.org/staging/main](https://hub.ciroh.org/staging/main): A nightly build of CIROH Hub's main branch. This environment is updated every time new changes are merged to main, and it's used to test and verify that new changes work when deployed.
 - hub.ciroh.org/staging/##: Staging builds for individual PRs. These builds are manually triggered by the "preview on staging" PR tag, and they are hosted with a base URL corresponding to the PR number. Once the PR is merged or closed, the staging environment is automatically closed.
 
@@ -54,7 +54,7 @@ To facilitate multiple deployment processes, the primary CI and CD processes are
     - Expects a JSON metadata file to be uploaded as an artifact and provided via artifact ID.
     - Expects the build artifact to be provided via its unique ID and the run ID of the script that called it. (The run ID is necessary to allow for artifact-passing between the two halfs of the PR CI/CD process.)
 
-Note that these scripts run with the permission level of their parent workflow. In practice, this means that `ci_build` can be run with reduced permissions if access to secrets is non-essential, but `cd_build` *must* be run with elevated permissions so that it can retrieve the keys used for deployment.
+Note that these scripts run with the permission level of their parent workflow. In practice, this means that `ci_build` can be run with reduced permissions if access to secrets is non-essential, but `cd_deploy_composite` *must* be run with elevated permissions so that it can retrieve the keys used for deployment.
 
 ### Main-branch CI/CD
 
