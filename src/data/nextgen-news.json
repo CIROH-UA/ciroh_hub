@@ -15,11 +15,23 @@
 		{
 			"type": "NRDS",
 			"title": "ngen-datastream: Now Open to Community Contributions",
-			"link": "https://github.com/CIROH-UA/ngen-datastream/releases/tag/v3.3.0",
-			"description": "NRDS now features a full pipeline to integrate community contributions for new or existing datastreams! A new set of [contribution documents](https://github.com/CIROH-UA/ngen-datastream/blob/main/docs/nrds/contribute/README.md) explains what the NRDS is, what defines a datastream, and the two primary contribution paths: proposing a new datastream or updating an existing one.",
-			"release_date": "2026-10-6",
-			"version": "v3.3.0",
+			"link": [
+				"https://github.com/CIROH-UA/ngen-datastream/releases/tag/v3.4.0",
+				"https://github.com/CIROH-UA/ngen-datastream/releases/tag/v3.3.0"
+			],
+			"description": "NRDS now features a full pipeline to integrate community contributions for new or existing datastreams! A new set of [contribution documents](https://github.com/CIROH-UA/ngen-datastream/blob/main/docs/nrds/contribute/README.md) explains what the NRDS is, what defines a datastream, and the two primary contribution paths: proposing a new datastream or updating an existing one. As of v3.4.0, the contribution pipeline is fully versioned and traceable.",
+			"release_date": "2026-10-29",
+			"version": "v3.4.0",
 			"contributors": 1
+		},
+		{
+			"type": "NRDS",
+			"title": "ngen-datastream: On-Premise HPC Deployment",
+			"link": "https://github.com/CIROH-UA/ngen-datastream/releases/tag/v3.4.0",
+			"description": "The AWS infrastructure that performs the NRDS simulations has been recreated on Alabama's on-premise HPC NextStream on the [infra/lxd](https://github.com/CIROH-UA/ngen-datastream/tree/main/infra/lxd) branch. This gives the NRDS both a cloud and on premise back-end to deploy datastreams judiciously and efficiently. This release also provides support for t-route restart files, allowing routing simulations to begin with pre-initialized river flows.",
+			"release_date": "2026-10-29",
+			"version": "v3.4.0",
+			"contributors": 3
 		},
 		{
 			"type": "update",

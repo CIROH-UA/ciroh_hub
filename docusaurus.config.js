@@ -209,6 +209,14 @@ const config = {
             to: '/docs/products/data-management/fim-database',
             from: '/docs/products/community-fim/fim-database',
           },
+          {
+            to: '/docs/products/ngiab-ecosystem/nrds/ngen-datastream/',
+            from: '/docs/products/ngiab-ecosystem/nrds/nrds-aws/',
+          },
+          {
+            to: '/docs/products/ngiab-ecosystem/nrds/ngen-datastream/changelog',
+            from: '/docs/products/ngiab-ecosystem/nrds/nrds-aws/changelog',
+          },
         ],
         createRedirects(existingPath) {
           if (existingPath.includes('/docs/products/ngiab-ecosystem/ngiab')) {
