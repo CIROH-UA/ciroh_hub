@@ -94,7 +94,7 @@ function WorkingGroupCard({ group, index }) {
         <div className="tw-mt-5">
           <div className="tw-flex tw-items-center tw-gap-2 tw-text-slate-900 dark:tw-text-white tw-font-semibold">
             <FiUsers />
-            Leads
+            Lead
           </div>
           <div className="tw-mt-2 tw-flex tw-flex-wrap tw-gap-2">
             {group.leads.map((lead) => (
