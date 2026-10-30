@@ -1,15 +1,23 @@
-import React from 'react';
+import { useState } from 'react';
 import useBaseUrl from '@docusaurus/useBaseUrl';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
+import Link from '@docusaurus/Link';
 import { useColorMode } from '@docusaurus/theme-common';
+import ModalGeneric from '@site/src/components/Modal/ModalGeneric';
 
 const SupportContact = () => {
   const { siteConfig } = useDocusaurusContext();
   const { colorMode } = useColorMode();
+  const [ modalOpen, setModalOpen ] = useState(false);
   const isDark = colorMode === 'dark';
 
+  function toggleModalOpen() {
+    setModalOpen(!modalOpen);
+    return false; // For the sake of <a> elements
+  }
+
   const contactUrl = useBaseUrl('/contact');
-  const supportUrl = 'mailto:ciroh-it-support@ua.edu'
+  const supportEmail = 'ciroh-it-support@ua.edu'
   const feedbackUrl = siteConfig?.customFields?.externalLinks?.feedbackForm || 'https://forms.cloud.microsoft/r/NzA2sLrzeJ';
 
   const sectionStyle = {
@@ -68,7 +76,8 @@ const SupportContact = () => {
     fontWeight: 700,
     textDecoration: 'none',
     boxShadow: '0 8px 20px rgba(14, 165, 233, 0.28)',
-    transition: 'all 0.2s ease'
+    transition: 'all 0.2s ease',
+    cursor: 'pointer',
   };
 
   const secondaryButtonStyle = {
@@ -83,7 +92,8 @@ const SupportContact = () => {
     fontWeight: 700,
     textDecoration: 'none',
     border: '2px solid #0ea5e9',
-    transition: 'all 0.2s ease'
+    transition: 'all 0.2s ease',
+    cursor: 'pointer',
   };
 
   return (
@@ -94,10 +104,16 @@ const SupportContact = () => {
           Having issues with cyberinfrastructure you already have access to? We're here to help! Contact us at ciroh-it-support@ua.edu.
         </p>
         <div style={buttonsStyle}>
-          <a href={supportUrl} style={primaryButtonStyle}>
+          <a href="#" style={primaryButtonStyle} onClick={toggleModalOpen}>
             Contact Support
           </a>
         </div>
+        <ModalGeneric open={modalOpen} onClose={toggleModalOpen}>
+          <h2>Contact Support</h2>
+          <p>To get support for CIROH R2OHC, contact us at <a href={'mailto:'+supportEmail}>{supportEmail}</a>.</p>
+          <Link class="button button--active button--primary" style={{'margin-right':'1.3rem','margin-bottom':'1.3rem'}} href={'mailto:'+supportEmail}>Open in Email Client</Link>
+          <Link class="button button--active button--secondary" style={{'margin-right':'1.3rem','margin-bottom':'1.3rem'}} href='#' onClick={toggleModalOpen}>Close</Link>
+        </ModalGeneric>
       </div>
     </div>
   );

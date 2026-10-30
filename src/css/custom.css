@@ -62,9 +62,9 @@
   --ciroh-button-primary-bg: #19a7ce;
   --ciroh-button-primary-text: whitesmoke;
   --ciroh-button-primary-border: #19a7ce;
-  --ciroh-button-secondary-bg: whitesmoke;
-  --ciroh-button-secondary-text: #000000;
-  --ciroh-button-secondary-border: #19a7ce;
+  --ciroh-button-secondary-bg: #060010;
+  --ciroh-button-secondary-text: whitesmoke;
+  --ciroh-button-secondary-border: whitesmoke;
 }
 
 [data-theme='light'] body {
@@ -136,12 +136,10 @@
   --ifm-footer-color: whitesmoke;
 
   /* Global button theme tokens (dark mode) */
-  --ciroh-button-primary-bg: #19a7ce;
-  --ciroh-button-primary-text: whitesmoke;
-  --ciroh-button-primary-border: #19a7ce;
-  --ciroh-button-secondary-bg: #060010;
-  --ciroh-button-secondary-text: whitesmoke;
-  --ciroh-button-secondary-border: #19a7ce;
+  --ciroh-button-secondary-bg: whitesmoke;
+  --ciroh-button-secondary-text: #060010;
+  --ciroh-button-secondary-border: whitesmoke;
+  
 }
 
 :root[data-theme='light'] {
@@ -325,8 +323,12 @@ a.button.button--secondary {
 
 .button.button--secondary:hover,
 a.button.button--secondary:hover {
-  background: var(--ifm-color-primary);
-  color: #000000;
+  filter: brightness(1.05);
+}
+
+[data-reduce-motion="false"] .button.button--secondary:hover,
+[data-reduce-motion="false"] a.button.button--secondary:hover {
+  transform: translateY(-1px);
 }
 
 .footer__col {
