@@ -54,7 +54,7 @@ export default function WorkingGroupDetails({ group }) {
           ) : null}
           {group.leads?.length ? (
             <p className="tw-mt-3 tw-flex tw-flex-wrap tw-items-center tw-gap-2 tw-text-slate-700 dark:tw-text-slate-300">
-              <FiUsers /> <strong>Leads:</strong> {group.leads.join('; ')}
+              <FiUsers /> <strong>Lead:</strong> {group.leads.join('; ')}
             </p>
           ) : null}
           {annual.period ? (
