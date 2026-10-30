@@ -4,6 +4,8 @@ import Layout from '@theme/Layout';
 import TechBox from "@site/src/components/HydroShare/TechBox";
 import HydroShareResourcesSelector from "@site/src/components/HydroShare/HydroShareResourcesSelector";
 import HydroShareLogo from '@site/static/img/logos/hydroshare-white.png';
+import PresentationLightIcon from '@site/static/img/cards/datasets_logo_light.png';
+import PresentationDarkIcon from '@site/static/img/cards/datasets_logo_dark.png';
 import useBaseUrl from '@docusaurus/useBaseUrl';
 import Header from "@site/src/components/Header";
 import { useColorMode } from '@docusaurus/theme-common';
@@ -40,7 +42,7 @@ export default function PresentationsPage() {
 function PresentationsPageContent({ contributeUrl, docsUrl }) {
   const { colorMode } = useColorMode();
   const isDarkTheme = colorMode === 'dark';
-  const defaultImage = 'https://ciroh-portal-static-data.s3.us-east-1.amazonaws.com/presentation_placeholder.png';
+  const defaultImage = isDarkTheme ? PresentationDarkIcon : PresentationLightIcon;
 
   const [presentations, setPresentations] = useState([]);
   const [statsLoading, setStatsLoading] = useState(true);

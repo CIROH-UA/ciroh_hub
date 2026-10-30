@@ -19,6 +19,7 @@ export default function ResourceCardCurated({ resource, defaultImage }) {
     const authors = splitAuthors(resource?.authors);
 
     const thumbnailUrl = resource?.thumbnail_url || defaultImage;
+    const [thumbnailFailed, setThumbnailFailed] = useState(false);  // Used to fallback to default image when thumbnail fails to load
     const pageUrl = resource?.page_url;
     const docsUrl = resource?.docs_url;
     const resourceUrl = resource?.resource_url;
@@ -91,9 +92,10 @@ export default function ResourceCardCurated({ resource, defaultImage }) {
                             <div className="tw-relative tw-flex tw-items-center tw-justify-center tw-w-[80%] tw-h-[80%] tw-rounded-xl dark:tw-bg-slate-800" onClick={() => setShowImageModal(true)}>
                                 {/* Image */}
                                 <img
-                                    src={thumbnailUrl}
+                                    src={thumbnailFailed ? defaultImage : thumbnailUrl}
                                     alt={`${title} thumbnail`}
                                     className="tw-w-full tw-h-full tw-object-contain tw-rounded-md tw-p-8 dark:tw-bg-slate-800"
+                                    onError={() => setThumbnailFailed(true)}
                                 />
 
                                 {/* Open Image Viewer Icon */}

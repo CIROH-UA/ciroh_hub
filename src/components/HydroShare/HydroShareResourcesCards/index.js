@@ -23,6 +23,7 @@ export function ResourceCard({ resource, defaultImage, onResourceUpdated, editab
     const authors = splitAuthors(resource?.authors);
 
     const thumbnailUrl = resource?.thumbnail_url || defaultImage;
+    const [thumbnailFailed, setThumbnailFailed] = useState(false);  // Used to fallback to default image when thumbnail fails to load
     const pageUrl = resource?.page_url;
     const docsUrl = resource?.docs_url;
     const resourceUrl = resource?.resource_url;
@@ -30,6 +31,9 @@ export function ResourceCard({ resource, defaultImage, onResourceUpdated, editab
     const resourceType = resource?.resource_type;
 
     const { authenticated } = useHydroShareAuth();
+
+    // Reattempt loading the thumbnail when the URL changes
+    useEffect(() => { setThumbnailFailed(false); }, [thumbnailUrl]);
 
     useEffect(() => {
         if (!showEmbed || !embedUrl) {
@@ -106,10 +110,11 @@ export function ResourceCard({ resource, defaultImage, onResourceUpdated, editab
                                     <div className="tw-h-full tw-w-full tw-animate-pulse tw-bg-slate-200 dark:tw-bg-slate-800" />
                                 ) : thumbnailUrl ? (
                                     <img
-                                        src={thumbnailUrl}
+                                        src={thumbnailFailed ? defaultImage : thumbnailUrl}
                                         alt={title}
                                         className="tw-h-full tw-w-full tw-object-fill"
                                         loading="lazy"
+                                        onError={() => setThumbnailFailed(true)}
                                     />
                                 ) : (
                                     <div className="tw-flex tw-h-full tw-w-full tw-items-center tw-justify-center tw-text-slate-400 dark:tw-text-slate-500">
