@@ -1,7 +1,6 @@
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import ExecutionEnvironment from '@docusaurus/ExecutionEnvironment';
-import { useHistory } from '@docusaurus/router';
-import useBaseUrl from '@docusaurus/useBaseUrl';
+import { useHistory, useLocation } from '@docusaurus/router';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import { AuthContext, AuthProvider } from 'react-oauth2-code-pkce';
 
@@ -11,6 +10,12 @@ const HS_LOGOUT_URL = 'https://www.hydroshare.org/accounts/logout/';
 const RETURN_TO_KEY = 'hydroshare-auth-return-to';  // The key in sessionStorage that stores where the user was when they started logging in, so they can be sent back
 const AUTH_PENDING_KEY = 'hydroshare-auth-pending'; // The key in localStorage that stores when a login redirect starts, so a page load with a fresh token can be recognized as a return from HydroShare rather than an ordinary visit
 const AUTH_PENDING_MAX_AGE_MS = 10 * 60 * 1000;
+
+const LOGIN_REDIRECT_ROUTES = ['/contribute', '/apps', '/datasets', '/notebooks', '/courses', '/presentations', '/events']; // Pages that expose a HydroShare login control
+const DEFAULT_REDIRECT_ROUTE = '/contribute';   // Fallback route for OAuth redirect if the current page is not registered
+
+// Drop a trailing slash (except on root)
+const stripTrailingSlash = (path) => (path.length > 1 ? path.replace(/\/+$/, '') : path);
 
 // Default state: logged out with no-op actions. Used during SSR and by any component rendered outside the provider
 const DEFAULT_AUTH_STATE = {
@@ -33,7 +38,7 @@ export const HydroShareAuthContext = createContext(DEFAULT_AUTH_STATE);
  * redirect, and wraps logIn/logOut with return-to and HydroShare session
  * logout behavior.
  */
-function VerifiedAuthLayer({ children }) {
+function VerifiedAuthLayer({ children, contributePath }) {
     const { token, logIn: pkceLogIn, logOut: pkceLogOut, loginInProgress } = useContext(AuthContext);
     const history = useHistory();
 
@@ -67,7 +72,7 @@ function VerifiedAuthLayer({ children }) {
         return () => { cancelled = true; };
     }, [token]);
 
-    // Complete a return from the HydroShare login redirect: flag it for consumers and send the user back to the page they started on
+    // Complete a return from the HydroShare login redirect: flag it for consumers and restore the exact URL the user started on
     useEffect(() => {
         // No token exists, not returning from a login
         if (!token) return;
@@ -76,23 +81,25 @@ function VerifiedAuthLayer({ children }) {
         const pendingSince = parseInt(localStorage.getItem(AUTH_PENDING_KEY), 10);
         if (!pendingSince || Date.now() - pendingSince > AUTH_PENDING_MAX_AGE_MS) return;
 
-        // A valid login redirect is detected; clear the pending flag and mark the return
+        // A valid login redirect is detected; clear the pending flag
         localStorage.removeItem(AUTH_PENDING_KEY);
-        setReturnedFromLogin(true);
 
-        // Redirect the user back to the page they started on, if possible
+        // Set flag on contribute page so we know to open the "Create HydroShare Resource" form upon return from login
+        if (stripTrailingSlash(window.location.pathname) === contributePath) setReturnedFromLogin(true);
+
+        // Restore the original return-to URL if available (query/hash may have been stripped)
         try {
             // Attempt to retrieve the return-to URL from session storage
             const returnTo = sessionStorage.getItem(RETURN_TO_KEY);
             sessionStorage.removeItem(RETURN_TO_KEY);
 
-            // Navigate to the return-to URL if it exists and is different from the current path
+            // Restore the full return-to URL if it differs from the current one (e.g. stripped query/hash)
             const currentPath = window.location.pathname + window.location.search;
             if (returnTo && returnTo !== currentPath) history.replace(returnTo);
         } catch {
             // Session storage unavailable; the user stays on the redirect page
         }
-    }, [token]);
+    }, [token, contributePath]);
 
     // Wrapper to record the current page and time before redirecting to HydroShare
     const logIn = useCallback(() => {
@@ -157,26 +164,34 @@ function VerifiedAuthLayer({ children }) {
  * and ensures that the VerifiedAuthLayer is applied.
  */
 function ClientHydroShareAuthProvider({ children }) {
-    const { siteConfig: { customFields } } = useDocusaurusContext();
-    const contributePath = useBaseUrl('/contribute');
+    const { siteConfig: { customFields, baseUrl } } = useDocusaurusContext();
+    const { pathname } = useLocation();
+
+    const base = baseUrl.replace(/\/+$/, ''); // '/local' for baseUrl '/local/', '' for '/'
+    const contributePath = base + DEFAULT_REDIRECT_ROUTE;
+
+    // Build the login redirect URI. Falls back to default path if the current page is not registered
+    const redirectUri = useMemo(() => {
+        const registered = LOGIN_REDIRECT_ROUTES.map((route) => base + route);
+        const current = stripTrailingSlash(pathname);
+        const target = registered.includes(current) ? current : contributePath;
+        return `${window.location.origin}${target}`;
+    }, [base, contributePath, pathname]);
 
     const authConfig = useMemo(() => ({
         clientId: customFields.hs_client_id,
         authorizationEndpoint: 'https://www.hydroshare.org/o/authorize/',
         tokenEndpoint: 'https://www.hydroshare.org/o/token/',
-        // Must exactly match a redirect URI registered on the HydroShare OAuth app.
-        // Pinned to /contribute: the provider is site-wide, so the login can complete
-        // there from any page, after which the user is sent back to where they started
-        redirectUri: `${window.location.origin}${contributePath}`,
+        redirectUri,
         scope: 'read write',
         autoLogin: false,
         decodeToken: false, // HydroShare tokens are opaque, not JWTs
         clearURL: true,
-    }), [customFields.hs_client_id, contributePath]);
+    }), [customFields.hs_client_id, redirectUri]);
 
     return (
         <AuthProvider authConfig={authConfig}>
-            <VerifiedAuthLayer>{children}</VerifiedAuthLayer>
+            <VerifiedAuthLayer contributePath={contributePath}>{children}</VerifiedAuthLayer>
         </AuthProvider>
     );
 }
