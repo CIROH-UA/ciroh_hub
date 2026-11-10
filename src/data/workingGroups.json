@@ -201,7 +201,7 @@
     }
   },
   {
-    "id": "model-forecast-evaluation",
+    "id": "evaluation-testbeds",
     "title": "Evaluation and Testbeds Working Group",
     "description": "Clarifies what evaluation information is needed to support R2O and other uses of model and forecast evaluation, and promotes and improves the existing protocols, benchmark datasets, tools, and operational testbeds associated with evaluation.",
     "leads": [

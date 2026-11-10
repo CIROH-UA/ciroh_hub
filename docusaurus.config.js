@@ -216,6 +216,10 @@ const config = {
             to: '/docs/products/ngiab-ecosystem/nrds/ngen-datastream/changelog',
             from: '/docs/products/ngiab-ecosystem/nrds/nrds-aws/changelog',
           },
+          {
+            to: '/working-groups/evaluation-testbeds',
+            from: '/working-groups/model-forecast-evaluation'
+          }
         ],
         createRedirects(existingPath) {
           if (existingPath.includes('/docs/products/ngiab-ecosystem/ngiab')) {
