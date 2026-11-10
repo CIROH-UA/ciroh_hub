@@ -72,20 +72,49 @@
   {
     "id": "hydroinformatics",
     "title": "Hydroinformatics Working Group",
-    "description": "Connects and coordinates projects and researchers involved in water data science with the goal of advancing broader-scale, cross-cutting initiatives across CIROH's computational infrastructure and tools.",
+    "description": "Connects CIROH researchers, federal partners, and the broader water data science community who build the data, software, and cyberinfrastructure that carry research into operations. The WG helps synthesize CIROH's hydroinformatics advances with those made by the wider community and informs how they are organized and shared through the CIROH Hub. It promotes standards, interoperability, and good practice for sharing data, code, and models, and it coordinates cross-institutional projects so teams build on each other's work. The WG also organizes training, including Developers Conference workshops and a proposed hydroinformatics field camp, with an emphasis on students and early-career scientists.",
     "leads": [
-      "Dan Ames, BYU"
+      "Dan Ames, Brigham Young University"
     ],
     "reportsCollectionId": "",
     "annual": {
       "period": "2025-2026",
       "objectives": [
-        "Design strategy and document for a generic hydroinformatics library (Python: import ciroh; from ciroh import forecasts).",
-        "Plan and develop strategy for a hydroinformatics field camp.",
-        "Provide detailed guidance and documentation for integrating research tools in the CIROH Portal/Hub."
+        "Synthesize and coordinate cross-institutional research proposals and projects, connecting teams that work on similar hydroinformatics problems.",
+        "Improve, integrate, and document the CIROH Hub (which merged the CIROH Portal and DocuHub) so CIROH data, applications, notebooks, and publications are easy to find, use, and contribute to.",
+        "Systematically evaluate how CIROH research shares data and code, and recommend best practices for data management and sharing.",
+        "Develop a scholarly product highlighting CIROH's research advances in hydroinformatics.",
+        "Support hydroinformatics education and training, including Developers Conference workshops, webinars, and planning for a hydroinformatics field camp."
       ],
-      "accomplishments": [],
-      "products": []
+      "accomplishments": [
+        "Virtual kickoff meeting (September 2025) and WG meetup (July 2026), an in-person breakout and WG dinner at the 2025 CIROH Science Meeting, and an October 2026 coordination meeting on upcoming events, workshops, and trainings",
+        "Coordinated fifteen (15) FY26 white papers across ten (10) institutions, with four (4) invited to full proposals, including HydroServer as a core community data service (Objective #1)",
+        "Helped design and launch the CIROH Hub (hub.ciroh.org) in February 2026, merging the CIROH Portal and DocuHub, with more than 17 design recommendations from WG members (Objective #2)",
+        "Audit of data and code sharing across 299 CIROH-funded publications, in partnership with CUAHSI, with a paper now under review at AGU Earth and Space Science (Objective #3)",
+        "Review paper \"Bridging the Research-to-Operations Gaps in NOAA Water Prediction through Advances in Hydroinformatics,\" with eleven (11) authors from eight (8) institutions, in press in the Journal of the American Water Resources Association (Objective #4)",
+        "Hydroinformatics and Data Science track at the 2025 and 2026 CIROH Developers Conferences, led by WG members (Objective #5)",
+        "Developed CIROH's data sharing guiding principles and best-practice recommendations for sharing data, code, and models (2023-2024, as Working Group 3)"
+      ],
+      "products": [
+        {
+          "title": "CIROH Hub",
+          "url": "https://hub.ciroh.org"
+        },
+        {
+          "title": "CIROH National Water Model API (BigQuery)",
+          "url": "https://hub.ciroh.org/docs/products/data-management/bigquery-api/"
+        },
+        {
+          "title": "CUAHSI HydroShare",
+          "description": "Home of the CIROH community and working group resources",
+          "url": "https://hub.ciroh.org"
+        },
+        {
+          "title": "Tethys Platform",
+          "description": "Web applications for National Water Model data (including Tethys Dash)",
+          "url": "https://www.tethysplatform.org"
+        }
+      ]
     }
   },
   {
@@ -173,8 +202,8 @@
   },
   {
     "id": "model-forecast-evaluation",
-    "title": "Model & Forecast Evaluation Working Group",
-    "description": "Informs the creation of CIROH's model and forecast evaluation expectation, strategy, and implementation roadmap. Helps synthesize CIROH's model and forecast evaluation research advances with those from the hydrologic sciences community and organizes activities to advance this research area.",
+    "title": "Evaluation and Testbeds Working Group",
+    "description": "Clarifies what evaluation information is needed to support R2O and other uses of model and forecast evaluation, and promotes and improves the existing protocols, benchmark datasets, tools, and operational testbeds associated with evaluation.",
     "leads": [
       "Shaun Carney, RTI"
     ],
@@ -182,9 +211,26 @@
     "annual": {
       "period": "2025-2026",
       "objectives": [
-        "Solidify with guidance and examples CIROH's model and forecast evaluation approach, including \"model/example\" protocols for evaluation, definition of data, metrics, and tools for hydrologic modeling (simulation & forecasting), flood inundation mapping, forcing data, decision support, and observations.",
-        "Produce scholarly output documenting evaluation protocols and guidance.",
-        "Analyze CIROH's research portfolio and broader research community model and forecast evaluation research and inform CIROH's research and development strategy and roadmap."
+        "Clarify evaluation information needed to support R2O.",
+        [
+          "Work with the CIROH R2O team and OWP management to clarify what evaluation evidence will help inform decisions about whether new approaches should be moved into operations",
+          "Define a complete suite of evaluation-related information that would support R2O decisions",
+          "Produce a template or example “pitch deck” for summarizing results for management using at least one newly developed method"
+        ],
+        "Clarify, promote, and improve evaluation protocols, baseline datasets, evaluation tools, and operational testbeds.",
+        [
+          "Define the evaluation components and how they fit together—i.e., evaluation protocols (how to compare a new method), benchmark datasets (what to compare against), evaluation tools and metrics (e.g., TEEHR, FIMeval), operational testbeds (e.g., NRDS, CHPS in the cloud), and results communication",
+          "Map what exists: Document what is already available for each evaluation component, who maintains it, and where to find it",
+          "Raise awareness and support use: Raise awareness through speaker demos, and provide worked examples or quick-start guidance so researchers can apply each component",
+          "Collect feedback: Gather user feedback on barriers, usability, and gaps for each component",
+          "Prioritize improvements: Identify and prioritize improvements for future CIROH development (e.g., expanding protocols, collecting/developing new baseline datasets, improving tool usability, improving operational testbed integration)",
+          "Maintain the guidance: Maintain the Evaluation Guidance document as a living resource with a clear update process"
+        ],
+        "Build community knowledge of evaluation approaches, applications, and testbeds.",
+        [
+          "Hold a monthly speaker series focused on evaluation and testbed-related topics. Record and share the sessions, with short summaries of key takeaways.",
+          "Use speaker input to shape guidance updates, evaluation improvements, and the R2O process"
+        ]
       ],
       "accomplishments": [],
       "products": []
