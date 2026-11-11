@@ -102,3 +102,32 @@
 .addProductButton:focus { outline: 2px solid rgba(14,165,233,0.35); outline-offset: 2px; }
 
 .addProductButton svg { display: block; width: 16px; height: 16px; }
+
+.primaryButtonStyle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 170px;
+  padding: 0.9rem 1.5rem;
+  border-radius: 0.75rem;
+  background: linear-gradient(135deg, #22c1ee 0%, #0ea5e9 100%);
+  color: #ffffff;
+  font-weight: 700;
+  text-decoration: none;
+  box-shadow: 0 8px 20px rgba(14, 165, 233, 0.28);
+  cursor: pointer;
+}
+
+[data-reduce-motion="false"] .primaryButtonStyle {
+  transition: all 0.2s ease;
+}
+
+.primaryButtonStyle:hover {
+  background: linear-gradient(135deg, #3bccf4 0%, #38b5f0 100%);
+}
+
+[data-reduce-motion="false"] .primaryButtonStyle:hover {
+  transform: translateY(-3px)
+}
+
+.primaryButtonStyle svg { display: block; width: 2rem; height: 2rem; padding-right: 0.5rem; }

@@ -100,6 +100,7 @@ const config = {
 
     // Centralized external links used across pages/components
     externalLinks: {
+      wgIntakeForm: "https://app.smartsheet.com/b/form/019f1f425a1d717180af65a76b9fa26f",
       zoteroLogin: "https://www.zotero.org/user/login",
       feedbackForm: "https://forms.cloud.microsoft/r/NzA2sLrzeJ",
     },
@@ -216,6 +217,10 @@ const config = {
             to: '/docs/products/ngiab-ecosystem/nrds/ngen-datastream/changelog',
             from: '/docs/products/ngiab-ecosystem/nrds/nrds-aws/changelog',
           },
+          {
+            to: '/working-groups/evaluation-testbeds',
+            from: '/working-groups/model-forecast-evaluation'
+          }
         ],
         createRedirects(existingPath) {
           if (existingPath.includes('/docs/products/ngiab-ecosystem/ngiab')) {
