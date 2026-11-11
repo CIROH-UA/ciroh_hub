@@ -98,6 +98,7 @@
       "products": [
         {
           "title": "CIROH Hub",
+          "description": "Home of the CIROH community and working group resources",
           "url": "https://hub.ciroh.org"
         },
         {
@@ -106,8 +107,7 @@
         },
         {
           "title": "CUAHSI HydroShare",
-          "description": "Home of the CIROH community and working group resources",
-          "url": "https://hub.ciroh.org"
+          "url": "https://www.hydroshare.org/"
         },
         {
           "title": "Tethys Platform",
