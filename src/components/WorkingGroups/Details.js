@@ -2,6 +2,8 @@ import React from 'react';
 import Layout from '@theme/Layout';
 import Link from '@docusaurus/Link';
 import { FiArrowLeft, FiTarget, FiAward, FiPackage, FiUsers } from 'react-icons/fi';
+import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
+import styles from '@site/src/pages/working-groups/styles.module.css';
 
 // Items are plain strings, { title, description, url } objects, or arrays thereof
 function Items({ items }) {
@@ -44,6 +46,8 @@ function Section({ icon, title, items, emptyText }) {
 
 export default function WorkingGroupDetails({ group }) {
   const annual = group.annual ?? {};
+  const { siteConfig } = useDocusaurusContext();
+  const wgIntakeFormUrl = siteConfig?.customFields?.externalLinks?.wgIntakeForm || 'https://app.smartsheet.com/b/form/019f1f425a1d717180af65a76b9fa26f';
   return (
     <Layout title={group.title} description={group.description}>
       <main className="tw-pb-16">
@@ -70,6 +74,12 @@ export default function WorkingGroupDetails({ group }) {
               Reporting period: {annual.period}{annual.updated ? ` (updated ${annual.updated})` : ''}
             </p>
           ) : null}
+          <a href={wgIntakeFormUrl} class={styles.primaryButtonStyle}>
+            <svg className="tw-w-8 w-mr-4" viewBox="0 0 24 24" aria-hidden="true" focusable="false" role="img">
+              <path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2M8.5 11a4 4 0 100-8 4 4 0 000 8zM20 8v6M23 11h-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+            </svg>
+            Join Working Group
+          </a>
 
           <Section icon={<FiTarget />} title="Objectives" items={annual.objectives} emptyText="Objectives will be posted soon." />
           <Section icon={<FiAward />} title="Accomplishments" items={annual.accomplishments} emptyText="Accomplishments will be posted soon." />

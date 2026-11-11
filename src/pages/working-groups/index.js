@@ -265,7 +265,7 @@ export default function WorkingGroupsPage() {
                 CIROH's Working Groups drive innovation and collaboration across critical research areas, from hydrologic modeling and flood inundation mapping to artificial intelligence and early career development. Discover the groups shaping the future of water research, their 2025-2026 objectives, and the leaders guiding each initiative.
               </p>
               <div className="tw-mt-5">
-                <a href={wgIntakeFormUrl} className={styles.joinGroupButton} target='_blank' rel="noreferrer noopener">
+                <a href={wgIntakeFormUrl} class={styles.primaryButtonStyle}>
                   <svg className="tw-w-8 w-mr-4" viewBox="0 0 24 24" aria-hidden="true" focusable="false" role="img">
                     <path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2M8.5 11a4 4 0 100-8 4 4 0 000 8zM20 8v6M23 11h-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
                   </svg>

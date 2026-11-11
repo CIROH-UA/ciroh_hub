@@ -100,6 +100,7 @@ const config = {
 
     // Centralized external links used across pages/components
     externalLinks: {
+      wgIntakeForm: "https://app.smartsheet.com/b/form/019f1f425a1d717180af65a76b9fa26f",
       zoteroLogin: "https://www.zotero.org/user/login",
       feedbackForm: "https://forms.cloud.microsoft/r/NzA2sLrzeJ",
     },
