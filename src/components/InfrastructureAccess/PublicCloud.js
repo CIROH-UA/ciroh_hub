@@ -10,8 +10,8 @@ const PublicCloud = () => {
   const awsLogo = useBaseUrl('/img/logos/corp/aws-black.svg');
   const gcpLogo = useBaseUrl('/img/logos/corp/google-cloud.jpg');
 
-  const awsRequestLink = 'https://github.com/CIROH-UA/NGIAB-CloudInfra/issues/new?template=case_studies_call_template.yml&labels=infrastructure%2Cresource-request%2Caws&title=%5BAWS%20Resource%20Request%5D%3A%20';
-  const gcpRequestLink = 'https://github.com/CIROH-UA/NGIAB-CloudInfra/issues/new?template=case_studies_call_template.yml&labels=infrastructure%2Cresource-request%2Cgoogle&title=%5BGCP%20Resource%20Request%5D%3A%20';
+  const awsRequestLink = 'https://github.com/CIROH-UA/r2ohc_platform/issues/new?template=cloud_resources_request.yml&labels=infrastructure%2Cresource-request%2Caws&title=%5BAWS%20Resource%20Request%5D%3A%20';
+  const gcpRequestLink = 'https://github.com/CIROH-UA/r2ohc_platform/issues/new?template=cloud_resources_request.yml&labels=infrastructure%2Cresource-request%2Cgoogle&title=%5BGCP%20Resource%20Request%5D%3A%20';
 
   const providerCardBaseStyle = {
     padding: '1.5rem',
@@ -96,7 +96,7 @@ const PublicCloud = () => {
           <p style={{marginBottom: '0.75rem'}}>
             <strong>Reference:</strong> Please refer to{' '}
             <a 
-              href="https://github.com/CIROH-UA/NGIAB-CloudInfra/issues" 
+              href="https://github.com/CIROH-UA/r2ohc_platform/issues/new" 
               target="_blank" 
               rel="noopener noreferrer"
               style={{color: '#06b6d4', textDecoration: 'underline'}}
@@ -323,7 +323,7 @@ const PublicCloud = () => {
           </ul>
 
           <a 
-            href="https://github.com/CIROH-UA/NGIAB-CloudInfra/issues/new?template=exceeding_budget_request.yml"
+            href="https://github.com/CIROH-UA/r2ohc_platform/issues/new?template=exceeding_budget_request.yml"
             target="_blank"
             rel="noopener noreferrer"
             style={{
