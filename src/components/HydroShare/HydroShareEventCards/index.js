@@ -8,7 +8,7 @@ import ResourceEditForm from '@site/src/components/HydroShare/HydroShareResource
 import cardStyles from '@site/src/components/HydroShare/HydroShareResourcesCards/styles.module.css';
 import { fetchResourcesFromCollection, fetchResourceCustomMetadata, fetchResourceImageUrls, } from '@site/src/components/HydroShare/HydroShareImporter';
 import useHydroShareAuth from '@site/src/components/HydroShare/Auth/useHydroShareAuth';
-import ModalEventPresentations from '@site/src/components/Modal/ModalEventPresentations';
+import ModalResourceCards from '@site/src/components/Modal/ModalResourceCards';
 
 /**
  * Load event presentations for a given collection.
@@ -265,7 +265,7 @@ export function EventCard({ resource, defaultImage, onResourceUpdated, editableR
             </article>
 
             {/* Event Presentations Modal */}
-            <ModalEventPresentations
+            <ModalResourceCards
                 show={showModal}
                 onClose={() => setShowModal(false)}
                 title={title}
