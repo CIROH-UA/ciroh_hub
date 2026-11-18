@@ -31,7 +31,7 @@ const CIROHJupyterHub = () => {
         2i2c
       </a>
       , CIROH provides JupyterHub with both CPU and GPU capabilities. See the{' '}
-      <a href="https://hub.ciroh.org/docs/services/cloudservices/2i2c/#server-options" target="_blank" rel="noopener noreferrer" style={{ fontWeight: 600 }}>
+      <a href="https://hub.ciroh.org/docs/nimbus/cloudservices/2i2c/#server-options" target="_blank" rel="noopener noreferrer" style={{ fontWeight: 600 }}>
         2i2c server options documentation
       </a>
       {' '}for configuration details.

@@ -24,7 +24,7 @@ export default function Home() {
             }
             buttons={[
               { label: "Publications", href: "/publications", primary: true },
-              { label: "Cyberinfrastructure", href: "/docs/services/access" },
+              { label: "Cyberinfrastructure", href: "/docs/nimbus/access" },
             ]}
             notice={
               "CIROH Hub is the new home for content from CIROH Portal and DocuHub."

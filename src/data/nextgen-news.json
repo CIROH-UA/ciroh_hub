@@ -143,7 +143,7 @@
 			"type": "blog",
 			"title": "NGIAB and CIROH Cyberinfrastructure Power Flash Flood Research at the 2026 Summer Institute",
 			"link": "",
-			"description": "Ten graduate students across three teams (**Don't Runoff!**, **FlashCast**, and **The Post-Processors**) spent seven weeks at the 2026 Water Prediction Innovators Summer Institute advancing quantitative precipitation inputs into the NextGen Framework, using [NextGen In A Box (NGIAB)](https://ngiab.ciroh.org/) and NSF ACCESS [Jetstream2](/docs/services/external-resources/nsf-access/jetstream) allocations provided through CIROH cyberinfrastructure. [Read more in the blog post.](/blog/summer-institute-flash-flood)"
+			"description": "Ten graduate students across three teams (**Don't Runoff!**, **FlashCast**, and **The Post-Processors**) spent seven weeks at the 2026 Water Prediction Innovators Summer Institute advancing quantitative precipitation inputs into the NextGen Framework, using [NextGen In A Box (NGIAB)](https://ngiab.ciroh.org/) and NSF ACCESS [Jetstream2](/docs/nimbus/external-resources/nsf-access/jetstream) allocations provided through CIROH cyberinfrastructure. [Read more in the blog post.](/blog/summer-institute-flash-flood)"
 		},
 		{
 			"type": "blog",
@@ -155,7 +155,7 @@
 			"type": "news",
 			"title": "REU 2026 Advances Water Research with NSF ACCESS Jetstream2",
 			"link": "https://awi.ua.edu/2026/08/12/wading-through-water-wednesdays-an-experiential-approach-to-water-research-for-future-hydrologists/",
-			"description": "This summer's Research Experience for Undergraduates (REU) program put NSF ACCESS [Jetstream2](/docs/services/external-resources/nsf-access/jetstream) cyberinfrastructure to work, giving students hands-on experience. [Read more in AWI News.](https://awi.ua.edu/2026/08/12/wading-through-water-wednesdays-an-experiential-approach-to-water-research-for-future-hydrologists/)",
+			"description": "This summer's Research Experience for Undergraduates (REU) program put NSF ACCESS [Jetstream2](/docs/nimbus/external-resources/nsf-access/jetstream) cyberinfrastructure to work, giving students hands-on experience. [Read more in AWI News.](https://awi.ua.edu/2026/08/12/wading-through-water-wednesdays-an-experiential-approach-to-water-research-for-future-hydrologists/)",
 			"release_date": "08/12/2026"
 		},
 		{
@@ -322,7 +322,7 @@
 			"type": "pantarhei",
 			"title": "Extended Pantarhei Documentation — Now on CIROH Hub",
 			"links": "https://github.com/CIROH-UA/ciroh_hub/pull/136",
-			"description": "Extended tutorials and examples have been added to our Pantarhei documentation! [Access them here.](/docs/services/on-prem/Pantarhei/RunningJobs/)",
+			"description": "Extended tutorials and examples have been added to our Pantarhei documentation! [Access them here.](/docs/nimbus/on-prem/Pantarhei/RunningJobs/)",
 			"release_date": "06/29/2026",
 			"contributors": 1
 		},
@@ -330,7 +330,7 @@
 			"type": "2i2c",
 			"title": "New images on CIROH-2i2c JupyterHub",
 			"links": "https://github.com/CIROH-UA/awi-ciroh-image",
-			"description": "CIROH-2i2c JupyterHub has been updated with [new images from CIROH DevCon 2026](/docs/services/cloudservices/2i2c/available-images)! Additionally, its documentation has now been [updated with image creation instructions and image descriptions](/docs/services/cloudservices/2i2c/available-images)."
+			"description": "CIROH-2i2c JupyterHub has been updated with [new images from CIROH DevCon 2026](/docs/nimbus/cloudservices/2i2c/available-images)! Additionally, its documentation has now been [updated with image creation instructions and image descriptions](/docs/nimbus/cloudservices/2i2c/available-images)."
 		}
 	],
 	"April 2026 Update": [
@@ -795,7 +795,7 @@
 			{
 			"type": "update",
 			"title": "CIROH DocuHub",
-			"description": "DocuHub has been updated! This month's updates feature an overhaul of the [Infrastructure Access page](/docs/services/access), making it easier than ever to request access to CIROH CyberInfrastructure, alongside a [new blog post](/blog/ciroh-psu-collab) highlighting collaboration between the Alabama Water Institute and Pennsylvania State University.",
+			"description": "DocuHub has been updated! This month's updates feature an overhaul of the [Infrastructure Access page](/docs/nimbus/access), making it easier than ever to request access to CIROH CyberInfrastructure, alongside a [new blog post](/blog/ciroh-psu-collab) highlighting collaboration between the Alabama Water Institute and Pennsylvania State University.",
 			"link": "release-notes/v20251103"
 			},
 			{

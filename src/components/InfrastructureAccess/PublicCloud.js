@@ -114,9 +114,9 @@ const PublicCloud = () => {
     <div>
       <p style={{marginBottom: '1.5rem'}}>
         CIROH has partnered with{' '}
-        <Link to="/docs/services/cloudservices/aws/#requesting-ciroh-aws-accounts" style={{ fontWeight: 600 }}>AWS</Link>
+        <Link to="/docs/nimbus/cloudservices/aws/#requesting-ciroh-aws-accounts" style={{ fontWeight: 600 }}>AWS</Link>
         {' '}and{' '}
-        <Link to="/docs/services/cloudservices/google-cloud/#requesting-ciroh-google-cloud-accounts" style={{ fontWeight: 600 }}>Google Cloud</Link>
+        <Link to="/docs/nimbus/cloudservices/google-cloud/#requesting-ciroh-google-cloud-accounts" style={{ fontWeight: 600 }}>Google Cloud</Link>
         {' '}to provide access to their cloud computing services. Review the linked documentation for account request steps and guidance.
       </p>
       

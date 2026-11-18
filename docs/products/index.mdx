@@ -1,0 +1,24 @@
+---
+sidebar_position: 1
+title: "Community Resource Documentation"
+tags: [CIROH, Products, Software]
+---
+
+import useBaseUrl from '@docusaurus/useBaseUrl'
+import ProductCards from '@site/src/components/Products/ProductCards'
+import productsData from '@site/src/data/products.json'
+import ContributeCallout from '@site/src/components/Products/ContributeCallout'
+
+
+<div className="container">
+    <div className="hero-content">
+      <div className="hero-text">
+        At CIROH, our team of researchers, hydrologists, and engineers is committed to advancing our understanding of hydrologic processes, improving operational hydrologic forecasting techniques and workflows, collaborating on community water modeling, converting forecasts into practical solutions, and utilizing water predictions to help guide decision-making processes.
+      </div>
+    </div>
+</div>
+
+<ContributeCallout />
+
+
+<ProductCards productsData={productsData} />

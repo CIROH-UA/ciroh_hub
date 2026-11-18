@@ -27,7 +27,7 @@ const items = [
 
 export default function PresentationsPage() {
   const contributeUrl = useBaseUrl('/contribute?current-contribution=presentations');
-  const docsUrl = useBaseUrl('/docs/products/intro');
+  const docsUrl = useBaseUrl('/docs/products/index');
 
   return (
     <Layout title="Presentations" description="CIROH Presentations">

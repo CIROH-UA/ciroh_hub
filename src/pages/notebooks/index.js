@@ -26,7 +26,7 @@ const items = [
 
 export default function NoteBooksPage() {
   const contributeUrl = useBaseUrl('/contribute?current-contribution=notebooks');
-  const docsUrl = useBaseUrl('/docs/products/intro');
+  const docsUrl = useBaseUrl('/docs/products/index');
   const defaultImage = useBaseUrl('/img/logos/jupyter-logo.svg');
 
   return (
