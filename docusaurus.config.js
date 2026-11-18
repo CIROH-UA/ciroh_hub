@@ -253,6 +253,11 @@ const config = {
               existingPath.replace('/contribute/', '/docs/contribute/'),
             ];
           }
+          else if (existingPath.includes('/docs/services/')) {
+            return [
+              existingPath.replace('/docs/services/', '/docs/nimbus/'),
+            ];
+          }
           return undefined; // Return a falsy value: no redirect created
         },
       },
