@@ -191,7 +191,7 @@ export default function CloudInfraDashboard({ cards = [] }) {
                 <div className="header">
                     <h1 className="tw-text-4xl tw-font-extrabold tw-text-center tw-mb-6
                 tw-text-black dark:tw-text-white">
-                Research to Operations Hybrid Cloud (R2OHC)
+                NIMBUS Hybrid Cloud Platform
             </h1>
                     <p className="tw-text-gray-700 dark:tw-text-white">Last updated: August 2026</p>
                 </div>

@@ -20,7 +20,7 @@ const SupportButton = () => {
             <Link class="button button--active button--primary" style={{'margin-right':'1.3rem','margin-bottom':'1.3rem'}} href="#" onClick={toggleModalOpen}>Contact Support</Link>
             <ModalGeneric open={modalOpen} onClose={toggleModalOpen}>
                 <h2>Contact Support</h2>
-                <p>To get support for CIROH R2OHC, contact us at <a href={'mailto:'+supportEmail}>{supportEmail}</a>.</p>
+                <p>To get support for NIMBUS, contact us at <a href={'mailto:'+supportEmail}>{supportEmail}</a>.</p>
                 <Link class="button button--active button--primary" style={{'margin-right':'1.3rem','margin-bottom':'1.3rem'}} href={'mailto:'+supportEmail}>Open in Email Client</Link>
                 <Link class="button button--active button--secondary" style={{'margin-right':'1.3rem','margin-bottom':'1.3rem'}} href='#' onClick={toggleModalOpen}>Close</Link>
             </ModalGeneric>

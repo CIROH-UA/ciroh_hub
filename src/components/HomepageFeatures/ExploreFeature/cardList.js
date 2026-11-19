@@ -6,9 +6,9 @@ export default [
     link: "/docs/products/index"
   },
   {
-    title: "Cloud Services",
+    title: "NIMBUS",
     image: "img/graphics/explore-cloud.svg",
-    description: "Explore our array of cloud services and offerings, where you can delve into the specifics of CIROH-AWS cloud. Learn how to gain access to this cloud infrastructure and uncover insights into working seamlessly with the 2i2c cloud services.",
+    description: "Explore our array of cloud services and offerings, where you can delve into the specifics of CIROH's NIMBUS hybrid cloud platform. Learn how to gain access and uncover insights into working seamlessly across CIROH-2i2c JupyterHub, AWS, HPC, and more cloud services.",
     link: "/docs/nimbus/index"
   },
   {

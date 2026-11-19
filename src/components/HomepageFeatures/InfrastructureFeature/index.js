@@ -15,7 +15,7 @@ export default function InfrastructureFeature() {
               </span>
 
               <h2 className="tw-text-5xl md:tw-text-6xl tw-font-extrabold tw-mb-6 tw-mt-4">
-                CIROH R2OHC
+                NIMBUS
               </h2>
 
               <p className="tw-text-xl tw-max-w-2xl tw-text-slate-700 dark:tw-text-gray-300 tw-mx-auto">
@@ -75,9 +75,10 @@ export default function InfrastructureFeature() {
 
               </div>
 
-              <div className="tw-mt-12 tw-grid tw-grid-cols-1 md:tw-grid-cols-1 lg:tw-grid-cols-2 tw-gap-6 tw-max-w-5xl tw-mx-auto">
+              <div className="tw-mt-12 tw-grid tw-grid-cols-1 md:tw-grid-cols-1 lg:tw-grid-cols-3 tw-gap-6 tw-max-w-5xl tw-mx-auto">
+                <Link className="button button--active button--primary" to="/docs/nimbus">Learn More</Link>
                 <Link className="button button--active button--primary" to="/impact">Explore Community Impact</Link>
-                <Link className="button button--active button--primary" to="/docs/nimbus/index">Request IT Access</Link>
+                <Link className="button button--active button--primary" to="/docs/nimbus/access">Request Access</Link>
               </div>
               
             </div>
