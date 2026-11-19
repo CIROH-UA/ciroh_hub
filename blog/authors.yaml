@@ -1,3 +1,9 @@
+todo:
+  name: todo
+  title: Add authors via the ids in authors.yaml
+  title2: before publishing this post
+  image_url: /img/logos/ciroh-bgsafe.png
+
 arpita-2025:
   name: Arpita Patel
   title: Assistant Director, IT and DevOps
