@@ -29,7 +29,7 @@ const OnPremises = () => {
 
   const description = (
     <>
-      CIROH operates an on-premises infrastructure that includes high-performance computing (HPC) resources and specialized software via the Pantarhei and Wukong systems. See the <a href="https://hub.ciroh.org/docs/services/on-prem/Pantarhei/sysinfo" target="_blank" rel="noopener noreferrer">Pantarhei documentation</a> for system details.
+      CIROH operates an on-premises infrastructure that includes high-performance computing (HPC) resources and specialized software via the Pantarhei and Wukong systems. See the <a href="https://hub.ciroh.org/docs/nimbus/on-prem/Pantarhei/sysinfo" target="_blank" rel="noopener noreferrer">Pantarhei documentation</a> for system details.
     </>
   );
 

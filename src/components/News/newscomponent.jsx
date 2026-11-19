@@ -266,6 +266,7 @@ function getBadgeClass(type) {
     TEEHR: "cyan",
     R20: "success",
     r2ohc: "success",
+    nimbus: "success",
     cyberinfrastructure: "success",
     pantarhei: "success",
     "2i2c": "success",

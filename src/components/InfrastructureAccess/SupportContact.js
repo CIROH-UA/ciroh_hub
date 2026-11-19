@@ -101,7 +101,7 @@ const SupportContact = () => {
       <div style={cardStyle}>
         <h3 style={titleStyle}>Already Have Access?</h3>
         <p style={descriptionStyle}>
-          Having issues with cyberinfrastructure you already have access to? We're here to help! Contact us at ciroh-it-support@ua.edu.
+          Having issues with NIMBUS cyberinfrastructure you already have access to? We're here to help! Contact us at ciroh-it-support@ua.edu.
         </p>
         <div style={buttonsStyle}>
           <a href="#" style={primaryButtonStyle} onClick={toggleModalOpen}>
@@ -110,7 +110,7 @@ const SupportContact = () => {
         </div>
         <ModalGeneric open={modalOpen} onClose={toggleModalOpen}>
           <h2>Contact Support</h2>
-          <p>To get support for CIROH R2OHC, contact us at <a href={'mailto:'+supportEmail}>{supportEmail}</a>.</p>
+          <p>To get support for NIMBUS, contact us at <a href={'mailto:'+supportEmail}>{supportEmail}</a>.</p>
           <Link class="button button--active button--primary" style={{'margin-right':'1.3rem','margin-bottom':'1.3rem'}} href={'mailto:'+supportEmail}>Open in Email Client</Link>
           <Link class="button button--active button--secondary" style={{'margin-right':'1.3rem','margin-bottom':'1.3rem'}} href='#' onClick={toggleModalOpen}>Close</Link>
         </ModalGeneric>

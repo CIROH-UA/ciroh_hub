@@ -18,7 +18,7 @@ As the main account administrator for CIROH subaccount, here are some best pract
 
 - **Utilize git-secrets**: git-secrets is a client tool that prohibits unwanted commits containing secret data such as API keys, passwords, and tokens. You can integrate it into your CI/CD pipelines to prevent sensitive information from being added to your GitHub repositories. For more information, refer to the [AWS documentation](https://docs.aws.amazon.com/prescriptive-guidance/latest/patterns/scan-git-repositories-for-sensitive-information-and-security-issues-by-using-git-secrets.html) and the [git-secrets GitHub repository](https://github.com/awslabs/git-secrets).
 
-- **Use AWS Secrets Manager**: Use AWS Secrets Manager, or other secrets management solution, so you don’t have to hardcode keys in plaintext. The application or client can then retrieve secrets when needed. For more information, see [What is AWS Secrets Manager?](https://docs.aws.amazon.com/secretsmanager/latest/userguide/intro.html)
+- **Use AWS Secrets Manager**: Use AWS Secrets Manager, or other secrets management solution, so you don’t have to hardcode keys in plaintext. The application or client can then retrieve secrets when needed. For more information, see [What is AWS Secrets Manager?](https://docs.aws.amazon.com/secretsmanager/latest/userguide/index.html)
 
 ## Access Key Management :
 
@@ -30,7 +30,7 @@ As the main account administrator for CIROH subaccount, here are some best pract
 
 ## Resource Management:
 
-- **Tagging:** Implement a consistent tagging strategy for resources in all linked accounts. This allows for better cost allocation, resource identification, and easier filtering when managing resources across multiple accounts. Follow [How to tag resources on AWS](https://hub.ciroh.org/docs/services/cloudservices/aws/tagging).
+- **Tagging:** Implement a consistent tagging strategy for resources in all linked accounts. This allows for better cost allocation, resource identification, and easier filtering when managing resources across multiple accounts. Follow [How to tag resources on AWS](https://hub.ciroh.org/docs/nimbus/cloudservices/aws/tagging).
 
 - **Cost allocation**: Allowed limit for **new** subaccount is $500/project per month. Monitor the usage throughout the month and if it reaches above $500/project, notify admin of the subaccount to take necessary actions. For projects expecting more than $500 per month usage, please email ciroh-it-support@ua.edu in advance to get the approval from higher management. **Effective Sept 2024**, we transitioned to a new budgeting model (for existing
 users) that provides your CIROH AWS subaccount with a $10,000 budget for

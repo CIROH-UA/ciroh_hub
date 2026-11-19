@@ -206,6 +206,26 @@ const config = {
       {
         redirects: [
           {
+            to: '/docs/products',
+            from: '/docs/products/intro'
+          },
+          {
+            to: '/docs/nimbus',
+            from: '/docs/services/intro'
+          },
+          {
+            to: '/docs/nimbus',
+            from: '/docs/nimbus/intro' // Not a path that's ever existed, but one that could appear on another site via overly hasty link updates
+          },
+          {
+            to: '/docs/policies',
+            from: '/docs/policies/intro'
+          },
+          {
+            to: '/publications',
+            from: '/docs/publications/intro' // This was an orphaned link with no meaningful content
+          },
+          {
             to: '/docs/products/data-management/fim-database',
             from: '/docs/products/community-fim/fim-database',
           },
@@ -251,6 +271,11 @@ const config = {
           else if (existingPath.includes('/contribute/')) {
             return [
               existingPath.replace('/contribute/', '/docs/contribute/'),
+            ];
+          }
+          else if (existingPath.includes('/docs/services/')) {
+            return [
+              existingPath.replace('/docs/services/', '/docs/nimbus/'),
             ];
           }
           return undefined; // Return a falsy value: no redirect created
@@ -344,7 +369,7 @@ const config = {
             {
               label: "Documentation",
               position: "left",
-              to: "/docs/products/intro",
+              to: "/docs/products/index",
               items: [
                 // The sidebar loader is weirdly brittle. If a page is instantiated in "index.js", that must be specified explicitly.
                 {
@@ -370,16 +395,16 @@ const config = {
                 },
                 {
                   type: "doc",
-                  docId: "products/intro",
+                  docId: "products/index",
                   label: "Browse all documentation...",
                 },
               ],
             },
             {
-              label: "Cyberinfrastructure",
+              label: "NIMBUS",
               position: "left",
               type: "doc",
-              docId: "services/intro",
+              docId: "nimbus/index",
             },
             {
               label: "Community",
@@ -391,7 +416,7 @@ const config = {
                 },
                 {
                   type: "doc",
-                  docId: "policies/intro",
+                  docId: "policies/index",
                   label: "Policies",
                 },
                 {

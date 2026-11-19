@@ -7,7 +7,6 @@ import styles from '@site/src/pages/working-groups/styles.module.css';
 
 // Items are plain strings, { title, description, url } objects, or arrays thereof
 function Items({ items }) {
-  console.log(items)
   if (typeof items === 'string') return <li key={items}>{items}</li>;
   if (Array.isArray(items)) {
     return (

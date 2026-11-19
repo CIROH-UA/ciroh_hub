@@ -1,27 +1,27 @@
 ---
 sidebar_position: 3
 title: "Accessing the System"
-description: "Access of On-Premises Cluster Wukong"
-tags: [CIROH, Services, On-Premises Services, Wukong, HPC]
+description: "Access of On-Premises Cluster Pantarhei"
+tags: [CIROH, Services, On-Premises Services, Pantarhei, HPC]
 ---
 
 import useBaseUrl from '@docusaurus/useBaseUrl'
 
-Wukong curretly only supports the Secure Shell (SSH) mechanisms for logging in. The Secure Shell mechanism uses SSH keys. If you need help creating or uploading your SSH keys, please see the Managing SSH Public Keys page for that information.
+Pantarhei curretly only supports the Secure Shell (SSH) mechanisms for logging in. The Secure Shell mechanism uses SSH keys. If you need help creating or uploading your SSH keys, please see the Managing SSH Public Keys page for that information.
 
 ### General overview
 
-To connect to Wukong using SSH, you must follow two high-level steps:
+To connect to Pantarhei using SSH, you must follow two high-level steps:
 * [Connect to the University of Alabama (UA) Network](#connect-to-the-network)
 * [Connect to the Secure Shell (SSH)](#connect-to-the-ssh)
 
-:::info[Obtain Wukong Access]
-In the case that access to the Wukong system is unavailable to you, please follow the instructions on [Obtaining an Account](/docs/services/on-prem/Wukong/obtain).
+:::info[Obtain Pantarhei Access]
+In the case that access to the Pantarhei system is unavailable to you, please follow the instructions on [Obtaining an Account](/docs/nimbus/on-prem/Pantarhei/obtain).
 :::
 
 ### Connect to the Network
 
-University of Alabama (UA) requires users to use the Virtual private network (VPN) to connect to the UA campus network in order to connect to the Wukong cluster.
+University of Alabama (UA) requires users to use the Virtual private network (VPN) to connect to the UA campus network in order to connect to the Pantarhei cluster.
 
 :::tip
 For more information on setting up a VPN, please visit the [Office of Information Technology (OIT) website](https://oit.ua.edu/services/internet-networking/). 
@@ -33,7 +33,7 @@ import TabItem from '@theme/TabItem';
 
 <Tabs groupId="current-os" queryString>
 	<TabItem value="mac" label="MacOS and Linux" default>
-		Once you are connected to the VPN, follow these steps to access Wukong:
+		Once you are connected to the VPN, follow these steps to access Pantarhei:
 		
 		1. **Open a Terminal:** Find `Terminal` in your local machine and open it.
 
@@ -42,14 +42,14 @@ import TabItem from '@theme/TabItem';
 			:::
 
 		2. **Connect via SSH:** In the terminal, 
-			* Use the SSH command to connect to Wukong. 
+			* Use the SSH command to connect to Pantarhei. 
 				```Shell
-				ssh <USERNAME>@Wukong.ua.edu
+				ssh <USERNAME>@pantarhei.ua.edu
 				```
 				:::note
-				Replace `<USERNAME>` with your actual Wukong username.
+				Replace `<USERNAME>` with your actual Pantarhei username.
 				:::
-			* Enter your Wukong password
+			* Enter your Pantarhei password
 	</TabItem>
 	<TabItem value="win" label="Windows">
 		<table  style={{'width':'100%'}}>
@@ -62,24 +62,24 @@ import TabItem from '@theme/TabItem';
 			</tr>
 			<tr> 
 				<td>MobaXterm</td>
-				<td>Open a local terminal and [follow steps](/docs/services/on-prem/Wukong/access?current-os=mac#connect-to-the-ssh)&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;</td>
+				<td>Open a local terminal and [follow steps](/docs/nimbus/on-prem/Pantarhei/access?current-os=mac#connect-to-the-ssh)&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;</td>
 			</tr>
 			<tr> 
 				<td>Git Bash</td>
-				<td>[follow steps](/docs/services/on-prem/Wukong/access?current-os=mac#connect-to-the-ssh)</td>
+				<td>[follow steps](/docs/nimbus/on-prem/Pantarhei/access?current-os=mac#connect-to-the-ssh)</td>
 			</tr>
 			<tr> 
 				<td>Windows 10 PowerShell</td>
-				<td>[follow steps](/docs/services/on-prem/Wukong/access?current-os=mac#connect-to-the-ssh)</td>
+				<td>[follow steps](/docs/nimbus/on-prem/Pantarhei/access?current-os=mac#connect-to-the-ssh)</td>
 			</tr>
 			<tr> 
-				<td>Windows 10 Subsystem for Linux</td>
-				<td>[follow steps](/docs/services/on-prem/Wukong/access?current-os=mac#connect-to-the-ssh)</td>
+				<td>Windows 10 Subsystem for Linux</td> 
+				<td>[follow steps](/docs/nimbus/on-prem/Pantarhei/access?current-os=mac#connect-to-the-ssh)</td>
 			</tr>
 			<tr> 
 				<td>PuTTY</td>
 				<td>
-					[Follow steps below](/docs/services/on-prem/Wukong/access?current-os=win#putty)
+					[Follow steps below](/docs/nimbus/on-prem/Pantarhei/access?current-os=win#putty)
 				</td>
 			</tr>
 		</table>
@@ -97,18 +97,18 @@ For more information on PuTTY, please visit the [PuTTY website](https://www.putt
 			<p align="center">
 				<img src={useBaseUrl("/img/putty/image.png")} alt="putty" style={{'width':'50%', 'height':'50%'}}/>
 			</p>
-		3. **Host Name:** In the <mark>___Host Name (or IP address)___</mark> field enter the `Wukong.ua.edu`
+		3. **Host Name:** In the <mark>___Host Name (or IP address)___</mark> field enter the `pantarhei.ua.edu`
 		4. **Port:** In the <mark>___Port___</mark> field enter the `22`
 		5. **Open:** Click on the <mark>___Open___</mark> button. This will prompt a new login Secure Shell window.
-		6. **User Name:** In given new window, enter your Wukong <mark>___User Name___</mark>.
+		6. **User Name:** In given new window, enter your Pantarhei <mark>___User Name___</mark>.
 			<p align="center">
 				<img src={useBaseUrl("/img/putty/frame08_1.webp")} alt="putty"/>
 			</p>
-		7. **Password:** Enter your Wukong account <mark>___Password___</mark>.
+		7. **Password:** Enter your Pantarhei account <mark>___Password___</mark>.
 			<p align="center">
 				<img src={useBaseUrl("/img/putty/frame09_1.webp")} alt="putty"/>
 			</p>
 	</TabItem>
 </Tabs>
 
-We hope this guide helps you efficiently utilize the Wukong HPC system for your research needs. Happy computing!
+We hope this guide helps you efficiently utilize the Pantarhei HPC system for your research needs. Happy computing!

@@ -18,6 +18,8 @@ This is a guide for understanding the File System in CIROH-2i2c JupyterHub. You 
 ### 1. `/home/jovyan`
 This is your home directory and is same for all JupyterHub users. **Only you can access files in your home directory.** Any files you place in your home directory persists between sessions. It is recommended to use only for notebooks and code since it is not suitable for large datasets.
 
+Your user directory has a space limit of 40 GB. If you need more space, please submit an issue ticket via https://github.com/CIROH-UA/NGIAB-CloudInfra/issues.
+
 ### 2. `/home/jovyan/shared`
 This is the shared **readonly** directory. All users can access and read from the shared directory. Only the hub admins can add and delete data from this directory. 
 
