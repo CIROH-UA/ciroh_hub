@@ -1,3 +1,9 @@
+todo:
+  name: todo
+  title: Add authors via the ids in authors.yaml
+  title2: before publishing this post
+  image_url: /img/logos/ciroh-bgsafe.png
+
 arpita-2025:
   name: Arpita Patel
   title: Assistant Director, IT and DevOps
@@ -482,3 +488,10 @@ humberto-vergara:
   title2: 'Associate Director, Iowa Flood Center'
   url: 'https://engineering.uiowa.edu/directory/humberto-vergara'
   image_url: /img/blog/authors/humberto-vergara.jpg
+
+patrick-clemins:
+  name:  Patrick Clemins 
+  title: 'Director of Research Computing and Data,'
+  title2: 'Large Research Initiatives; University of Vemont'
+  url: 'https://www.uvm.edu/water/profile/patrick-clemins'
+  image_url: https://www.uvm.edu/d10-files/styles/717_width_square/public/images/2024-07/pat_clemins_800x800.jpg.webp?itok=2oS2J9MW
